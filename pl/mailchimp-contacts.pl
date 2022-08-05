@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 use strict ;
 use warnings ;
 
@@ -10,8 +8,8 @@ use DBI ;
 use Digest::MD5 qw / md5_hex / ;
 use JSON::PP ;
 use Mail::Chimp3 ;
-use SiteFunk::WhatsOn::Contact ;
-use SiteFunk::WhatsOn::Organisation ;
+use DATA::WhatsOn::Contact ;
+use DATA::WhatsOn::Organisation ;
 
 #-------------------------------------------------------------------------------
 
@@ -21,7 +19,7 @@ use SiteFunk::WhatsOn::Organisation ;
 
 my $name = 'derbyartsandtheatre.org.uk' ;
 
-my $confSim = new Config::Simple ( "/usr/local/etc/sitefunk/$name.ini" ) ;
+my $confSim = new Config::Simple ( "/usr/local/etc/DATA/$name.ini" ) ;
 my $home = $confSim -> param ( 'home' ) ;
 
 my $confGen = new Config::General ( "$home/env.cfg" ) ;
@@ -79,7 +77,7 @@ my $mailchimp = new Mail::Chimp3 (
 my @society_rowids = ( ) ;
 my $data_rowid ;
 
-my @organisations = SiteFunk::WhatsOn::Organisation -> fetch ( $dbh ) ;
+my @organisations = DATA::WhatsOn::Organisation -> fetch ( $dbh ) ;
 
 foreach my $organisation ( @organisations ) {
 
@@ -96,7 +94,7 @@ foreach my $organisation ( @organisations ) {
 # List the contacts in the current database and add the to the subscription list
 #
 
-my @contacts = SiteFunk::WhatsOn::Contact -> fetch ( $dbh ) ;
+my @contacts = DATA::WhatsOn::Contact -> fetch ( $dbh ) ;
 
 foreach my $contact ( @contacts ) {
 
@@ -138,7 +136,7 @@ foreach my $contact ( @contacts ) {
 		print Dumper $response if $response -> { code } ne '200' ;
 
 	}
-		
+
 }
 
 #-------------------------------------------------------------------------------

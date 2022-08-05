@@ -1,6 +1,4 @@
-#!/usr/bin/perl
-
-=head1 derbyartsandtheatre.org.uk-twitter-events
+=head1 twitter-events
 
 This script tweets about events on behalf of Derby Arts and Theatre Association.
 
@@ -15,7 +13,7 @@ use DateTime ;
 use DBI ;
 use Image::Grab qw / grab / ;
 use Twitter::API ;
-use SiteFunk::WhatsOn::Event ;
+use DATA::WhatsOn::Event ;
 
 #-------------------------------------------------------------------------------
 
@@ -117,7 +115,7 @@ unless ( $hour >= 9 && $hour <= 18 ) {
 
 my $name								= 'derbyartsandtheatre.org.uk' ;
 my $ini									= new Config::Simple (
-													"/usr/local/etc/sitefunk/$name.ini"
+													"/usr/local/etc/DATA/$name.ini"
 												) ;
 my $home								= $ini -> param ( 'home' ) ;
 my $confObj							= new Config::General ( "$home/env.cfg" ) ;
@@ -144,7 +142,7 @@ my $filter = {
 	to			=>	substr ( $to	, 0 , 10 ) ,
 	status	=>	'PUBLISHED'
 } ;
-my @events = SiteFunk::WhatsOn::Event -> fetch ( $dbh , $filter ) ;
+my @events = DATA::WhatsOn::Event -> fetch ( $dbh , $filter ) ;
 
 #-------------------------------------------------------------------------------
 
@@ -199,7 +197,7 @@ foreach my $event ( @events ) {
 		# them are). See if we have their Twitter handle on record so that we can
 		# include it in the Tweet.
 
-		my $society = new SiteFunk::WhatsOn::Organisation ;
+		my $society = new DATA::WhatsOn::Organisation ;
 		$society -> rowid ( $event -> society_rowid ) ;
 		$society -> fetch ( $dbh ) ;
 

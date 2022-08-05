@@ -1,16 +1,12 @@
-#!/usr/bin/perl
-
 use strict ;
 use warnings ;
-
-use lib qw ( /usr/local/lib/perl_overrides ) ;
 
 use Config::General ;
 use Config::Simple ;
 use DBI ;
 use Encode qw / decode encode / ;
 use HTML::HTMLDoc ;
-use SiteFunk::WhatsOn::Event ;
+use DATA::WhatsOn::Event ;
 use Template ;
 
 #-------------------------------------------------------------------------------
@@ -18,7 +14,7 @@ use Template ;
 # Get Environment Settings
 
 my $project = 'derbyartsandtheatre.org.uk' ;
-my $ini = new Config::Simple ( "/usr/local/etc/sitefunk/$project.ini" ) ;
+my $ini = new Config::Simple ( "/usr/local/etc/DATA/$project.ini" ) ;
 my $home = $ini -> param ( 'home' ) ;
 my $confObj = new Config::General ( "$home/env.cfg" ) ;
 my %conf = $confObj -> getall ;
@@ -37,7 +33,7 @@ my $filter = {
   from    => 'now'        ,
   status  => 'PUBLISHED'
 } ;
-my @events = SiteFunk::WhatsOn::Event -> fetch ( $dbh , $filter ) ;
+my @events = DATA::WhatsOn::Event -> fetch ( $dbh , $filter ) ;
 
 foreach my $event ( @events ) {
 

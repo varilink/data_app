@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 use strict ;
 use warnings ;
 
@@ -16,8 +14,8 @@ use HTML::Packer ;
 use Image::Grab qw / grab / ;
 use Mail::Chimp3 ;
 use MIME::Base64 ;
-use SiteFunk::WhatsOn::Event ;
-use SiteFunk::WhatsOn::NewsItem ;
+use DATA::WhatsOn::Event ;
+use DATA::WhatsOn::NewsItem ;
 use Template ;
 
 #-------------------------------------------------------------------------------
@@ -169,7 +167,7 @@ $params { events } = 12 unless $params { events } ;
 #
 
 my $ini = new Config::Simple (
-	'/usr/local/etc/sitefunk/derbyartsandtheatre.org.uk.ini'
+	'/usr/local/etc/DATA/derbyartsandtheatre.org.uk.ini'
 ) ;
 
 my $home = $ini -> param ( 'home' ) ;
@@ -385,7 +383,7 @@ my $dbh = DBI -> connect (
 	'dbi:SQLite:dbname=' . $env -> { database } , "" , ""
 ) ;
 
-my @news_items = SiteFunk::WhatsOn::NewsItem -> fetch (
+my @news_items = DATA::WhatsOn::NewsItem -> fetch (
 	$dbh , { limit => $params { news } }
 ) if $params { news } ;
 
@@ -433,7 +431,7 @@ if ( $params { days } ) {
 
 }
 
-my @events = SiteFunk::WhatsOn::Event -> fetch (
+my @events = DATA::WhatsOn::Event -> fetch (
 	$dbh , { from => $from , status => 'PUBLISHED' , limit => $params { events } }
 ) ;
 

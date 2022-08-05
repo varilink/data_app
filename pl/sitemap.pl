@@ -1,6 +1,4 @@
-#!/usr/bin/perl
-
-=head1 derbyartsandtheatre.org.uk-sitemap
+=head1 sitemap
 
 This script generates a sitemap for the derbyartsandtheatre.org.uk website.
 
@@ -14,9 +12,9 @@ use Config::Simple ;
 use Data::Dumper ;
 use DateTime ;
 use DBI ;
-use SiteFunk::WhatsOn::Event ;
-use SiteFunk::WhatsOn::NewsItem ;
-use SiteFunk::WhatsOn::Organisation ;
+use DATA::WhatsOn::Event ;
+use DATA::WhatsOn::NewsItem ;
+use DATA::WhatsOn::Organisation ;
 use XML::Output ;
 
 my $today = DateTime -> today ;
@@ -28,7 +26,7 @@ my $today = DateTime -> today ;
 #
 
 my $ini = new Config::Simple (
-  '/usr/local/etc/sitefunk/derbyartsandtheatre.org.uk.ini'
+  '/usr/local/etc/DATA/derbyartsandtheatre.org.uk.ini'
 ) ;
 
 my $home = $ini -> param ( 'home' ) ;
@@ -90,7 +88,7 @@ foreach my $tmpl ( @tmpls ) {
 
   if ( $reloc eq 'event' ) {
 
-    my @events = SiteFunk::WhatsOn::Event -> fetch (
+    my @events = DATA::WhatsOn::Event -> fetch (
       $dbh , { from => 'now' , status => 'PUBLISHED' }
     ) ;
 
@@ -135,7 +133,7 @@ foreach my $tmpl ( @tmpls ) {
 
   } elsif ( $reloc eq 'news_item' ) {
 
-    my @news_items = SiteFunk::WhatsOn::NewsItem -> fetch ( $dbh ) ;
+    my @news_items = DATA::WhatsOn::NewsItem -> fetch ( $dbh ) ;
 
     foreach my $news_item ( @news_items ) {
 
@@ -178,7 +176,7 @@ foreach my $tmpl ( @tmpls ) {
 
   } elsif ( $reloc eq 'society' ) {
 
-    my @societies = SiteFunk::WhatsOn::Organisation -> fetch (
+    my @societies = DATA::WhatsOn::Organisation -> fetch (
       $dbh , { type => 'whatson_society' , status => 'ACTIVE' }
     ) ;
 

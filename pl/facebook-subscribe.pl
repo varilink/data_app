@@ -1,6 +1,4 @@
-#!/usr/bin/perl
-
-=head1 derbyartsandtheatre.org.uk-facebook-unsubscribe
+=head1 facebook-unsubscribe
 
 This script posts an invitation to subscribe to the monthly, DATA, email
 bulletin via Facebook.
@@ -21,7 +19,7 @@ use Facebook::Graph ;
 
 my $name								= 'derbyartsandtheatre.org.uk' ;
 my $ini									= new Config::Simple (
-													"/usr/local/etc/sitefunk/$name.ini"
+													"/usr/local/etc/DATA/$name.ini"
 												) ;
 my $home								= $ini -> param ( 'home' ) ;
 my $confObj							= new Config::General ( "$home/env.cfg" ) ;
