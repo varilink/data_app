@@ -2,6 +2,9 @@
 <html class="no-js" lang="en">
 
   <head>
+
+[%~ IF conf.root == 'https://www.derbyartsandtheatre.org.uk/' -%]
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async
     src="https://www.googletagmanager.com/gtag/js?id=UA-137420866-1">
@@ -13,7 +16,9 @@
       gtag('config', 'UA-137420866-1');
     </script>
 
-[% PROCESS head.tt FILTER indent 4 %]
+[% END %]
+
+[% PROCESS head.tt FILTER indent 4 -%]
 
   </head>
 

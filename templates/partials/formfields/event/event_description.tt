@@ -294,7 +294,7 @@ tinymce . init ( {
 	menubar: false ,
 	plugins: 'link' ,
 	selector : '#mceEventDescription' ,
-	skin_url: '/assets/skins/lightgray' ,
+	skin: false ,
 	toolbar: 'bold italic superscript | link'
 } ) ;
 
@@ -471,9 +471,7 @@ tinymce . init ( {
 
   } ,
 
-[%~ # Specify the location of the skin that I'm using                        -%]
-
-  skin_url: '/assets/skins/lightgray' ,
+  skin: false ,
 
   toolbar: false ,
 

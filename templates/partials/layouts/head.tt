@@ -21,7 +21,10 @@
 [%~ END -%]
 
 <base href="[% conf.root %]">
-<link rel="stylesheet" href="[% conf.root %]assets/css/app.css">
+<link rel="stylesheet" href="[% conf.root %]assets/css/main.css">
+[%~ IF psgi.REQUEST_URI.match ( '^/secure/(?:admin|rep)/event/online/' ) %]
+<link rel="stylesheet" href="[% conf.root %]assets/css/tinymce.css">
+[%~ END %]
 
 [%~ IF
   conf.use_captcha && (
