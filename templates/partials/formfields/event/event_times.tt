@@ -1,0 +1,44 @@
+<!-- Start of Event Times -->
+<div class="floated-label-wrapper">
+
+[%~ UNLESS error_event_times # Initial State -%]
+
+  <label for="event_times">
+    Times ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+  <input type="text" id="event_times" name="event_times" placeholder=
+  "Times ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  aria-describedby="event_timesHelpText"
+  [% IF required %]required[% END %] value="[% event.times %]"
+  [%~ IF disabled %]disabled[% END %]>
+
+[%~ ELSE # Error State -%]
+
+  <label class="is-invalid-label" for="event_times">
+    Times ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+  <input class="is-invalid-input" type="text" id="event_times" name=
+  "event_times" placeholder=
+  "Times ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  aria-describedby="event_timesHelpText" [% IF required %]required[% END %]
+  value="[% event.times %]" [% IF disabled %]disabled[% END %]>
+  <small class="form-error is-visible">
+[%~ IF error_event_times %]
+    [% error_event_times %]
+[%~ END %]
+  </small>
+
+[%~ END # error_event_times %]
+
+  <p class="help-text" id="event_timesHelpText">
+    If any of the performances do not start at 7.30pm, enter the times for
+    event; for example:<br>
+    "Sat matinee 2.30pm"<br>
+    "Wed - Fri 7.15pm; Sat 1.30pm & 6pm"<br>
+    "7pm"<br>
+    Leave this field blank to default it to a 7:30pm start time.<br>
+    Enter "TBC" (to be confirmed) to suppress the display of the start time
+    altogether.<br>
+  </p>
+</div>
+<!-- End of Event Times -->

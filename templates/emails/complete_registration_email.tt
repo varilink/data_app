@@ -1,0 +1,47 @@
+[% IF user.status == 'UNCONFIRMED' %]
+
+[% PROCESS email_header.tt
+	title = 'Confirm Email Address'
+%]
+
+[% PROCESS email_paragraph.tt %]
+
+Congratulations! You have registered a user account with DATA Diary. We just
+need to confirm the email address associated with your user account before you
+can use it. Please click on "Confirm Email Address" below to confirm that you
+have received this email.
+
+</p>
+
+[% path = '/account/action/confirm_email' %]
+[% identity = "${user.email}/${user.secret}" %]
+[% responses = 'success_confirm_email/error_confirm_email' %]
+
+[% url = "${path}/${identity}/${responses}" | url %]
+
+[% PROCESS email_footer.tt
+	action = {
+		name = 'Confirm Email Address'
+		url = "$url"
+	}
+%]
+
+[% ELSIF user.status == 'REQUESTED' %]
+
+[% PROCESS email_header.tt
+	title = 'User Account Requested'
+%]
+
+[% PROCESS email_paragraph.tt %]
+
+A user account has been requested for email address [% user.email %]. This email
+address is not recorded by DATA as associated with either a member of the DATA
+committee or a representative of a DATA member society. You should correspond
+with this person to ascertain in what capacity they wish to register a user
+account.
+
+</p>
+
+[% PROCESS email_footer.tt %]
+
+[% END %]

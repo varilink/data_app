@@ -1,0 +1,61 @@
+<!-- Start of Event Dates -->
+<div class="floated-label-wrapper">
+
+[%~ UNLESS error_event_dates # Initial State -%]
+
+  <label for="eventDates">
+    Dates (Optional)
+  </label>
+  <input type="text" id="eventDates" name="event_dates"
+  aria-describedby="eventDatesHelpText" placeholder="Dates (Optional)"
+  value="[% event.dates %]">
+  <small class="form-error">
+
+[%~ IF error_msg -%]
+
+    [% error_msg # Can be passed in from the calling template %]
+
+[%~ ELSE -%]
+
+    You must enter the event dates in one of the formats specified
+
+[%~ END -%]
+
+  </small>
+
+[%~ ELSE # Error State -%]
+
+  <label class="is-invalid-label" for="eventDates">
+    Dates (Optional)
+  </label>
+  <input class="is-invalid-input" aria-invalid="true" type="text"
+  id="eventDates" name="event_dates" aria-describedby="eventDatesHelpText"
+  placeholder="Dates (Optional)">
+  <small class="form-error is-visible">
+
+[%~ IF error_event_dates -%]
+
+    [% error_event_dates %]
+
+[%~ END -%]
+
+  </small>
+
+[%~ END # error_event_dates -%]
+
+  <p class="help-text" id="eventDatesHelpText">
+    If this event has a performance each and every day, between and including
+    the start date and the end date, then you may leave this field blank.<br>
+    If that's not the case then use this field to indicate on which dates the
+    event is performed; for example:<br>
+    Start Date = "01/09/2017"<br>
+    End Date = "09/09/2017"<br>
+    Dates (this field) = "1, 2, 8 & 9 Sep"<br>
+
+[%~ UNLESS template.name == 'notify_event.tt' %]
+    Please use the format shown in the example above.
+[%- END -%]
+
+  </p>
+</div>
+<!-- End of Event Dates -->

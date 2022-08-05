@@ -1,0 +1,29 @@
+<table class="mcnImageCardBlock" cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody class="mcnImageCardBlockOuter">
+    <tr>
+      <td class="mcnImageCardBlockInner" style="padding-top:9px; padding-right:18px; padding-bottom:9px; padding-left:18px;" valign="top">
+        <table class="mcnImageCardBottomContent" style="background-color: #404040;" cellspacing="0" cellpadding="0" border="0" align="left" width="100%">
+          <tbody>
+            <tr>
+              <td class="mcnTextContent" style="background: #4c1010; padding: 9px 18px;color: #F2F2F2; font-family: Helvetica;font-size: 16px;font-weight: bold;text-align: center;" width="246" valign="top">
+                [% news_item.title %] <span style="color: #E0E0E0; font-size: 14px; font-weight: normal;">[% news_item.publication_date %]</span>
+              </td>
+            </tr>
+[% IF news_item.image %]
+            <tr>
+              <td class="mcnImageCardMiddleImageContent" style="padding-top:0px; padding-right:0px; padding-bottom:0; padding-left:0px;" align="left" valign="top">
+                <img class="mcnImage" src="[% news_item.temp ( 'full_size_url' ) %]" width="264" height="132" style="margin: 0px; padding: 0px;">
+              </td>
+            </tr>
+[% END %]
+            <tr>
+              <td class="mcnTextContent" style="background: #E6E6E6; padding: 9px 18px; font-family: Helvetica;font-size: 14px;font-weight: normal;text-align: center;" width="246" valign="top">
+                <a href="[% conf.root %]news_item/[% news_item.rowid %]" target="_blank">[% news_item.precis %]&nbsp;&gt;</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>

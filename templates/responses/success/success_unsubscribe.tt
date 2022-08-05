@@ -1,0 +1,38 @@
+[% SET
+
+	title = 'Unsubscribe Request Actioned'
+
+# Alert to the user that they are trying to unsubscribe and yet we don't have
+# them listed as a subscriber.
+
+%]
+
+[% PROCESS header.tt %]
+
+<div class="row column">
+
+[% PROCESS h1.tt %]
+
+</div>
+
+<div class="row">
+
+	<div class=
+	"columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+
+		<div class="callout primary">
+
+			<p>
+				Your request to unsubscribe from our mailing list has been
+				processed. We're sorry to see you go. We thank you for your interest
+				in DATA. You can return directly to our <a href="[% root %]">home
+				page</a> (<a href="[% root %]"><i class="fa fa-home"></i></a>).
+			</p>
+
+		</div>
+
+	</div>
+
+</div>
+
+[% PROCESS footer.tt %]

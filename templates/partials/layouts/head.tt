@@ -1,0 +1,69 @@
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+[%~ IF
+  caller == 'event.tt' || caller == 'news_item.tt' || caller == 'society.tt'
+-%]
+
+<title>DATA - [% title %]</title>
+
+[%~ ELSE -%]
+
+<title>Derby Arts and Theatre Association (DATA) - [% title %]</title>
+
+[%~ END -%]
+
+[%~ IF description -%]
+
+<meta name=”description” content=”[% description %]”>
+
+[%~ END -%]
+
+<base href="[% conf.root %]">
+<link rel="stylesheet" href="[% conf.root %]assets/css/app.css">
+
+[%~ IF
+  conf.use_captcha && (
+    template.name == 'begin_registration.tt'        ||
+    template.name == 'join_us.tt'                   ||
+    template.name == 'notify_event.tt'              ||
+    template.name == 'resend_confirmation_email.tt' ||
+    template.name == 'sign_in.tt'                   ||
+    template.name == 'subscribe.tt'                 ||
+    template.name == 'userid_reminder.tt'
+  )
+%]
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+	function onSubmit ( token ) {
+		$( "form" ) . submit ( ) ;
+	}
+</script>
+[%~ END %]
+
+[%~ IF template.name == 'index.tt' %]
+<script>
+	// Twitter Widget for Follow Us Button
+	window.twttr = (function(d, s, id) {
+  	var js, fjs = d.getElementsByTagName(s)[0],
+		t = window.twttr || {};
+		if (d.getElementById(id)) return t;
+		js = d.createElement(s);
+		js.id = id;
+		js.src = "https://platform.twitter.com/widgets.js";
+		fjs.parentNode.insertBefore(js, fjs);
+		t._e = [];
+		t.ready = function(f) {
+			t._e.push(f);
+		};
+		return t;
+	}(document, "script", "twitter-wjs"));
+</script>
+[%~ END %]
+
+[%~ SET
+
+	global.script = { } # Clear all scripts stored in the global
+
+%]

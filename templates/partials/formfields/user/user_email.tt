@@ -1,0 +1,105 @@
+<div class="floated-label-wrapper">
+
+[%~ UNLESS error_user_email # Initial State %]
+
+  <label for="userEmail">
+    Email Address ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+
+  <input type="email" id="userEmail" name="user_email"	placeholder=
+  "Email Addess ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  pattern="email" aria-describedby="userESmailHelpText"
+  [% IF required %]required[% END %]
+  value="[% user.email %]">
+
+  <small class="form-error">
+[%~ IF error_msg %]
+    [% error_msg %]
+[%~ ELSE %]
+    Email address isn't a valid format
+[%~ END %]
+  </small>
+
+[%~ ELSE # Error State %]
+
+  <label class="is-invalid-label" for="userEmail">
+    Email Address ([% IF required %]Mandatory[% ELSE %]Optional[% END %]
+  </label>
+
+  <input class="is-invalid-input" type="email" id="userEmail" name=
+  "user_email" placeholder="[% IF required %]Mandatory[% ELSE %]Optional
+  [% END %]" pattern="email" aria-describedby="useremailHelpText"
+  [% IF required %]required[% END %] value="[% user.email %]">
+
+  <small class="form-error is-visible">
+
+[%~ IF error_user_email == 'Missing' %]
+
+    You must enter an email address as indicated below
+
+[%~ ELSIF error_user_email == 'email_valid' %]
+
+    The email address that you have entered does not have a valid format
+
+[%~ ELSIF error_user_email == 'email_free' %]
+
+    There is already a user account registered with DATA for that email address
+
+[%~ ELSIF error_user_email == 'user_exists' %]
+
+    We have no registered user account associated with that email address.
+
+[%~ ELSIF error_user_email == 'user_confirmed' %]
+
+    We have yet to receive confirmation of this email address.
+
+[%~ ELSIF error_user_email == 'contact_valid' %]
+
+    Email address not known by DATA as belonging to a representative of a DATA
+    member society or	a member of the DATA committee
+
+[%~ ELSE %]
+
+    [% error_user_email %]
+
+[%~ END %]
+
+  </small>
+
+[%~ END # error_user_email %]
+
+[%~ IF template.name == 'begin_registration.tt' %]
+
+  <p class="help-text" id="userEmailHelpText">
+    You must enter the email address that you wish to associate with your user
+    account.
+  </p>
+
+[%~	ELSIF
+
+  template.name == 'account.tt' ||
+  caller        == 'account.tt'
+
+%]
+
+  <p class="help-text" id="userEmailHelpText">
+    Update if you want to change the email associated with your account.
+  </p>
+
+[%~ ELSIF	template.name == 'userid_reminder.tt' %]
+
+  <p class="help-text" id="userEmailHelpText">
+    Enter the email address associated with your user account and we will send
+    the userid reminder to that email address.
+  </p>
+
+[%~ ELSIF	template.name == 'resend_confirmation_email.tt' %]
+
+  <p class="help-text" id="userEmailHelpText">
+    Enter the email address associated with your user account and we will
+    resend a verification email to that address.
+  </p>
+
+[%~ END %]
+
+</div>

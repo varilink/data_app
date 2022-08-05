@@ -1,0 +1,16 @@
+[% PROCESS email_header.tt
+	title = 'Event Online Promotion Update'
+%]
+
+[% PROCESS email_paragraph.tt %]
+
+[% userid %] has used a DATA user account to update an event's online promotion
+details. You should go and check that they've done it okay. The event is as
+follows:<br />
+Name=[% event.name %]<br />
+Start Date=[% event.start_date %]<br />
+End Date=[% event.end_date %]
+
+</p>
+
+[% PROCESS email_footer.tt %]

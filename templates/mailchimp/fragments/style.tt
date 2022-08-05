@@ -1,0 +1,544 @@
+p {
+  margin: 10px 0 ;
+  padding: 0 ;
+}
+table {
+  border-collapse: collapse ;
+}
+h1 {
+  display: block ;
+  margin: 0 ;
+  padding: 0 ;
+}
+img, a img {
+  border: 0 ;
+  height: auto ;
+  outline: none ;
+  text-decoration: none ;
+}
+body, #bodyTable, #bodyCell {
+  height: 100% ;
+  margin: 0 ;
+  padding: 0 ;
+  width:100% ;
+}
+.mcnPreviewText{
+ display: none !important ;
+}
+#outlook a {
+  padding: 0 ;
+}
+img {
+  -ms-interpolation-mode:bicubic ;
+}
+table{
+  mso-table-lspace: 0pt ;
+  mso-table-rspace: 0pt ;
+}
+.ReadMsgBody {
+  width: 100% ;
+}
+.ExternalClass {
+  width: 100% ;
+}
+p, a, li, td, blockquote {
+  mso-line-height-rule:exactly ;
+}
+a[href^=tel], a[href^=sms] {
+  color: inherit ;
+  cursor: default ;
+  text-decoration: none !important ;
+}
+p, a, li, td, body, table, blockquote {
+  -ms-text-size-adjust: 100% ;
+  -webkit-text-size-adjust: 100% ;
+}
+.ExternalClass,
+.ExternalClass p,
+.ExternalClass td,
+.ExternalClass div,
+.ExternalClass span,
+.ExternalClass font {
+  line-height: 100% ;
+}
+a[x-apple-data-detectors] {
+  color: inherit !important ;
+  text-decoration: none !important ;
+  font-size: inherit !important ;
+  font-family: inherit !important ;
+  font-weight: inherit !important ;
+  line-height: inherit !important ;
+}
+.templateContainer {
+  max-width: 600px !important ;
+}
+a.mcnButton {
+  display: block ;
+}
+.mcnImage, .mcnRetinaImage {
+  vertical-align: bottom ;
+}
+.mcnTextContent {
+  word-break: break-word ;
+}
+.mcnTextContent img {
+  height: auto !important ;
+}
+.mcnDividerBlock {
+  table-layout: fixed !important ;
+}
+body, #bodyTable {
+  background-color: #FAFAFA ;
+}
+#bodyCell {
+  border-top: 0 ;
+}
+h1 {
+  color: #202020 ;
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif ;
+  font-size: 26px ;
+  font-style: normal ;
+  font-weight: normal ;
+  line-height: 125% ;
+  letter-spacing: normal ;
+  text-align: left ;
+}
+
+[% #----------------------------------------------------------------------------
+
+	#
+	# SECTIONS
+	#
+
+#---------------------------------------------------------------------------- %]
+
+[%
+	# Preheader
+%]
+
+#templatePreheader {
+  background-color: #FAFAFA ;
+  border-top: 0 ;
+  border-bottom: 0 ;
+  font-family: Helvetica ;
+  font-size: 12px ;
+  font-weight: normal ;
+  line-height: 150% ;
+  font-weight: normal ;
+  padding-top: 9px ;
+  padding-bottom: 9px ;
+}
+
+#templatePreheader .mcnTextContent a {
+  color: #656565 ;
+  text-decoration: underline ;
+}
+
+[%
+	# Header
+%]
+
+#templateHeader {
+  background-color: #FFFFFF ;
+  border-top: 0 ;
+  border-bottom: 0 ;
+  padding-top: 9px ;
+  padding-bottom: 0 ;
+}
+
+#templateHeader .mcnTextContent {
+  color: #202020 ;
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif ;
+  font-size: 16px ;
+  line-height: 150% ;
+  text-align: center ;
+}
+
+[%
+	# Guidance
+%]
+
+#templateGuidance {
+  background-color: #FFFFFF ;
+  border-top: 0 ;
+  border-bottom: 0 ;
+  padding-top: 0 ;
+  padding-bottom: 0 ;
+}
+
+#templateGuidance .mcnTextContent {
+  color: #202020 ;
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif ;
+  font-size: 16px ;
+  line-height: 150% ;
+  text-align: left ;
+}
+
+#templateGuidance .mcnTextContent a {
+  color: #4DAC71 ;
+  font-weight: normal ;
+  text-decoration: none ;
+}
+
+[%
+	# NewsInto
+%]
+
+#templateNewsIntro {
+  background-color: #FFFFFF ;
+  border-top: 0 ;
+  border-bottom: 0 ;
+  padding-top: 0 ;
+  padding-bottom: 0 ;
+}
+
+#templateNewsIntro .mcnTextContent {
+  color: #202020 ;
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif ;
+  font-size: 16px ;
+  line-height: 150% ;
+  text-align: left ;
+}
+
+#templateNewsIntro .mcnTextContent a {
+  color: #4DAC71 ;
+  font-weight: normal ;
+  text-decoration: none ;
+}
+
+[%
+
+	# NewsItems
+
+%]
+
+#templateNewsItems {
+  background-color: #FFFFFF ;
+  border-top: 0 ;
+  border-bottom: 0 ;
+  padding-top: 0 ;
+  padding-bottom: 0 ;
+}
+
+#templateNewsItems .mcnTextContent {
+  color: #202020 ;
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif ;
+  font-size: 16px ;
+  line-height: 150% ;
+  text-align: left ;
+}
+
+#templateNewsItems .mcnTextContent a {
+  color: #4DAC71 ;
+  font-weight: normal ;
+  text-decoration: none ;
+}
+
+[%
+	# EventsInto
+%]
+
+#templateEventsIntro {
+  background-color: #FFFFFF ;
+  border-top: 0 ;
+  border-bottom: 0 ;
+  padding-top: 0 ;
+  padding-bottom: 0 ;
+}
+
+#templateEventsIntro .mcnTextContent {
+  color: #202020 ;
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif ;
+  font-size: 16px ;
+  line-height: 150% ;
+  text-align: left ;
+}
+
+#templateEventsIntro .mcnTextContent a {
+  color: #4DAC71 ;
+  font-weight: normal ;
+  text-decoration: none ;
+}
+
+[%
+
+	# Events
+
+%]
+
+#templateEvents {
+  background-color: #FFFFFF ;
+  border-top: 0 ;
+  border-bottom: 0 ;
+  padding-top: 0 ;
+  padding-bottom: 0 ;
+}
+
+#templateEvents .mcnTextContent {
+  color: #202020 ;
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif ;
+  font-size: 16px ;
+  line-height: 150% ;
+  text-align: left ;
+}
+
+#templateEvents .mcnTextContent a {
+  color: #4DAC71 ;
+  font-weight: normal ;
+  text-decoration: none ;
+}
+
+[%
+
+	# Footer
+
+%]
+
+#templateFooter {
+  background-color: #FAFAFA ;
+  border-top: 0 ;
+  border-bottom: 0 ;
+  padding-top: 9px ;
+  padding-bottom: 9px ;
+}
+
+#templateFooter .mcnTextContent, #templateFooter .mcnTextContent p {
+  color: #656565 ;
+  font-family: Helvetica ;
+  font-size: 12px ;
+  line-height: 150% ;
+  text-align: center ;
+}
+
+#templateFooter .mcnTextContent a, #templateFooter .mcnTextContent p a {
+  color: #656565 ;
+  font-weight: normal ;
+  text-decoration: underline ;
+}
+
+[% #----------------------------------------------------------------------------
+
+	# Media Queries
+
+# --------------------------------------------------------------------------- %]
+
+[%# Fix width at 600px on larger screens %]
+
+@media only screen and ( min-width: 768px ) {
+  .templateContainer {
+    width: 600px !important ;
+  }
+}
+
+[%# Stop Mobile Safari resizing text on smaller screens %]
+
+@media only screen and ( max-width: 480px ) {
+  body, table, td, p, a, li, blockquote {
+    -webkit-text-size-adjust: none !important ;
+  }
+}
+
+[%# On smaller screens ensure that the body occupies 100% of the width %]
+
+@media only screen and ( max-width: 480px ) {
+  body {
+    width: 100% !important ;
+    min-width: 100% !important ;
+  }
+}
+
+[%# Pad the body cell 10px when on a small screen %]
+
+@media only screen and ( max-width: 480px ) {
+  #bodyCell {
+    padding-top:10px !important;
+  }
+}
+
+[%# Ensure a columnWrapper is full width on smaller screens %]
+
+@media only screen and ( max-width: 480px ) {
+  .columnWrapper  {
+    max-width: 100% !important ;
+    width: 100% !important ;
+  }
+}
+
+[%# Enusre images of class mcnImage are 100% wide on small screens %]
+
+@media only screen and ( max-width: 480px ) {
+  .mcnImage {
+    width: 100% !important ;
+  }
+}
+
+[%# Control width and padding for various containers and content elements %]
+
+@media only screen and ( max-width: 480px ) {
+  .mcnRecContentContainer,
+  .mcnCaptionBottomContent,
+  .mcnTextContentContainer,
+  .mcnBoxedTextContentContainer,
+  .mcnImageGroupContentContainer,
+  .mcnCaptionLeftTextContentContainer,
+  .mcnCaptionRightTextContentContainer,
+  .mcnCaptionLeftImageContentContainer,
+  .mcnCaptionRightImageContentContainer,
+  .mcnImageCardLeftTextContentContainer,
+  .mcnImageCardRightTextContentContainer,
+  .mcnImageCardLeftImageContentContainer,
+  .mcnImageCardRightImageContentContainer {
+    max-width: 100% !important ;
+    width: 100% !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  .mcnBoxedTextContentContainer {
+    min-width: 100% !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  .mcnImageGroupContent {
+    padding: 9px !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  .mcnCaptionLeftContentOuter .mcnTextContent,
+  .mcnCaptionRightContentOuter .mcnTextContent {
+    padding-top: 9px !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  .mcnImageCardTopImageContent,
+  .mcnCaptionBottomContent:last-child .mcnCaptionBottomImageContent,
+  .mcnCaptionBlockInner .mcnTextContent {
+    padding-top: 18px !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  .mcnImageCardBottomImageContent {
+    padding-bottom: 9px !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  .mcnImageCardMiddleImageContent {	[%# Added by DW for middle image in card %]
+    padding-top: 0 !important ;
+    padding-bottom: 0 !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  .mcnImageGroupBlockInner {
+    padding-top: 0 !important ;
+    padding-bottom: 0 !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  .mcnImageGroupBlockOuter {
+    padding-top: 9px !important ;
+    padding-bottom: 9px !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  .mcnTextContent,
+  .mcnBoxedTextContentColumn {
+    padding-right: 18px !important ;
+    padding-left: 18px !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  .mcnImageCardLeftImageContent,
+  .mcnImageCardRightImageContent {
+    padding-right: 18px !important ;
+    padding-bottom: 0 !important ;
+    padding-left: 18px !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  .mcpreview-image-uploader {
+    display: none !important ;
+    width: 100% !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  h1 {
+    font-size: 22px !important ;
+    line-height: 125% !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  .mcnBoxedTextContentContainer .mcnTextContent,
+  .mcnBoxedTextContentContainer .mcnTextContent p {
+    font-size: 14px !important ;
+    line-height: 150% !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  #templatePreheader {
+    display: block !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  #templatePreheader .mcnTextContent, #templatePreheader .mcnTextContent p {
+    font-size: 14px !important ;
+    line-height: 150% !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  #templateHeader .mcnTextContent, #templateHeader .mcnTextContent p {
+    font-size: 16px !important ;
+    line-height: 150% !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  #templateGuidance .mcnTextContent, #templateGuidance .mcnTextContent p {
+    font-size: 16px !important ;
+    line-height: 150% !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  #templateNewsIntro .mcnTextContent, #templateNewsIntro .mcnTextContent p {
+    font-size: 16px !important ;
+    line-height: 150% !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  #templateNewsItems .columnContainer .mcnTextContent,
+  #templateNewsItems .columnContainer .mcnTextContent p {
+    font-size: 16px !important ;
+    line-height: 150% !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  #templateEvents .columnContainer .mcnTextContent,
+  #templateEvents .columnContainer .mcnTextContent p {
+    font-size: 16px !important ;
+    line-height: 150% !important ;
+  }
+}
+
+@media only screen and ( max-width: 480px ) {
+  #templateFooter .mcnTextContent,  #templateFooter .mcnTextContent p {
+    font-size: 14px !important ;
+    line-height: 150% !important ;
+  }
+}

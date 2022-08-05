@@ -1,0 +1,113 @@
+[% SET
+
+title = 'Privacy Policy'
+
+%]
+
+[%~ PROCESS header.tt %]
+
+    <div class="row column">
+
+[% PROCESS h1.tt media="the_diary_scheme" FILTER indent 4 %]
+
+      <p class="lead">
+        DATA takes the protection of the privacy of its members and subscribers
+        seriously. Please find below the policies that we apply in order to
+        ensure this.
+      </p>
+
+      <ol>
+        <li>
+          DATA will maintain records of personal data only insofar as it is
+          necessary to conduct the business of DATA, which consists of:
+        </li>
+        <ul>
+          <li>
+            Sending out DATA Diary listings to subscribers to the DATA Diary in
+            order to publicise the events of DATA members societies.
+          </li>
+          <li>
+            Communicating with representatives of DATA member societies to
+            maintain the DATA Diary and ensure the inclusion of its events in
+            member societies' programmes as per the terms of the <a href=
+            "[% conf.root %]diary_scheme">Diary Scheme</a>.
+          </li>
+          <li>
+            Coordinating the administrative affairs of DATA; for example
+            collecting membership fees, organising the AGM of DATA members, etc.
+          </li>
+          <li>
+            Consulting with DATA members on matters of interest to them so that
+            DATA may faithfully represent their views in lobbying on their
+            behalf.
+          </li>
+        </ul>
+        <br>
+        <li>
+          DATA will only hold the personal data that is needed for the purposes
+          identified in point 1 above and no more. This consists of name and
+          email	address and/or postal address and/or telephone number as
+          required.
+        </li>
+        <br>
+        <li>
+          DATA will not use any personal data that it holds for any purpose
+          other than those identified in point 1 above.
+        </li>
+        <br>
+        <li>
+          DATA uses Mailchimp to distribute its monthly bulletins. We store your
+          personal data (email address and name) in Mailchimp solely for this
+          purpose. Mailchimp is the only third-party with whom we share any
+          personal information.
+        </li>
+        <br>
+        <li>
+          DATA member societies must ensure that DATA holds personal data for
+          one or more representatives of their member society in order to ensure
+          that the administrative requirements of their membership can be met.
+        </li>
+        <br>
+        <li>
+          DATA will always obtain consent to hold the personal data for
+          representatives of member societies and subscribers to the DATA Diary
+          directly from the individuals themselves.
+        </li>
+        <br>
+        <li>
+          DATA will immediately cease sending the DATA Diary listing to anybody
+          on its mailing list who requests to be removed from that mailing list,
+          though note point 5 above.
+        </li>
+        <br>
+        <li>
+          DATA will remove from its records the personal data of any invidual
+          who is no longer:
+          <ul>
+            <li>A nominated representative of a member society; nor</li>
+            <li>An individual DATA member; nor</li>
+            <li>A subscriber to the DATA Diary  listings.</li>
+          </ul>
+        </li>
+        <br>
+        <li>
+          DATA will action a request by any individual to be removed from its
+          records, though note point 5 above.
+        </li>
+        <br>
+        <li>
+          DATA will on request provide the details of personal data held about
+          an individual to that individual and an explanation of the purposes
+          for which it is held.
+        <li>
+        <br>
+        <li>
+          All requests for action or information in relation to this policy can
+          be made via email to <a href="mailto:admin@derbyartsandtheatre.org.uk"
+          >admin@derbyartsandtheatre.org.uk</a>.
+        </li>
+      </ol>
+
+    </div>
+
+[% PROCESS footer.tt %]

@@ -1,0 +1,48 @@
+<!-- Start of Event Box Office -->
+<div class="floated-label-wrapper">
+
+[%~ UNLESS error_event_box_office # Initial State -%]
+
+  <label for="eventBoxOffice">
+    Box Office or Information ([% IF required %]Mandatory[% ELSE %]Optional
+    [%~ END %])
+  </label>
+  <input type="text" id="eventBoxOffice" name="event_box_office" placeholder=
+  "Box Office or Information ([% IF required %]Mandatory[% ELSE %]Optional
+  [%~ END %])" aria-describedby="event_box_officeHelpText" [% IF required %]
+  required[% END %]	value="[% event.box_office FILTER html %]"
+  [% IF disabled %]disabled[% END %]>
+  <small class="form-error">[% error_msg %]</small>
+
+[%~ ELSE # Error State -%]
+
+  <label class="is-invalid-label" for="eventBoxOffice">
+    Box Office or Information ([% IF required %]Mandatory[% ELSE %]Optional
+    [%~ END %])
+  </label>
+  <input class="is-invalid-input" type="text" id="eventBoxOffice" name=
+  "event_box_office" placeholder="Box Office ([% IF required %]Mandatory
+  [%~ ELSE %]Optional[% END %])" aria-describedby="event_box_officeHelpText"
+  [% IF required %]required[% END %] value="[% event.box_office FILTER html %]"
+  [% IF disabled %]disabled[% END %]>
+  <small class="form-error is-visible">
+
+[%~ IF error_event_box_office == 'Missing' %]
+    You must enter box office information and/or contact details
+[%~ ELSE %]
+    [% error_event_box_office %]
+[%~ END -%]
+
+  </small>
+
+[%~ END # error_event_box_office -%]
+
+  <p class="help-text" id="event_box_officeHelpText">
+    Enter information and/or contact details for box office or other enquiries;
+    for example:<br>
+    "01332 593939"<br>
+    "tickets £10 via 01773 829248"<br>
+    "Derby Live Box Office - 01332 255800"
+  </p>
+</div>
+<!-- End of Event Box Office -->

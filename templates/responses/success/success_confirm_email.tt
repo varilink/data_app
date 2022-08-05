@@ -1,0 +1,33 @@
+[%~ SET title = 'Email Address Verified'
+
+# Report the successful registration of a user account back to the user.
+
+%]
+
+[%~ PROCESS header.tt %]
+
+    <div class="row">
+
+      <div class=
+      "columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+
+[% PROCESS h1.tt FILTER indent 6 %]
+
+        <div class="callout success">
+
+          <p class="lead">
+            You have successfully verified the email address associated with
+            your user account. You can now use your user account to <a href=
+            "[% conf.root %]account/sign_in">Sign-In</a> to our site.
+            Alternatively you can select from the menu above or return to our <a
+            href="[% conf.root %]">home page</a> (<a href="[% conf.root %]"><i
+            class="fas fa-home"></i></a>).
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+[% PROCESS footer.tt %]

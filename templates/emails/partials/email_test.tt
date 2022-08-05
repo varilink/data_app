@@ -1,0 +1,10 @@
+[% IF original %]
+
+[% PROCESS email_paragraph.tt %]
+
+We are testing and the original recipient of this email was [% original %]. This
+recipient has been overridden.
+
+</p>
+
+[% END %]

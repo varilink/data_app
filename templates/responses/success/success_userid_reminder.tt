@@ -1,0 +1,32 @@
+[% SET title = 'Userid Reminder Sent'
+
+# Report the successful registration of a user account back to the user.
+
+%]
+
+[%~ PROCESS header.tt %]
+
+    <div class="row">
+
+      <div class=
+      "columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+
+[% PROCESS h1.tt FILTER indent 8 %]
+
+        <div class="callout success">
+
+          <p class="lead">
+            <i class="fas fa-check"></i>
+				    We have emailed a reminder of the userid associated with your user
+            account to you. You can select from the menu above or return to our
+            <a href="[% conf.root %]">home page</a>
+            (<a href="[% conf.root %]"><i class="fas fa-home"></i></a>).
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+[% PROCESS footer.tt %]

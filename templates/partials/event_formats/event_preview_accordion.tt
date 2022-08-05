@@ -1,0 +1,348 @@
+<p class="lead">
+  Below you can see how
+
+[%~ IF session.role == 'admin' =%]
+
+  this
+
+[%~ ELSIF session.role == 'rep' =%]
+
+  your
+
+[%~ END =%]
+
+  event will appear in the various formats that we use to promote it based on
+  the information you have entered in the Programme <span
+  class="show-for-medium">Listing</span> and Online <span
+  class="show-for-medium">Promotion</span> pages. You can change the way that
+
+[%~ IF session.role == 'admin' =%]
+
+  this
+
+[%~ ELSIF session.role == 'rep' =%]
+
+  your
+
+[%~ END =%]
+
+  event will appear by changing the information entered on those pages.
+</p>
+<!-- Start of the Accordion -->
+<ul class="accordion" data-accordion>
+  <!-- Start of Online Listings Accordion Item -->
+  <li class="accordion-item is-active" data-accordion-item>
+    <a href="#" class="accordion-title">Online Listings</a>
+    <!-- Start of Accorion Content -->
+    <div class="accordion-content" data-tab-content>
+
+[%~ IF event.society_rowid -%]
+
+      <p style="margin-bottom: 0;">
+        We show lists of future, published DATA events on our website:
+      </p>
+      <ul>
+        <li>
+          For <strong>all</strong> future events on the <a
+          href="[% conf.root %]events">Events</a> page;
+        </li>
+        <li>
+          Only those for [% event.society_name %] on their <a
+          href="[% conf.root %]society/[% event.society_rowid %]">More
+          about&hellip;</a> page.
+        </li>
+      </ul>
+      <p>
+        Here is how this event will look in those listings based on the
+        information entered:
+      </p>
+
+[%~ ELSE %]
+
+      <p>
+        We show a list of all future events on our website on the <a
+        href="[% conf.root %]events">Events</a> page. Here is how this
+        event will look in that listing based on the information entered:
+      </p>
+
+[%~ END -%]
+
+      <div class="hide-for-medium">
+        <div class="callout secondary">
+
+[%~ INCLUDE online_events_list_item.tt screen = 'small' FILTER indent 16 -%]
+
+        </div>
+        <p>
+          <strong>NOTE:</strong> You are viewing on a smaller screen, this
+          event will be listed in a more expanded format on larger screens
+          but we can't show you how that would look unless you are using a
+          larger screen.
+        </p>
+      </div>
+      <div class="show-for-medium">
+        <div class="callout secondary">
+
+[%~ PROCESS online_events_list_item.tt FILTER indent 16 -%]
+
+        </div>
+        <p>
+          <strong>NOTE:</strong> You are viewing on a larger screen, this
+          event will be listed in the more compressed format below on a
+          smaller screen:
+        </p>
+        <div class="callout secondary">
+
+[%~ INCLUDE online_events_list_item.tt screen = 'small' FILTER indent 16 -%]
+
+        </div>
+      </div>
+    </div>
+    <!-- End of Accordion Content -->
+  </li>
+  <!-- End of Online Listings Accordion Item -->
+  <!-- Start of Online in Event Card Format Accordion Item -->
+  <li class="accordion-item" data-accordion-item>
+    <a href="#" class="accordion-title">Online in Event Card Format</a>
+    <!-- Start of Accordion Content -->
+    <div class="accordion-content" data-tab-content>
+      <p>
+        Each event is shown in event card format on its own page, here is
+        the <a href="[% conf.root %]event/[% event.rowid %]">page for this
+        event</a>. We also show the next twelve events in the DATA Diary
+        in chronological order on our <a href="[% conf.root %]">home
+        page</a> in event card format.
+      </p>
+      <p>
+        Here is the event card for this event based on the information
+        entered:
+      </p>
+
+[%- PROCESS event_card.tt FILTER indent 12 %]
+
+[%~ UNLESS event.use_desc # event.use_desc == 0 -%]
+
+      <p>
+        <strong>NOTE:</strong> Since no fuller description of this event
+        has been entered on the Online <span class="show-for-medium">
+        Promotion</span> page, this card is built from the Programme <span
+        class="show-for-medium">Listing</span> details. Use the Onine
+        <span class="show-for-medium">Promotion</span> page to provide a
+        fuller description and add an image for greater visual impact.
+      </p>
+
+[%~ END -%]
+
+    </div>
+    <!-- End of Accordion Content -->
+  </li>
+  <!-- End of Online in Event Card Format Accordion Item -->
+  <!-- Start of Printed Listings Accordion Item -->
+  <li class="accordion-item" data-accordion-item>
+    <a href="#" class="accordion-title">Printed Listings</a>
+    <!-- Start of Accordion Content -->
+    <div class="accordion-content" data-tab-content>
+      <p>
+        We make our event listings available for printing in a format
+        specific to this purpose. Here is how your event will appear in
+        these printed listings:
+      </p>
+      <table class="preview">
+
+[%- PROCESS printed_events_list_item.tt FILTER indent 14 -%]
+
+      </table>
+    </div>
+    <!-- End of Accordion Content -->
+  </li>
+  <!-- End of Printed Listings Accordion Item -->
+  <!-- Start of Social Media Accordion Item -->
+  <li class="accordion-item" data-accordion-item>
+    <a href="#" class="accordion-title">Social Media Updates</a>
+    <!-- Start of Accordion Content -->
+    <div class="accordion-content" data-tab-content>
+      <p>
+        We automatically post event updates to the <a
+        href="https://www.facebook.com/DerbyArtsAndTheatreAssociation"
+        target="_blank">DATA Facebook page</a> and Tweet them via the <a
+        href="https://twitter.com/DerbyAmPerfArts" target="_blank">DATA Twitter
+        account</a>. When we do so, we always link back to the <a
+        href="[% conf.root %]event/[% event.rowid %]">page for this event</a> on
+        the DATA website, for full event details. However, we also include a
+        summary message in the post/Tweet which varies according to how far away
+        the event is as follows:
+      </p>
+
+[%~ # Start of "Post Method" Logic ------------------------------------------ %]
+[%~ # This logic mirrors that in the post method of the Event object.         %]
+[%~ # Unify the two at some point.                                            %]
+
+[%~ SET rel_who = '' %]
+
+[%~ IF ( matches = event.presented_by.match ( '^"(.+)"$' ) ) %]
+
+[%~ rel_who = matches.1 %]
+
+[%~ ELSE %]
+
+[%~ rel_who = "presented by ${event.presented_by}" %]
+
+[%~ END %]
+
+[%~ SET rel_who_where = rel_who _ ' at ' _ event.venue_name %]
+
+[%~ # End of Post Method Logic -----------------------------------------------%]
+
+      <p>
+        <span style="text-decoration: underline;">
+          More than seven days prior to the
+
+[%~ IF event.end_date == event.start_date -%]
+
+          day of the event
+
+[%~ ELSE -%]
+
+          first day of the event
+
+[%~ END -%]
+
+        </span>
+        <br>
+        [% event.name %] will be
+        [% rel_who_where %]
+
+[%~ IF event.end_date == event.start_date -%]
+
+        [% "on ${event.start_date}" %]
+
+[%~ ELSE -%]
+
+        [% "from ${event.start_date} to ${event.end_date}" %]
+
+[%~ END -%]
+
+      </p>
+      <p>
+        <span style="text-decoration: underline;">
+          Less than seven days prior to the
+
+[%~ IF event.end_date == event.start_date -%]
+
+          day of the event
+
+[%~ ELSE -%]
+
+          first day of the event
+
+[%~ END -%]
+
+        </span>
+        <br>
+        [% event.name %] will be
+        [% rel_who_where %]
+
+[%~ IF event.end_date == event.start_date -%]
+
+        [% "on ${event.start_day}" %]
+
+[%~ ELSE -%]
+
+        [% "from ${event.start_day} to ${event.end_day}" %]
+
+[%~ END -%]
+
+      </p>
+      <p>
+        <span style="text-decoration: underline;">
+          The day before the
+
+[%~ IF event.end_date == event.start_date -%]
+
+          day of the event
+
+[%~ ELSE -%]
+
+          first day of the event
+
+[%~ END -%]
+
+        </span>
+        <br>
+        [% event.name %] will be
+        [% rel_who_where %]
+
+[%~ IF event.end_date == event.start_date =%]
+
+        tomorrow
+
+[%~ ELSE =%]
+
+        from tomorrow
+
+[%~ END -%]
+
+      </p>
+      <p>
+        <span style="text-decoration: underline;">
+          On the
+
+[%~ IF event.end_date == event.start_date -%]
+
+          day of the event
+
+[%~ ELSE -%]
+
+          first day of the event
+
+[%~ END -%]
+
+        </span>
+        <br>
+        [% event.name %] will be
+        [% rel_who_where %]
+
+[%~ IF event.end_date == event.start_date =%]
+
+        today
+
+[%~ ELSE =%]
+
+        from today
+
+[%~ END -%]
+
+      </p>
+
+[%~ UNLESS event.end_date == event.start_date -%]
+
+      <p>
+        <span style="text-decoration: underline;">
+          On each subsequent day until the event has ended
+        </span>
+        <br>
+        Still time to catch [% event.name %]
+        [% rel_who_where %] - don't miss it!
+      </p>
+
+[%~ END -%]
+
+    </div>
+    <!-- End of Accordion Content -->
+  </li>
+  <!-- End of Social Media Accordion Item -->
+  <!-- Start of Email Bulletin Accordion Item -->
+  <li class="accordion-item" data-accordion-item>
+    <a href="#" class="accordion-title">Email Bulletin</a>
+    <!-- Start of Accordion Content -->
+    <div class="accordion-content" data-tab-content>
+      <p>
+        Once a month we send an email bulletin to our subscriber list. This
+        includes a mini-card list of events that coming in the next month.
+      </p>
+    </div>
+    <!-- End of Accordion Content -->
+  </li>
+  <!-- End of Email Bulletin Accordion Item -->
+</ul>
+<!-- End of the Accordion -->

@@ -1,0 +1,33 @@
+<!-- Start of Heading 1 -->
+<div class="row column">
+  <br>
+  <br>
+
+[%~ IF media -%]
+
+  <div class="media-object align-middle align-center">
+    <div class="media-object-section bottom">
+      <h1 class="text-center">
+        <span class="show-for-large">Derby Arts and Theatre Association</span>
+        <span class="hide-for-large">DATA</span><br />[% title %]
+      </h1>
+    </div>
+    <div class="media-object-section">
+      <div class="image">
+        <img src="[% conf.root %]assets/img/[% media %].jpg" alt="[% title %]">
+      </div>
+    </div>
+  </div>
+
+[%~ ELSE -%]
+
+  <h1 class="text-center">
+    <span class="show-for-large">Derby Arts and Theatre Association</span>
+    <span class="hide-for-large">DATA</span><br />[% title %]
+  </h1>
+
+[%~ END -%]
+
+  <br>
+</div>
+<!-- End of Heading 1 -->

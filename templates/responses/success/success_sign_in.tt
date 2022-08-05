@@ -1,0 +1,48 @@
+[%~ SET title = 'Sign-In Successful'
+
+# Report the successful registration of a user account back to the user.
+
+%]
+
+[%~ PROCESS header.tt %]
+
+    <div class="row">
+
+      <div class=
+    	"columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+
+[% PROCESS h1.tt FILTER indent 6 %]
+
+        <div class="callout success">
+
+          <p class="lead text-center">
+            <i class="fas fa-thumbs-up"></i>
+            You have successfully signed-in and your menu now reflects this.
+          </p>
+
+          <p class="text-center">
+            <img class="hide-for-medium" src="[% conf.root ~%]
+            assets/img/menu/signed_in_mobile_topbar.png">
+            <img class="show-for-medium" src="[% conf.root ~%]
+            assets/img/menu/signed_in_topbar.png">
+          </p>
+
+          <p class="lead text-center">
+            While you remain signed-in, you may update the details of your <a
+            href="[% conf.root %]secure/account">Account</a> and access the
+[% IF session.role == 'admin' %]
+            <a href="[% conf.root %]secure/admin">Admin</a>
+[% ELSIF session.role == 'rep' %]
+            <a href="[% conf.root %]secure/rep">Admin</a>
+[% END %]
+            area, in which you can update the information held in the DATA
+            Diary.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+[% PROCESS footer.tt %]

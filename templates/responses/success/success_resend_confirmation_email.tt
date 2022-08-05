@@ -1,0 +1,19 @@
+[% SET
+
+	title = 'Resend of Email to Confirm Email Address'
+
+%]
+
+[% PROCESS header.tt %]
+
+<div class="row column">
+
+	[% PROCESS h1.tt %]
+
+	<p>
+		The confirmation email has been resent.
+	</p>
+
+</div>
+
+[% PROCESS footer.tt %]

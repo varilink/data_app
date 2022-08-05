@@ -1,0 +1,57 @@
+<div class="floated-label-wrapper">
+
+[%~ UNLESS error_user_first_name # Initial State %]
+
+  <label for="user_first_name">
+    First Name ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+
+  <input type="text" id="user_first_name" name="user_first_name"	placeholder=
+  "First Name ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  [% IF required %]required[% END %] aria-describedby="user_first_nameHelpText"
+  value="[% user.first_name %]">
+
+  <small class="form-error">
+[%~ IF error_msg %]
+    [% error_msg %]
+[%~ ELSE %]
+    You must enter your first name
+[%~ END %]
+  </small>
+
+[%~ ELSE # Error State %]
+
+  <label class="is-invalid-label" for="user_first_name">
+    First Name ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+
+  <input class="is-invalid-input" type="text" id="user_first_name" name=
+  "user_first_name"	placeholder="First Name ([% IF required %]Mandatory
+  [% ELSE %]Optional[% END %])" [% IF required %]required[% END %]
+  aria-describedby="user_first_nameHelpText" value="[% user.first_name %]">
+
+  <small class="form-error is-visible">
+[%~ IF error_user_first_name == 'Missing' %]
+    You must enter your first name
+[%~ ELSE %]
+    [% error_user_first_name %]
+[%~ END %]
+  </small>
+
+[%~ END # error_user_first_name %]
+
+[%~ IF template.name == 'account.tt' || caller == 'account.tt' %]
+
+  <p class="help-text" id="user_first_nameHelpText">
+    Update if you want to change the first name associated with your account.
+  </p>
+
+[%~ ELSE %]
+
+  <p class="help-text" id="user_first_nameHelpText">
+    Enter your first name.
+  </p>
+
+[%~ END %]
+
+</div>

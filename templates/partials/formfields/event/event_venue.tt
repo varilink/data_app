@@ -1,0 +1,89 @@
+<!-- Start of Event Venue -->
+<div class="floated-label-wrapper ui-widget">
+
+[%~ UNLESS error_event_venue # Initial State -%]
+
+  <label for="eventVenue">
+    Venue ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+  <input type="text" id="eventVenue" name="event_venue" placeholder=
+  "Venue ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  aria-describedby="eventVenueHelpText"	[% IF required %]required[% END %]
+  value="[% event.venue_name %]" [% IF disabled %]disabled[% END %]>
+  <small class="form-error">[% error_msg %]</small>
+
+[%~ ELSE # Error State -%]
+
+  <label class="is-invalid-label" for="eventVenue">
+    Venue ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+  <input class="is-invalid-input" type="text" id="eventVenue" name=
+  "event_venue" placeholder="Venue ([% IF required %]Mandatory[% ELSE ~%]
+  Optional[% END %])" aria-describedby="eventVenueHelpText"
+  [% IF required %]required[% END %] value="[% event.venue_name %]"
+  [% IF disabled %]disabled[% END %]>
+  <small class="form-error is-visible">
+[% IF error_event_venue == 'Missing' -%]
+    You must enter the venue for the event
+[% ELSIF error_event_venue == 'venue_exists' -%]
+    You must select a venue as described below or notify us if you can't find
+    the venue that you require
+[% ELSE -%]
+    [% error_event_venue %]
+[% END -%]
+  </small>
+
+[%~ END # error_event_venue -%]
+
+  <p class="help-text" id="eventVenueHelpText">
+    Select the venue for the event. Start to type characters in the venue's name
+    and when you have typed at least two characters a list of venues to select
+    from will appear. The characters can be anywhere in the venue name and
+    should be as differentiating as possible, e.g. "ph" rather than "st" to find
+    "St. Philip's Church, Chaddesden".
+[%~ UNLESS template.name == 'notify_event.tt' %]
+    If you can't find the venue for your event please notify us via email to
+    <a href="mailto:admin@derbyartsandtheatre.org.uk">
+    admin@derbyartsandtheatre.org.uk</a>.
+[%~ ELSE %]
+    If you can't find the venue for your event in this way then type in your
+    venue rather than select it.
+[%~ END %]
+  </p>
+</div>
+
+[%~ global.script.event_venue = BLOCK %]
+
+[%~ MACRO whatson_venues BLOCK %]
+
+// Venues list for autocomplete selection
+var venues = [
+
+[%~ FOREACH venue IN venues -%]
+
+	"[% venue.name %]" ,
+
+[%~ END -%]
+
+] ;
+
+[%#
+
+Attach to named inputs rather than use an id as we have placeholder and
+confirmed instances.
+
+-%]
+
+$ ( 'input[name=event_venue]' ) . autocomplete ( {
+
+	minLength: 2 ,
+	source: venues
+
+} ) ;
+
+[%~ END # MACRO whatson_venues BLOCK %]
+
+[%~ CGIAPP.embed ( 'whatson_venues' , 'ACTIVE' ) %]
+
+[%~ END # BLOCK global.script.event_venue %]
+<!-- End of Event Venue -->

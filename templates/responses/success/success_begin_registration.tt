@@ -1,0 +1,70 @@
+[%~ SET title = 'Complete User Account Registration'
+
+# Complete the registration of a user account. This will only be shown if the
+# email address is recognised as being eligible for a new user account
+
+%]
+
+[%~ PROCESS header.tt %]
+
+    <div class="row column">
+
+[% PROCESS h1.tt FILTER indent 6 %]
+
+      <p class="lead">
+        Please complete the details below and click on "Register" to complete
+        the registration of a user account associated with the email address
+        that you provided.
+      </p>
+
+[% PROCESS form.tt
+	action		= '/account/action/complete_registration'		,
+	name			= 'Registration Details'							,
+	onError		= 'success_begin_registration'					,
+	onSuccess	= '/account/success_complete_registration'	,
+FILTER indent 6 %]
+
+        <input name="user_email" id="user_email" type="hidden" value=
+        "[% user_email %]">
+
+[% required = 1 # All form fields on this page are required %]
+
+        <h2>Contact Details</h2>
+
+[% PROCESS user_first_name.tt
+	error_msg = 'You must enter your first name'
+FILTER indent 8 %]
+
+[% PROCESS user_surname.tt
+	error_msg = 'You must enter your surname'
+FILTER indent 8 %]
+
+        <h2>Account Details</h2>
+
+[% INCLUDE user_userid.tt
+	error_msg = 'You must enter an alphanumeric userid at least 8 characters long' ,
+	noautocomplete = 1 ,
+FILTER indent 8 %]
+
+[% INCLUDE user_password.tt
+	error_msg = 'You must choose a password that complies with the format described below' ,
+	noautocomplete = 1 ,
+FILTER indent 8 %]
+
+[% PROCESS user_confirm_password.tt
+	error_msg = 'You must repeat your password to confirm it'
+FILTER indent 8 %]
+
+[% PROCESS buttons.tt
+  buttons = [
+    {
+      id    = 'register'  ,
+      type  = 'submit'    ,
+      value = 'Register'  ,
+    }
+  ]
+FILTER indent 6 %]
+
+    </div>
+
+[% PROCESS footer.tt %]

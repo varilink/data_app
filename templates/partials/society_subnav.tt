@@ -1,0 +1,103 @@
+<!-- Start of Society Sub Navigation -->
+<div class="row column">
+
+  <div class="callout information">
+    <p class="lead text-center" style="margin-bottom: 0;">
+      <span style="font-size: 125%;">
+        <i class="fas fa-info-circle"></i>&nbsp;&nbsp;Information
+      </span>
+    </p>
+    <p class="lead">
+
+[%~ IF session.role == 'rep' -%]
+
+      Here you can update the "Details" for your society or view the "Contacts"
+      that we have on record for it. You can <strong>not</strong> edit those
+      contacts. Instead please email <a
+      href="mailto:admin@derbyartsandtheatre.org.uk">
+      admin@derbyartsandtheatre.org.uk</a> to notify us of any changes. Your
+      society's membership of DATA requires that you <strong>must</strong>
+      provide us with an email address for at least one current contact at all
+      times.
+
+[%~ ELSIF session.role == 'admin' %]
+
+[%~ IF rowid # Update -%]
+
+      Here you can update the "Details" for a society or view the "Contacts"
+      that we have on record for it. You can <strong>not</strong> edit those
+      contacts. Instead please email <a
+      href="mailto:admin@derbyartsandtheatre.org.uk">
+      admin@derbyartsandtheatre.org.uk</a> to notify the administrator of any
+      changes.
+
+[%~ ELSE # ! rowid therefore Add -%]
+
+      Here you can add a new DATA member society and the "Details" associated
+      with it. You can <strong>not</strong> add "Contacts" for the society.
+      Instead please email <a href="mailto:admin@derbyartsandtheatre.org.uk">
+      admin@derbyartsandtheatre.org.uk</a> to notify the administrator of them.
+
+[%~ END # IF rowid %]
+
+[%~ ELSE # Should never occur, could throw and error %]
+
+[%~ END -%]
+
+    </p>
+  </div>
+
+  <br>
+  <nav aria-label="Pagination">
+
+    <ul class="pagination text-center">
+
+[%~ IF
+  template.name == 'admin_society.tt' OR
+  template.name == 'rep_society.tt'
+%]
+
+      <li class="current">
+        Details
+      </li>
+
+[%~ IF rowid -%]
+
+      <li>
+        <a href="[% conf.root %]secure/[% session.role %]/contacts/
+        [%~ rowid %]">
+          Contacts
+        </a>
+      </li>
+
+[%~ ELSE -%]
+
+      <li class="disabled">
+        Contacts
+      </li>
+
+[%~ END %]
+
+[%~ ELSE # template.name must be admin_contacts.tt or rep_contacts.tt -%]
+
+      <li>
+        <a href="[% conf.root %]secure/[% session.role %]/society/
+        [%~ rowid %]">
+          Details
+        </a>
+      </li>
+      <li class="current">
+        Contacts
+      </li>
+
+[%~ END -%]
+
+    </ul>
+  </nav>
+</div>
+<div class="row column expanded" style="background-color: #4dac71;">
+  &nbsp;
+</div>
+<br>
+<br>
+<!-- End of Society Sub Navigation -->

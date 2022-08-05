@@ -1,0 +1,521 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-137420866-1">
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-137420866-1');
+    </script>
+
+[% PROCESS head.tt FILTER indent 4 %]
+
+  </head>
+
+  <body>
+
+[%- PROCESS cookie_alert.tt FILTER indent 4 -%]
+
+    <!-- Start of Top Bar Wrapper -->
+    <div class="top-bar-wrapper">
+
+[%-#----------------------------------------------------------------------------
+
+#	Title Bar
+
+#-----------------------------------------------------------------------------%]
+
+      <!-- Start of Mobile Title Bar -->
+      <div class="title-bar" data-responsive-toggle="responsive-menu">
+
+        <button class="menu-icon" type="button" data-toggle="responsive-menu">
+        </button>
+        <div class="title-bar-title">Menu</div>
+
+      </div>
+      <!-- End of Mobile Title Bar -->
+
+[%-#----------------------------------------------------------------------------
+
+#	Top Bar (Upper)
+
+#-----------------------------------------------------------------------------%]
+
+      <!-- Start of Top Bar Upper -->
+      <div class="top-bar upper" id="responsive-menu"
+      data-animate="slide-in-down slide-out-up">
+
+[%-#----------------------------------------------------------------------------
+
+#		Left Section
+
+#-----------------------------------------------------------------------------%]
+
+        <!-- Start of Top Bar Left -->
+        <div class="top-bar-left">
+
+          <ul class="menu horizontal">
+
+            <li><a href="[% conf.root %]"><i class="fas fa-home"></i></a></li>
+
+[%-#----------------------------------------------------------------------------
+
+			Events
+
+#-----------------------------------------------------------------------------%]
+
+[%~ IF template.name == 'events.tt' %]
+            <li>
+              <a href="[% conf.root %]events">
+                <span class="is-active">Events</span>
+              </a>
+[%~ ELSE %]
+            <li>
+              <a href="[% conf.root %]events">
+                Events
+              </a>
+[%~ END %]
+
+[%~ IF
+  template.name == 'events.tt'        ||
+  template.name == 'subscribe.tt'     ||
+  template.name == 'notify_event.tt'
+# Vertical event sub menu for small -%]
+
+              <ul class="nested vertical menu hide-for-medium">
+
+[%~ IF template.name == 'subscribe.tt' %]
+                <li>
+                  <a href="[% conf.mailchimp_signup_form_url %]">
+                    <span class="is-active">Subscribe</span>
+                  </a>
+                </li>
+[%~ ELSE %]
+                <li>
+                  <a href="[% conf.mailchimp_signup_form_url %]">
+                    Subscribe
+                  </a>
+                </li>
+[%~ END %]
+
+[%~ IF template.name == 'notify_event.tt' %]
+                <li>
+                  <a href="[% conf.root %]notify_event">
+                    <span class="is-active">Notify Event</span>
+                  </a>
+                </li>
+[%~ ELSE %]
+                <li>
+                  <a href="[% conf.root %]notify_event">
+                    Notify Event
+                  </a>
+                </li>
+[%~ END -%]
+
+              </ul>
+
+[%~ END # Vertical event sub menu for small -%]
+
+            </li>
+
+[%-#----------------------------------------------------------------------------
+
+  # Societies
+
+#-----------------------------------------------------------------------------%]
+
+[%~ IF template.name == 'societies.tt' %]
+            <li>
+              <a href="[% conf.root %]societies">
+                <span class="is-active">Societies</span>
+              </a>
+[%~ ELSE %]
+            <li>
+              <a href="[% conf.root %]societies">
+                Societies
+              </a>
+[%~ END %]
+
+[%~ IF template.name == 'societies.tt' || template.name == 'join_us.tt'
+# Vertical societies sub menu for small -%]
+
+              <ul class="nested vertical menu hide-for-medium">
+
+[%~ IF template.name == 'join_us.tt' %]
+                <li>
+                  <a href="[% conf.root %]join_us">
+                    <span class="is-active">Join Us</span>
+                  </a>
+                </li>
+[%~ ELSE %]
+                <li>
+                  <a href="[% conf.root %]join_us">
+                    Join Us
+                  </a>
+                </li>
+[%~ END -%]
+
+              </ul>
+
+[%~ END # Vertical societies sub menu for small -%]
+
+            </li>
+
+[%-#----------------------------------------------------------------------------
+
+  # About Us
+
+#-----------------------------------------------------------------------------%]
+
+            <li>
+              <a href="[% conf.root %]about_us">
+[%~ IF template.name == 'about_us.tt' %]
+                <span class="is-active">About Us</span>
+[%~ ELSE %]
+                About Us
+[%~ END %]
+              </a>
+
+[%~ IF
+  template.name == 'about_us.tt'      ||
+  template.name == 'diary_scheme.tt'  ||
+  template.name == 'news.tt'          ||
+  caller        == 'news_item.tt'     ||
+  template.name == 'privacy.tt'
+# Vertical about us sub menu for small -%]
+
+              <ul class="nested vertical menu hide-for-medium">
+
+                <li>
+                  <a href="[% conf.root %]news">
+[%~ IF caller == 'news_item.tt' || template.name == 'news.tt' %]
+                    <span class="is-active">News</span>
+[%~ ELSE %]
+                    News
+[%~ END %]
+                  </a>
+                </li>
+
+                <li>
+                  <a href="[% conf.root %]diary_scheme">
+[%~ IF template.name == 'diary_scheme.tt' %]
+                    <span class="is-active">Diary Scheme</span>
+[%~ ELSE %]
+                    Diary Scheme
+[%~ END %]
+                  </a>
+                </li>
+
+                <li>
+                  <a href="[% conf.root %]privacy">
+[%~ IF template.name == 'privacy.tt' %]
+                    <span class="is-active">Privacy Policy</span>
+[%~ ELSE %]
+                    Privacy Policy
+[%~ END %]
+                  </a>
+                </li>
+
+              </ul>
+
+[%~ END # Vertical about us sub menu for small -%]
+
+            </li>
+
+          </ul>
+
+        </div>
+        <!-- End of Top Bar Left -->
+
+[%-#----------------------------------------------------------------------------
+
+  # Right Section
+
+#-----------------------------------------------------------------------------%]
+
+        <!-- Start of Top Bar Right -->
+        <div class="top-bar-right">
+
+          <ul class="menu horizontal">
+
+[%~ IF session.userid %]
+
+[%-#----------------------------------------------------------------------------
+
+  # Authenticated
+
+#-----------------------------------------------------------------------------%]
+
+            <li>
+              <a href="[% conf.root %]secure/account/action/logout">
+                Sign-Out
+              </a>
+            </li>
+
+            <li>
+              <a href="[% conf.root %]secure/account">
+[%~ IF template.name == 'account.tt' %]
+                <span class="is-active">Account</span>
+[%~ ELSE %]
+                Account
+[%~ END %]
+              </a>
+            </li>
+
+            <li>
+[%~ IF session.role == 'admin' %]
+              <a href="[% conf.root %]secure/admin/">
+                <i class="fas fa-caret-right"></i> <span>Admin</span>
+              </a>
+[%~ ELSIF session.role == 'rep' %]
+              <a href="[% conf.root %]secure/rep/">
+                <i class="fas fa-caret-right"></i> <span>Admin</span>
+              </a>
+[%~ ELSE # session.role not 'admin' or 'rep' - invalid, throw an exception %]
+[%~ END # IF session.role == 'admin' %]
+            </li>
+
+[%~ ELSE # ! session.userid %]
+
+[%-#----------------------------------------------------------------------------
+
+  # Unauthenticated
+
+#-----------------------------------------------------------------------------%]
+
+            <li>
+              <a href="[% conf.root %]account/sign_in">
+[%~ IF
+  template.name == 'request_password_reset.tt'            ||
+  template.name == 'sign_in.tt'                           ||
+  template.name == 'success_request_password_reset.tt'    ||
+  template.name == 'success_reset_password.tt'            ||
+  template.name == 'success_show_password_reset_page.tt'  ||
+  template.name == 'success_sign_in.tt'                   ||
+  template.name == 'success_userid_reminder.tt'           ||
+  template.name == 'userid_reminder.tt'
+%]
+                <span class="is-active">Sign-In</span>
+[%~ ELSE %]
+                Sign-In
+[%~ END %]
+              </a>
+
+[%~ IF
+  template.name == 'begin_registration.tt'                ||
+  template.name == 'request_password_reset.tt'            ||
+  template.name == 'resend_confirmation_email.tt'         ||
+  template.name == 'sign_in.tt'                           ||
+  template.name == 'success_request_password_reset.tt'    ||
+  template.name == 'success_reset_password.tt'            ||
+  template.name == 'success_show_password_reset_page.tt'  ||
+  template.name == 'success_userid_reminder.tt'           ||
+  template.name == 'userid_reminder.tt'                   ||
+  template.name == 'warning_begin_registration.tt'
+# Vertical sign-in sub menu for small %]
+
+              <ul class="nested vertical menu hide-for-medium">
+
+                <li><a href="[% conf.root %]account/begin_registration">
+[%~ IF
+  template.name == 'begin_registration.tt'        ||
+  template.name == 'resend_confirmation_email.tt' ||
+  template.name == 'warning_begin_registration.tt'
+%]
+                  <span class="is-active">Register</span>
+[%~ ELSE %]
+                  Register
+[%~ END %]
+                </a></li>
+
+              </ul>
+
+[%~ END # Vertical about us sub menu for small %]
+
+            </li>
+
+[%~ END # IF session.userid %]
+
+          </ul>
+
+        </div>
+        <!-- End of Top Bar Right -->
+
+      </div>
+      <!-- End of Top Bar Upper -->
+
+[%-#----------------------------------------------------------------------------
+
+  # Top Bar (Lower)
+
+#-----------------------------------------------------------------------------%]
+
+      <div class="top-bar lower show-for-medium">
+
+[%-#----------------------------------------------------------------------------
+
+  # Left Section
+
+#-----------------------------------------------------------------------------%]
+
+        <div class="top-bar-left">
+
+[%~ IF
+  template.name == 'events.tt'        ||
+  template.name == 'subscribe.tt'     ||
+  template.name == 'notify_event.tt'
+%]
+
+[%-#----------------------------------------------------------------------------
+
+  # Events
+
+#-----------------------------------------------------------------------------%]
+
+          <ul class="menu horizontal" style="margin-left: 3.3em;">
+
+            <li class="menu-text">
+              <i class="fas fa-rotate-90 fa-level-up-alt"></i>
+            </li>
+
+            <li><a href="[% conf.mailchimp_signup_form_url %]">
+[%~ IF template.name == 'subscribe.tt' %]
+              <span class="is-active">Subscribe</span>
+[%~ ELSE %]
+              Subscribe
+[%~ END %]
+            </a></li>
+
+            <li><a href="[% conf.root %]notify_event">
+[%~ IF template.name == 'notify_event.tt' %]
+              <span class="is-active">Notify Us</span>
+[%~ ELSE %]
+              Notify Us
+[%~ END %]
+            </a></li>
+
+          </ul>
+
+[%~ ELSIF template.name == 'societies.tt' || template.name == 'join_us.tt' %]
+
+[%-#----------------------------------------------------------------------------
+
+  # Societies
+
+#-----------------------------------------------------------------------------%]
+
+          <ul class="menu horizontal" style="margin-left: 8.2em;">
+
+            <li class="menu-text">
+              <i class="fas fa-rotate-90 fa-level-up-alt"></i>
+            </li>
+
+            <li><a href="[% conf.root %]join_us">
+[%~ IF template.name == 'join_us.tt' %]
+              <span class="is-active">Join Us</span>
+[%~ ELSE %]
+              Join Us
+[%~ END %]
+            </a></li>
+
+          </ul>
+
+[%~ ELSIF
+  template.name	== 'about_us.tt'      ||
+  template.name	== 'diary_scheme.tt'  ||
+  template.name	== 'news.tt'          ||
+  caller        == 'news_item.tt'     ||
+  template.name == 'privacy.tt'
+%]
+
+[%-#----------------------------------------------------------------------------
+
+  # About Us
+
+#-----------------------------------------------------------------------------%]
+
+          <ul class="menu horizontal" style="margin-left: 14.1em;">
+
+            <li class="menu-text">
+              <i class="fas fa-rotate-90 fa-level-up-alt"></i>
+            </li>
+
+            <li><a href="[% conf.root %]news">
+[%~ IF caller == 'news_item.tt' || template.name == 'news.tt' %]
+              <span class="is-active">News</span>
+[%~ ELSE %]
+              News
+[%~ END %]
+            </a></li>
+
+            <li><a href="[% conf.root %]diary_scheme">
+[%~ IF template.name == 'diary_scheme.tt' %]
+              <span class="is-active">Diary Scheme</span>
+[%~ ELSE %]
+              Diary Scheme
+[%~ END %]
+            </a></li>
+
+            <li><a href="[% conf.root %]privacy">
+[%~ IF template.name == 'privacy.tt' %]
+              <span class="is-active">Privacy Policy</span>
+[%~ ELSE %]
+              Privacy Policy
+[%~ END %]
+            </a></li>
+
+          </ul>
+
+[%~ ELSIF
+  template.name == 'begin_registration.tt'                ||
+  template.name == 'request_password_reset.tt'            ||
+  template.name == 'resend_confirmation_email.tt'         ||
+  template.name == 'sign_in.tt'                           ||
+  template.name == 'success_begin_registration.tt'        ||
+  template.name == 'success_request_password_reset.tt'    ||
+  template.name == 'success_reset_password.tt'            ||
+  template.name == 'success_show_password_reset_page.tt'  ||
+  template.name == 'success_userid_reminder.tt'           ||
+  template.name == 'userid_reminder.tt'                   ||
+  template.name == 'warning_begin_registration.tt'
+%]
+
+[%-#----------------------------------------------------------------------------
+
+  # Sign-In
+
+#-----------------------------------------------------------------------------%]
+
+          <ul class="menu horizontal align-right" style="margin-right: 0.4em;">
+
+            <li><a href="[% conf.root %]account/begin_registration">
+[%~ IF
+  template.name == 'begin_registration.tt'          ||
+  template.name == 'resend_confirmation_email.tt'   ||
+  template.name == 'success_begin_registration.tt'  ||
+  template.name == 'warning_begin_registration.tt'
+%]
+              <span class="is-active">Register</span>
+[%~ ELSE %]
+              Register
+[%~ END %]
+            </a></li>
+
+            <li class="menu-text">
+              <i class="fas fa-rotate-90 fa-level-down-alt"></i>
+            </li>
+
+          </ul>
+
+[%~ END %]
+
+        </div> [%# End of top-bar-right %]
+
+      </div> [%# End of top-bar ( lower ) %]
+
+    </div> [%# End of top-bar-wrapper %]

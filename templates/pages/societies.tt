@@ -1,0 +1,61 @@
+[% SET
+
+title = 'Member Societies'
+
+%]
+
+[%~ PROCESS header.tt %]
+
+[% PROCESS h1.tt media = "member_societies" FILTER indent 4 %]
+
+    <div class="row column">
+
+      <p class="lead">
+        DATA Diary is made possible by the participation of our member
+        societies, read more about them below. Are you associated with an
+        amateur performing arts society in or around the Derby area that is not
+        a member of DATA? Why not apply to <a href="[% conf.root %]join_us">Join
+        Us</a>?
+      </p>
+
+      <ul class="accordion" data-accordion data-allow-all-closed="true"
+      data-multi-expand="true">
+
+[%~ MACRO whatson_societies BLOCK %]
+
+[%~ FOREACH society IN societies %]
+
+<li class="accordian-item" data-accordion-item>
+  <a href="#" class="accordion-title">[% society.name %]</a>
+  <div class="accordion-content" data-tab-content>
+
+    <p>[% society.description %]</p>
+
+      <a href="[% conf.root %]society/[% society.rowid %]">
+        More about [% society.name %]
+      </a>
+
+    </div>
+</li>
+
+[%~ END %]
+
+[%~ END # MACRO whatson_societies BLOCK %]
+
+[%~ CGIAPP.embed (
+
+	# component = whatson_societies - a list of member societies
+	'whatson_societies'	,
+
+	# filter - determines which member societies are returned
+	'filter' = {
+		'status'	=> 'ACTIVE'	, # Only member societies in ACTIVE status returned
+	}
+
+) FILTER indent 8 %]
+
+      </ul>
+
+    </div>
+
+[% PROCESS footer.tt %]

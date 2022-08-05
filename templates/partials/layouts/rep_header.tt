@@ -1,0 +1,229 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+
+[%- PROCESS head.tt FILTER indent 4 -%]
+
+  </head>
+  <body>
+    <!-- Start of Top Bar Wrapper -->
+    <div class="top-bar-wrapper">
+
+[%~#----------------------------------------------------------------------------
+
+#	Title Bar
+
+#-----------------------------------------------------------------------------%]
+
+      <!-- Start of Mobile Title Bar -->
+      <div class="title-bar" data-responsive-toggle="responsive-menu">
+        <button class="menu-icon" type="button" data-toggle="responsive-menu">
+        </button>
+        <div class="title-bar-title">Menu</div>
+      </div>
+      <!-- End of Mobile Title Bar -->
+
+[%~#----------------------------------------------------------------------------
+
+#	Top Bar (Upper)
+
+#-----------------------------------------------------------------------------%]
+
+      <!-- Start of Top Bar Upper -->
+      <div id="responsive-menu" class="top-bar upper"
+      data-animate="slide-in-down slide-out-up">
+
+[%~#----------------------------------------------------------------------------
+
+#		Left Section
+
+#-----------------------------------------------------------------------------%]
+
+        <!-- Start of Top Bar Left (Upper) -->
+        <div class="top-bar-left upper">
+          <ul class="menu horizontal">
+
+[%~#----------------------------------------------------------------------------
+
+#			Rep Home
+
+#-----------------------------------------------------------------------------%]
+
+            <li>
+              <a href="[% conf.root %]secure/rep">
+[%~ IF template.name == 'rep_index.tt' %]
+                <span class="is-active">Admin</span>
+[%~ ELSE %]
+                Admin
+[%~ END %]
+              </a>
+            </li>
+
+[%~#----------------------------------------------------------------------------
+
+#			Admin Events
+
+#-----------------------------------------------------------------------------%]
+
+            <li>
+              <a href="[% conf.root %]secure/rep/events">
+[%~ IF
+  template.name == 'rep_events.tt'                        ||
+  ( template.name == 'rep_event_programme.tt' && rowid )  ||
+  template.name == 'rep_event_online.tt'
+%]
+                <span class="is-active">Events</span>
+[%~ ELSE %]
+                Events
+[%~ END %]
+              </a>
+            </li>
+
+[%~#----------------------------------------------------------------------------
+
+#			Admin Societies
+
+#---------------------------------------------------------------------------- %]
+
+[%~ MACRO whatson_societies BLOCK %]
+
+[%~ IF societies.size == 1 # Must be a representative of a single society -%]
+
+            <li>
+              <a href="[% conf.root %]secure/rep/society/
+              [%~ societies.0.rowid %]">
+
+[%~ IF caller == 'rep_society.tt' || caller == 'rep_contacts.tt' -%]
+
+                <span class="is-active">Society</span>
+
+[%~ ELSE -%]
+
+                Society
+
+[%~ END -%]
+
+              </a>
+            </li>
+
+[%~ ELSE # Must be a representative of more than one society -%]
+
+            <li>
+              <a href="[% conf.root %]secure/rep/societies">
+
+[%~ IF
+  caller == 'rep_societies.tt'  ||
+  caller == 'rep_society.tt'    ||
+  caller == 'rep_contacts.tt'
+-%]
+
+                <span class="is-active">Societies</span>
+
+[%~ ELSE # template.name != 'rep_societies.tt' || 'rep_society.tt' -%]
+
+                Societies
+
+[%~ END -%]
+
+              </a>
+            </li>
+
+[%~ END # IF societies.size == 1 %]
+
+[%~ END # MACRO whatson_societies BLOCK %]
+
+[%~ CGIAPP.embed (
+  'whatson_societies' ,
+  'filter' = {
+    'userid' => "$session.userid"
+  }
+) -%]
+
+          </ul>
+        </div>
+        <!-- End of Top Bar Left (Upper) -->
+
+[%~#----------------------------------------------------------------------------
+
+#	Right Section
+
+#-----------------------------------------------------------------------------%]
+
+        <!-- Start of Top Bar Right (Upper) -->
+        <div class="top-bar-right">
+          <ul class="horizontal menu">
+            <li>
+              <a href="[% conf.root %]secure/account/action/logout">
+                Sign-Out
+              </a>
+            </li>
+            <li>
+              <a href="[% conf.root %]secure/account">
+                Account
+              </a>
+            </li>
+            <li>
+              <a href="[% conf.root %]">
+                <i class="fas fa-caret-right"></i>
+                <i class="fas fa-home"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- End of Top Bar Right (Upper) -->
+      </div>
+      <!-- End of Top Bar Upper -->
+
+[%~#----------------------------------------------------------------------------
+
+#	Top Bar (Lower)
+
+#-----------------------------------------------------------------------------%]
+
+      <!-- Start of Top Bar Lower -->
+      <div class="top-bar lower show-for-medium">
+
+[%~#----------------------------------------------------------------------------
+
+#		Left Section
+
+#-----------------------------------------------------------------------------%]
+
+        <!-- Start of Top Bar Left (Lower) -->
+        <div class="top-bar-left">
+
+[%~ IF
+  template.name == 'rep_events.tt'          ||
+  template.name == 'rep_event_programme.tt' ||
+  template.name == 'rep_event_online.tt'
+%]
+
+[%~#----------------------------------------------------------------------------
+
+#			Events
+
+#-----------------------------------------------------------------------------%]
+
+          <ul class="menu horizontal" style="margin-left: 5.2em;">
+            <li class="menu-text">
+              <i class="fas fa-rotate-90 fa-level-up-alt"></i>
+            </li>
+            <li>
+              <a href="[% conf.root %]secure/rep/event/programme">
+[%~ IF template.name == 'rep_event_programme.tt' && !rowid %]
+                <span class="is-active">Add Event</span>
+[%~ ELSE %]
+                Add Event
+[%~ END %]
+              </a>
+            </li>
+          </ul>
+
+[%~ END -%]
+
+        </div> [%# End of Top Bar Left %]
+        <!-- End of Top Bar Left (Lower) -->
+      </div>
+      <!-- End of Top Bar Lower -->
+    </div>
+    <!-- End of Top Bar Wrapper -->

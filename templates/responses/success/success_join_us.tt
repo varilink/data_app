@@ -1,0 +1,32 @@
+[% SET title = 'Membership Enquiry Received'
+
+# Join Us Confirmed
+
+%]
+
+[%~ PROCESS header.tt %]
+
+<div class="row">
+
+	<div class=
+	"columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+
+[% PROCESS h1.tt %]
+
+		<div class="callout success">
+
+			<p class="lead">
+        <i class="fas fa-check"></i>
+				We have received your membership enquiry. We will get back to you
+				shortly. Thank you for your interest in DATA. You can select from the
+        menu above or return to our <a href="[% conf.root %]">home page</a>
+        (<a href="[% conf.root %]"><i class="fas fa-home"></i></a>).
+			</p>
+
+		</div>
+
+	</div>
+
+</div>
+
+[% PROCESS footer.tt %]

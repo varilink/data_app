@@ -1,0 +1,68 @@
+[%#-----------------------------------------------------------------------------
+
+	Format for listing events online, adapts for small screens to be more
+	compressed. Used in the public, admin and rep areas.
+
+------------------------------------------------------------------------------%]
+
+<div class="hide-for-medium">
+
+[%~ FOREACH event IN events %]
+
+[%~ IF event.start_date.substr ( 6 ) != year %]
+
+[%~ SET year = event.start_date.substr ( 6 ) %]
+
+  <div class="row column">
+
+    <h4>[% year %]</h4>
+
+  </div>
+
+[%~ END %]
+
+[%~ INCLUDE online_events_list_item.tt screen = 'small' FILTER indent 2 %]
+
+[%~ END # FOREACH event IN events %]
+
+</div>
+
+[%~ SET year = '' # Reset for show-for-medium %]
+
+<div class="show-for-medium">
+
+  <div class="row">
+
+    <div class="small-6 columns"><h5>Event</h5></div>
+    <div class="small-2 columns"><h5>When</h5></div>
+    <div class="small-4 columns"><h5>Venue</h5></div>
+
+  </div>
+
+[%~ FOREACH event IN events %]
+
+[%~ IF event.start_date.substr ( 6 ) != year %]
+
+[%~ SET year = event.start_date.substr ( 6 ) %]
+
+  <div class="row column">
+
+    <h4>[% year %]</h4>
+
+  </div>
+
+[%~ ELSE # event.start_date.substr ( 6 ) == year %]
+
+  <div class="row column">
+
+    <hr>
+
+  </div>
+
+[%~ END # IF event.start_date.substr ( 6 ) != year %]
+
+[%~ INCLUDE online_events_list_item.tt format %]
+
+[%~ END # FOREACH event IN events %]
+
+</div>

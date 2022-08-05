@@ -1,0 +1,249 @@
+[%~ SET
+
+title = 'Events Listing'
+
+%]
+
+[%~ PROCESS header.tt %]
+
+[% PROCESS h1.tt media = "coming_events" FILTER indent 4 %]
+
+    <div class="row column">
+
+      <p class="lead">
+        This is the full listing of future events presented by DATA's member <a
+        href="[% conf.root %]societies">Societies</a>. Click on the name of any
+        event for more information about that event and its venue.
+
+[%~ IF session.userid ~%]
+
+[%~ IF session.role == 'admin' =%]
+
+        You can add events to this listing or update events already listed via
+        the <a href="[% conf.root %]secure/admin">Admin</a> area.
+      </p>
+
+[%~ ELSIF session.role == 'rep' ~%]
+
+[%~ MACRO whatson_societies BLOCK ~%]
+
+[%~ IF societies.size == 1 =%]
+
+        You can add events to this listing or update events already listed for
+        the member society that you represent via the <a href="[% conf.root ~%]
+        secure/rep">Admin</a> area.
+      </p>
+
+[%~ ELSE # societies.size > 1 =%]
+
+        You can add events to this listing or update events already listed for
+        the member societies that you represent via the <a href="
+        [~% conf.root %]secure/rep">Admin</a> area.
+      <p>
+
+[%~ END # IF societies.size == 1 %]
+
+[%~ END # MACRO whatson_societies BLOCK ~%]
+
+[%~ CGIAPP.embed (
+	'whatson_societies' ,
+	'filter' = {
+		userid => session.userid
+	}
+) ~%]
+
+[%~ ELSE # no session.role - throw and exception ~%]
+
+[%~ END # IF session.role == 'admin' ~%]
+
+[%~ ELSE # no session.userid = not logged in -%]
+
+        If you know of events that you believe are missing from our listing
+        then please <a href="[% conf.root %]notify_event">Notify Us</a> of them.
+      </p>
+
+[%~ END %]
+
+      <div class="callout information">
+
+        <p>
+          <i class="fas fa-info-circle"></i>
+          <a href="javascript:;" data-open="progListModal">Click here to copy
+          this full event listing in tabular format</a> for pasting in to Word
+          or an equivalent (instructional video provided). However, if you want
+          a listing of the next few weeks' DATA events for inclusion in your
+          programme, then we recommend you use the "Download Flyer" facility in
+          the "<a href="[% conf.root %]#coming_events">Coming Events</a>"
+          section of our <a href="[% conf.root %]">home page</a>
+          (<a href="[% conf.root %]"><i class="fas fa-home"></i></a>) instead.
+        </p>
+
+      </div>
+
+[%-#----------------------------------------------------------------------------
+
+  # Include a hidden copy of the listing in tabular format to cut and paste for
+  # programme listings
+
+#-----------------------------------------------------------------------------%]
+
+      <!-- Start of the progListModal -->
+      <div class="reveal large" id="progListModal" data-reveal>
+
+        <button class="close-button" data-close aria-label="Close modal"
+        type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <br>
+
+        <p>
+          Click on "Copy Listing" and then paste the listing in to Word or an
+          alternative application of your choice. The video embedded directly
+          below explains how to do this.
+        </p>
+
+        <div id="progListVideo"></div>
+
+[% PROCESS buttons.tt
+	buttons = [
+		{
+			href	= 'javascript:;'	,
+			id		= 'progListCopy'	,
+			value = 'Copy Listing'
+		}
+	]
+FILTER indent 8 %]
+
+        <table class="unstriped" id="progList">
+
+          <thead>
+
+            <tr>
+
+              <td>Dates<br>/ Times</td>
+
+              <td>Name</td>
+
+              <td>Presented By<br>/ Box Office and Enquiries</td>
+
+              <td>Venue</td>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+[%~ MACRO whatson_events BLOCK %]
+
+[%~ FOREACH event IN events %]
+
+[%~ IF event.start_date.substr ( 6 ) != year %]
+
+[%~ SET year = event.start_date.substr ( 6 ) -%]
+
+            <tr>
+              <td colspan="4"><strong>[% year %]</strong></td>
+            </tr>
+
+[%~ END %]
+
+[%- PROCESS printed_events_list_item.tt FILTER indent 12 %]
+
+[%~ END # FOREACH event IN events %]
+
+          </tbody>
+
+[%~ END # MACRO whatson_events BLOCK %]
+
+[%~ CGIAPP.embed (
+
+	# component = whatson_events - a list of events
+	'whatson_events'	,
+
+	# filter - determines which events are returned
+	'filter' = {
+		'from'	=> 'now'			, # Only events that have not yet ended
+		'status'	=> 'PUBLISHED'	, # Only events that have been published
+	} ,
+
+	# behaviour
+	'behaviour' = {
+		'defaults' => 1
+	}
+
+) %]
+
+        </table>
+
+      </div>
+      <!-- End of the progListModal -->
+
+[%~#--------------------------------------------------------------------------%]
+
+    </div>
+
+[%~ MACRO whatson_events BLOCK %]
+
+[%~ PROCESS online_events_list.tt %]
+
+[%~ END # MACRO whatson_events BLOCK %]
+
+[%~ CGIAPP.embed (
+
+	# component = whatson_events - a list of events
+	'whatson_events'	,
+
+	# filter - determines which events are returned
+	'filter' = {
+		'from'	=> 'now'			, # Only events that haven't yet ended
+		'status'	=> 'PUBLISHED'	, # Only events that have been published
+	} ,
+
+	# behaviour - determines some of the behaviours of the component
+	'behaviour' = {
+		'defaults'	=> 1
+	}
+
+) FILTER indent 4 %]
+
+[% global.script.events = BLOCK %]
+
+	$( '#progListModal' ) . on ( 'closed.zf.reveal' , function ( ) {
+
+		$ ( '#progListVideo' ) . html ( '' ) ;
+
+	} ) ;
+
+	$ ( '#progListModal' ) . on ( 'closeme.zf.reveal' , function ( ) {
+
+		$ ( '#progListVideo' ) . html (
+
+			`<iframe width="560" height="315" frameborder="0" src=
+			"https://www.youtube.com/embed/vrscaKPEsL8?rel=0"
+			allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+
+		) ;
+
+	} ) ;
+
+	$( '#progListCopy' ) . click ( function ( event ) {
+
+		var el = document . getElementById ( 'progList' ) ;
+		var range = document . createRange ( ) ;
+		range . selectNodeContents ( el ) ;
+		var sel = window . getSelection ( ) ;
+		sel . removeAllRanges ( ) ;
+		sel . addRange ( range ) ;
+		document.execCommand ( "copy" ) ;
+		sel . removeAllRanges ( ) ;
+		alert (
+			'Event listing copied now paste it in to Word or an alternative'
+		) ;
+
+	} ) ;
+
+
+[% END # global.script.events = BLOCK %]
+
+[% PROCESS footer.tt %]

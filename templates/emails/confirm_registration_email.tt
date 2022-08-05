@@ -1,0 +1,15 @@
+[% PROCESS email_header.tt
+	title = 'User Account Requested'
+%]
+
+[% PROCESS email_paragraph.tt %]
+
+<p>
+	A user account has been requested for email address [% user.email %]. This
+	email address is not recorded by DATA as associated with either a member of
+	the DATA committee or a representative of a DATA member society. You should
+	correspond with this person to ascertain in what capacity they wish to
+	register a user account.
+</p>
+
+[% PROCESS email_footer.tt %]

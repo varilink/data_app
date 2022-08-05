@@ -1,0 +1,35 @@
+[%~ SET
+
+title = 'Preview Event'
+
+%]
+
+[%~ PROCESS rep_header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+[%~ MACRO whatson_event BLOCK -%]
+
+[% PROCESS event_subnav.tt -%]
+
+<div class="row column">
+
+[%- PROCESS event_preview_accordion.tt FILTER indent 2 %]
+
+</div>
+
+[%~ END # MACRO whatson_event BLOCK %]
+
+[%~ CGIAPP.embed (
+  'whatson_event'       , # Single event
+  'filter' = {
+    'from'    => 'now'              , # Only events that have not yet ended
+    'rowid'   => "$rowid"           , # An event with this unique rowid
+    'userid'  => "$session.userid"  , # An event that we represent
+  } ,
+  'behaviour' = {
+    'defaults' => 1
+  }
+) FILTER indent 4 -%]
+
+[%- PROCESS footer.tt %]

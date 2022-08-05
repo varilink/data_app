@@ -1,0 +1,25 @@
+[% MACRO whatson_news_item BLOCK %]
+
+[%~ SET
+
+	title = news_item.title
+
+%]
+
+[%~ PROCESS header.tt %]
+
+    <div class="row columns">
+
+      [% PROCESS h1.tt FILTER indent 4 %]
+
+      [% news_item.item_text %]
+
+[% END # MACRO whatson_news_item BLOCK %]
+
+[%~ CGIAPP.embed (
+  'whatson_news_item'
+) %]
+
+    </div>
+
+[% PROCESS footer.tt %]

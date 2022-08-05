@@ -1,0 +1,69 @@
+[%#-----------------------------------------------------------------------------
+This partial outputs buttons for the admin/rep event programme/online pages.
+These have an arrangement that is unique to those pages. Hence we use a unique
+partial.
+------------------------------------------------------------------------------%]
+
+<!-- Start of Buttons -->
+<button class="button" type="button" data-toggle="saveOptions
+[%~ size FILTER ucfirst IF size %]">
+  Save and&hellip;
+</button>
+
+<div id="saveOptions[% size FILTER ucfirst IF size %]" class="dropdown-pane"
+data-position="right" data-alignment="bottom" data-hover="true"
+data-hover-pane="true" data-dropdown
+style=[% IF size == 'large' %]"width: 22em;"[% ELSE %]"width: 100%;"[% END %]>
+  <div class="button-group [% size IF size %] stacked"
+  style="margin-bottom: 0;">
+    <button class="button" type="submit" name="save_and_continue">
+      Continue to Edit
+    </button>
+    <button class="button" type="submit" name="save_and_exit">
+      Exit
+    </button>
+
+[%~ IF
+  template.name == 'admin_event_programme.tt' ||
+  caller        == 'admin_event_programme.tt' ||
+  template.name == 'rep_event_programme.tt'   ||
+  caller        == 'rep_event_programme.tt'
+-%]
+
+    <button class="button" type="submit" name="save_and_online">
+      [% IF event.use_desc %]Update[% ELSE %]Enter[% END %] Online<span
+      class="show-for-medium"> Promotion</span> Details
+    </button>
+
+[%~ ELSIF
+  template.name == 'admin_event_online.tt' ||
+  caller        == 'admin_event_online.tt' ||
+  template.name == 'rep_event_online.tt'   ||
+  caller        == 'rep_event_online.tt'
+-%]
+
+    <button class="button" type="submit" name="save_and_programme">
+      Update Programme<span class="show-for-medium"> Listing</span> Details
+    </button>
+
+[%~ END -%]
+
+    <button class="button" type="submit" name="save_and_preview">
+      Preview<span class="show-for-medium"> Event</span>
+    </button>
+  </div>
+</div>
+
+<a href="[% conf.root %]secure/[% session.role %]/events" id='cancel'
+class="button">
+  Exit without Saving
+</a>
+
+[%~ IF rowid %]
+
+<button class="button alert" type="submit" name="delete">
+  Delete
+</button>
+
+[%~ END # IF rowid %]
+<!-- End of Buttons -->

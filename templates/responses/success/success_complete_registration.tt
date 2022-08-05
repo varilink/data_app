@@ -1,0 +1,47 @@
+[% SET title = 'User Account Registration Successful'
+
+# Report the successful registration of a user account back to the user.
+
+%]
+
+[%~ PROCESS header.tt %]
+
+    <div class="row">
+
+      <div class=
+      "columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+
+[% PROCESS h1.tt FILTER indent 8 %]
+
+        <div class="callout success">
+
+          <p class="lead">
+            <i class="fas fa-thumbs-up"></i>&nbsp;&nbsp;Success<br>
+            You have registered your DATA Diary user account. Before you can use
+            it we must verify that you have access to the email	address that you
+            asked to be associated with it.
+          </p>
+
+          <p class="lead">
+            An email has been sent to [% user.email %] with the subject &quot;
+            [%~ email.subject %]&quot;. If this email has been sent to your junk
+            or SPAM folder then can you ensure that the sender is not blocked as
+            it comes	from the email address that we will use to correspond with
+            you in respect of your user account with us. That email has a link
+            in it that you must click on to verify that you have access to
+            &quot;[% user.email %]&quot;.
+          </p>
+
+			    <p class="lead">
+            You can select from the menu above or return to our <a
+            href="[% conf.root %]">home page</a> (<a href="[% conf.root %]">
+            <i class="fas fa-home"></i></a>).
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+[% PROCESS footer.tt %]

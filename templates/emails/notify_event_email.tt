@@ -1,0 +1,28 @@
+[% PROCESS email_header.tt
+	title = 'Event Notification'
+%]
+
+[% PROCESS email_paragraph.tt %]
+
+<p>
+	We have received notification of an upcoming event from:<br />
+	[% contact.email %]
+</p>
+
+<p>
+	The details are as follows:<br />
+	Name=[% event.name %]<br />
+	Start Date=[% event.start_date %]<br />
+	End Date=[% event.end_date %]<br />
+	Dates=[% event.dates %]<br />
+	Times=[% event.times %]<br />
+	Society=[% event.society_name %]<br />
+	Presented By=[% event.presented_by %]<br />
+	Venue=[% event.venue_name %]<br />
+[% UNLESS event.venue_rowid %]
+	NOTE: The venue has NOT been selected from the list of venues on record!
+[% END %]
+	Box Office=[% event.box_office %]
+</p>
+
+[% PROCESS email_footer.tt %]

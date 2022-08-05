@@ -1,0 +1,25 @@
+[% PROCESS email_header.tt
+	title = 'Confirm Email Address'
+%]
+
+[% PROCESS email_paragraph.tt %]
+
+You have changed the email address associated with your user account. We just
+need to confirm the new email address associated with your user account before
+you can use it again. Please click on "Confirm Email Address" below to confirm
+that you have received this email.
+
+</p>
+
+[% path = '/account/action/confirm_email' %]
+[% identity = "${user.email}/${user.secret}" %]
+[% responses = 'success_confirm_email/error_confirm_email' %]
+
+[% url = "${path}/${identity}/${responses}" | url %]
+
+[% PROCESS email_footer.tt
+	action = {
+		name = 'Confirm Email Address'
+		url = "$url"
+	}
+%]

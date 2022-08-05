@@ -1,0 +1,32 @@
+[%~ SET
+
+title = 'Unauthorised Access'
+
+%]
+
+[%~ PROCESS header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+<div class="row">
+
+	<div class=
+	"columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+
+		<div class="callout alert">
+
+			<p class="lead">
+				<i class="fas fa-times"></i> You have tried to access a page that you
+        are not authorised to access. We suggest that you go
+				to our <a href="[% conf.root %]">home page</a> (<a
+        href="[% conf.root %]"><i class="fas fa-home"></i></a>) and navigate
+        from there.
+			</p>
+
+		</div>
+
+	</div>
+
+</div>
+
+[% PROCESS footer.tt %]

@@ -1,0 +1,173 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+[% PROCESS head.tt FILTER indent 4 %]
+  </head>
+  <body>
+    <!-- Start of the Top Bar Wrapper -->
+    <div class="top-bar-wrapper">
+[%#-----------------------------------------------------------------------------
+
+	Title Bar
+
+------------------------------------------------------------------------------%]
+      <!-- Start of the Title Bar -->
+      <div class="title-bar" data-responsive-toggle="responsive-menu">
+        <button class="menu-icon" type="button" data-toggle="responsive-menu">
+        </button>
+        <div class="title-bar-title">Menu</div>
+      </div>
+      <!-- End of the Title Bar -->
+[%#-----------------------------------------------------------------------------
+
+	Top Bar (Upper)
+
+------------------------------------------------------------------------------%]
+      <!-- Start of the Upper Top Bar -->
+      <div id="responsive-menu" class="top-bar upper"
+      data-animate="slide-in-down slide-out-up">
+[%#-----------------------------------------------------------------------------
+
+		Left Section
+
+------------------------------------------------------------------------------%]
+        <!-- Start of the Left Section of the Upper Top Bar -->
+        <div class="top-bar-left">
+          <ul class="menu horizontal">
+[%#-----------------------------------------------------------------------------
+
+			Admin Home
+
+------------------------------------------------------------------------------%]
+            <li><a href="[% conf.root %]secure/admin">
+[%~ IF template.name == 'admin_index.tt' %]
+              <span class="is-active">Admin</span>
+[%~ ELSE %]
+              Admin
+[%~ END %]
+            </a></li>
+[%#-----------------------------------------------------------------------------
+
+			Admin Events
+
+------------------------------------------------------------------------------%]
+            <li><a href="[% conf.root %]secure/admin/events">
+[%~ IF
+  template.name == 'admin_events.tt'                        ||
+  ( template.name == 'admin_event_programme.tt' && rowid )  ||
+  template.name == 'admin_event_online.tt'
+%]
+              <span class="is-active">Events</span>
+[%~ ELSE %]
+              Events
+[%~ END %]
+            </a></li>
+[%#-----------------------------------------------------------------------------
+
+			Admin Societies
+
+------------------------------------------------------------------------------%]
+            <li><a href="[% conf.root %]secure/admin/societies">
+[%~ IF
+  template.name == 'admin_societies.tt'           ||
+  ( template.name == 'admin_society.tt' && rowid) ||
+  template.name == 'admin_contacts.tt'
+%]
+              <span class="is-active">Societies</span>
+[% ELSE %]
+              Societies
+[% END -%]
+            </a></li>
+          </ul>
+        </div>
+        <!-- End of the Left Section of the Upper Top Bar -->
+[%#-----------------------------------------------------------------------------
+
+	Right Section
+
+------------------------------------------------------------------------------%]
+        <!-- Start of the Right Section of the Upper Top Bar -->
+        <div class="top-bar-right">
+          <ul class="horizontal menu">
+            <li>
+              <a href="[% conf.root %]secure/account/action/logout">
+                Sign-Out
+              </a>
+            </li>
+            <li><a href="[% conf.root %]secure/account">Account</a></li>
+            <li>
+              <a href="[% conf.root %]">
+                <i class="fas fa-caret-right"></i>
+                <i class="fas fa-home"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- End of the Right Section of the Upper Top Bar -->
+      </div>
+      <!-- End of the Upper Top Bar -->
+[%#-----------------------------------------------------------------------------
+
+	Top Bar (Lower)
+
+------------------------------------------------------------------------------%]
+      <!-- Start of the Lower Top Bar -->
+      <div class="top-bar lower show-for-medium">
+[%#-----------------------------------------------------------------------------
+
+		Left Section
+
+------------------------------------------------------------------------------%]
+        <!-- Start of the Left Section of the Lower Top Bar -->
+        <div class="top-bar-left">
+[%~ IF
+  template.name == 'admin_events.tt'          ||
+  template.name == 'admin_event_programme.tt' ||
+  template.name == 'admin_event_online.tt'
+%]
+[%#-----------------------------------------------------------------------------
+
+			Events
+
+------------------------------------------------------------------------------%]
+          <ul class="menu horizontal" style="margin-left: 5.2em;">
+            <li class="menu-text">
+              <i class="fas fa-rotate-90 fa-level-up-alt"></i>
+            </li>
+            <li><a href="[% conf.root %]secure/admin/event/programme">
+[%~ IF template.name == 'admin_event_programme.tt' && !rowid %]
+              <span class="is-active">Add Event</span>
+[%~ ELSE %]
+              Add Event
+[%~ END %]
+            </a></li>
+          </ul>
+[%#-----------------------------------------------------------------------------
+
+			Societies
+
+------------------------------------------------------------------------------%]
+[%~ ELSIF
+  template.name == 'admin_societies.tt' ||
+  template.name == 'admin_society.tt'   ||
+  template.name == 'admin_contacts.tt'
+%]
+          <ul class="menu horizontal" style="margin-left: 10.1em;">
+            <li class="menu-text">
+              <i class="fas fa-rotate-90 fa-level-up-alt"></i>
+            </li>
+            <li><a href="[% conf.root %]secure/admin/society">
+[%~ IF template.name == 'admin_society.tt' && !rowid %]
+              <span class="is-active">Add Society</span>
+[%~ ELSE %]
+              Add Society
+[%~ END %]
+            </a></li>
+          </ul>
+[%~ END %]
+        </div>
+        <!-- End of the Left Section of the Lower Top Bar -->
+      </div>
+      <!-- End of the Lower Top Bar -->
+    </div>
+    <!-- End of the Top Bar Wrapper -->

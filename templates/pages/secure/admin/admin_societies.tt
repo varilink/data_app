@@ -1,0 +1,68 @@
+[%~ SET
+
+title = 'Member Societies'
+
+%]
+
+[%~ PROCESS admin_header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+    <div class="row column">
+
+      <div class="callout information">
+
+        <p class="lead">
+          <i class="fas fa-info-circle"></i>&nbsp;&nbsp;Information<br>
+          To update the details of a member society, click on the society's
+          name below. Alternatively <a
+          href="[% conf.root %]secure/admin/society">Add (a) Society</a>.
+        </p>
+
+      </div>
+
+[%~ MACRO whatson_societies BLOCK %]
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Name</th>
+            <th>Active (Yes/No)</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+[%~ FOREACH society IN societies %]
+
+          <tr>
+            <td>
+              <a href="[% conf.root %]secure/admin/society/[% society.rowid %]">
+                [% society.name %]
+              </a>
+            </td>
+            <td>
+[%~ IF society.status == "ACTIVE" ~%]
+              Yes
+[%~ ELSE ~%]
+              No
+[%~ END ~%]
+            </td>
+          </tr>
+
+[%~ END %]
+
+        </tbody>
+
+      </table>
+
+[%~ END # MACRO whatson_societies BLOCK %]
+
+[%~ CGIAPP.embed ( 'whatson_societies' ) %]
+
+    </div>
+
+[% PROCESS footer.tt %]

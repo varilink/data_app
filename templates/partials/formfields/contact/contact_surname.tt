@@ -1,0 +1,71 @@
+<div class="floated-label-wrapper">
+
+[% UNLESS error_contact_surname # Initial State %]
+
+	<label for="contactSurname">
+		Surname ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+	</label>
+
+	<input type="text" id="contactSurname" name="contact_surname" placeholder=
+	"Surname ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+	[% IF required %]required[% END %] aria-describedby= "contactSurnameHelpText"
+	value="[% contact.surname %]" />
+
+	<small class="form-error">
+
+[% IF error_msg %]
+
+		[% error_msg %]
+
+[% ELSE %]
+
+		You must enter your surname
+
+[% END %]
+
+	</small>
+
+[% ELSE # Error State %]
+
+	<label class="is-invalid-label" for="userSurname">
+		Surname ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+	</label>
+
+	<input class="is-invalid-input" aria-invalid="true" type="text" id=
+	"contactSurname" name="contact_surname" placeholder="Surname (
+	[%~ IF required %]Mandatory[% ELSE %]Optional[% END %])" [% IF required ~%]
+	required [% END %] aria-describedby="contactSurnameHelpText" value=
+	"[% contact.surname %]" />
+
+	<small class="form-error is-visible">
+
+[% IF error_contact_surname == 'Missing' %]
+
+		You must enter your surname
+
+[% ELSE %]
+
+		[% error_contact_surname %]
+
+[% END %]
+
+	</small>
+
+[% END # error_contact_surname %]
+
+
+[% IF template.name == 'subscribe.tt' %]
+
+	<p class="help-text" id="contactSurnameHelpText">
+		Please provide your surname for your subscription.
+	</p>
+
+[% ELSE %]
+
+	<p class="help-text" id="contactSurnameHelpText">
+		Enter your surname.
+	</p>	
+
+[% END %]
+
+</div>

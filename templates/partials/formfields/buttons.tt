@@ -1,0 +1,90 @@
+[%
+
+# This partial inserts a button group. The parameters that it receives are as
+# follows:
+# size = Size of the button group, which is one of tiny,
+
+-%]
+
+  <!-- Start Button Group -->
+  <div class="button-group
+[%~ IF size %]
+[%~ UNLESS size == 'medium' %] [% size %][% END %]
+[%~ ELSE # not size =%]
+large
+[%~ END # IF size %]
+[%~ IF stack %][% " stacked-for-$stack" %][% END ~%]
+">
+
+[%~ form = 0 # We need to track if there are any buttons that indicate a form %]
+
+[%~ FOREACH button IN buttons %]
+
+[%~ IF button.href %]
+
+[%~
+
+	# Rather than a form submit (or other form action) button, we just want a
+	# href link button.
+
+-%]
+
+[%~ IF button.href == '#' || button.href == 'javascript:;' %]
+
+[%~ button_href = button.href %]
+
+[%~ ELSE %]
+
+[%~ button_href = "$root$button.href" %]
+
+[%~ END -%]
+
+    <a href="[% button_href %]" class="button"
+    [%~ IF button.id %] id="[% button.id %]"[% END %]>
+      [% button.value %]
+    </a>
+
+[%~ ELSIF button.protect # Protected form submission %]
+
+[%~ form = 1 # We have a form -%]
+
+    <button
+[%~ IF button.id %] id="[% button.id %]"[% END %]
+[%~ IF button.name %] name="[% button.name %]"[% END %]
+[%~ IF button.type %] type="[% button.type %]"[% END %]
+    class="button
+[%~ IF conf.use_captcha %] g-recaptcha[% END %]
+[%~ IF button.colour %] [% button.colour %][% END %]"
+[%~ IF conf.use_captcha %]
+    data-sitekey="[% conf.recaptcha_site_key %]"
+    data-callback="onSubmit"
+[%~ END %]
+[%~ IF button.action %] formaction="[% button.action %]"[% END %]
+[%~ IF button.disabled %] disabled[% END %]>
+      [% button.value %]
+    </button>
+
+[%~ ELSE # Unprotected form submission %]
+
+[%~ form = 1 # We have a form -%]
+
+    <button
+[%~ IF button.id %] id="[% button.id %]"[% END %]
+[%~ IF button.name %] name="[% button.name %]"[% END %]
+[%~ IF button.type %] type="[% button.type %]"[% END %]
+    class="button
+[%~ IF button.colour %] [% button.colour %][% END %]"
+[%~ IF button.action %] formaction="[% button.action %]"[% END %]
+[%~ IF button.disabled %] disabled[% END %]>
+      [% button.value %]
+    </button>
+
+[%~ END # IF button.href %]
+
+[%~ END # FOREACH button IN buttons -%]
+
+  </div>
+  <!-- End Button Group -->
+[% IF form && ! suppress_form %]
+</form>
+[%~ END %]

@@ -1,0 +1,37 @@
+<!-- Start of Address -->
+[%~ MACRO whatson_venue BLOCK %]
+
+[%- IF event.venue_name == 'Online' %]
+
+[%~ venue.description %]
+
+[%~ ELSIF ( matches = event.venue_name.match ( '^(.+),' ) ) %]
+
+[%~ matches.0 %]
+
+[%~ ELSE %]
+
+[%~ event.venue_name %]
+
+[%~ END -%]
+
+[% ",<br>$venue.address1"	IF venue.address1 %]
+[% ",<br>$venue.address2"	IF venue.address2 %]
+[% ",<br>$venue.address3"	IF venue.address3 %]
+[% ",<br>$venue.address4"	IF venue.address4 %]
+[% "<br>$venue.postcode"	IF venue.postcode %]
+
+[%~ END # MACRO whatson_venue BLOCK %]
+
+[%~ CGIAPP.embed (
+
+	'whatson_venue'	,
+
+	'filter' = {
+
+		'event'	=> "$event.rowid"
+
+	}
+
+) %]
+<!-- End of Address -->

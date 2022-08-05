@@ -1,0 +1,147 @@
+    <br>
+    <br>
+    <!-- Start of Footer -->
+    <footer class="footer-data">
+      <div class="row medium-unstack">
+        <div class="small-12 medium-5 columns">
+          <h4 class="footer-data-name">Derby Arts and Theatre Association</h4>
+          <div class="row align-top">
+            <div class="columns small-4">
+              <img src="[% conf.root %]assets/img/logo.png">
+            </div>
+            <div class="columns small-8">
+              <p class="footer-data-tagline">
+                The home of amateur performing arts societies in the Derby area.
+                Registered in England and Wales with charity number 517836.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="medium-1 large-3 columns show-for-medium">
+        </div>
+        <div class="small-12 medium-6 large-4 columns">
+          <h4 class="footer-data-title">Contact and Social Media</h4>
+          <div class="footer-data-block">
+            <p>
+              <i class="fas fa-envelope" aria-hidden="true"></i>
+              10 Hitchen Road, Long Eaton, Nottingham NG10&nbsp;3SB
+            </p>
+          </div>
+          <div class="footer-data-block">
+            <p>
+              <i class="fas fa-at" aria-hidden="true"></i>
+              admin@derbyartsandtheatre.org.uk
+            </p>
+          </div>
+          <!-- Start of Social Menu -->
+          <ul class="menu footer-data-menu-social simple">
+            <li>
+                <a target="_blank"
+                href="https://www.facebook.com/DerbyArtsAndTheatreAssociation">
+                <i class="fab fa-facebook-f" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li>
+              <a target="_blank" href="https://twitter.com/DerbyAmPerfArts">
+                <i class="fab fa-twitter" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li>
+              <a target="_blank"
+              href="https://www.youtube.com/channel/UCTXIEwu1D9mnV9uU7H-TZMw">
+                <i class="fab fa-youtube" aria-hidden="true"></i>
+              </a>
+            </li>
+          </ul>
+          <!-- End of Social Menu -->
+        </div>
+      </div>
+      <div class="footer-data-bottom">
+        <div class="row align-middle medium-unstack">
+          <div class="columns medium-5 show-for-medium">
+            <br>
+            <p>&copy; 2018 No rights reserved</p>
+          </div>
+          <div class="medium-1 large-3 columns show-for-medium">
+          </div>
+          <div class="columns small-12 medium-6 large-4">
+            <ul class="menu footer-data-bottom-links">
+              <li><a href="[% conf.root %]">
+                Home
+              </a></li>
+              <li><a href="[% conf.root %]events">
+                Events
+              </a></li>
+              <li><a href="[% conf.root %]societies">
+                Societies
+              </a></li>
+              <li><a href="[% conf.root %]about_us">
+                About Us
+              </a></li>
+            </ul>
+          </div>
+          <div class="columns small-12 show-for-small-only">
+            <p>&copy; 2018 No rights reserved</p>
+          </div>
+        </div> [%# End of the row in the footer-data-bottom section %]
+      </div>
+    </footer>
+    <!-- End of Footer -->
+    <script src="[% conf.root %]assets/js/app.js"></script>
+    <script>
+
+      $ ( function ( ) { [%# Only run Javascript when the DOM is ready %]
+
+[%-#----------------------------------------------------------------------------
+
+  # YouTube Modals (Look to conditionally include using the global variable)
+
+#---------------------------------------------------------------------------- %]
+
+        // Empty the modal of HTML as it closes
+        $ ( '.youtube-modal' ) . on ( 'closed.zf.reveal' , function ( ) {
+
+          $ ( this ) . html ( '' ) ;
+
+        } ) ;
+
+        // Populate the modal with the required HTML just before it opens
+        $ ( '.youtube-modal' ) . on ( 'closeme.zf.reveal' , function ( ) {
+
+          $ ( this ) . html (
+
+            `<button class="close-button" data-close aria-label="Close modal"
+            type="button">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <br>
+            <div class="youtube-container">
+              <iframe frameborder="0" allowfullscreen
+              src="https://www.youtube.com/embed/`                            +
+              $ ( this ) . attr ( 'id' )                                      +
+              `?rel=0"
+              allow="autoplay; encrypted-media">
+              </iframe>
+            </div>`
+
+          ) ;
+
+        } ) ;
+
+[%~#----------------------------------------------------------------------------
+
+	# Pull in Javascript defined in script BLOCKs
+
+#-----------------------------------------------------------------------------%]
+
+[%~ FOREACH key IN global.script.keys %]
+
+[%- global.script.$key FILTER indent 8 -%]
+
+[%~ END -%]
+
+      } ) ;
+
+    </script>
+  </body>
+</html>

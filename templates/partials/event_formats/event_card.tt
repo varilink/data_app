@@ -1,0 +1,58 @@
+<!-- Start of Event Card -->
+<div class="event-card">
+  <div class="event-card-divider">
+    <h5>
+      [% event.name %]
+    </h5>
+  </div>
+
+[%~ IF event.use_desc == 0 -%]
+
+  <div class="event-card-section">
+
+[%- PROCESS event_default_description.tt FILTER indent 8 -%]
+
+  </div>
+
+[%~ ELSIF event.use_desc == 1 -%]
+
+  <div class="card-image">
+    <p>
+      <img alt="[% event.name FILTER html %]"
+      src="[% conf.root %][% event.image %]">
+    </p>
+  </div>
+  <div class="event-card-section">
+
+[%~ IF event.description %]
+
+    [% event.description -%]
+
+[%~ ELSE %]
+
+[%- PROCESS event_default_description.tt FILTER indent 8 -%]
+
+[%~ END -%]
+
+  </div>
+
+[%~ ELSIF event.use_desc == 2 -%]
+
+  <div class="event-card-section">
+
+[%~ IF event.description -%]
+
+    [% event.description -%]
+
+[%~ ELSE %]
+
+[%- PROCESS event_default_description.tt FILTER indent 8 -%]
+
+[%~ END -%]
+
+  </div>
+
+[%~ END %]
+
+</div>
+<!-- End of Event Card -->

@@ -1,0 +1,97 @@
+<!-- Start of Event Start Date -->
+<div class="floated-label-wrapper">
+
+[%~ UNLESS error_event_start_date # Initial State -%]
+
+  <label for="event_start_date">
+    Start Date ([% IF required %]Mandatory[% ELSE %]Optional[% END %]
+    DD/MM/YYYY)
+  </label>
+  <input type="text" id="eventStartDate" name="event_start_date" placeholder=
+  "Start Date ([% IF required %]Mandatory[% ELSE %]Optional[% END =%]
+  DD/MM/YYYY)" aria-describedby="event_start_dateHelpText" pattern=
+  "day_month_year" [% IF required %]required[% END %] class="datapicker"
+  value="[% event.start_date %]">
+  <small class="form-error">
+
+[%~ IF error_msg -%]
+
+    [% error_msg %]
+
+[%~ ELSE -%]
+
+    You must enter a valid date in DD/MM/YYYY format
+
+[%~ END -%]
+
+  </small>
+
+[%~ ELSE # Error State -%]
+
+  <label class="is-invalid-label" for="event_start_date">
+    Start Date ([% IF required %]Mandatory[% ELSE %]Optional[% END %]
+    DD/MM/YYYY)
+  </label>
+  <input class="is-invalid-input" type="text" id="eventStartDate"
+  name="event_start_date" placeholder="Start Date ([% IF required ~%]
+  Mandatory[% ELSE %]Optional[% END %] DD/MM/YYYY)" aria-describedby=
+  "event_start_dateHelpText"	pattern="day_month_year" [% IF required %]
+  required[% END %] class="datapicker">
+  <small class="form-error is-visible">
+
+[%~ IF error_event_start_date == 'Missing' -%]
+
+    You must enter the start date of the event
+
+[%~ ELSIF error_event_start_date == 'start_date_valid' -%]
+
+    Start date is not a valid date in DD/MM/YYYY format
+
+[%~ ELSIF error_event_start_date == 'start_date_after_today' -%]
+
+    Start date not later than today's date
+
+[%~ ELSE -%]
+
+    [% error_event_start_date %]
+
+[%~ END -%]
+
+  </small>
+
+[%~ END # error_event_start_date -%]
+
+  <p class="help-text" id="event_start_dateHelpText">
+    Enter the start date of the event in DD/MM/YYYY format.<br>
+    This is the date of the first performance of the event.
+  </p>
+</div>
+
+[%~ global.script.event_start_date = BLOCK %]
+
+// Setup Datepicker on Event Start Date
+$ ( '#eventStartDate' )
+  . datepicker ( {
+    dateFormat: 'dd/mm/yy' ,
+    minDate: 1 ,
+[%~ IF event.end_date %]
+    maxDate: '[% event.end_date %]' ,
+[%~ ELSIF error && event_end_date %]
+    maxDate: '[% event_end_date %]' ,
+[%~ END %]
+    onSelect: function ( ) {
+      $ ( this ) . datepicker ( 'hide' ) ;
+      $ ( this ) . trigger ( 'keyup' ) ;
+      $ ( '#eventEndDate' ) . datepicker (
+        'option' , 'minDate' , $ ( '#eventStartDate' ) . datepicker ( 'getDate' )
+      ) ;
+    }
+  } )
+  . change ( function ( ) {
+    $ ( '#eventEndDate' ) . datepicker (
+      'option' , 'minDate' , $ ( '#eventStartDate' ) . datepicker ( 'getDate' )
+    ) ;
+  } ) ;
+
+[%~ END # global.script.event_start_date = BLOCK %]
+<!-- End of Event Start Date -->

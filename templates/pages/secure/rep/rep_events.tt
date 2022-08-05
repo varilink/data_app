@@ -1,0 +1,159 @@
+[%~ SET
+
+title = 'Events Listing'
+
+%]
+
+[%~ PROCESS rep_header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+    <div class="row column">
+
+      <div class="callout information">
+
+        <p class="lead">
+          <i class="fas fa-info-circle"></i>&nbsp;&nbsp;Information<br>
+          This is a listing of the future events for the member
+
+[%~ MACRO whatson_societies BLOCK %]
+
+[%~ IF societies.size == 1 =%]
+
+          society
+
+[%= ELSE # Must be a representative of more than one society =%]
+
+          societies
+
+[%= END # IF societies.size == 1 %]
+
+[%~ END # MACRO whatson_societies BLOCK %]
+
+[%~ CGIAPP.embed (
+  'whatson_societies' ,
+  'filter' = {
+    'userid' => "$session.userid"
+  }
+) -%]
+
+          that you represent merged with those events from other societies that
+          overlap with yours as a planning aid to avoid clashes. Remember that
+          events must be "Published" to be advertised to the public.
+          "Placeholder" events are only visible to representatives of member
+          societies. You can update the details of any of your events listed by
+          clicking on the event's name below or you can <a
+          href="[% conf.root %]secure/rep/event/programme">Add (an) Event</a>.
+        </p>
+
+      </div>
+
+      <table class="stack">
+
+        <thead>
+
+          <tr>
+            <th>Event</th>
+            <th>Status</th>
+            <th>Date(s) and Time(s)</th>
+          </tr>
+
+        </thead>
+
+[%~ MACRO whatson_events BLOCK %]
+
+[%~ FOREACH event IN events %]
+
+[%~ IF event.start_date.substr ( 6 ) != year # Change of year %]
+
+[%~ SET year = event.start_date.substr ( 6 ) %]
+
+[%~ UNLESS loop.index == 0 # Not first row %]
+
+        </tbody>
+
+[%~ END # Not first row -%]
+
+        <tbody>
+
+          <tr style="background-color: white;"><td colspan="3"></td></tr>
+
+          <tr>
+            <td colspan="3"><strong>[% year %]</strong></td>
+          </tr>
+
+[%~ END # Change of year %]
+
+          <tr>
+            <td>
+
+[%~ MACRO whatson_societies BLOCK
+
+# Get the socities that the logged in user represents.
+
+%]
+
+[%~ mine = 0 %]
+
+[%~ FOREACH society IN societies %]
+
+[%~ SET mine = 1 IF society.name == event.society_name %]
+
+[%~ END %]
+
+[%~ IF mine -%]
+
+              <a href=
+                "[% conf.root %]secure/rep/event/programme/[% event.rowid %]">
+                [% event.name FILTER html %]
+              </a>
+
+[%~ ELSE -%]
+
+              [% event.name FILTER html %]
+
+[%~ END %]
+
+              <br>[% event.presented_by %]
+
+[%~ END %]
+
+[%~ CGIAPP.embed (
+  'whatson_societies' ,
+  'filter' = {
+    'userid' => "$session.userid"
+  }
+) -%]
+
+            </td>
+				<td>[% event.status FILTER lower FILTER ucfirst %]</td>
+        <td>
+          [% event.dates %]
+[%~ UNLESS event.times == 'TBC' %]
+          &nbsp;[% event.times %]
+[%~ END %]
+        </td>
+			</tr>
+
+[%~ END %]
+
+[%~ END # MACRO whatson_events BLOCK %]
+
+[%~ CGIAPP.embed (
+  'whatson_events'	,
+  'filter' = {
+    'from'	=> 'now'               , # Events that have not yet ended
+    'userid'	=> "$session.userid" , # Those represented by a userid
+  } ,
+  'behaviour' = {
+    'defaults'	=> 1
+  }
+) %]
+
+		</tbody>
+
+	</table>
+
+</div>
+
+[% PROCESS footer.tt %]

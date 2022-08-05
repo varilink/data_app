@@ -1,0 +1,945 @@
+[% SET
+
+	title = 'Coming Events'
+	description = 'The Derby Arts and Theatre Association (DATA) is the representative body for amateur performing arts in the Derby area. DATA also maintains a list of Events staged by DATA member Societies - the DATA Diary.'
+
+~%]
+
+<!doctype html>
+<html class='no-js' lang='en'>
+	<head>
+
+[%~ IF conf.root == 'https://www.derbyartsandtheatre.org.uk/' -%]
+
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-137420866-1">
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-137420866-1');
+    </script>
+
+[% END %]
+
+[%- PROCESS head.tt FILTER indent 8 -%]
+
+	</head>
+
+	<body>
+
+[%~ #---------------------------------------------------------------------------
+
+	# Cookie Alert
+
+#-----------------------------------------------------------------------------%]
+
+[%- PROCESS cookie_alert.tt FILTER indent 8 %]
+
+		<!-- Start of the Hero Image -->
+		<div class="hero-image-custom">
+
+[%-#----------------------------------------------------------------------------
+
+	# Mobile Title Bar
+
+#---------------------------------------------------------------------------- %]
+
+			<!-- Start of the Mobile Title Bar -->
+			<div class="title-bar title-bar-custom" data-responsive-toggle=
+			"top-bar-hero">
+				<button class="menu-icon" type="button" data-toggle="top-bar-hero">
+				</button>
+				<div class="title-bar-title">Menu</div>
+			</div>
+			<!-- End of the Mobile Title Bar -->
+
+[%#-----------------------------------------------------------------------------
+
+	Menu
+
+------------------------------------------------------------------------------%]
+
+			<!-- Start of the Top Bar -->
+			<div class="top-bar top-bar-hero-custom" id="top-bar-hero"
+			data-animate="slide-in-down slide-out-up">
+
+				<div class="top-bar-left">
+					<ul class="menu">
+						<li><a href="[% conf.root %]events">Events</a></li>
+						<li><a href="[% conf.root %]societies">Societies</a></li>
+						<li><a href="[% conf.root %]about_us">About Us</a></li>
+					</ul>
+				</div> [%# End of top-bar-left %]
+
+				<div class="top-bar-right">
+					<ul class="menu">
+[%~ IF session.userid # User is authenticated %]
+						<li>
+							<a href="[% conf.root %]secure/account/action/logout">
+								Sign-Out
+							</a>
+						</li>
+						<li>
+							<a href="[% conf.root %]secure/account">Account</a>
+						</li>
+						<li>
+							<a href=
+[%~ IF session.role == 'admin' %]
+								"[% conf.root %]secure/admin/"
+[%~ ELSIF session.role == 'rep' %]
+								"[% conf.root %]secure/rep/"
+[%~ ELSE # This should never occur %]
+                "#"
+[%~ END # IF session.role ~%]
+							><i class="fa fa-caret-right"></i> <span>Admin</span></a>
+						</li>
+[%~ ELSE # ! session.userid and so user is NOT authenticated %]
+						<li><a href="[% conf.root %]account/sign_in">Sign-In</a></li>
+[%~ END # IF session.userid %]
+					</ul>
+				</div> [%# End of top bar right %]
+
+			</div>
+			<!-- End of the Top Bar -->
+
+[%-#----------------------------------------------------------------------------
+
+	# Hero
+
+#-----------------------------------------------------------------------------%]
+
+			<!-- Start of Hero Text -->
+			<div class="hero-body-custom">
+
+				<div class="hero-contents-custom">
+
+					<h1>Derby Arts and Theatre Association</h1>
+
+					<p class="subheader">
+						The home of amateur performing arts societies in the Derby
+						area.
+					</p>
+
+					<a href="#coming_events" class="round button hollow">
+						Coming Events
+					</a>
+
+				</div>
+
+			</div>
+			<!-- End of Hero Text -->
+
+		</div>
+		<!-- End of Hero Image -->
+
+[%-#----------------------------------------------------------------------------
+
+	# Body of Page
+
+#-----------------------------------------------------------------------------%]
+
+		<!-- Start of Lead Paragraph -->
+		<div class="row columns">
+
+			<br>
+			<br>
+			<p class="lead">
+				The Derby Arts and Theatre Association (DATA) is the representative
+				body for amateur performing arts in the Derby area. DATA also
+				maintains a list of <a href="[% conf.root %]events">Events</a> staged
+				by DATA's member <a href="[% conf.root %]societies">Societies</a> - the
+				DATA Diary. Find out more about DATA on our <a href=
+				"[% conf.root %]about_us">About Us</a> page.
+			</p>
+			<br>
+
+		</div>
+		<!-- End of Lead Paragraph -->
+
+		<!-- Start of "Follow Us" Section -->
+		<div class="row column expanded" style="background-image:
+    url('[% conf.root %]assets/img/textures/green_bar.png');">
+
+			<br>
+
+			<div class="row medium-unstack">
+
+				<div class="columns small-12">
+
+					<p class="text-center">
+
+						<span style="font-size: 3rem; color: #4dac71;">
+							<i class="fas fa-envelope"></i>
+						</span>
+						<br>
+						<a class="button" href="http://eepurl.com/dJi_vv" target="_blank"
+						style="border-radius: 4px; padding: 0.3em 0.5em 0.55em 0.5em;">
+							Subscribe to our email bulletin
+						</a>
+
+					</p>
+
+				</div>
+
+        <div class="columns small-12">
+
+          <p class="text-center">
+
+            <span style="font-size: 3rem; color: #3B5998;">
+              <i class="fab fa-facebook"></i>
+            </span>
+            <br>
+						<a class="button" target="_blank"
+						href="https://www.facebook.com/DerbyArtsAndTheatreAssociation"
+						style="border-radius: 4px; padding: 0.3em 0.5em 0.55em 0.5em;
+						background-color: #3B5998;">
+							Folow us on Facebook
+						</a>
+
+          </p>
+
+        </div>
+
+				<div class="columns small-12">
+
+					<p class="text-center">
+
+						<span style="font-size: 3rem; color: #1DA1F2;">
+							<i class="fab fa-twitter"></i>
+						</span>
+						<br>
+						<a class="twitter-follow-button" data-show-count="false"
+						data-size="large" href="https://twitter.com/DerbyAmPerfArts">
+							Follow us on Twitter
+						</a>
+
+					</p>
+
+				</div>
+
+			</div>
+
+			<br>
+
+		</div>
+		<!-- End of "Follow Us" Section -->
+
+		<!-- Start of "Coming Events" Title Section -->
+		<div class="row columns">
+
+			<br>
+			<br>
+
+			<h2 id="coming_events">Coming Events</h2>
+
+			<p class="lead">
+				Below are the events presented by our member <a
+				href="[% conf.root %]societies">Societies</a> in the near future. Our
+				full <a href="[% conf.root %]events">Events</a> list contains more and
+        facilitates the copying of the list for inclusion in printed programmes.
+			</p>
+      <br>
+
+    </div>
+
+    <div class="row column expanded" style="background-image:
+    url('[% conf.root %]assets/img/textures/green_bar.png');">
+
+      <br>
+
+      <div class="row medium-unstack">
+
+        <div class="columns small-12 large-4 large-offset-2">
+
+          <div class="callout information">
+
+            <p class="text-center" style="margin-bottom: 0;">
+              <span style="font-size: 120%;">
+                <i class="fas fa-info-circle"></i> Information
+              </span>
+            </p>
+
+            <p>
+              DATA members can download a one-page flyer of coming events to
+              print on either A4 or A5 paper <span
+              class="show-for-medium">(right)</span> for inclusion in their
+              programmes as required by the terms of the <a
+              href="[% conf.root %]diary_scheme">Diary Scheme</a>.
+            </p>
+
+          </div>
+
+        </div> [%# End of Column %]
+
+        <div class="columns small-12 large-4 large-offset-2">
+
+          <form action="[% conf.root %]action/printed_listing">
+            <p>Page Size:</p>
+            <p>
+              <input id="A4" name="pagesize" type="radio" value="A4" checked>
+              <label for="A4">A4</label>
+              <input id="A5" name="pagesize" type="radio" value="A5">
+              <label for="A5">A5</label>
+            </p>
+            <input class="button" type="submit" value="Download Flyer">
+          </form>
+
+        </div> [%# End of Column %]
+
+      </div> [%# End of Row %]
+
+    </div> [%# End of Wrapper Row %]
+
+		<!-- End of "Coming Events Title Section" -->
+    <br>
+    <br>
+		<!-- Start of "Coming Events" List -->
+
+[%~ MACRO whatson_events BLOCK %]
+
+[%~ MACRO venue_link BLOCK %]
+
+<a data-toggle="event_venue_[% loop_index %][% screen_size %]">
+[%~ IF ( matches = event.venue_name.match ( '^(.+),' ) ) %]
+    [% matches.0 %] address
+[%~ ELSE %]
+    [% event.venue_name %] address
+[%~ END %]
+</a>
+
+<div class="dropdown-address-pane top"
+id="event_venue_[% loop_index %][% screen_size %]"
+data-dropdown data-hover="true">
+
+[% PROCESS event_address.tt FILTER indent 2 -%]
+
+</div>
+
+[%~ END # MACRO venue_link BLOCK %]
+
+[%~#----------------------------------------------------------------------------
+
+	# Coming Events for Small Screens
+
+#-----------------------------------------------------------------------------%]
+
+<!-- Start of Small Screens Layout -->
+<div class="hide-for-medium">
+
+  <div class="row column">
+
+    <br>
+
+[%~ FOREACH event IN events -%]
+
+    <div class="row column text-center">
+
+      <div class="text-left" style="display: inline-block;">
+
+[%~ IF event.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt FILTER indent 6 %]
+[% venue_link ( loop_index = loop.index , screen_size = 'S' ) FILTER indent 6 %]
+
+[%~ END -%]
+
+      </div>
+
+      <br>
+      <br>
+
+    </div>
+
+[%~ END # FOREACH event in events %]
+
+  </div>
+
+</div>
+<!-- End of Small Screens Layout -->
+
+[%-#----------------------------------------------------------------------------
+
+	# Coming Events for Medium Screens
+
+#-----------------------------------------------------------------------------%]
+
+[%~ max_images = 0 %]
+
+[%~ FOREACH col IN [ 1 , 2 ] %]
+
+[%~
+images = 0
+item1 = col - 1
+item2 = col + 1
+item3 = col + 3
+item4 = col + 5
+item5 = col + 7
+item6 = col + 9
+%]
+
+[%~ FOREACH item IN [ item1 , item2 , item3 , item4 , item5 , item6 ] %]
+
+[%~ SET images = images + 1 IF events.${item}.use_desc == 1 %]
+[%~ SET max_images = images IF images > max_images %]
+
+[%~ END # FOREACH item %]
+
+[% SET col1_images = images IF col == 1 %]
+[% SET col2_images = images IF col == 2 %]
+
+[%~ END # FOREACH col %]
+
+<!-- Start of Medium Screens Layout -->
+<div class="show-for-medium hide-for-large">
+
+  <div class="row">
+
+    <div class="medium-6 columns">
+
+      <br>
+
+[%~ IF events.0.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.0 FILTER indent 6 %]
+[%
+  venue_link ( event = events.0 , loop_index = 0 , screen_size = 'M' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
+      </span>
+
+[%~ IF events.2.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.2 FILTER indent 6 %]
+[%
+  venue_link ( event = events.2 , loop_index = 2 , screen_size = 'M' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
+      </span>
+
+[%~ IF events.4.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.4 FILTER indent 6 %]
+[%
+  venue_link ( event = events.4 , loop_index = 4 , screen_size = 'M' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
+      </span>
+
+[%~ IF events.6.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.6 FILTER indent 6 %]
+[%
+  venue_link ( event = events.6 , loop_index = 6 , screen_size = 'M' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
+      </span>
+
+[%~ IF events.8.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.8 FILTER indent 6 %]
+[%
+  venue_link ( event = events.8 , loop_index = 8 , screen_size = 'M' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
+      </span>
+
+[%~ IF events.10.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.10 FILTER indent 6 %]
+[%
+  venue_link ( event = events.10 , loop_index = 10 , screen_size = 'M' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+
+    </div>
+
+    <div class="medium-6 columns">
+
+      <br>
+
+[%~ IF events.1.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.1 FILTER indent 6 %]
+[%
+  venue_link ( event = events.1 , loop_index = 1 , screen_size = 'M' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
+      </span>
+
+[%~ IF events.3.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.3 FILTER indent 6 %]
+[%
+  venue_link ( event = events.3 , loop_index = 3 , screen_size = 'M' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
+      </span>
+
+[%~ IF events.5.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.5 FILTER indent 6 %]
+[%
+  venue_link ( event = events.5 , loop_index = 5 , screen_size = 'M' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
+      </span>
+
+[%~ IF events.7.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.7 FILTER indent 6 %]
+[%
+  venue_link ( event = events.7 , loop_index = 7 , screen_size = 'M' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
+      </span>
+
+[%~ IF events.9.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.9 FILTER indent 6 %]
+[%
+  venue_link ( event = events.9 , loop_index = 9 , screen_size = 'M' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
+      </span>
+
+[%~ IF events.11.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.11 FILTER indent 6 %]
+[%
+  venue_link ( event = events.11 , loop_index = 11 , screen_size = 'M' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- End of Medium Screens Layout -->
+
+[%~#----------------------------------------------------------------------------
+
+	# Coming Events for Large Screens
+
+#-----------------------------------------------------------------------------%]
+
+[%~ max_images = 0 %]
+
+[%~ FOREACH col IN [ 1 , 2 , 3 ] %]
+
+[%~
+images = 0
+item1 = col - 1
+item2 = col + 2
+item3 = col + 5
+item4 = col + 8
+%]
+
+[%~ FOREACH item IN [ item1 , item2 , item3 , item4 ] %]
+
+[%~ SET images = images + 1 IF events.${item}.use_desc == 1 %]
+[%~ SET max_images = images IF images > max_images %]
+
+[%~ END # FOREACH item %]
+
+[% SET col1_images = images IF col == 1 %]
+[% SET col2_images = images IF col == 2 %]
+[% SET col3_images = images IF col == 3 %]
+
+[%~ END # FOREACH col %]
+
+<!-- Start of Large Screens Layout -->
+<div class="show-for-large">
+
+  <div class="row">
+
+    <div class="large-4 columns">
+
+      <br>
+
+[%~ IF events.0.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.0 FILTER indent 6 %]
+[%
+  venue_link ( event = events.0 , loop_index = 0 , screen_size = 'L' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
+      </span>
+
+[%~ IF events.3.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.3 FILTER indent 6 %]
+[%
+  venue_link ( event = events.3 , loop_index = 3 , screen_size = 'L' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
+      </span>
+
+[%~ IF events.6.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.6 FILTER indent 6 %]
+[%
+  venue_link ( event = events.6 , loop_index = 6 , screen_size = 'L' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
+      </span>
+
+[%~ IF events.9.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.9 FILTER indent 6 %]
+[%
+  venue_link ( event = events.9 , loop_index = 9 , screen_size = 'L' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+
+    </div>
+
+    <div class="large-4 columns">
+
+      <br>
+
+[%~ IF events.1.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.1 FILTER indent 6 %]
+[%
+  venue_link ( event = events.1 , loop_index = 1 , screen_size = 'L' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
+      </span>
+
+[%~ IF events.4.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.4 FILTER indent 6 %]
+[%
+  venue_link ( event = events.4 , loop_index = 4 , screen_size = 'L' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
+      </span>
+
+[%~ IF events.7.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.7 FILTER indent 6 %]
+[%
+  venue_link ( event = events.7 , loop_index = 7 , screen_size = 'L' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
+      </span>
+
+[%~ IF events.10.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.10 FILTER indent 6 %]
+[%
+  venue_link ( event = events.10 , loop_index = 10 , screen_size = 'L' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+
+    </div>
+
+    <div class="large-4 columns">
+
+      <br>
+
+[%~ IF events.2.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.2 FILTER indent 6 %]
+[%
+  venue_link ( event = events.2 , loop_index = 2 , screen_size = 'L' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col3_images ) %]
+      </span>
+
+[%~ IF events.5.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.5 FILTER indent 6 %]
+[%
+  venue_link ( event = events.5 , loop_index = 5 , screen_size = 'L' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col3_images ) %]
+      </span>
+
+[%~ IF events.8.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.8 FILTER indent 6 %]
+[%
+  venue_link ( event = events.8 , loop_index = 8 , screen_size = 'L' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+      <span style="line-height: 3.5;">
+        [%  break = '<br>' %][% break.repeat ( max_images - col3_images ) %]
+      </span>
+
+[%~ IF events.11.name
+# Wrap in IF even.name so we output nothing if there is no event. This is
+# necessary if for example there are less than 12 events for the home page.
+-%]
+
+[% PROCESS event_card.tt event = events.11 FILTER indent 6 %]
+[%
+  venue_link ( event = events.11 , loop_index = 11 , screen_size = 'L' )
+  FILTER indent 6
+%]
+
+[%~ END -%]
+
+      <br>
+      <br>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- End of Large Screens Layout -->
+
+[%~ #-------------------------------------------------------------------------%]
+
+[%~ END # MACRO whatson_events BLOCK %]
+
+[%~ CGIAPP.embed (
+
+	# component = whatson_events - a list of events
+	'whatson_events'	,
+
+	# filter - determines which events are returned
+	'filter' = {
+			'from'		=> 'now'				, # Only events that haven't yet ended
+			'to'			=> 'this-year'	, # Only events falling within the next year
+			'status'	=> 'PUBLISHED'	, # Only events that have been published
+			'limit'		=>	12					, # At most twelve events
+	} ,
+
+	'behaviour' = {
+		defaults => 1
+	}
+
+) FILTER indent 8 %]
+
+		<!-- End of "Coming Events" List -->
+
+[% PROCESS footer.tt %]

@@ -1,0 +1,68 @@
+[%~ IF screen == 'small' -%]
+
+<div class="row column">
+  <p>
+    <strong><a href="[% conf.root %]event/[% event.rowid %]">
+      [% event.name FILTER html %]
+    </a></strong><br>
+[%~ IF ( matches = event.presented_by.match ( '^"(.+)"$' ) ) %]
+    [% matches.0 %]<br>
+[%~ ELSE %]
+    Presented by [% event.presented_by %]<br>
+[%~ END %]
+    [% event.dates %]
+[%~ UNLESS event.times == 'TBC' ~%]
+    &nbsp;[% event.times %]
+[%~ END %]
+    at [% event.venue_name %]<br>
+    [% event.box_office FILTER ucfirst %]
+  </p>
+</div>
+
+[%~ ELSE # screen != 'small'
+-%]
+
+<div class="row">
+  <div class="small-6 columns">
+    <p>
+      <strong><a href="[% conf.root %]event/[% event.rowid %]">
+      [% event.name FILTER html %]</a></strong><br>
+
+[%~ IF ( matches = event.presented_by.match ( '^"(.+)"$' ) ) -%]
+      [% matches.0 %]<br>
+[%~ ELSE %]
+      Presented by [% event.presented_by %]<br>
+[%~ END -%]
+
+    </p>
+  </div>
+  <div class="small-2 columns">
+    <div class="hide-for-large">
+      <p>
+        [% event.dates %]
+[%~ UNLESS event.times == 'TBC' %]
+        <br>[% event.times %]
+[%~ END %]
+      </p>
+    </div>
+    <div class="show-for-large">
+      <p>
+        [% event.dates %]
+[%~ UNLESS event.times == 'TBC' %]
+        at [% event.times %]
+[%~ END %]
+      </p>
+    </div>
+  </div>
+  <div class="small-4 columns">
+    <p>[% event.venue_name %]</p>
+  </div>
+</div>
+<div class="row column">
+  <p>
+    Further information:<br />
+    [% event.box_office FILTER ucfirst %]
+  </p>
+</div>
+
+[%~ END %]

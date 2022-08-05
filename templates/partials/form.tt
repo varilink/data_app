@@ -1,0 +1,135 @@
+<!-- Start of Form -->
+<form [% UNLESS invisible %]class="callout"[% END %] [% IF id %]id="[% id %]"
+[% END %] action="[% action %]" data-abide novalidate method=
+"[% UNLESS method %]POST[% ELSE %][% method %][% END %]" accept-charset="utf-8"
+autocomplete="off">
+  <h2 class="text-center">[% name %]</h2>
+
+[%~ IF onError %]
+  <input type="hidden" name="onError" id="onError" value="[% onError %]">
+[%~ END ~%]
+
+[%~ IF onSuccess %]
+  <input type="hidden" name="onSuccess" id="onSuccess" value="[% onSuccess %]">
+[%~ END ~%]
+
+[%~ IF onSuccessContinue %]
+  <input type="hidden" name="onSuccessContinue" id="onSuccessContinue"
+  value="[% onSuccessContinue %]">
+[%~ END ~%]
+
+[%~ IF onSuccessFinish %]
+  <input type="hidden" name="onSuccessFinish" id="onSuccessFinish"
+  value="[% onSuccessFinish %]">
+[%~ END ~%]
+
+[%~ IF onWarning %]
+  <input type="hidden" name="onWarning" id="onWarning" value="[% onWarning %]">
+[%~ END ~%]
+
+[%~ UNLESS error # Initial State %]
+  <div data-abide-error class="alert callout" aria-live="assertive"
+  style="display: none;">
+
+[%~ ELSE # Error State %]
+  <div data-abide-error class="alert callout" aria-live="assertive"
+  role="alert" style="display: block;">
+[% END %]
+    <p class="lead">
+      <i class="fas fa-times"></i>
+[%- IF error_msg %]
+      [% error_msg %]
+[% ELSE %]
+      There are errors in your input as indicated below. Please correct them and
+      try again.
+[% END -%]
+    </p>
+  </div>
+  <br>
+
+[%~ global.script.form = BLOCK %]
+
+[%~#----------------------------------------------------------------------------
+
+  # Keep track of whether we have unsaved form changes and alert the user if
+  # they attempt to navigate way while they remain unsaved.
+
+#-------------------------------------------------------------------------------
+-%]
+
+// Alert users if they navigate away from a page with unsaved changes
+tinyMCE . triggerSave ( ) ;
+var origFormState = $ ( 'input , textarea , select' )
+  . not ( "[name='g-recaptcha-response']" ) . serialize ( ) ;
+
+$ ( 'form' ) . submit ( function ( ) {
+
+  tinyMCE . triggerSave ( ) ;
+  origFormState = $ ( 'input , textarea , select' )
+    . not ( "[name='g-recaptcha-response']" ) . serialize ( ) ;
+
+} ) ;
+
+window . addEventListener ( 'beforeunload' , function ( e ) {
+
+  tinyMCE . triggerSave ( ) ;
+	var currFormState = $ ( 'input , textarea , select' )
+    . not ( "[name='g-recaptcha-response']" ) . serialize ( ) ;
+
+	console.log ( 'Original Form State:' ) ;
+	console.log ( origFormState ) ;
+	console.log ( 'Current Form State:' ) ;
+	console.log ( currFormState ) ;
+
+	if ( currFormState != origFormState ) {
+    e . preventDefault ( ) ;
+    e . returnValue = null ;
+  }
+
+} ) ;
+
+[%-#----------------------------------------------------------------------------
+
+  # Put floating labels on input fields.
+
+#-----------------------------------------------------------------------------%]
+
+// Floating labels on input fields
+var inputs =
+	'input:text,textarea,input[type="email"],input[type="password"],select' ;
+
+function check_labels ( ) {
+
+	var label = $ ( this ) . prev ( 'label' ) ;
+
+	if ( this.value !== '' ) {
+
+		label . addClass ( 'show' ) ;
+
+	} else {
+
+		label . removeClass ( 'show' );
+
+	}
+
+}
+
+[%-# Check at document load %]
+$ ( inputs ) . each ( check_labels ) ;
+[%# Check on change events %]
+$ ( inputs ) . on ( 'change keyup mouseup' , check_labels ) ;
+
+[%-#----------------------------------------------------------------------------
+
+  # Remove the placeholder styling on select fields on change (i.e. the
+  # selection of an actual value.
+
+#-----------------------------------------------------------------------------%]
+
+$ ( 'select' ) . on ( 'change' , function ( ) {
+
+	this . removeAttribute ( 'style' ) ;
+
+} ) ;
+
+[% END # global.script.form = BLOCK %]

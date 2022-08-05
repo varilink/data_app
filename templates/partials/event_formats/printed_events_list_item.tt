@@ -1,0 +1,26 @@
+<tr valign="top">
+  <td>
+    [% event.dates %]
+[%~ UNLESS event.times == 'TBC' %]
+    <br>[% event.times %]
+[%~ END %]
+  </td>
+  <td>[% event.name FILTER html %]</td>
+  <td>
+
+[%~ IF ( matches = event.presented_by.match ( '^"(.+)"$' ) ) -%]
+
+    [% matches.0 %]<br>
+
+[%~ ELSE -%]
+
+    Presented by [% event.presented_by %]<br>
+
+[%~ END -%]
+
+    ([% event.box_office %])
+  </td>
+  <td>
+    [% event.venue_name %]
+  </td>
+</tr>

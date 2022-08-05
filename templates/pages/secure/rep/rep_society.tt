@@ -1,0 +1,65 @@
+[%~ SET
+
+title = 'Update Society'
+
+%]
+
+[%~ PROCESS rep_header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+[% PROCESS society_subnav.tt FILTER indent 4 %]
+
+    <div class="row column">
+
+[% PROCESS form.tt
+  action    = '/secure/rep/action/society'  ,
+  onError   = 'rep_society'                 ,
+  onSuccess = "/secure/rep/society/$rowid"
+FILTER indent 6 -%]
+
+        <h2 class="text-center">Society Details</h2>
+
+        <input type="hidden" name="organisation_rowid" value="[% rowid %]">
+        <input type="hidden" name="organisation_type" value="whatson_society">
+
+[%~ MACRO whatson_society BLOCK %]
+
+[%~ organisation = society -%]
+
+<input type="hidden" name="organisation_status"
+value="[% organisation.status %]">
+
+[% INCLUDE organisation_name.tt required = 1 %]
+
+[% PROCESS organisation_website.tt %]
+
+[% PROCESS organisation_email.tt %]
+
+[% PROCESS organisation_description.tt %]
+
+[%~ END # MACRO whatson_event BLOCK %]
+
+[%~ CGIAPP.embed (
+  'whatson_society'                 , # Fetch a society
+  'filter' = {
+    'rowid'   => "$rowid"           , # For a specific rowid
+    'userid'  => "$session.userid"  , # For which the user is a representative
+	}
+) FILTER indent 8 %]
+
+[% PROCESS buttons.tt
+
+	buttons = [
+		{
+			id = 'save' ,
+			value = 'Save' ,
+			type = 'submit'
+		}
+	]
+
+FILTER indent 6 %]
+
+    </div>
+
+[% PROCESS footer.tt %]

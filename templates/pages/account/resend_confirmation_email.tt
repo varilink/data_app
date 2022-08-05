@@ -1,0 +1,51 @@
+[%~ SET title = 'Resend Confirmation Email'
+
+# Resend a confirmation email. The confirmation email contains a link to click
+# on in order to confirm the email address that is associated with a user
+# account.
+
+%]
+
+[%~ PROCESS header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+    <div class="row columns">
+
+      <p class="lead">
+        When you register a user account we send an email to the address that
+        you associate with it. This contains a link that you must click on to
+        verfiy that you have access to that email address. If you haven't
+        received this email you should check your junk or SPAM folder in the
+        first instance. If you find it there then please add [% conf.webmin %]
+        to your list of "safe senders" to ensure that you receive all emails
+        that we send to you in connection with your account. If you can't locate
+        the email anywhere, please enter your email address below and click on
+        "Resend" and we will resend it to you immediately.
+      </p>
+
+[% PROCESS form.tt
+  action    = "${conf.root}account/action/resend_confirmation_email"  ,
+  name      = 'Email Address to Verify'                               ,
+  onError   = 'resend_confirmation_email'                             ,
+  onSuccess = 'success_complete_registration'
+FILTER indent 6 %]
+
+[% PROCESS user_email.tt
+  required = 1
+FILTER indent 8 %]
+
+[% PROCESS buttons.tt
+  buttons = [
+    {
+      id      = 'resend'  ,
+      protect = 1         ,
+      type    = 'submit'  ,
+      value   = 'Resend'
+    }
+  ]
+FILTER indent 8 %]
+
+    </div>
+
+[% PROCESS footer.tt %]

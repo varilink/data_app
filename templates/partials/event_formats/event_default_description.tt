@@ -1,0 +1,16 @@
+<p>
+	[% event.name FILTER html %]
+[%~ IF ( matches = event.presented_by.match ( '^"(.+)"$' ) ) =%]
+	[% matches.0 FILTER lcfirst FILTER html %].
+[%~ ELSE =%]
+	presented by [% event.presented_by FILTER html %].
+[%~ END %]
+	[% event.venue_name FILTER html %]
+[%= IF ( event.dates.match ( '-' ) ) %]from[% ELSE %]on[% END =%]
+	[% event.dates %]
+[%~ UNLESS event.times == 'TBC' =%]
+	at [% event.times %]
+[%~ END ~%]
+	.
+	[% event.box_office _ '.' FILTER html FILTER ucfirst %]
+</p>

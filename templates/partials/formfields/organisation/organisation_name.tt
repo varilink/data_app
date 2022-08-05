@@ -1,0 +1,41 @@
+<div class="floated-label-wrapper">
+
+[%~ UNLESS error_organisation_name # Initial State %]
+
+  <label for="organisation_name">
+    Name ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+
+  <input type="text" id="organisation_name" name="organisation_name"
+  placeholder="Name ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  aria-describedby="organisation_nameHelpText"
+  [% IF required %] required[% END %]
+  value="[% organisation.name %]">
+
+  <small class="form-error">[% error_msg %]</small>
+
+[%~ ELSE # Error State %]
+
+  <label class="is-invalid-label" for="organisation_name">
+    Name ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+
+  <input class="is-invalid-input" type="text" id="organisation_name"
+  name="organisation_name" placeholder=
+  "[% IF required %]Mandatory[% ELSE %]Optional[% END %]"
+  aria-describedby="organisation_nameHelpText"
+  [% IF required %]required[% END %]
+  value="[% organisation.name %]">
+
+  <small class="form-error is-visible">[% error_msg %]</small>
+
+[% END # error_organisation_name %]
+
+  <p class="help-text" id="organisation_nameHelpText">
+    You must enter a name for the society; for example:<br>
+    "Belper Musical Theatre";<br>
+    "Mickleover Players";<br>
+    "The Derventio Choir".
+  </p>
+
+</div>

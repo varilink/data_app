@@ -1,0 +1,150 @@
+[%~ SET
+
+title = 'My Account'
+
+%]
+
+[%~ PROCESS header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+    <div class="row column">
+
+      <p class="lead">
+        To change any of the details associated with the user account that you
+        have logged in with, update the details below and click on "Update".
+      </p>
+
+[% PROCESS form.tt
+  action		= '/secure/account/action'          ,
+  name      = 'Account Details'                 ,
+  onError		= 'account'                         ,
+  onSuccess	= '/secure/account'                 ,
+  onWarning	= '/account/warning_update_account'
+FILTER indent 6 %]
+
+[%~ MACRO auth_current_user BLOCK %]
+
+<h3>Name</h3>
+
+[% INCLUDE user_first_name.tt
+  required = 1
+%]
+
+[% INCLUDE user_surname.tt
+  required = 1
+%]
+
+<h3>Account</h3>
+
+<div class="callout information">
+
+  <p>
+    <i class="fas fa-info-circle"></i>
+    If you change any of the details of your user account (userid, email address
+    or password) then you will be signed-out and have to sign-in again to
+    access any services that require you to be signed-in. Furthermore, if
+    you change your email address then you will have to verify the new email
+    address before you can sign-in again. In this eventuality, we will send you
+    an email that	contains a link that will enable you to do this.
+	</p>
+
+</div>
+
+[% INCLUDE user_userid.tt
+	required = 1 ,
+	error_msg = 'If you change your userid you must enter a new userid consistent with the format requirements below'
+%]
+
+[% INCLUDE user_email.tt
+	required = 1 ,
+	error_msg = 'If you change your email address then you must enter a valid, new email address'
+%]
+
+[%~ IF user_confirm_email || error_user_confirm_email %]
+
+[% INCLUDE user_confirm_email.tt
+	disabled = 0 ,
+	hidden	= 0 ,
+	required = 1
+%]
+
+[%~ ELSE %]
+
+[% INCLUDE user_confirm_email.tt
+	disabled = 1 ,
+	hidden	= 1 ,
+	required = 0
+%]
+
+[%~ END %]
+
+[%~ END # MACRO auth_current_user %]
+
+[%~ IF error %]
+
+[% auth_current_user %]
+
+[%~ ELSE %]
+
+[%~ CGIAPP.embed ( 'auth_current_user' ) FILTER indent 8 %]
+
+[%~ END %]
+
+[%~ INCLUDE user_password.tt FILTER indent 8 %]
+
+[%~ IF user_confirm_password || error_user_confirm_password %]
+
+[% INCLUDE user_confirm_password.tt
+	disabled = 0 ,
+	hidden	= 0 ,
+	required = 1
+FILTER indent 8 %]
+
+[%~ ELSE %]
+
+[% INCLUDE user_confirm_password.tt
+	disabled = 1 ,
+	hidden	= 1 ,
+	required = 0
+FILTER indent 8 %]
+
+[%~ END %]
+
+[% PROCESS buttons.tt
+
+	buttons = [
+		{
+			id		= 'update' ,
+			type	= 'submit' ,
+			value	= 'Update'
+		}
+	]
+
+FILTER indent 6 %]
+
+    </div>
+
+[%~ global.script.account = BLOCK %]
+
+// If email is changed ask for confirmation of the new email
+$ ( '#userEmail' ) . on ( 'change' , function ( ) {
+
+  $ ( '#userConfirmEmail' ) . prop ( 'disabled' , false ) ;
+  $ ( '#userConfirmEmail' ) . prop ( 'required' , true ) ;
+  $ ( '#userConfirmEmail' ) . parent ( ) . removeClass ( 'hide' ) ;
+
+} ) ;
+
+// If password is changed ask for confirmation of the new password
+$ ( '#userPassword' ) . on ( 'change' , function ( ) {
+
+  $ ( '#userConfirmPassword' ) . prop ( 'disabled' , false ) ;
+  $ ( '#userConfirmPassword' ) . prop ( 'required' , true ) ;
+  $ ( '#userConfirmPassword' ) . parent ( ) . removeClass ( 'hide' ) ;
+
+} ) ;
+
+[%~ END # global.script.account = BLOCK %]
+
+[% PROCESS footer.tt %]

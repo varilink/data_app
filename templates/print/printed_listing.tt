@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+<title>
+Derby Arts and Theatre Association
+</title>
+</head>
+<body>
+<center><h2>Derby Arts and Theatre Association</h2><center>
+[% IF pagesize == 'A4' %]
+<table cellpadding="5">
+[% ELSIF pagesize == 'A5' %]
+<table cellpadding="3">
+[% ELSE %]
+<table>
+[% END %]
+
+[% FOREACH event IN events %]
+
+[% PROCESS printed_events_list_item.tt %]
+
+[% LAST IF limit AND ( loop.index + 1 ) >= limit %]
+
+[% END %]
+
+</table>
+<center>
+  <br>
+  <p>See derbyartsandtheatre.org.uk for further information</p>
+</center>
+</body>
+</html>

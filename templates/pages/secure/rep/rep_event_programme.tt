@@ -1,0 +1,284 @@
+[%~ IF rowid %]
+
+[%~ SET title = 'Update Event (Programme Listing)' %]
+
+[%~ ELSE %]
+
+[%~ SET title = 'Add Event (Programme Listing)' %]
+
+[%~ END %]
+
+[%~ PROCESS rep_header.tt %]
+
+    <div class="reveal warning" id="warningModal" data-reveal>
+
+      <div class="callout warning">
+
+        <p class="lead">
+          <i class="fas fa-exclamation-triangle"></i>
+          You have updated the Programme Listing details for an event that has a
+          custom description set for Online Promotion. You should check the
+          Online Promotion details for the event to ensure that its description
+          is still correct.
+        </p>
+
+      </div>
+
+    </div>
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+[%~ MACRO whatson_event BLOCK %]
+
+[% PROCESS event_subnav.tt %]
+
+<div class="row column">
+
+[%~ IF rowid %]
+
+[%~ onSuccess = "/secure/rep/event/programme/$rowid" %]
+
+[%~ ELSE %]
+
+[%~ onSuccess = '/secure/rep/events' %]
+
+[%~ END %]
+
+[% PROCESS form.tt
+  action    = '/secure/rep/action/event/programme'  ,
+  name      = 'Event Details for Programme Listings'  ,
+  onError   = 'rep_event_programme'                 ,
+  onSuccess = "$onSuccess"
+FILTER indent 2 %]
+
+[%~ IF rowid %]
+
+  <input type="hidden" id="event_rowid" name="event_rowid" value="[% rowid %]">
+
+[%~ END # IF rowid %]
+
+  <h3>What is it?</h3>
+
+[% INCLUDE event_name.tt
+  required = 1 ,
+  error_msg = 'You must enter the name of the event'
+FILTER indent 2 %]
+
+[% INCLUDE event_status.tt FILTER indent 2 %]
+
+  <h3>Who is presenting it?</h3>
+
+[% INCLUDE event_society.tt
+  required = 1 # Reps can only add events presented by a member society
+  caller = caller
+FILTER indent 2 %]
+
+[% INCLUDE event_presented_by.tt required = 0 FILTER indent 2 %]
+
+  <h3>When is it?</h3>
+
+[% INCLUDE event_start_date.tt
+  required = 1 ,
+  error_msg = 'You must enter a valid date in DD/MM/YYYY format'
+FILTER indent 2 %]
+
+[% INCLUDE event_end_date.tt
+  required = 0 ,
+  error_msg = 'If you enter and end date, it must be a valid date in DD/MM/YYYY format'
+FILTER indent 2 %]
+
+[% INCLUDE event_dates.tt	required = 0 FILTER indent 2 %]
+
+[% INCLUDE event_times.tt FILTER indent 2 %]
+
+  <h3>Other Details</h3>
+
+[%~#----------------------------------------------------------------------------
+  MACRO event_placeholder_callout BLOCK
+#-----------------------------------------------------------------------------%]
+
+<div class="callout information">
+  <p>
+    <i class="fas fa-info-circle"></i>
+    While the event is <strong>placehoder</strong>, the venue and information and/or
+    contact details for box office or other enquiries are optional.
+  </p>
+</div>
+
+[%~ END %]
+
+[%~#----------------------------------------------------------------------------
+  MACRO event_published_callout BLOCK
+#-----------------------------------------------------------------------------%]
+
+<div class="callout information">
+  <p>
+    <i class="fas fa-info-circle"></i>
+    Once the event is <strong>published</strong>, the venue and information
+    and/or contact details for box office or other enquiries are mandatory.
+  </p>
+</div>
+
+[%~ END %]
+
+[%~ IF
+
+  event.status == 'PLACEHOLDER'
+  # We have retrieved an event with PLACEHOLDER status from the database.
+
+  ||
+  ( error && event_status == 'PLACEHOLDER' )
+  # This is an error response and the form value for event_status was
+  # PLACEHOLDER.
+
+  ||
+  ( !error && !rowid )
+  # This is not an error response nor is it an update, this is the initial
+  # create. So, default to PLACEHOLDER.
+
+  #-----------------------------------------------------------------------------
+  # EVENT STATUS IS PLACEHOLDER
+  #-----------------------------------------------------------------------------
+
+%]
+
+  <!-- Start of eventPlaceholder div -->
+  <div id="eventPlaceholder">
+
+[% event_placeholder_callout FILTER indent 4 %]
+
+[% INCLUDE event_venue.tt FILTER indent 4 %]
+
+[% INCLUDE event_box_office.tt FILTER indent 4 %]
+
+  </div>
+  <!-- End of eventPlaceholder div -->
+
+  <!-- Start of eventPublished div -->
+  <div id="eventPublished" class="hide">
+
+[% event_published_callout FILTER indent 4 %]
+
+[% INCLUDE event_venue.tt
+	disabled = 1 ,
+	error_msg = 'You must enter the venue for the event' ,
+	required = 1
+FILTER indent 4 %]
+
+[% INCLUDE event_box_office.tt
+	disabled = 1 ,
+	required = 1
+FILTER indent 4 %]
+
+  </div>
+  <!-- End of eventPublished div -->
+
+[%~ ELSIF
+
+  event.status == 'PUBLISHED'
+  # We have retrieved an event with PUBLISHED status from the database
+
+  ||
+  ( error && event_status == 'PUBLISHED' )
+  # This is an error response and the form value for event_status was PUBLISHED
+
+  #-----------------------------------------------------------------------------
+  # EVENT STATUS IS PUBLISHED
+  #-----------------------------------------------------------------------------
+
+%]
+
+  <!-- Start of eventPlaceholder div -->
+  <div id="eventPlaceholder" class="hide">
+
+[% event_placeholder_callout FILTER indent 4 %]
+
+[% INCLUDE event_venue.tt
+	disabled = 1
+FILTER indent 4 %]
+
+[% INCLUDE event_box_office.tt
+	disabled = 1
+FILTER indent 4 %]
+
+  </div>
+  <!-- End of eventPlaceholder  div -->
+
+  <!-- Start of eventPublished div -->
+  <div id="eventPublished">
+
+[% event_published_callout FILTER indent 4 %]
+
+[% INCLUDE event_venue.tt
+	disabled = 0 ,
+	error_msg = 'You must enter the venue for the event' ,
+	required = 1
+FILTER indent 4 %]
+
+[% INCLUDE event_box_office.tt
+	disabled = 0 ,
+	required = 1
+FILTER indent 4 %]
+
+  </div>
+  <!-- End of eventPublished div -->
+
+[%~ ELSE # Error state %]
+
+[%~ END %]
+
+[%~ #---------------------------------------------------------------------------
+
+  # The buttons are complex and so we do not use the buttons.tt partial
+
+%]
+
+  <div class="button-group large show-for-medium">
+[% INCLUDE event_buttons.tt size='large' FILTER indent 4 %]
+  </div>
+
+  <div class="button-group hide-for-medium stacked" style="width: 100%;">
+[% INCLUDE event_buttons.tt FILTER indent 4 %]
+  </div>
+
+[%~ END # MACRO whatson_event BLOCK %]
+
+[%~ IF rowid %]
+
+[%~ CGIAPP.embed (
+  'whatson_event'	,
+  'filter' = {
+    'from'    => 'now'              , # Events that have not yet ended
+    'rowid'   => "$rowid"           ,
+    'userid'  => "$session.userid"    # Events represented by this user
+	}
+) FILTER indent 4 %]
+
+[%~ ELSE # NOT rowid %]
+
+[% whatson_event FILTER indent 4 %]
+
+[%~ END # IF rowid %]
+
+      </form>
+      <!-- End of Form -->
+    </div>
+
+[%~ global.script.rep_event_programme = BLOCK %]
+
+[%~ IF show_warning == 'event_updated' %]
+
+// There is a warning message to show on load
+$( '#warningModal' ) . foundation ( 'open' ) ;
+
+[%~ END # IF show_warning == 'event_updated' %]
+
+// Enable cancel button bypass of unsaved changes warning
+$( '#cancel' ) . click ( function ( ) {
+  tinyMCE . triggerSave ( ) ;
+  origFormState = $ ( 'form' ) . serialize ( ) ;
+} ) ;
+
+[%~ END # global.script.rep_event_programme = BLOCK %]
+
+[% PROCESS footer.tt %]

@@ -1,0 +1,103 @@
+[% SET
+
+title = 'Events Listing'
+
+%]
+
+[%~ PROCESS admin_header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+    <div class="row column">
+
+      <div class="callout information">
+
+        <p class="lead">
+          <i class="fas fa-info-circle"></i>&nbsp;&nbsp;Information<br>
+          This is the list of future events in the DATA Diary. Remember that
+          events must be "Published" to be advertised to the public.
+          "Placeholder" events are only visible to DATA administrators. You can
+          update the details of any event listed by clicking on the event's
+          name below or you can <a href="
+          [%~ conf.root %]secure/admin/event/programme">Add (an) Event</a>.
+        </p>
+
+      </div>
+
+      <table class="stack">
+
+        <thead>
+
+          <tr>
+            <th>Event</th>
+            <th>Status</th>
+            <th>Date(s) and Time(s)</th>
+          </tr>
+
+        </thead>
+
+[%~ MACRO whatson_events BLOCK %]
+
+[%~ FOREACH event IN events %]
+
+[%~ IF event.start_date.substr ( 6 ) != year # Change of year %]
+
+[%~ SET year = event.start_date.substr ( 6 ) %]
+
+[%~ UNLESS loop.index == 0 # Not first row %]
+
+        </tbody>
+
+[% END # Not first row %]
+
+		    <tbody>
+
+          <tr style="background-color: white;"><td colspan="3"></td></tr>
+
+          <tr>
+            <td colspan="3"><strong>[% year %]</strong></td>
+          </tr>
+
+[%~ END # Change of year %]
+
+          <tr>
+            <td>
+
+              <a href=
+              "[% conf.root %]secure/admin/event/programme/[% event.rowid %]">
+                [% event.name FILTER html %]
+              </a>
+
+              <br>[% event.presented_by %]
+
+            </td>
+            <td>[% event.status FILTER lower FILTER ucfirst %]</td>
+            <td>
+              [% event.dates %]
+[%~ UNLESS event.times == 'TBC' %]
+              &nbsp;[% event.times %]
+[%~ END %]
+            </td>
+          </tr>
+
+[%~ END %]
+
+[%~ END # MACRO whatson_events BLOCK %]
+
+[%~ CGIAPP.embed (
+	'whatson_events'		,	# List of events
+	'filter' = {
+		'from' => 'now'	,	# Only return events that have not yet ended
+	} ,
+	'behaviour' = {
+		'defaults'	=> 1
+	}
+) %]
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+[% PROCESS footer.tt %]

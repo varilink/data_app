@@ -1,0 +1,26 @@
+[% IF cols == 1 %]
+
+    </td>
+  </tr>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+</td>
+</tr>
+</table>
+<![endif]-->
+
+[% ELSIF cols == 2 %]
+
+          </td>
+        </tr>
+      </table>
+<!--[if (gte mso 9)|(IE)]>
+</td>
+</tr>
+</table>
+<![endif]-->
+    </td>
+  </tr>
+</table>
+
+[% END %]

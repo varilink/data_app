@@ -1,0 +1,92 @@
+[%~ SET
+
+title = 'Administration Area'
+
+%]
+
+[%~ PROCESS rep_header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+    <div class="row">
+
+      <div class=
+      "column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+
+        <div class="callout information">
+
+          <p class="lead text-center">
+            <i class="fas fa-info-circle"></i>&nbsp;&nbsp;Information<br>
+            This is the <a href="[% conf.root %]secure/rep/">Admin</a> area
+            for representatives of DATA member societies. If you have access to
+            this area, then you can update the information held about <a
+            href="[% conf.root %]secure/rep/events">Events</a> associated with
+            the member
+
+[%~ MACRO whatson_societies BLOCK %]
+
+[%~ IF societies.size == 1 # Must be a representative of a single society =%]
+
+            society that you represent as well as the details of that
+            <a href="[% conf.root %]secure/rep/societies">Society</a>.
+
+[%~ ELSE # Must be a representative of more than one society =%]
+
+            societies that you represent as well as the details of those
+            <a href="[% conf.root %]secure/rep/societies">Societies</a>.
+
+[%~ END # IF societies.size == 1 %]
+
+[%~ END # MACRO whatson_societies BLOCK %]
+
+[%~ CGIAPP.embed (
+  'whatson_societies' ,
+  'filter' = {
+    'userid' => "$session.userid"
+  }
+) -%]
+
+          </p>
+
+          <div class="show-for-medium">
+            <p class="text-center">
+              <img src="[% conf.root %]assets/img/menu/admin_lh_topbar.png">
+            </p>
+          </div>
+
+          <div class="hide-for-medium">
+            <p class="text-center">
+              <img src="[% conf.root ~%]
+              assets/img/menu/admin_lh_mobile_topbar.png">
+            </p>
+          </div>
+
+          <p class="lead text-center">
+            At any time you can return to the public area of our website via the
+            home icon <span style="white-space: nowrap;">(<a href="
+            [%~ conf.root %]"><i class="fas fa-caret-right"></i><i class="fas
+            fa-home"></i></a>):</span>
+          </p>
+
+          <div class="show-for-medium">
+            <p class="text-center">
+              <img src="[% conf.root %]assets/img/menu/admin_rh_topbar.png">
+            </p>
+          </div>
+
+          <div class="hide-for-medium">
+            <p class="text-center">
+              <img src="[% conf.root ~%]
+              assets/img/menu/admin_rh_mobile_topbar.png">
+            </p>
+          </div>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+[% PROCESS footer.tt %]

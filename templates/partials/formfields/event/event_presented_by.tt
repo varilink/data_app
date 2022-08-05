@@ -1,0 +1,149 @@
+<!-- Start of Event Presented By -->
+<div class="floated-label-wrapper">
+
+[%~ UNLESS error_event_presented_by || error_society_or_presented_by
+
+	# Initial State, i.e. NOT error state
+
+-%]
+
+  <label for="event_presented_by">
+    Presented By (Optional)
+  </label>
+  <input type="text" id="event_presented_by" name="event_presented_by"
+  aria-describedby="event_presented_byHelpText" placeholder=
+  "Presented By (Optional)" value="[% event.presented_by FILTER html %]">
+  <small class="form-error">[% error_msg %]</small>
+
+[%~ ELSE # Error State -%]
+
+  <label class="is-invalid-label" for="event_presented_by">
+    Presented By (Optional)
+  </label>
+  <input class="is-invalid-input" type="text" id="event_presented_by" name=
+  "event_presented_by"	aria-describedby="event_presented_byHelpText"
+  placeholder="Presented By (Optional)"
+  value="[% event.presented_by FILTER html %]">
+
+[%~ IF error_presented_by -%]
+
+  <small class="form-error is-visible">[% error_msg %]</small>
+
+[%~ END ~%]
+
+[%~ END # error_event_presented_by || error_society_or_presented_by ~%]
+
+[% MACRO whatson_societies BLOCK %]
+
+[%~ IF caller == 'admin_event_programme.tt' -%]
+
+  <p class="help-text" id="event_presented_byHelpText">
+    Enter who the event is presented by if it isn't simply the member society
+    selected above.<br>
+    Unless one of the following is true this can be left blank to default to
+    the member society name:
+  </p>
+  <ol class="help-text">
+    <li>
+      There is no member society for this event; for example "The Eagle Awards"
+      presented by "Derby Theatre"
+    </li>
+    <li>
+      The member society is collaborating with others; for example "Derby
+      Cathedral Concerts with Derby Cathedral Choir"
+    </li>
+    <li>
+      The member society isn't presenting the event but has another association
+      with it; for example "Sponsored by Derby Bach Choir"&nbsp;*
+    </li>
+  </ol>
+  <p class="help-text">
+    *&nbsp;In the last example include the quotation marks to suppress
+    "Presented by" appearing for this event in the diary.
+  </p>
+
+[%~ ELSIF caller == 'notify_event.tt' -%]
+
+  <p class="help-text" id="event_presented_byHelpText">
+    Enter who the event is presented by if it isn't simply the member society
+    selected above.<br>
+    Unless one of the following is true this can be left blank to default to the
+    member society name:
+  </p>
+  <ol class="help-text">
+    <li>
+      The member society is presenting the event in conjunction with other
+      parties; for example "Derby Cathedral Concerts <strong>with Derby
+      Cathedral Choir</strong>"
+    </li>
+    <li>
+      The member society is <strong>not</strong> presenting the event but has
+      some other relationship to it; for example "<strong>Sponsored by</strong>
+      Derby Bach Choir"
+    </li>
+  </ol>
+
+[%~ ELSE # 'Must be rep_event_programme.tt' -%]
+
+  <p class="help-text" id="event_presented_byHelpText">
+[% IF societies.size == 1 -%]
+    Enter who the event is presented by if it isn't simply
+    "[% societies.0.name %]".<br>
+[% ELSE -%]
+    Enter who the event is presented by if it isn't simply the member society
+    selected above.<br>
+[% END -%]
+    Unless one of the following is true this can be left blank to default to
+    the member society name:
+  </p>
+  <ol class="help-text">
+    <li>
+      The member society is collaborating with others; for example "Derby
+      Cathedral Concerts with Derby Cathedral Choir"
+    </li>
+    <li>
+      The member society isn't presenting the event but has another
+      association with it; for example "Sponsored by Derby Bach Choir"&nbsp;*
+    </li>
+  </ol>
+  <p class="help-text">
+    *&nbsp;In the last example include the quotation marks to suppress
+    "Presented by" appearing for this event in the diary.
+  </p>
+
+[%~ END %]
+
+[%~ END # MACRO whatson_societies BLOCK %]
+
+[%~ IF
+	template.name == 'rep_event_programme.tt' ||
+	( template.name == 'input text' && caller == 'rep_event_programme.tt' )
+%]
+
+[%~ CGIAPP.embed (
+
+	'whatson_societies' ,
+
+	'filter'	= {
+		'status'	=> 'ACTIVE' ,
+		'userid'	=> "$session.userid" ,
+	}
+
+) %]
+
+[%~ ELSE %]
+
+[%~ CGIAPP.embed (
+
+	'whatson_societies' ,
+
+	'filter'	= {
+		'status'	=> 'ACTIVE' ,
+	}
+
+) %]
+
+[%~ END -%]
+
+</div>
+<!-- End of Event Presented By -->

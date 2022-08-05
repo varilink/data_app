@@ -1,0 +1,45 @@
+[%~ SET
+
+title = 'Error'
+
+%]
+
+[%~ IF psgi.REQUEST_URI.match ( '^\/+secure\/admin' ) %]
+
+[%~ PROCESS admin_header.tt %]
+
+[%~ ELSIF psgi.REQUEST_URI.match ( '^\/+secure\/rep' ) %]
+
+[%~ PROCESS rep_header.tt %]
+
+[%~ ELSE %]
+
+[%~ PROCESS header.tt %]
+
+[%~ END %]
+
+    <div class="row">
+
+      <div class=
+      "columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+
+[% PROCESS h1.tt FILTER indent 6 %]
+
+        <div class="callout alert">
+
+          <p class="lead">
+            <i class="fas fa-times"></i>
+            For some reason there has been an unknown error while handling your
+            access to our website. We apologise for this and for any
+            inconvenience caused to you. You can select from the menu above or
+            return to our <a href="[% conf.root %]">home page</a>
+            (<a href="[% conf.root %]"><i class="fas fa-home"></i></a>).
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+[% PROCESS footer.tt %]

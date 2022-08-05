@@ -1,0 +1,68 @@
+[%~ SET title = 'Error Verifying Email Address'
+
+# Report an error confirming an email address back to the user.
+
+%]
+
+[%~ PROCESS header.tt %]
+
+    <div class="row">
+
+      <div class=
+    	"columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+
+[% PROCESS h1.tt FILTER indent 8 %]
+
+[%~ IF error_user_email == 'user_not_confirmed' %]
+
+        <div class="callout alert">
+
+          <p class="lead">
+            <i class="fa fa-exclamation-triangle"></i> The email address for
+            your user account is already verified and so your user account is
+            already activated for use. You can already use	your user account to
+            <a href="[% conf.root %]account/sign_in">Sign-In</a> to our site.
+            Alternatively, you can select from the menu above or return to our
+            <a href="[% conf.root %]">home page</a> (<a href="[% conf.root %]">
+            <i class="fa fa-home"></i></a>).
+          </p>
+
+        </div>
+
+[%~ ELSE %]
+
+[% PROCESS form.tt
+  action    = '/account/action/resend_confirmation_email'                 ,
+  error_msg =
+    'There has been an error confirming your email address. It''s '   _
+    'possible that the link in an email that you used is out of '     _
+    'date. Enter your	userid below and click on resend to get '       _
+    'another confirmation email sent to you and confirm your email '  _
+    'address immediately via that email.'                                 ,
+  invisible =	1                                                           ,
+  onError   = 'resend_confirmation_email'                                 ,
+  onSuccess = 'success_resend_confirmation_email'                         ,
+%]
+
+[% PROCESS user_userid.tt
+  required = 1
+%]
+
+[% PROCESS buttons.tt
+  buttons = [
+    {
+      id      = 'resend'  ,
+      protect = 1         ,
+      type    = 'submit'  ,
+      value   = 'Resend'
+    }
+  ]
+%]
+
+[% END # IF error_email == 'user_not_confirmed' %]
+
+      </div>
+
+    </div>
+
+[% PROCESS footer.tt %]

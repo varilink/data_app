@@ -1,0 +1,81 @@
+<!-- Start of Event Status -->
+<fieldset>
+
+  <input type="radio" name="event_status" value="PLACEHOLDER"
+  id="event_statusPlaceholder" aria-describedby="event_statusHelpText"
+  required [% IF !error && event.status != 'PUBLISHED' %]checked[% END %]>
+
+  <label for="event_statusPlaceholder">Placeholder</label>
+
+  <input type="radio" name="event_status" value="PUBLISHED"
+  id="event_statusPublished" aria-describedby="event_statusHelpText"
+  [% IF event.status == 'PUBLISHED' %]checked[% END %]>
+
+  <label for="event_statusPublished">Published</label>
+
+</fieldset>
+
+<p class="help-text" id="event_statusHelpText">
+  Indicate whether to publish this event or leave it as a placeholder. Only
+  published events are advertised to the public. Placeholder events are only
+  visible to DATA committee members and representatives of member societies as a
+  planning aid.
+</p>
+
+[%~ global.script.event_status = BLOCK %]
+
+// Reflect changes in event status
+$ ( 'input[name="event_status"]' ) . change ( function ( ) {
+
+  var eventStatus = $ ( this ) . filter ( ":checked" ) . val ( ) ;
+
+  if ( eventStatus == 'PUBLISHED' ) {
+
+    // Enable, update and reveal Published
+
+    $ ( '#eventPublished #eventVenue' ) . prop ( 'disabled' , false ) ;
+    $ ( '#eventPublished #eventBoxOffice' ) . prop ( 'disabled' , false ) ;
+
+    $ ( '#eventPublished #eventVenue' ) . val (
+      $ ( '#eventUnpublised #eventVenue' ) . val ( )
+    ) ;
+    $ ( '#eventPublished #eventBoxOffice' ) . val (
+      $ ( '#eventPlaceholder #eventBoxOffice' ) . val ( )
+    ) ;
+
+    $ ( '#eventPublished'	) . removeClass	( 'hide' ) ;
+
+    // Disable and hide Placeholder
+    $ ( '#eventPlaceholder #eventVenue' ) . prop ( 'disabled' , true ) ;
+    $ ( '#eventPlaceholder #eventBoxOffice' )	. prop (
+      'disabled' , true ) ;
+    $ ( '#eventPlaceholder'	) . addClass		( 'hide' ) ;
+
+  } else if ( eventStatus == 'PLACEHOLDER' ) {
+
+    // Enable, update and reveal Placeholder
+
+    $ ( '#eventPlaceholder #eventVenue' ) . prop ( 'disabled' , false ) ;
+    $ ( '#eventPlaceholder #eventBoxOffice' )	. prop ( 'disabled' , false ) ;
+
+    $ ( '#eventPlaceholder #eventVenue' ) . val (
+      $ ( '#eventPublished #eventVenue' ) . val ( )
+    ) ;
+    $ ( '#eventPlaceholder #eventBoxOffice' ) . val (
+      $ ( '#eventPublished #eventBoxOffice' ) . val ( )
+    ) ;
+
+    $( '#eventPlaceholder'	) . removeClass	( 'hide' ) ;
+
+    // Disable and hide Published
+    $ ( '#eventPublished #eventVenue' ) . prop ( 'disabled' , true ) ;
+    $ ( '#eventPublished #eventBoxOffice' ) . prop ( 'disabled' , true ) ;
+
+    $( '#eventPublished'		) . addClass		( 'hide' ) ;
+
+  }
+
+} ) ;
+
+[%~ END # global.script.event_status = BLOCK %]
+<!-- End of Event Status -->

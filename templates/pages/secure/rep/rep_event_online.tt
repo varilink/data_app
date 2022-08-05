@@ -1,0 +1,91 @@
+[% SET
+
+title = 'Update Event (Online Promotion)'
+
+%]
+
+[%~ PROCESS rep_header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+[%~ MACRO whatson_event BLOCK %]
+
+[% PROCESS event_subnav.tt FILTER indent 4 %]
+
+[%#---------------------------------------------------------------------------%]
+
+[% IF rowid %]
+
+[% onSuccess = "/secure/rep/event/online/$rowid" %]
+
+[% ELSE %]
+
+[% onSuccess = '/secure/rep/events' %]
+
+[% END %]
+
+[%#---------------------------------------------------------------------------%]
+
+    <div class="row column">
+
+[% PROCESS form.tt
+  action    = '/secure/rep/action/event/online' ,
+  id        = 'eventCardForm'                   ,
+  onError   = 'rep_event_online'                ,
+  onSuccess = "$onSuccess"
+FILTER indent 6 %]
+
+[% PROCESS event_online_promotion_form.tt FILTER indent 8 %]
+
+[%~ END # MACRO whatson_event BLOCK %]
+
+[%~ IF rowid %]
+
+[%~ CGIAPP.embed (
+  'whatson_event'                   ,
+  'filter' = {
+    'from'    => 'now'              ,	# Only events that have not yet ended
+    'rowid'   => "$rowid"           ,
+    'userid'  => "$session.userid"  , # Only events the user represents
+  }                                 ,
+  behaviour = {
+    defaults  => 1
+  }
+) FILTER indent 8 %]
+
+[%~ ELSE # NOT rowid %]
+
+[% whatson_event %]
+
+[%~ END # IF rowid %]
+
+[%~ #---------------------------------------------------------------------------
+
+  # The buttons are complex and so we do not use the buttons.tt partial
+
+%]
+
+        <div class="button-group large show-for-medium">
+[% INCLUDE event_buttons.tt size='large' FILTER indent 10 %]
+        </div>
+
+        <div class="button-group hide-for-medium stacked"
+        style="width: 100%;">
+[% INCLUDE event_buttons.tt FILTER indent 10 %]
+        </div>
+
+      </form>
+      <!-- End of Form -->
+    </div>
+
+[%~ global.script.rep_event_online = BLOCK %]
+
+// Enable cancel button bypass of unsaved changes warning
+$( '#cancel' ) . click ( function ( ) {
+  tinyMCE . triggerSave ( ) ;
+  origFormState = $ ( 'form' ) . serialize ( ) ;
+} ) ;
+
+[% END # global.script.rep_event_online = BLOCK %]
+
+[% PROCESS footer.tt %]

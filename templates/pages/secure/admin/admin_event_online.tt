@@ -1,0 +1,90 @@
+[% SET
+
+title = 'Update Event (Online Promotion)'
+
+%]
+
+[%~ PROCESS admin_header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+[%~ MACRO whatson_event BLOCK %]
+
+[% PROCESS event_subnav.tt FILTER indent 4 %]
+
+[%~#--------------------------------------------------------------------------%]
+
+[%~ IF rowid %]
+
+[% onSuccess = "/secure/admin/event/online/$rowid" %]
+
+[%~ ELSE %]
+
+[% onSuccess = '/secure/admin/events' %]
+
+[%~ END %]
+
+[%~#--------------------------------------------------------------------------%]
+
+    <div class="row column">
+
+[% PROCESS form.tt
+  action    = '/secure/admin/action/event/online' ,
+  id        = 'eventCardForm'                     ,
+  onError   = 'admin_event_online'                ,
+  onSuccess = "$onSuccess"
+FILTER indent 6 %]
+
+[% PROCESS event_online_promotion_form.tt FILTER indent 8 %]
+
+[%~ END # MACRO whatson_event BLOCK %]
+
+[%~ IF rowid %]
+
+[%~ CGIAPP.embed (
+  'whatson_event'       , # Single event
+  'filter' = {
+    'from' => 'now'     , # Only return events that have not yet ended
+    'rowid'	=> "$rowid" , # An event with this unique rowid
+  }                     ,
+  behaviour = {
+    defaults => 1
+  }
+) FILTER indent 8 %]
+
+[%~ ELSE # NOT rowid %]
+
+[% whatson_event %]
+
+[%~ END # IF rowid %]
+
+[%~ #---------------------------------------------------------------------------
+
+  # The buttons are complex and so we do not use the buttons.tt partial
+
+%]
+
+        <div class="button-group large show-for-medium">
+[% INCLUDE event_buttons.tt size='large' FILTER indent 10 %]
+        </div>
+
+        <div class="button-group hide-for-medium stacked"
+        style="width: 100%;">
+[% INCLUDE event_buttons.tt FILTER indent 10 %]
+        </div>
+
+      </form>
+      <!-- End of Form -->
+    </div>
+
+[%~ global.script.admin_event_online = BLOCK %]
+
+// Enable cancel button bypass of unsaved changes warning
+$( '#cancel' ) . click ( function ( ) {
+  tinyMCE . triggerSave ( ) ;
+  origFormState = $ ( 'form' ) . serialize ( ) ;
+} ) ;
+
+[% END # global.script.admin_event_online = BLOCK %]
+
+[% PROCESS footer.tt %]

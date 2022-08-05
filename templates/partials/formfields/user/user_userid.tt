@@ -1,0 +1,185 @@
+<div class="floated-label-wrapper">
+
+[%~ UNLESS error_user_userid # Initial State %]
+
+  <label for="userUserid">
+    Userid ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+
+[%~ IF
+  template.name	== 'success_begin_registration.tt'  ||
+  template.name	== 'account.tt'                     ||
+  caller			== 'account.tt'
+
+  # Either success_complete_registration or account allows us to set a new
+  # userid and so we must include the pattern check.
+
+%]
+
+  <input type="text" id="userUserid" name="user_userid" placeholder=
+  "Userid ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  aria-describedby="userUseridHelpText"	pattern="userid"
+  [% IF required %]required[% END %] value="[% session.userid %]"
+  [% 'autocomplete="off"' IF noautocomplete %]>
+
+[%~	ELSE
+
+  # Cant set a new userid so we must be just using an existing one and
+  # therefore the pattern check is not required.
+
+%]
+
+  <input type="text" id="userUserid" name="user_userid" placeholder=
+  "Userid ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  aria-describedby="userUseridHelpText" [% IF required %]required[% END %]
+  value="[% session.userid %]"
+  [% 'autocomplete="off"' IF noautocomplete %]>
+
+[%~ END %]
+
+  <small class="form-error">
+    [% error_msg %]
+  </small>
+
+[%~ ELSE # Error State %]
+
+  <label class="is-invalid-label" for="userUserid">
+    Userid ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+
+[%~ IF
+  template.name	== 'success_begin_registration.tt'  ||
+  template.name	== 'account.tt'                     ||
+  caller			== 'account.tt'
+
+  # Either success_begin_registration or account allows us to set a new userid
+  # and so we must include the pattern check.
+
+%]
+
+  <input class="is-invalid-input" aria-invalid="true" type="text" id=
+  "userUserid" name="user_userid" pattern="userid" placeholder=
+  "Userid ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  aria-describedby="user_useridHelpText"	[% IF required %]required[% END %]
+  [% 'autocomplete="off"' IF noautocomplete %]>
+
+[%~ ELSE %]
+
+  <input class="is-invalid-input" aria-invalid="true" type="text" id=
+  "userUserid" name="user_userid" placeholder=
+  "Userid ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  aria-describedby="user_useridHelpText" [% IF required %]required[% END %]
+  [% 'autocomplete="off"' IF noautocomplete %]>
+
+[%~ END %]
+
+  <small class="form-error is-visible">
+
+[%~ IF error_user_userid == 'Missing' %]
+
+[%~ IF template.name == 'success_begin_registration.tt' %]
+
+    You must enter a userid
+
+[%~ ELSE # template.name != 'success_begin_registration.tt' %]
+
+    You must enter your userid
+
+[%~ END %]
+
+[%~ ELSIF error_user_userid == 'userid_unique' %]
+
+    That userid has already been registered with DATA so you must choose
+    another one
+
+[%~ ELSIF error_user_userid == 'user_confirmed' %]
+
+    The email address associated with that user account is not yet verified -
+    see below
+
+[%~ ELSIF error_user_userid == 'user_not_confirmed' %]
+
+    That user account is already activated and there is no need to confirm the
+    email address again
+
+[%~ ELSIF error_user_userid == 'userid_long_enough' %]
+
+    The userid that you have specified is not long enough
+
+[%~ ELSIF error_user_userid == 'user_exists' %]
+
+[%#
+
+	In the sign in screen at least (will need to check if this error condition
+	can be returned by other screens) we just want to report that the user
+	credentials provided are incorrect. We dont want to indicate whether it is
+	the userid or the password that is wrong as that might be valuable
+	information for hackers.
+
+%]
+
+[%~ UNLESS template.name == 'success_begin_registration.tt' %]
+
+    The userid that you have entered is not registered with us
+
+[%~ END %]
+
+[%~ ELSE %]
+
+    [% error_user_userid %]
+
+[%~ END %]
+
+  </small>
+
+[%~ END # error_user_userid %]
+
+[%~ IF template.name == 'success_begin_registration.tt' %]
+
+  <p class="help-text" id="userUseridHelpText">
+    Choose a userid to register with us. This must consist of only letters and
+    numbers and be at least eight characters long.
+  </p>
+
+[%~ ELSIF
+  template.name == 'sign_in.tt'                   ||
+  template.name == 'reset_password.tt'            ||
+  template.name == 'resend_confirmation_email.tt'
+%]
+
+  <p class="help-text" id="userUseridHelpText">
+    Enter your userid. <a
+    href="[% conf.root %]account/userid_reminder">Forgotten your userid?</a>
+  </p>
+
+[%~ ELSIF
+  template.name == 'account.tt' ||
+  caller        == 'account.tt'
+%]
+
+  <p class="help-text" id="userUseridHelpText">
+    Update if you want to change the userid associated with your account. This
+    must consist of only letters and numbers and be at least eight	characters
+    long.
+  </p>
+
+[%~ END # IF template.name == 'success_begin_registration' %]
+
+[%~ IF error_user_userid == 'user_confirmed' %]
+
+  <div class="alert callout">
+
+    <p>
+      <i class="fas fa-times"></i>
+      You must verify the email address associated with your user account before
+      you can use it to Sign-In here. We have sent you an email with a link in
+      it in order to do this. If you can't find that email then we can <a
+      href="[% conf.root %]account/resend_confirmation_email">resend it to
+      you</a>.
+    </p>
+
+  </div>
+
+[%~ END # IF error_user_userid == 'user_confirmed' %]
+
+</div>

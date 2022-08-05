@@ -1,0 +1,108 @@
+[%~ SET
+
+title = 'About Us'
+
+%]
+
+[%~ PROCESS header.tt %]
+
+[% PROCESS h1.tt media="the_diary_scheme" FILTER indent 4 %]
+
+    <div class="row medium-unstack">
+
+      <div class="columns">
+
+        <p>
+          Derby Arts and Theatre Association (DATA) was founded in 1986 and
+          registered as a charity a little later. For a brief period, DATA
+          operated an arts centre and cafe in St. Werburgh's Church, Cheapside,
+          Derby. Sometime later "Our Founder" (see <span class=
+          "show-for-medium">right</span><span class=
+          "hide-for-medium">below</span>) the late Tony Jaggers (with others)
+          instigated the DATA Diary, which has continued every since.
+        </p>
+
+        <p>
+          Another organisation - Derby New Theatre Association (DNTA) - was
+          founded in 2003 and registered as a charity in 2005. DNTA was formed
+          with the purpose of establishing a community theatre in Derby.
+          Although much work was done in the early years, it became clear that
+          establishing a community theatre, run by amateurs, was not going to be
+          a viable proposition. DNTA evolved, therefore, into a lobbying and
+          networking group. It also published, twice-yearly, a leaflet called
+          "Spotlight", publicising amateur theatre productions.
+        </p>
+
+        <p>
+          Both charities had as their objectives, educating the public in and
+          developing the performing arts in Derby, and both publicised their
+          members' productions and events. There was also a considerable overlap
+          in the membership of the two boards of trustees. So it was decided
+          that it would be sensible to merge the two organisations under the
+          banner of DATA, which has a broader area of coverage of the performing
+          arts as it includes amateur music and concert groups as well as
+          theatre groups.
+        </p>
+
+        <p>
+          At a special general meeting held on 21<sup>st</sup> November 2017,
+          DNTA members agreed to dissolve the association and charity and to
+          authorise the trustees to apply any remaining property or money by
+          transfer to DATA, being a registered charity with objectives similar
+          to DNTA.
+        </p>
+
+        <p>
+          DATA has taken on the lobbying role of DNTA, including making
+          representations to relevant organisations about performance venues.
+          Effectively, DATA has become the only representative body for amateur
+          arts organisations in the Derby area, and consequently the sector now
+          has a stronger claim to be consulted about, and a stronger voice to
+          influence, arts developments in the city.
+        </p>
+
+      </div>
+
+      <div class="columns">
+
+        <div class="callout">
+
+          <div class="show-for-medium-only">
+
+            <img src="[% conf.root %]assets/img/our_founder.jpg" class=
+            "float-center" alt="Our Founder">
+
+            <h2 class="text-center">Our Founder</h2>
+
+          </div>
+
+          <div class="hide-for-medium-only">
+
+            <img src="[% conf.root %]assets/img/our_founder.jpg" class=
+            "float-right" alt="Our Founder" style="margin-left: 1em;
+            margin-bottom: 1em;">
+
+            <h2>Our Founder</h2>
+
+          </div>
+
+          <p>
+            DATA was founded in 1985 by Tony Jaggers, in the days before the
+            Internet! The Diary Scheme was an arrangement whereby	member
+            societies agreed to list each others' events in their	programmes.
+          </p>
+
+          <p>
+            Sadly, Tony passed away in February 2016. His contribution to
+            amateur performing arts in the Derby area is immeasurable. DATA and
+            The Diary Scheme's continuing success is one way in which his
+            presence in our community is still manifested.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+[% PROCESS footer.tt %]

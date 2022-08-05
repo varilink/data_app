@@ -1,0 +1,33 @@
+<!--[if mso]>
+<td align="center" valign="top">
+<![endif]-->
+<table style="display:inline;" cellspacing="0" cellpadding="0" border="0" align="left">
+  <tbody>
+    <tr>
+      <td style="padding-right:10px; padding-bottom:9px;" valign="top">
+        <table class="mcnFollowContentItem" cellspacing="0" cellpadding="0" border="0" width="100%">
+          <tbody>
+            <tr>
+              <td style="padding-top:5px; padding-right:10px; padding-bottom:5px; padding-left:9px;" align="left" valign="middle">
+                <table cellspacing="0" cellpadding="0" border="0" align="left" width="">
+                  <tbody>
+                    <tr>
+                      <td align="center" width="24" valign="middle">
+                        <a href="[% link.url %]" target="_blank">
+                          <img src="https://cdn-images.mailchimp.com/icons/social-block-v2/color-[% link.type %]-48.png" style="display:block;" class="" height="24" width="24">
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!--[if mso]>
+</td>
+<![endif]-->

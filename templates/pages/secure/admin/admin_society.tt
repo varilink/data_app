@@ -1,0 +1,78 @@
+[%~ IF rowid %]
+
+[%~ SET title = 'Update Society' %]
+
+[%~ ELSE %]
+
+[%~ SET title = 'Add Society' %]
+
+[%~ END %]
+
+[%~ PROCESS admin_header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+[% PROCESS society_subnav.tt FILTER indent 4 %]
+
+    <div class="row column">
+
+[% PROCESS form.tt
+  action    = '/secure/admin/action/society'  ,
+  name      = 'Member Society Details'        ,
+  onError   = 'admin_society'                 ,
+  onSuccess = '/secure/admin/societies'
+FILTER indent 6 %]
+
+        <input type="hidden" name="organisation_rowid" value="[% rowid %]">
+        <input type="hidden" name="organisation_type" value="whatson_society">
+
+[%~ MACRO whatson_society BLOCK %]
+
+[%~ organisation = society %]
+
+[% INCLUDE organisation_name.tt
+  required = 1
+FILTER indent 8 %]
+
+[% INCLUDE organisation_status.tt
+  required = 1
+FILTER indent 8 %]
+
+[% INCLUDE organisation_website.tt FILTER indent 8 %]
+
+[% INCLUDE organisation_email.tt FILTER indent 8 %]
+
+[% INCLUDE organisation_description.tt FILTER indent 8 %]
+
+[%~ END # MACRO whatson_event BLOCK %]
+
+[%~ IF rowid %]
+
+[%~ CGIAPP.embed (
+	'whatson_society'	,
+	'filter' = {
+		'rowid' => "$rowid"
+	}
+) %]
+
+[%~ ELSE %]
+
+[%~ whatson_society %]
+
+[%~ END %]
+
+[% PROCESS buttons.tt
+
+	buttons = [
+		{
+			id = 'save' ,
+			value = 'Save' ,
+			type = 'submit'
+		}
+	]
+
+FILTER indent 6 %]
+
+    </div>
+
+[% PROCESS footer.tt %]

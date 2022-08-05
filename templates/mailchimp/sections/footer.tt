@@ -1,0 +1,134 @@
+<table style="min-width:100%;" cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody >
+    <tr>
+      <td style="padding:9px" align="center" valign="top">
+        <table style="min-width:100%;" cellspacing="0" cellpadding="0" border="0" width="100%">
+          <tbody>
+            <tr>
+              <td style="padding-left:9px;padding-right:9px;" align="center">
+                <table style="min-width:100%;" cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tbody>
+                    <tr>
+                      <td style="padding-top:9px; padding-right:9px; padding-left:9px;" align="center" valign="top">
+                        <table cellspacing="0" cellpadding="0" border="0" align="center">
+                          <tbody>
+                            <tr>
+                              <td align="center" valign="top">
+                                <!--[if mso]>
+                                <table align="center" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                <![endif]-->
+
+[% links =
+	[
+		{
+			type => 'twitter' ,
+			url => 'https://twitter.com/DerbyAmPerfArts'
+		} ,
+		{
+			type => 'facebook' ,
+			url => 'https://www.facebook.com/DerbyArtsAndTheatreAssociation/'
+		} ,
+		{
+			type => 'youtube' ,
+			url => 'https://www.youtube.com/channel/UCTXIEwu1D9mnV9uU7H-TZMw/'
+		} ,
+		{
+			type => 'link' ,
+			url => "$conf.root"
+		} ,
+	]
+%]
+
+[% FOREACH link IN links %]
+
+[% PROCESS link.tt %]
+
+[% END %]
+
+<!--[if mso]>
+</tr>
+</table>
+<![endif]-->
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="mcnDividerBlock" style="min-width:100%;" cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody class="mcnDividerBlockOuter">
+    <tr>
+      <td class="mcnDividerBlockInner" style="min-width: 100%; padding: 10px 18px 25px;">
+        <table class="mcnDividerContent" style="min-width: 100%;border-top: 2px solid #EEEEEE;" cellspacing="0" cellpadding="0" border="0" width="100%">
+          <tbody>
+            <tr>
+              <td>
+                <span></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="mcnTextBlock" style="min-width:100%;" cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody class="mcnTextBlockOuter">
+    <tr>
+      <td class="mcnTextBlockInner" style="padding-top:9px;" valign="top">
+<!--[if mso]>
+<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+<tr>
+<![endif]-->
+<!--[if mso]>
+<td valign="top" width="600" style="width:600px;">
+<![endif]-->
+        <table style="max-width:100%; min-width:100%;" class="mcnTextContentContainer" cellspacing="0" cellpadding="0" border="0" align="left" width="100%">
+          <tbody>
+            <tr>
+              <td class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;" valign="top">
+                <em>Copyright &copy; *|CURRENT_YEAR|* *|LIST:COMPANY|*, All rights reserved.</em>
+                <br>
+                *|IFNOT:ARCHIVE_PAGE|*
+                *|LIST:DESCRIPTION|*
+                <br>
+                <br>
+                <strong>Our mailing address is:</strong>
+                <br>
+                *|HTML:LIST_ADDRESS_HTML|* *|END:IF|*
+                <br>
+                <br>
+                Want to change how you receive these emails?<br>
+                You can <a href="*|UPDATE_PROFILE|*" target="_blank">update your preferences</a> or <a href="*|UNSUB|*" target="_blank">unsubscribe from this list</a>.
+                <br>
+                <br>
+                *|IF:REWARDS|* *|HTML:REWARDS|*
+                *|END:IF|*
+              </td>
+            </tr>
+          </tbody>
+        </table>
+<!--[if mso]>
+</td>
+<![endif]-->
+<!--[if mso]>
+</tr>
+</table>
+<![endif]-->
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,48 @@
+<div class="floated-label-wrapper">
+
+[%~ UNLESS error_organisation_website # Initial State %]
+
+  <label for="organisation_website">
+    Website ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+
+  <input type="text" id="organisation_website" name="organisation_website"
+  placeholder="Website ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  pattern="website" aria-describedby="organisationWebsiteHelpText"
+  [% IF required %] required[% END %]
+  value="[% organisation.website %]">
+
+  <small class="form-error">
+[%~ IF error_msg %]
+    [% error_msg %]
+[%~ ELSE %]
+    Website URL is invalid
+[%~ END %]
+  </small>
+
+[%~ ELSE # Error State %]
+
+  <label class="is-invalid-label" for="organisation_website">
+    Website ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+
+  <input class="is-invalid-input" type="text" id="organisation_website"
+  name="organisation_website" placeholder=
+  "Website ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  pattern="website" aria-describedby="organisationWebsiteHelpText"
+  [% IF required %] required[% END %] value="[% organisation.website %]">
+
+  <small class="form-error is-visible">
+    [% error_organisation_website %]
+  </small>
+
+[%~ END # error_organisation_website %]
+
+  <p class="help-text" id="organisationWebsiteHelpText">
+	   If this organisation has a website then you can enter its address here; for
+	    example:<br>
+      www.sitwellsingers.org.uk<br>
+      www.duchess-theatre.com
+  </p>
+
+</div>

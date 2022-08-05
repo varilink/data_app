@@ -1,0 +1,17 @@
+<div class="floated-label-wrapper">
+
+  <label for="organisationDescription">
+    Description (Optional)
+  </label>
+
+  <textarea name="organisation_description" id="organisationDescription"
+  rows="5" cols="80" placeholder="Description (Optional)"
+  aria-describedby="organisationDescriptionHelpText">
+    [%~ organisation.description ~%]
+  </textarea>
+
+  <p class="help-text" id="organisationDescriptionHelpText">
+    Enter a single paragraph description of your member society.
+  </p>
+
+</div>

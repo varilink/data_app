@@ -1,0 +1,41 @@
+[% UNLESS cookies.dismiss_cookie_alert == 'yes' -%]
+
+<!-- Start of the Cookie Alert -->
+<div data-sticky-container>
+
+  <div class="cookie-alert sticky" data-sticky data-options="marginTop:0;"
+  data-closable>
+
+    <div class="row column">
+
+      <div class="callout secondary">
+        <br>
+        We use cookies to enable some of the functionality on our website.
+        Read our <a href="[% conf.root %]privacy">privacy policy</a> to learn
+        more. By continuing to use our site you consent to our use of
+        cookies.
+
+        <button id="cookieConsent" class="close-button" aria-label="Close alert"
+        type="button" data-close>
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- End of the Cooke Alert -->
+
+[%~ global.script.cookie_alert = BLOCK -%]
+
+// Register a request to dismiss the cookie alert
+$ ( '#cookieConsent' ) . on ( 'click' , function ( event ) {
+  $ . cookie ( 'dismiss_cookie_alert' , 'yes' , { expires: 7 } ) ;
+} ) ;
+
+[%- END # global.script.cookie_alert = BLOCK %]
+
+[%~ END %]

@@ -1,0 +1,72 @@
+[%~ MACRO whatson_event BLOCK %]
+
+[%~ SET
+
+	title = "${event.name}"
+
+%]
+
+[%~ PROCESS header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+    <div class="row medium-unstack">
+
+<div class="column medium-offset-1">
+
+  <h2>Event</h2>
+
+[% PROCESS event_card.tt FILTER indent 4 %]
+
+  </div>
+
+  <div class="column medium-offset-1">
+
+    <h2>Venue</h2>
+
+[% PROCESS event_address.tt FILTER indent 6 %]
+
+[% MACRO whatson_venue BLOCK %]
+
+[%~ IF venue.website %]
+<br>
+<a href="http://[% venue.website %]" target="_blank">
+  [% venue.website %]
+</a>
+[%~ END %]
+
+[%~ END # MACRO whatson_venue BLOCK %]
+
+[%~ CGIAPP.embed (
+	'whatson_venue' ,
+	'filter' = {
+		'event' => "$event.rowid"
+	}
+) FILTER indent 6 %]
+
+  </div>
+
+[%~ END # MACRO whatson_event BLOCK %]
+
+[%~ CGIAPP.embed (
+
+	# component = whatson_event - a single event
+	'whatson_event'	,
+
+	# filter - determines which event (if any) is returned
+	'filter' = {
+		'rowid'	=> "$rowid"		, # An event with this unique rowid
+		'from'	=> 'now'			, # Only an event that hasn't yet ended
+		'status'	=> 'PUBLISHED'	, # Only an event that has been published
+	} ,
+
+	# behaviour - controls the behaviour of the component
+	'behaviour' = {
+		'defaults' = 1
+	}
+
+) FILTER indent 6 %]
+
+  </div>
+
+[% PROCESS footer.tt ~%]

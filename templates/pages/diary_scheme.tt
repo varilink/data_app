@@ -1,0 +1,198 @@
+[%~ SET
+
+title = 'Diary Scheme'
+
+%]
+
+[%~ PROCESS header.tt %]
+
+[%- PROCESS h1.tt media="the_diary_scheme" FILTER indent 4 %]
+
+    <div class="row medium-unstack">
+
+      <div class="columns">
+
+        <p>
+          Derby Arts and Theatre Association (DATA) administers the Diary
+          Scheme, a mutual aid arrangement for amateur theatre and music
+          societies in the Derby area. It has been operating since DATA was
+          founded in 1986 (see our <a href="[% conf.root %]about_us">About
+          Us</a> page).
+        </p>
+
+[%~ MACRO whatson_societies BLOCK %]
+
+<p>
+  Member societies, of which there are currently [% societies.size %], may list
+  the events that they stage on this website, which is provided and maintained
+  by DATA. Member societies pay a small fee to cover DATA's costs (currently
+  &pound;10 for two years' subscription).
+</p>
+
+[%~ END # MACRO whatson_societies BLOCK %]
+
+[%~ CGIAPP.embed (
+  'whatson_societies'	,
+  'filter' = {
+    'status' => 'ACTIVE'
+  } ,
+) FILTER indent 8 %]
+
+        <p>
+          Each member society must appoint at least one person to liaise with
+          the Diary Scheme's organisers. The majority of communication is by
+          e-mail. Member society representatives should advise the Diary Scheme
+          organisers of their future plans as early as possible by one of the
+          following means:
+        </p>
+
+        <ul>
+          <li>
+            Via e-mail to <a href="mailto:admin@derbyartsandtheatre.org.uk">
+            admin@derbyartsandtheatre.org.uk</a>;
+          </li>
+          <li>
+            By using the <a href="[% conf.root %]notify_event">Notify Us</a>
+            <span style="font-style: italic;">(of events)</span> page;
+          </li>
+          <li>
+            Via our recommended method, which is to <a
+            href="[% conf.root %]account/begin_registration">Register</a> a user
+            account with us, which you can then use to directly add events
+            to our website.
+          </li>
+        </ul>
+
+        <p>
+          Member societies are encouraged to use the list as a planning aid to
+          avoid duplication of events or clashes of dates. Events can be added
+          as placeholders to make them visible to other member societies without
+          being published to the public for this purpose. However, there is no
+          control by DATA over member societies' plans.
+        </p>
+
+        <p>
+          Published events are made visible on this website where they can be
+          seen by the public and are also then publicised via a number of other
+          means, see "Publicity via the DATA Diary" <span
+          class="hide-for-medium">(below)</span><span
+          class="show-for-medium">(right)</span>.
+        </p>
+
+        <p>
+          DATA and the Diary Scheme organisers accept no liability for any
+          errors, howsoever caused.
+        </p>
+
+      </div>
+
+      <div class="columns">
+
+        <div class="card" style="border-color: #4c1010; #max-width: 400px;">
+
+          <div class="card-divider" style="background-color: #4c1010;
+          color: #fefefe;">
+            <h5>Publicity via the DATA Diary</h5>
+          </div>
+          <!-- Start of Orbit -->
+          <div class="orbit" role="region" data-orbit
+          aria-label="Data Diary Publicity Channels" style="width: 100%;">
+            <!-- Start of Orbit Wrapper -->
+            <div class="orbit-wrapper">
+              <!-- Start of Orbit Container -->
+              <ul class="orbit-container">
+                <li class="is-active orbit-slide">
+                  <figure class="orbit-figure">
+                    <img class="orbit-image"
+                    src="[% root %]/assets/img/freddie.png"
+                    alt="Mailchimp">
+                    <figcaption class="orbit-caption">Mailchimp</figcaption>
+                  </figure>
+                </li>
+                <li class="orbit-slide">
+                  <figure class="orbit-figure">
+                    <img class="orbit-image"
+                    src="[% root %]/assets/img/news_items/facebook.jpg"
+                    alt="Facebook">
+                    <figcaption class="orbit-caption">Facebook</figcaption>
+                  </figure>
+                </li>
+                <li class="orbit-slide">
+                  <figure class="orbit-figure">
+                    <img class="orbit-image"
+                    src="[% root %]/assets/img/news_items/big-bird-card.jpeg"
+                    alt="Twitter">
+                    <figcaption class="orbit-caption">Twitter</figcaption>
+                  </figure>
+                </li>
+                <li class="orbit-slide">
+                  <figure class="orbit-figure">
+                    <img class="orbit-image"
+                    src="[% root %]/assets/img/programme.jpg"
+                    alt="Programmes">
+                    <figcaption class="orbit-caption">Programmes</figcaption>
+                  </figure>
+                </li>
+              </ul>
+              <!-- End of Orbit Container -->
+            </div>
+            <!-- End of Orbit Wrapper -->
+          </div>
+          <!-- End of Orbit -->
+
+          <div class="card-section">
+            <p>
+              Events published to the DATA Diary via this website are also
+              publicised via a number of other means as follows:
+            </p>
+            <ul>
+              <li>
+                Inclusion in DATA's monthly, <a href="https://mailchimp.com"
+                target="_blank">Mailchimp</a> e-mail bulletin, which anyone can
+                <a href="http://eepurl.com/dJi_vv" target="_blank">Subscribe</a>
+                to.
+              </li>
+              <li>
+                Postings to the <a target="_blank"
+                href="https://www.facebook.com/DerbyArtsAndTheatreAssociation/">
+                DATA Facebook page</a>.
+              </li>
+              <li>
+                Tweets from the <a target="_blank"
+                href="https://twitter.com/DerbyAmPerfArts">DATA Twitter
+                account</a>.
+              </li>
+              <li>
+                Inclusion in the programmes of events staged by other member
+                societies.
+              </li>
+            </ul>
+            <div class="callout information">
+              <p>
+                <i class="fas fa-info-circle"></i>
+                It has always been and remains an obligation that DATA member
+                societies include a listing of upcoming events in the DATA Diary
+                with the programmes for events that they stage. You can download
+                a printed format, one-page flyer for this purpose below.
+              </p>
+              <form action="[% conf.root %]action/printed_listing">
+                <p>Page Size:</p>
+                <p>
+                  <input id="A4" name="pagesize" type="radio" value="A4"
+                  checked>
+                  <label for="A4">A4</label>
+                  <input id="A5" name="pagesize" type="radio" value="A5">
+                  <label for="A5">A5</label>
+                </p>
+                <input class="button" type="submit" value="Download Flyer">
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+[% PROCESS footer.tt %]

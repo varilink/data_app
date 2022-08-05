@@ -1,0 +1,33 @@
+[% SET title = 'Event Notification Received'
+
+# Notify Us
+
+%]
+
+[% PROCESS header.tt %]
+
+<div class="row">
+
+  <div class=
+	"columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+
+		[% PROCESS h1.tt %]
+
+		<div class="callout success">
+
+			<p class="lead">
+        <i class="fas fa-check"></i>
+				Thank you for notifying us an event. The details that you entered
+				have been sent to the administrators of the DATA Diary who will
+				respond to them as soon as possible. You can select from the menu
+        above or return to our <a href="[% conf.root %]">home page</a>
+        (<a href="[% conf.root %]"><i class="fa fa-home"></i></a>).
+			</p>
+
+		</div>
+
+	</div>
+
+</div>
+
+[% PROCESS footer.tt %]

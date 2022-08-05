@@ -1,0 +1,90 @@
+<input type="hidden" id="event_rowid" name="event_rowid" value="[% rowid %]">
+
+<div class="row medium-unstack">
+
+  <div class="columns"> [%# Left hand column containing instructions %]
+
+    <p>
+      Our <a href="[% conf.root %]">home page</a> presents DATA Diary's coming
+      events as cards. By default, these cards are built	from the event details
+      that you have already entered for programme listings. You can choose
+      instead to edit the card for your event, to provide a fuller description
+      and add an image for greater visual impact.
+    </p>
+
+[% PROCESS event_use_desc.tt FILTER indent 4 %]
+
+    <div class="callout information event-use-desc-yes
+    [%= IF event.use_desc == 0 || event_use_desc == 0 %]hide[% END %]">
+
+      <p>
+        <i class="fas fa-info-circle"></i>
+        To edit the description for your event's card, click in the	text in the
+        lowermost section of the card <span class="hide-for-medium">below</span>
+        <span class="show-for-medium">right</span> and directly edit the text
+        using your keyboard in conjunction with the toolbar that appears.
+      </p>
+
+      <div class="event-use-desc-yes-with-image
+      [%= UNLESS event.use_desc == 1 || event_use_desc == 1 %]hide[% END %]">
+
+[%~ add_image_help = BLOCK %]
+To add an image to the card for your event, click on the image	<span
+class="hide-for-medium">below</span><span class="show-for-medium">right</span>
+with the text "Click me to provide an image for your event" and then either
+select an image from the web by specifying its "Source" on the "General" tab or
+upload an image using the "Upload" tab. Images must be in JPG/JPEG, PNG or GIF
+format and no larger that 2MBytes in size.
+[% END %]
+
+[%~ change_image_help = BLOCK %]
+To change the image for the card for your event, click on the current	image
+<span class="hide-for-medium">below</span><span	class="show-for-medium">right
+</span> and then either select an image from the web by specifying its "Source"
+on the "General" tab or upload an image using the "Upload" tab. Images must be
+in JPG/JPEG, PNG or GIF format and no	larger that 2MBytes in size.
+[% END %]
+
+[%~ IF
+
+  # Check if a custom image has been provided, either in initial or error mode
+
+  ( !error && event.image	)
+  ||
+  ( error && mceEventImage )
+
+%]
+
+        <p id="addImageHelp" class="hide">
+[% add_image_help FILTER indent 10 %]
+        </p>
+
+        <p id="changeImageHelp">
+[% change_image_help FILTER indent 10 %]
+        </p>
+
+[%~ ELSE # No custom image has yet been provided %]
+
+        <p id="addImageHelp">
+[% add_image_help FILTER indent 10 %]
+        </p>
+
+        <p id="changeImageHelp" class="hide">
+[% change_image_help FILTER indent 10 %]
+        </p>
+
+[%~ END %]
+
+      </div>
+
+    </div>
+
+  </div> [%# END of the left hand column %]
+
+  <div class="columns shrink"> [%# Right hand column containing card %]
+
+[% PROCESS event_description.tt FILTER indent 4 %]
+
+  </div> [%# END of the right hand column %]
+
+</div> [%# END of the row %]

@@ -1,0 +1,61 @@
+[%~ SET title = 'Join Us'
+
+# Join Us - You can submit an enquiry to join for your society
+
+%]
+
+[%~ PROCESS header.tt %]
+
+    <div class="row column">
+
+[% PROCESS h1.tt media = "member_societies" FILTER indent 6 %]
+
+      <p class="lead">
+        Are you aware of or are you involved with an amateur performing arts
+        society in the Derby area that is not yet a member of DATA? If so and
+        you are interested in that society joining DATA and benefiting from
+        the <a href="[% conf.root %]diary_scheme">Diary Scheme</a> then complete
+        the form below and click on "Join Us" and we will get back to you.
+      </p>
+
+[% PROCESS form.tt
+	action		= '/action/join_us'				,
+	name			= 'Membership Enquiry'			,
+	onError		= 'join_us'							,
+	onSuccess	= '/success_join_us'
+FILTER indent 6 %]
+
+        <h2>Contact Details</h2>
+
+[%~ required = 1 # Applies to all three formfields %]
+
+[% PROCESS contact_email.tt
+  error_msg = 'You must enter a valid email address'
+FILTER indent 8 %]
+
+[% PROCESS contact_confirm_email.tt
+  error_msg = 'You must repeat your email address to confirm it',
+FILTER indent 8 %]
+
+        <h2>Message</h2>
+
+[% PROCESS contact_message.tt
+  error_msg = 'You must enter your message'
+FILTER indent 8 %]
+
+[% PROCESS buttons.tt
+
+  buttons = [
+    {
+      id = 'join_us' ,
+      protect = 1 ,
+      type = 'submit' ,
+      value = 'Join Us'
+    }
+  ]
+
+FILTER indent 6 %]
+
+    </div>
+
+[% PROCESS footer.tt %]

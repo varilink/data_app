@@ -1,0 +1,133 @@
+<!-- Start of Event Sub Navigation -->
+[%#-----------------------------------------------------------------------------
+
+	This partial contains some explanation and sub navigation that's used in
+	four pages:
+	- admin_event_programme.tt
+	- admin_event_online.tt
+	- rep_event_programme.tt
+	- rep_event_online.tt
+
+------------------------------------------------------------------------------%]
+[%~ SET rowid = event_rowid IF !rowid && event_rowid
+
+	# In the error state event_rowid is passed by form fill and rowid isn't.
+	# Set rowid to event_rowid so that rowid can be used consistently
+
+~%]
+<div class="row column">
+  <div class="callout information">
+    <p class="lead text-center" style="margin-bottom: 0;">
+      <span style="font-size: 120%;">
+        <i class="fas fa-info-circle"></i>&nbsp;&nbsp;Information
+      </span>
+    </p>
+    <p class="lead">
+      Event details are entered on two pages; "Programme<span
+      class="show-for-medium"> Listing</span>" and "Online<span
+      class="show-for-medium"> Promotion</span>". The Programme<span
+      class="show-for-medium"> Listing</span> page restricts information entered
+      to short text for inclusion in lists of events. Events can be kept in
+      "Placeholder" until the are ready to be "Published". While in Placeholder
+      they are only visible to other admin users for planning purposes, e.g. to
+      avoid clashes. The Online<span class="show-for-medium"> Promotion</span>
+      page can be used
+      to capture a fuller description of a Published event, including an image,
+      for more effective promotion of that event online. The "Preview
+      <span class="show-for-medium">Event</span>" page shows how a Published
+      event will look in the various formats that we use to promote it.
+    </p>
+  </div>
+</div>
+<br>
+<div class="row column">
+  <nav aria-label="Pagination">
+    <ul class="pagination text-center">
+[%#-----------------------------------------------------------------------------
+
+	"Programm Listing" page link
+
+------------------------------------------------------------------------------%]
+[%~ IF
+  template.name == 'admin_event_programme.tt' ||
+  caller        == 'admin_event_programme.tt' ||
+  template.name == 'rep_event_programme.tt'   ||
+  caller        == 'rep_event_programme.tt'
+-%]
+      <li class="current">
+        Programme<span class="show-for-medium"> Listing</span>
+      </li>
+[%~ ELSE # we are in one of the other pages -%]
+      <li>
+        <a href="[% conf.root %]secure/[% session.role %]/event/programme/
+        [%~ rowid %]">
+          Programme<span class="show-for-medium"> Listing</span>
+        </a>
+      </li>
+[%~ END ~%]
+[%#-----------------------------------------------------------------------------
+
+	"Online Promotion" page link
+
+------------------------------------------------------------------------------%]
+[%~ IF rowid && event.status == 'PUBLISHED' %]
+[%~ IF
+  template.name == 'admin_event_online.tt'  ||
+  caller        == 'admin_event_online.tt'  ||
+  template.name == 'rep_event_online.tt'    ||
+  caller        == 'rep_event_online.tt'
+%]
+      <li class="current">
+        Online<span class="show-for-medium"> Promotion</span>
+      </li>
+[%~ ELSE # we are in one of the other pages %]
+      <li>
+        <a href="[% conf.root %]secure/[% session.role %]/event/online/
+        [%~ rowid %]">
+          Online<span class="show-for-medium"> Promotion</span>
+        </a>
+      </li>
+[%~ END ~%]
+[%~ ELSE # NOT IF rowid && event.status == 'PUBLISHED' - disable link %]
+      <li class="disabled">
+        Online<span class="show-for-medium"> Promotion</span>
+      </li>
+[%~ END # IF rowid %]
+[%#-----------------------------------------------------------------------------
+
+	"Preview Event" page link
+
+------------------------------------------------------------------------------%]
+[%~ IF rowid && event.status == 'PUBLISHED' %]
+[%~ IF
+  template.name == 'admin_event_preview.tt' ||
+  caller        == 'admin_event_preview.tt' ||
+  template.name == 'rep_event_preview.tt'   ||
+  caller        == 'rep_event_preview.tt'
+%]
+      <li class="current">
+        Preview<span class="show-for-medium"> Event</span>
+      </li>
+[%~ ELSE # we are in one of the other pages %]
+      <li>
+        <a href="[% conf.root %]secure/[% session.role %]/event/preview/
+        [%~ rowid %]">
+          Preview<span class="show-for-medium"> Event</span>
+        </a>
+      </li>
+[%~ END ~%]
+[%~ ELSE # NOT IF rowid && event.status == 'PUBLISHED' - disable link %]
+      <li class="disabled">
+        Preview<span class="show-for-medium"> Event</span>
+      </li>
+[%~ END # IF rowid %]
+[%#---------------------------------------------------------------------------%]
+    </ul>
+  </nav>
+</div>
+<div class="row column expanded" style="background-color: #4dac71;">
+  &nbsp;
+</div>
+<br>
+<br>
+<!-- End of Event Sub Navigation -->

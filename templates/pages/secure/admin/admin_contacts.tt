@@ -1,0 +1,71 @@
+[%~ SET title = 'View Contacts' %]
+
+[%~ PROCESS admin_header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+[% PROCESS society_subnav.tt FILTER indent 4 %]
+
+    <div class="row column">
+
+      <h2 class="text-center">Society Contacts</h2>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Primary Contact?</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+[%~ MACRO whatson_society BLOCK %]
+
+[%~ IF society.rowid %]
+
+[%~ MACRO whatson_contacts BLOCK %]
+
+[%~ FOREACH contact IN contacts %]
+
+          <tr>
+            <td>[% contact.surname %], [% contact.first_name %]</td>
+            <td>[% contact.role %]</td>
+            <td>[% IF contact.primary_contact %]Yes[% END %]</td>
+          </tr>
+
+[%~ END %]
+
+[%~ END # MACRO whatson_contacts BLOCK %]
+
+[%~ CGIAPP.embed (
+
+	'whatson_contacts' , "$rowid"
+
+) %]
+
+[%~ END %]
+
+[%~ END # MACRO whatson_society BLOCK %]
+
+[%~ CGIAPP.embed (
+
+  'whatson_society'	,
+
+  filter = {
+
+    'rowid'	=> "$rowid"				,
+
+  }
+
+) %]
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+[% PROCESS footer.tt %]

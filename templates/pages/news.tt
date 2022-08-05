@@ -1,0 +1,243 @@
+[% SET
+
+	title = 'Membership News'
+
+%]
+
+[%~ PROCESS header.tt %]
+
+[% PROCESS h1.tt FILTER indent 4 %]
+
+[%~ MACRO whatson_news_items BLOCK %]
+
+[%~ MACRO news_item_card BLOCK -%]
+
+<div class="news-item">
+
+  <div class="news-item-divider">
+
+    <h5>
+      [% news_item.title ~%]
+      <br><small>[% news_item.published_date %]</small>
+      [%~ IF news_item.title.length < 37 %]<br><br>[% END %]
+    </h5>
+
+  </div>
+
+[%~ IF news_item.image %]
+
+  <div class="card-image">
+    <img alt="[% news_item.title %]" src="[% news_item.image %]">
+  </div>
+
+[%~ END # IF news_item.image %]
+
+  <div class="news-item-section">
+    <a href="[% root %]news_item/[% news_item.rowid %]">
+      [% news_item.precis %] <i class="fas fa-chevron-right"></i>
+    </a>
+  </div>
+
+</div>
+
+[%~ END # MACRO news_item_card BLOCK %]
+
+[%-#----------------------------------------------------------------------------
+
+  # Small Screens
+
+#-----------------------------------------------------------------------------%]
+
+<div class="hide-for-medium">
+
+[%~ FOREACH news_item IN news_items %]
+
+[%~ IF loop.index < 3 %]
+
+  <div class="row column">
+
+    [%- news_item_card FILTER indent 4 %]
+
+  </div>
+
+[%~ ELSIF loop.index >=3 %]
+
+[%~ IF loop.index == 3 %]
+
+  <div class="column row">
+
+    <ul class="accordion" data-accordion data-allow-all-closed="true">
+
+[%~ END # IF loop.index == 3 %]
+
+      <li class="accordion-item" data-accordion-item>
+
+        <a href="#" class="accordion-title">
+          [% news_item.title %]<br>
+          [% news_item.published_date %]
+        </a>
+
+        <div class="accordion-content" data-tab-content>
+          <h3>[% news_item.precis %]</h3>
+          [% news_item.item_text %]
+        </div>
+
+      </li>
+
+[%~ IF loop.last %]
+
+    </ul>
+
+  </div>
+
+[%~ END # IF loop.last %]
+
+[%~ END # IF loop.index 3 2 %]
+
+[%~ END # FOREACH news_item IN news_items %]
+
+</div>
+
+[%-#----------------------------------------------------------------------------
+
+  # Medium Screens
+
+#-----------------------------------------------------------------------------%]
+
+<div class="show-for-medium hide-for-large">
+
+[%~ FOREACH news_item IN news_items %]
+
+[%~ IF loop.index < 4 %]
+
+[%~ IF loop.index == 0 || loop.index == 2 %]
+
+	<div class="row">
+
+[%~ END %]
+
+		<div class="column">
+
+      [%- news_item_card FILTER indent 4 %]
+
+		</div>
+
+[%~ IF loop.index == 1 || loop.index == 3 %]
+
+	</div>
+
+[%~ END %]
+
+[%~ ELSIF loop.index >=4 %]
+
+[%~ IF loop.index == 4 %]
+
+	<div class="column row">
+
+		<ul class="accordion" data-accordion data-allow-all-closed="true">
+
+[%~ END # IF loop.index == 2 %]
+
+			<li class="accordion-item" data-accordion-item>
+
+				<a href="#" class="accordion-title">
+					[% news_item.title %]<br>
+					[% news_item.published_date %]
+				</a>
+
+				<div class="accordion-content" data-tab-content>
+					<h3>[% news_item.precis %]</h3>
+					[% news_item.item_text %]
+				</div>
+
+			</li>
+
+[%~ IF loop.last %]
+
+		</ul>
+
+	</div>
+
+[%~ END # IF loop.last %]
+
+[%~ END # IF loop.index < 4 %]
+
+[%~ END # FOREACH news_item IN news_items %]
+
+</div>
+
+[%-#----------------------------------------------------------------------------
+
+  # Large Screens
+
+#-----------------------------------------------------------------------------%]
+
+<div class="show-for-large">
+
+[%~ FOREACH news_item IN news_items %]
+
+[%~ IF loop.index < 6 %]
+
+[%~ IF loop.index == 0 || loop.index == 3 %]
+
+	<div class="row">
+
+[%~ END %]
+
+		<div class="column">
+
+      [%- news_item_card FILTER indent 4 %]
+
+		</div>
+
+[%~ IF loop.index == 2 || loop.index == 5 %]
+
+	</div>
+
+[%~ END %]
+
+[%~ ELSIF loop.index >=6 %]
+
+[%~ IF loop.index == 6 %]
+
+	<div class="column row">
+
+		<ul class="accordion" data-accordion data-allow-all-closed="true">
+
+[%~ END # IF loop.index == 6 %]
+
+			<li class="accordion-item" data-accordion-item>
+
+				<a href="#" class="accordion-title">
+					[% news_item.title %]<br>
+					[% news_item.published_date %]
+				</a>
+
+				<div class="accordion-content" data-tab-content>
+					<h3>[% news_item.precis %]</h3>
+					[% news_item.item_text %]
+				</div>
+
+			</li>
+
+[%~ IF loop.last %]
+
+		</ul>
+
+	</div>
+
+[%~ END # IF loop.last %]
+
+[%~ END # IF loop.index >=6 %]
+
+[%~ END # FOREACH news_item IN news_items %]
+
+</div>
+
+[%~ END # MACRO whatson_news_items BLOCK %]
+
+[%~ CGIAPP.embed (
+	'whatson_news_items'
+) FILTER indent 4 %]
+
+[% PROCESS footer.tt %]

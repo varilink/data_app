@@ -1,0 +1,66 @@
+[%~ UNLESS error_organisation_status # Initial State %]
+
+<label>Status
+
+  <fieldset class="fieldset">
+
+    <legend>
+      Indicate the society's status
+    </legend>
+
+    <input type="radio" name="organisation_status" value="ACTIVE"
+    id="osActive" required aria-describedby="organisationStatusHelpText"
+    [% IF organisation.status == "ACTIVE" %]checked[% END %]>
+
+    <label for="osActive">Active</label>
+
+    <input type="radio" name="organisation_status" value="INACTIVE"
+    id="osInactive" required aria-describedby="organisationStatusHelpText"
+    [% IF organisation.status == "INACTIVE" %]checked[% END %]>
+
+    <label for="osInactive">Inactive</label>
+
+  </fieldset>
+
+  <small class="form-error">[% error_msg %]</small>
+
+</label>
+
+[%~ ELSE # Error State %]
+
+<label class="is-invalid-label">Status
+
+  <fieldset class="fieldset">
+
+    <legend>
+      Indicate the society's status
+    </legend>
+
+    <input class="is-invalid-input" type="radio" name="organisation_status"
+    value="ACTIVE"	id="osActive" required
+    aria-describedby="organisationStatusHelpText"
+    [% IF organisation.status == "ACTIVE" %]checked[% END %]>
+
+    <label for="osActive">Active</label>
+
+    <input class="is-invalid-input" type="radio" name="organisation_status"
+    value="INACTIVE" id="osInactive"
+    aria-describedby="organisationStatusHelpText"
+    [% IF organisation.status == "INACTIVE" %]checked[% END %]>
+
+    <label for="osInactive">Inactive</label>
+
+  </fieldset>
+
+  <small class="form-error">[% error_organisation_status %]</small>
+
+</label>
+
+  <p class="help-text" id="organisationStatusHelpText">
+	   Indicate the status of the organisation; options are:<br>
+     "Active" - for example a current member society or a venue that is taking
+     bookings;<br>
+     "Inactive" - for example a former member society or a venue that is closed.
+</p>
+
+[% END # error_organisation_status %]

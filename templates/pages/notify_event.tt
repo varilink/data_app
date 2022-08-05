@@ -1,0 +1,152 @@
+[% SET title = 'Notify us of Events'
+
+# Description of this page here...
+
+%]
+
+[%~ PROCESS header.tt %]
+
+[% PROCESS h1.tt media = "coming_events" FILTER indent 4 %]
+
+    <div class="row column">
+
+[%~ IF session.userid %]
+
+      <div class="callout warning">
+
+        <p>
+          You are signed in as
+
+[%~ IF session.role == 'admin' =%]
+
+          an administrator of the DATA Diary web site. Please use the <a
+          href="[% conf.root %]secure/admin/">Admin</a> area to enter the
+          details of events.
+
+[%~ ELSIF session.role == 'rep' %]
+
+[%~ MACRO whatson_societies BLOCK ~%]
+
+[%~ IF societies.size == 1 =%]
+
+          a representative of a DATA Diary member society. To add or update the
+          events for your society you should use the <a href="[% conf.root ~%]
+          secure/rep/">Admin</a> area instead.
+
+[%~ ELSE =%]
+
+          a representative of more than one DATA Diary member society.
+
+[%~ END # IF societies.size == 1 %]
+
+[%~ END # MACRO whatson_societies BLOCK %]
+
+[%~ CGIAPP.embed (
+
+	# component whatson_societies - list of member societies
+	'whatson_societies' ,
+
+	# filter - determines which member societies are returned
+	'filter' = {
+		'userid'	=> "$session.userid" # Only those for which I am a rep
+	}
+
+) %]
+
+[%~ ELSE # session.role not 'admin' or 'rep' - could throw an exception %]
+
+[%~ END # IF session.role == 'admin' %]
+
+        </p>
+
+      </div>
+
+[%~ ELSE # ! session.userid %]
+
+      <p class="lead">
+        To notify us of an event for inclusion in the DATA Diary, enter the
+        details below and click on "Notify". Note that if you are a
+        representative of one of our member	<a
+        href="[% conf.root %]societies">Societies</a> then we suggest that you
+        <a href="[% conf.root %]account/begin_registration">Register</a> a user
+        account with us instead. This will allow you to directly edit the
+        details that we hold for your society, including its events.
+      </p>
+
+[% PROCESS form.tt
+	action = '/action/notify_event' ,
+	name = 'Event Notification' ,
+	onSuccess = '/success_notify_event' ,
+	onError = 'notify_event'
+FILTER indent 6 %]
+
+        <h2>Contact Details</h2>
+
+[% INCLUDE contact_email.tt
+	required = 1 ,
+	error_msg = 'You must enter a valid email address'
+FILTER indent 8 %]
+
+[% INCLUDE contact_confirm_email.tt
+	required = 1 ,
+	error_msg = 'You must repeat your email address to confirm it',
+FILTER indent 8 %]
+
+        <h2>Event Details</h2>
+
+[% INCLUDE event_name.tt
+	required = 1 ,
+	error_msg = 'You must enter the name of the event'
+FILTER indent 8 %]
+
+[% INCLUDE event_start_date.tt
+	required = 1 ,
+	error_msg = 'You must enter the event start date in DD/MM/YYYY format'
+FILTER indent 8 %]
+
+[% INCLUDE event_end_date.tt
+	required = 0 ,
+	error_msg = 'If provided, event end date must be a valid date in DD/MM/YYYY format'
+FILTER indent 8 %]
+
+[% INCLUDE event_dates.tt
+  required = 0
+FILTER indent 8 %]
+
+[% INCLUDE event_times.tt
+  required = 0
+FILTER indent 8 %]
+
+[% INCLUDE event_society.tt
+	required = 1 ,
+	error_msg = 'You must select a DATA member society from the drop-down list'
+FILTER indent 8 %]
+
+[% INCLUDE event_presented_by.tt FILTER indent 8 %]
+
+[% INCLUDE event_venue.tt
+  required = 1 ,
+  error_msg = 'You must give details of the venue for the event'
+FILTER indent 8 %]
+
+[% INCLUDE event_box_office.tt
+  required = 1 ,
+  error_msg = 'You must provide contact details for box office or other enquiries'
+FILTER indent 8 %]
+
+[% PROCESS buttons.tt
+	buttons = [
+		{
+			id = 'notify' ,
+			protect = 1 ,
+			type = 'submit' ,
+			value = 'Notify Us'
+		}
+	]
+FILTER indent 6 %]
+
+[%~ END # IF session.userid %]
+
+    </div>
+
+[% PROCESS footer.tt %]

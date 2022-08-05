@@ -1,0 +1,36 @@
+<table class="mcnImageCardBlock" cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody class="mcnImageCardBlockOuter">
+    <tr>
+      <td class="mcnImageCardBlockInner" style="padding-top:9px; padding-right:18px; padding-bottom:9px; padding-left:18px;" valign="top">
+        <table class="mcnImageCardBottomContent" style="background-color: #404040; border: 1px solid #2d6643;" cellspacing="0" cellpadding="0" align="left" width="100%">
+          <tbody>
+            <tr>
+              <td class="mcnTextContent" style="background: #2d6643; padding: 9px 18px;color: #F2F2F2; font-family: Helvetica;font-size: 16px;font-weight: bold;text-align: center;" width="246" valign="top">
+                [% event.name FILTER html %]
+              </td>
+            </tr>
+[% IF event.image %]
+            <tr>
+              <td class="mcnImageCardMiddleImageContent" style="padding-top:0px; padding-right:0px; padding-bottom:0; padding-left:0px;" align="left" valign="top">
+                <img class="mcnImage" src="[% event.temp ( 'full_size_url' ) %]" width="262" style="margin: 0px; padding: 0px;">
+              </td>
+            </tr>
+[% END %]
+            <tr>
+              <td class="mcnTextContent" style="background-color: #FEFEFE; padding: 9px 18px; font-family: Helvetica;font-size: 14px;font-weight: normal;text-align: center;" width="246" valign="top">
+[%~ IF ( matches = event.presented_by.match ( '^"Organised by (.+)"$' ) ) =%]
+                [% matches.0 FILTER html %]<br>
+[%~ ELSE =%]
+                [% event.presented_by FILTER html %]<br>
+[%~ END %]
+                [% event.dates %] [% event.times %]<br>
+                [% event.venue_name %]<br>
+                <a href="[% conf.root %]event/[% event.rowid %]" target="_blank">Full event details</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>

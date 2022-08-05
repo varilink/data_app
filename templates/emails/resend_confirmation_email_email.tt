@@ -1,0 +1,25 @@
+[% PROCESS email_header.tt
+	title = 'Confirm Email Address'
+%]
+
+[% PROCESS email_paragraph.tt %]
+
+Congratulations! You have registered a user account with DATA Diary. We just
+need to confirm the email address associated with your user account before you
+can use it. Please click on "Confirm Email Address" below to confirm that you
+have received this email.
+
+</p>
+
+[% path = '/account/action/confirm_email' %]
+[% identity = "${user.email}/${user.secret}" %]
+[% responses = 'success_confirm_email/unauthorised' %]
+
+[% url = "${path}/${identity}/${responses}" | url %]
+
+[% PROCESS email_footer.tt
+	action = {
+		name = 'Confirm Email Address'
+		url = "$url"
+	}
+%]

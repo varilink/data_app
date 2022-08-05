@@ -1,0 +1,225 @@
+# These are the entries for building the CGI Application Dispatch table.
+# The PSGI script reads this file and uses its contents to populate that table
+# with run modes.
+# Context configuration is then provided by the sitefunk.cfg file.
+
+#-------------------------------------------------------------------------------
+# Pages accessible via the general public (i.e. authentication not required)
+# area
+
+# Home page
+- '': index
+
+# News item
+- '/news_item/:rowid': news_item
+
+# News archive
+- '/news': news
+
+# Full events listing
+- '/events': events
+
+# A single event
+- '/event/:rowid': event
+
+# Societies listing
+- '/societies': societies
+
+# A single society
+- '/society/:rowid': society
+
+# About us
+- '/about_us': about_us
+
+# Diary scheme
+- '/diary_scheme': diary_scheme
+
+# Join us
+- '/join_us': join_us
+
+# Notify event
+- '/notify_event': notify_event
+
+# Privacy
+- '/privacy': privacy
+
+# Not found
+- '/not_found': not_found
+
+# Unauthorised
+- '/unauthorised': unauthorised
+
+# Error
+- '/error': error
+
+#
+# Actions initiated from pages and their redirect responses - test2
+#
+
+# Join us
+- '/action/join_us': join_us
+# Join us successful - CANDIDATE FOR CONVERSION TO NON REDIRECT
+- '/success_join_us': success_join_us
+
+# Notify event
+- '/action/notify_event': notify_event
+# Notify event successful - CANDIDATE FOR CONVERSION TO NON REDIRECT
+- '/success_notify_event': success_notify_event
+
+# Printed listing
+- '/action/printed_listing': printed_listing
+
+#
+# Actions initiated from emails - test 3
+#
+
+#-------------------------------------------------------------------------------
+
+# Account Management Area (Public)
+
+#-------------------------------------------------------------------------------
+
+#
+# Pages - test3
+#
+
+# Begin registration
+- '/account/begin_registration': begin_registration
+
+# Resend confirmation email
+- '/account/resend_confirmation_email': resend_confirmation_email
+
+# Userid reminder
+- '/account/userid_reminder': userid_reminder
+
+# Request password reset
+- '/account/request_password_reset': request_password_reset
+
+# Sign-in
+- '/account/sign_in': sign_in
+
+#
+# Actions initiated from pages and their responses - test4, test5 and test6
+#
+
+# Begin registration
+- '/account/action/begin_registration': begin_registration
+- '/account/warning_begin_registration': warning_begin_registration
+- '/account/success_begin_registration': success_begin_registration
+
+# Confirm registration (follows warning_being_registration)
+- '/account/action/confirm_registration': confirm_registration
+- '/account/success_confirm_registration': success_confirm_registration
+
+# Complete registration (follows success_begin_registration)
+- '/account/action/complete_registration': complete_registration
+- '/account/success_complete_registration': success_complete_registration
+
+# Resend confirmation email
+- '/account/action/resend_confirmation_email': resend_confirmation_email
+
+# Userid reminder
+- '/account/action/userid_reminder': userid_reminder
+- '/account/success_userid_reminder': success_userid_reminder
+
+# Password reset
+- '/account/action/request_password_reset': request_password_reset
+- '/account/success_request_password_reset': success_request_password_reset
+- '/account/action/reset_password': reset_password
+- '/account/success_reset_password': success_reset_password
+
+# Sign-in
+- '/account/action/login': login
+- '/secure/account/success_sign_in': success_sign_in
+
+#
+# Actions iniated from emails
+#
+
+- '/account/action/confirm_email/:email/:secret/:success/:error': confirm_email
+- '/account/action/show_password_reset_page/:userid/:secret/:onSuccess/:onError': show_password_reset_page
+
+
+
+
+
+
+
+
+
+
+#
+# Account Management Area (Secure)
+#
+
+
+- '/secure/account/action/logout': logout
+
+
+
+
+# Pages
+- '/secure/account': account
+
+# Actions
+- '/secure/account/action': update_account
+- '/account/warning_update_account': warning_update_account
+
+################################################################################
+#                                                                              #
+# Admin Role                                                                   #
+#                                                                              #
+################################################################################
+
+# Pages
+#------
+- '/secure/admin':                        admin_index
+- '/secure/admin/events':                 admin_events
+- '/secure/admin/event/programme':        admin_event_programme
+- '/secure/admin/event/programme/:rowid': admin_event_programme
+- '/secure/admin/event/online/:rowid':    admin_event_online
+- '/secure/admin/event/preview/:rowid':   admin_event_preview
+- '/secure/admin/societies':              admin_societies
+- '/secure/admin/society':                admin_society
+- '/secure/admin/society/:rowid':         admin_society
+- '/secure/admin/contacts/:rowid':        admin_contacts
+
+
+# Actions
+#--------
+- '/secure/admin/action/event/programme': event_programme
+- '/secure/admin/action/event/online':    event_online
+- '/secure/admin/action/society':         organisation
+
+################################################################################
+#                                                                              #
+# Rep Role                                                                     #
+#                                                                              #
+################################################################################
+
+# Pages
+#------
+- '/secure/rep':                        rep_index
+- '/secure/rep/events':                 rep_events
+- '/secure/rep/event/programme':        rep_event_programme
+- '/secure/rep/event/programme/:rowid': rep_event_programme
+- '/secure/rep/event/online/:rowid':    rep_event_online
+- '/secure/rep/event/preview/:rowid':   rep_event_preview
+- '/secure/rep/societies':              rep_societies
+- '/secure/rep/society/:rowid':         rep_society
+- '/secure/rep/contacts/:rowid':        rep_contacts
+
+# Actions
+#--------
+- '/secure/rep/action/event/programme': event_programme
+- '/secure/rep/action/event/online':    event_online
+- '/secure/rep/action/society':         organisation
+
+################################################################################
+#                                                                              #
+# Image Management                                                             #
+#                                                                              #
+################################################################################
+
+- '/secure/image/upload': upload
+- '/secure/image/proxy':  proxy

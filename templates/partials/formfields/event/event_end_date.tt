@@ -1,0 +1,79 @@
+<!-- Start of Event End Date -->
+<div class="floated-label-wrapper">
+
+[%~ UNLESS error_event_end_date # Initial State -%]
+
+  <label for="event_end_date">
+    End Date ([% IF required %]Mandatory[% ELSE %]Optional[% END %] DD/MM/YYYY)
+  </label>
+  <input type="text" id="eventEndDate" name="event_end_date" placeholder=
+  "End Date ([% IF required %]Mandatory[% ELSE %]Optional[% END %] DD/MM/YYYY)"
+  aria-describedby="event_end_dateHelpText"	pattern="day_month_year"
+  [% IF required %]required[% END %] value="[% event.end_date %]">
+  <small class="form-error">
+[%~ IF error_msg -%]
+    [% error_msg %]
+[%~ ELSE -%]
+    If you enter an end date, it must be a valid date in DD/MM/YYYY format
+[%~ END -%]
+  </small>
+
+[%~ ELSE # Error State -%]
+
+  <label class="is-invalid-label" for="event_end_date">
+    End Date ([% IF required %]Mandatory[% ELSE %]Optional[% END %] DD/MM/YYYY)
+  </label>
+  <input class="is-invalid-input" type="text" id="eventEndDate" name=
+  "event_end_date" placeholder="End Date ([% IF required %]Mandatory[% ELSE ~%]
+  Optional[% END %] DD/MM/YYYY)"	aria-describedby="event_end_dateHelpText"
+  pattern="day_month_year" [% IF required %]required[% END %] value=
+  "[% event.end_date %]">
+  <small class="form-error is-visible">
+[%~ IF error_event_end_date == 'end_date_valid' -%]
+    End date is not a valid date in DD/MM/YYYY format
+[%~ ELSIF error_event_end_date == 'end_date_not_before_start_date' -%]
+    End date can not be earlier than start date
+[%~ ELSE -%]
+    [% error_event_end_date %]
+[%~ END -%]
+  </small>
+
+[%~ END # error_event_end_date -%]
+
+  <p class="help-text" id="event_end_dateHelpText">
+    Enter the end date of the event in DD/MM/YYYY format or leave it blank for a
+    one-day event.<br>
+    This is the date of the last performance of the event.
+  </p>
+</div>
+
+[%~ global.script.event_end_date = BLOCK %]
+
+// Setup Datepicker on Event End Date
+$ ( '#eventEndDate' )
+
+  . datepicker ( {
+    dateFormat: 'dd/mm/yy' ,
+[% IF event.start_date %]
+    minDate: '[% event.start_date %]' ,
+[% ELSIF error && event_start_date %]
+    minDate: '[% event_start_date %]' ,
+[% ELSE %]
+    minDate: 1 ,
+[% END %]
+    onSelect: function ( ) {
+      $ ( this ) . datepicker ( 'hide' ) ;
+      $ ( this ) . trigger ( 'keyup' ) ;
+      $ ( '#eventStartDate' ) . datepicker (
+        'option' , 'maxDate' , $ ( '#eventEndDate' ) . datepicker ( 'getDate' )
+      ) ;
+    }
+  } )
+  . change ( function ( ) {
+    $ ( '#eventStartDate' ) . datepicker (
+      'option' , 'maxDate' , $ ( '#eventEndDate' ) . datepicker ( 'getDate' )
+    ) ;
+  } ) ;
+
+[%~ END # global.script.event_end_date = BLOCK %]
+<!-- End of Event End Date -->

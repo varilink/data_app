@@ -1,0 +1,255 @@
+<!-- Start of Event Society -->
+[%~#----------------------------------------------------------------------------
+#
+# This partical presents a selection list of member socities so that one can be
+# chosen to associated with an event.
+#
+# There are three places that it is used:
+#
+# 1. In the public area in the notify_event page. List all 'ACTIVE' societies.
+# Selection is mandatory.
+#
+# 2. In the admin area for full administrators in the admin_event page. List all
+# 'ACTIVE' societies. Selection is optional. Full administrators can specify and
+# event not linked to a member society, e.g. The Eagle Awards.
+#
+# 3. In the admin area for member society representatives in the rep_event page.
+# List all 'ACTIVE' socities that the user represents, usually this is one. When
+# it is one, we preselect and hide that society.
+#
+#-----------------------------------------------------------------------------%]
+
+[%~ MACRO whatson_societies BLOCK %]
+
+[%~ IF societies.size == 1
+
+# We must be in rep_event.tt for a representative of a single society.
+# Hide the select.
+
+%]
+
+<div class="hide">
+  <select name="event_society" required>
+    <option value="[% societies.0.rowid %]" selected></option>
+  </select>
+</div>
+
+[%~ ELSE # societies.length > 1 -%]
+
+<div class="floated-label-wrapper">
+
+[%~ UNLESS error_event_society || error_society_or_presented_by
+
+	# Initial state, i.e. not (yet) an error
+
+-%]
+
+  <label class="for-select" for="eventSociety">
+    Society ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+
+[%~ IF required # Mandatory ~%]
+
+[%~ IF event.society_rowid %]
+
+  <select id="eventSociety" name="event_society"
+  aria-describedby="event_societyHelpText" required>
+    <option value="" disabled hidden>Society (Mandatory)</option>
+
+[%~ ELSE # ! event.society_rowid -%]
+
+  <select id="eventSociety" name="event_society"
+  aria-describedby="event_societyHelpText" required style="color: #ccc">
+    <option value="" disabled selected hidden>Society (Mandatory)</option>
+
+[%~ END # event.society_rowid %]
+
+[%~ ELSE # Not Mandatory %]
+
+[%~ IF event.society_rowid -%]
+
+  <select id="eventSociety" name="event_society"
+  aria-describedby="event_societyHelpText">
+    <option value="" disabled hidden>Society (Optional)</option>
+
+[%~ ELSE # ! event.society_rowid %]
+
+  <select id="eventSociety" name="event_society"
+  aria-describedby="event_societyHelpText" style="color: #ccc">
+    <option value="" disabled selected hidden>Society (Optional)</option>
+
+[%~ END # event.society_rowid -%]
+
+    <option value="">-- None --</option>
+
+[%~ END # IF event_society.required %]
+
+[%~ FOREACH society IN societies %]
+
+[%~ IF event.society_rowid && society.rowid == event.society_rowid -%]
+
+    <option value="[% society.rowid %]" selected>[% society.name %]</option>
+
+[%~ ELSE -%]
+
+    <option value="[% society.rowid %]">[% society.name %]</option>
+
+[%~ END %]
+
+[%~ END # FOREACH society IN societies -%]
+
+  </select>
+  <small class="form-error">[% error_msg %]</small>
+
+[%~ #---------------------------------------------------------------------------
+
+	# The error state
+
+#-----------------------------------------------------------------------------%]
+
+[%~ ELSE # Error State %]
+
+  <label class="is-invalid-label for-select" for="eventSociety">
+    Society ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
+
+[%~ IF required # Mandatory %]
+[%~ IF event.society_rowid %]
+
+  <select class="is-invalid-input" id="eventSociety" name="event_society"
+  aria-describedby="event_societyHelpText" required>
+
+    <option value="" disabled hidden>Mandatory</option>
+
+[%~ ELSE # ! event.society_rowid %]
+
+  <select class="is-invalid-input" id="eventSociety" name="event_society"
+  aria-describedby="event_societyHelpText" required style="color: #e19488">
+
+    <option value="" disabled selected hidden>Society (Mandatory)</option>
+
+[%~ END %]
+
+[%~ ELSE # Not Mandatory %]
+
+[%~ IF event.society_rowid %]
+
+  <select class="is-invalid-input" id="eventSociety" name="event_society"
+  aria-describedby="event_societyHelpText">
+
+    <option value="" disabled hidden>Society (Optional)</option>
+
+[%~ ELSE # !event.society_rowid %]
+
+  <select class="is-invalid-input" id="eventSociety" name="event_society"
+  aria-describedby="event_societyHelpText" style="color: #e19488">
+
+    <option value="" disabled selected hidden>Society (Optional)</option>
+
+[%~ END # IF event.society_rowid %]
+
+    <option value="">-- None --</option>
+
+[%~ END # IF event_society.required %]
+
+[%~ FOREACH society IN societies %]
+
+[%~ IF event.society_rowid && society.rowid == event.society_rowid %]
+
+    <option value="[% society.rowid %]" selected>[% society.name %]</option>
+
+[%~ ELSE %]
+
+    <option value="[% society.rowid %]">[% society.name %]</option>
+
+[%~ END %]
+
+[%~ END # FOREACH society IN societies %]
+
+  </select>
+
+[%~ IF error_event_society %]
+
+  <small class="form-error is-visible">
+
+[%~ IF error_event_society == 'Missing' %]
+
+    You must select the member society presenting the event
+
+[%~ ELSE %]
+
+    [% error_event_society %]
+
+[%~ END %]
+
+  </small>
+
+[%~ END # IF error_event_society %]
+
+[%~ END # error_event_society || error_society_or_presented_by %]
+
+[%~ IF session.role %]
+
+[%~ IF session.role == 'rep' -%]
+
+  <p class="help-text" id="event_soecietyHelpText">
+    You must select which member society that you represent is presenting this
+    event.
+  </p>
+
+[%~ ELSIF session.role == 'admin' -%]
+
+  <p class="help-text" id="event_soecietyHelpText">
+    Select the member society that is presenting this event. Very occasionally
+    this may be left blank; for example "The Eagle Awards" presented by Derby
+    Theatre.
+  </p>
+
+[%~ END # IF session.role == 'rep' %]
+
+[%~ ELSE # This isn't an authenticated user with a role -%]
+
+  <p class="help-text" id="event_soecietyHelpText">
+    Select the member Society organising the event.
+  </p>
+
+[%~ END # IF session.role -%]
+
+</div>
+
+[%~ END # IF socities.size == 1 %]
+
+[%~ END # MACRO whatson_societies BLOCK %]
+
+[%~ IF
+  template.name == 'rep_event_programme.tt' ||
+  ( template.name == 'input text' && caller == 'rep_event_programme.tt' )
+
+# Restrict the list to only those societies that the user represents
+
+%]
+
+[%~ CGIAPP.embed (
+
+	'whatson_societies' ,
+
+	filter = {
+		'status'	=> 'ACTIVE' ,
+		'userid'	=> "$session.userid"
+	}
+
+) %]
+
+[%~ ELSE %]
+
+[%~ CGIAPP.embed (
+	'whatson_societies' ,
+
+	filter = {
+		'status'	=> 'ACTIVE' ,
+	}
+
+) %]
+
+[%~ END %]
+<!-- End of Event Society -->

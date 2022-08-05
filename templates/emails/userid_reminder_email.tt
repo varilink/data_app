@@ -1,0 +1,11 @@
+[% PROCESS email_header.tt
+	title = 'Userid Reminder'
+%]
+
+[% PROCESS email_paragraph.tt %]
+
+Your userid is: [% user.userid %]
+
+</p>
+
+[% PROCESS email_footer.tt %]
