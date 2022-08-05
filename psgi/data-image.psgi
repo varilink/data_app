@@ -1,9 +1,7 @@
-#!/bin/sh
-
 use strict ;
 use warnings ;
 
-use SiteFunk::Image::Dispatch ;
+use DATA::Image::Dispatch ;
 use CGI::PSGI ;
 
 sub {
@@ -12,7 +10,7 @@ sub {
 
    # Dispatch the request
 
-   my $app = SiteFunk::Image::Dispatch -> as_psgi (
+   my $app = DATA::Image::Dispatch -> as_psgi (
 
       args_to_new => {
          QUERY => CGI::PSGI -> new ( $env )
@@ -23,4 +21,3 @@ sub {
    return $app -> ( $env ) ;
 
 }
-

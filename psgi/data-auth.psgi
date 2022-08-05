@@ -1,9 +1,7 @@
-#!/bin/sh
-
 use strict ;
 use warnings ;
 
-use SiteFunk::Auth::Dispatch ;
+use DATA::Auth::Dispatch ;
 use CGI::PSGI qw / -utf8 / ;
 
 sub {
@@ -12,7 +10,7 @@ sub {
 
    # Dispatch the request
 
-   my $app = SiteFunk::Auth::Dispatch -> as_psgi (
+   my $app = DATA::Auth::Dispatch -> as_psgi (
 
       args_to_new => {
          QUERY => CGI::PSGI -> new ( $env )
@@ -23,4 +21,3 @@ sub {
    return $app -> ( $env ) ;
 
 }
-
