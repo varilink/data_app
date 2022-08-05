@@ -1,6 +1,6 @@
-package SiteFunk::Project::Image ;
+package DATA::Project::Image ;
 
-=head1 SiteFunk::Project::Image
+=head1 DATA::Project::Image
 
 =cut
 
@@ -10,7 +10,7 @@ use Cwd ;
 use File::Basename ;
 use File::Path qw / make_path / ;
 
-use base qw / SiteFunk::Project::Asset / ;
+use base qw / DATA::Project::Asset / ;
 
 sub load {
 

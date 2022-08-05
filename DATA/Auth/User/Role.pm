@@ -1,4 +1,4 @@
-package SiteFunk::Auth::User::Role ;
+package DATA::Auth::User::Role ;
 
 use strict ;
 use Carp ;
@@ -78,7 +78,7 @@ sub fetch {
 
 	while ( my $row = $sth -> fetchrow_hashref ) {
 
-		my $user_role = new SiteFunk::Auth::User::Role ;
+		my $user_role = new DATA::Auth::User::Role ;
 
 		$user_role -> _fetched	( 1 							) ;
 		$user_role -> userid		( $row -> { userid	}	) ;

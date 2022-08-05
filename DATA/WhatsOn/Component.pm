@@ -1,6 +1,6 @@
-package SiteFunk::WhatsOn::Component ;
+package DATA::WhatsOn::Component ;
 
-=head1 SiteFunk::WhatsOn::Component
+=head1 DATA::WhatsOn::Component
 
 =cut
 
@@ -8,10 +8,10 @@ use strict ;
 
 use base qw / Exporter / ;
 
-use SiteFunk::WhatsOn::Contact ;
-use SiteFunk::WhatsOn::Event ;
-use SiteFunk::WhatsOn::NewsItem ;
-use SiteFunk::WhatsOn::Organisation ;
+use DATA::WhatsOn::Contact ;
+use DATA::WhatsOn::Event ;
+use DATA::WhatsOn::NewsItem ;
+use DATA::WhatsOn::Organisation ;
 
 my @run_modes = qw /
 
@@ -70,7 +70,7 @@ sub whatson_contact {
 
    my $rowid = $self -> param ( 'rowid' ) ;
 
-   my $contact = new SiteFunk::WhatsOn::Contact ;
+   my $contact = new DATA::WhatsOn::Contact ;
 
    $contact -> rowid ( $rowid ) ;
 
@@ -99,7 +99,7 @@ sub whatson_contacts {
 	my $filter ;
 	$filter -> { org_id }	= shift if @_ ; # Organisation Identifier
 
-   my @contacts = SiteFunk::WhatsOn::Contact -> fetch (
+   my @contacts = DATA::WhatsOn::Contact -> fetch (
 		$self -> dbh , $filter
 	) ;
 
@@ -129,7 +129,7 @@ sub whatson_event {
 	# Controls component behaviour, e.g. where or not defaults are returned
 	my $behaviour = $params -> { behaviour } if $params -> { behaviour } ;
 
-   my $event = new SiteFunk::WhatsOn::Event ;
+   my $event = new DATA::WhatsOn::Event ;
 
    $event -> rowid ( $filter -> { rowid } ) ;
 
@@ -198,7 +198,7 @@ sub whatson_events {
 
 	my @events = ( ) ;
 
-	@events = SiteFunk::WhatsOn::Event -> fetch ( $self -> dbh , $filter ) ;
+	@events = DATA::WhatsOn::Event -> fetch ( $self -> dbh , $filter ) ;
 
   foreach my $event ( @events ) {
 
@@ -254,7 +254,7 @@ sub whatson_news_item {
 
    my $rowid = $self -> param ( 'rowid' ) ;
 
-   my $news_item = new SiteFunk::WhatsOn::NewsItem ;
+   my $news_item = new DATA::WhatsOn::NewsItem ;
 
    $news_item -> rowid ( $rowid ) ;
 
@@ -295,7 +295,7 @@ sub whatson_news_items {
 	my $filter = $params -> { filter } if $params ;
 
 	@news_items =
-		SiteFunk::WhatsOn::NewsItem -> fetch ( $self -> dbh , $filter ) ;
+		DATA::WhatsOn::NewsItem -> fetch ( $self -> dbh , $filter ) ;
 
 	my $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
 
@@ -325,7 +325,7 @@ sub whatson_society {
 
    #my $rowid = $self -> param ( 'rowid' ) ;
 
-   my $society = new SiteFunk::WhatsOn::Organisation ;
+   my $society = new DATA::WhatsOn::Organisation ;
 
    $society -> rowid ( $filter -> { rowid } ) ;
 
@@ -385,7 +385,7 @@ List all the societies
 	#$filter -> { status }	= shift if @_ ; # Status of organisations
 	#$filter -> { userid }	= shift if @_ ; # Userid of member society rep
 
-   my @societies = SiteFunk::WhatsOn::Organisation -> fetch (
+   my @societies = DATA::WhatsOn::Organisation -> fetch (
 		$self -> dbh , $filter
 	) ;
 
@@ -425,7 +425,7 @@ sub whatson_venue {
 
    my $event_rowid = $filter -> { event } ;
 
-	my $event = new SiteFunk::WhatsOn::Event ;
+	my $event = new DATA::WhatsOn::Event ;
 	$event -> rowid ( $event_rowid ) ;
 	$event -> fetch ( $self -> dbh ) ;
 
@@ -435,7 +435,7 @@ sub whatson_venue {
 
 	if ( $event -> venue_rowid ) {
 
-		my $venue = new SiteFunk::WhatsOn::Organisation ;
+		my $venue = new DATA::WhatsOn::Organisation ;
 		$venue -> rowid ( $event -> venue_rowid ) ;
 		$venue -> fetch ( $self -> dbh ) ;
 
@@ -471,7 +471,7 @@ sub whatson_venues {
 
 	}
 
-   my @venues = SiteFunk::WhatsOn::Organisation -> fetch (
+   my @venues = DATA::WhatsOn::Organisation -> fetch (
 		$self -> dbh , $filter
 	) ;
 

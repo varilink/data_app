@@ -1,11 +1,11 @@
-package SiteFunk::Test ;
+package DATA::Test ;
 
-=head1 SiteFunk::Test
+=head1 DATA::Test
 
 =cut
 
 use strict ;
-use base qw / SiteFunk::Main / ;
+use base qw / DATA::Main / ;
 
 sub setup {
 

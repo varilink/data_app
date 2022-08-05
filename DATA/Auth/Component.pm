@@ -1,6 +1,6 @@
-package SiteFunk::Auth::Component ;
+package DATA::Auth::Component ;
 
-=head1 SiteFunk::Auth::Component
+=head1 DATA::Auth::Component
 
 =cut
 
@@ -8,7 +8,7 @@ use strict ;
 
 use base qw / Exporter / ;
 
-use SiteFunk::Auth::User ;
+use DATA::Auth::User ;
 
 my @run_modes = qw /
 
@@ -61,7 +61,7 @@ Display details of the currently authenticated user
 
 	# This component gets the details for the user corresponding to the current,
 	# authenticated session, rather than being passed search keys.
-   my $user = new SiteFunk::Auth::User ;
+   my $user = new DATA::Auth::User ;
    $user -> userid ( $self -> session -> param ( 'userid' ) ) ;
    $user -> fetch ( $self -> dbh ) ;
 

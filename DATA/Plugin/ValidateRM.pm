@@ -1,4 +1,4 @@
-package SiteFunk::Plugin::ValidateRM ;
+package DATA::Plugin::ValidateRM ;
 
 use strict ;
 

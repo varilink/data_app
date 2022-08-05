@@ -1,4 +1,4 @@
-package SiteFunk::WhatsOn::Organisation::Handle ;
+package DATA::WhatsOn::Organisation::Handle ;
 
 use strict ;
 use Carp ;
@@ -87,7 +87,7 @@ sub fetch {
 
   while ( my $row = $sth -> fetchrow_hashref ) {
 
-    my $handle = new SiteFunk::WhatsOn::Organisation::Handle ;
+    my $handle = new DATA::WhatsOn::Organisation::Handle ;
 
     $handle -> organisation_rowid ( $row -> { organisation_rowid  } ) ;
     $handle -> platform_name      ( $row -> { platform_name       } ) ;

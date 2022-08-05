@@ -1,6 +1,6 @@
-package SiteFunk::Project::Stylesheet ;
+package DATA::Project::Stylesheet ;
 
-=head1 SiteFunk::Project::Stylesheet
+=head1 DATA::Project::Stylesheet
 
 =cut
 
@@ -10,7 +10,7 @@ use Cwd ;
 use File::Basename ;
 use File::Path qw / make_path / ;
 
-use base qw / SiteFunk::Project::Asset / ;
+use base qw / DATA::Project::Asset / ;
 
 sub load {
 

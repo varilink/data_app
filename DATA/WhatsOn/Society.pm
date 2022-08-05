@@ -1,6 +1,6 @@
-package SiteFunk::WhatsOn::Society ;
+package DATA::WhatsOn::Society ;
 
-=head1 SiteFunk::WhatsOn::Society
+=head1 DATA::WhatsOn::Society
 
 =cut
 
@@ -241,7 +241,7 @@ Fetch the coming events organised by a society
 
    while ( my $row = $sth -> fetchrow_hashref ) {
 
-      my $event = new SiteFunk::WhatsOn::Event ;
+      my $event = new DATA::WhatsOn::Event ;
 
       $event -> dates ( $row -> { dates } ) ;
       $event -> name ( $row -> { name } ) ;
@@ -286,7 +286,7 @@ sub list {
 
    while ( my $row = $sth -> fetchrow_hashref ) {
 
-      my $society = new SiteFunk::WhatsOn::Society ;
+      my $society = new DATA::WhatsOn::Society ;
 
       $society -> rowid ( $row -> { rowid } ) ;
       $society -> name ( $row -> { name } ) ;

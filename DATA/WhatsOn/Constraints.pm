@@ -1,6 +1,6 @@
-package SiteFunk::WhatsOn::Constraints ;
+package DATA::WhatsOn::Constraints ;
 
-=head1 SiteFunk::WhatsOn::Constraints
+=head1 DATA::WhatsOn::Constraints
 
 =cut
 
@@ -8,10 +8,10 @@ use strict ;
 
 use base qw / Exporter / ;
 
-use SiteFunk::Auth::User ;
-use SiteFunk::WhatsOn::Contact ;
-use SiteFunk::WhatsOn::Event ;
-use SiteFunk::WhatsOn::Organisation ;
+use DATA::Auth::User ;
+use DATA::WhatsOn::Contact ;
+use DATA::WhatsOn::Event ;
+use DATA::WhatsOn::Organisation ;
 
 use File::LibMagic ;
 use LWP::UserAgent ;
@@ -41,7 +41,7 @@ sub contact_is_subscribed {
 
 		my ( $dfv , $value ) = @_ ;
 
-		my $contact = new SiteFunk::WhatsOn::Contact ;
+		my $contact = new DATA::WhatsOn::Contact ;
 		$contact -> email ( $value ) ;
 		return 1 if $contact -> fetch ( $dbh ) && $contact -> subscriber ;
 		return 0 ;
@@ -166,7 +166,7 @@ sub unsubscribe_valid {
 
 		my ( $dfv , $email ) = @_ ;
 
-		my $contact = new SiteFunk::WhatsOn::Contact ;
+		my $contact = new DATA::WhatsOn::Contact ;
 		$contact -> email ( $email ) ;
 
 		my $data = $dfv -> get_filtered_data ;
@@ -217,11 +217,11 @@ WhatsOn Event or Society. It enforces the following:
 
 			my $user_userid = $dfv -> get_current_constraint_value ;
 
-			my $user = new SiteFunk::Auth::User ;
+			my $user = new DATA::Auth::User ;
 			$user -> userid ( $user_userid ) ;
 			$user -> fetch ( $dbh ) ;
 
-			my $contact = new SiteFunk::WhatsOn::Contact ;
+			my $contact = new DATA::WhatsOn::Contact ;
 			$contact -> email ( $user -> email ) ;
 			$contact -> fetch ( $dbh ) ;
 
@@ -262,18 +262,18 @@ a representative for the society that is presenting the event.
 		# This constraint is on userid so get the value of userid
 		my $user_userid = $dfv -> get_current_constraint_value ;
 
-		my $user = new SiteFunk::Auth::User ;
+		my $user = new DATA::Auth::User ;
 		$user -> userid ( $user_userid ) ;
 		$user -> fetch ( $dbh ) ;
 
-		my $contact = new SiteFunk::WhatsOn::Contact ;
+		my $contact = new DATA::WhatsOn::Contact ;
 		$contact -> email ( $user -> email ) ;
 		$contact -> fetch ( $dbh ) ;
 
 		my $data = $dfv -> get_filtered_data ;
 		my $event_rowid = $data -> { event_rowid } ;
 
-		my $event = new SiteFunk::WhatsOn::Event ;
+		my $event = new DATA::WhatsOn::Event ;
 		$event -> rowid ( $event_rowid ) ;
 		$event -> fetch ( $dbh ) ;
 
@@ -305,7 +305,7 @@ Tests if an organisation exists.
 
 		my ( $dfv , $value ) = @_ ;
 
-		my $venue = new SiteFunk::WhatsOn::Organisation ;
+		my $venue = new DATA::WhatsOn::Organisation ;
 		$venue -> name ( $value ) ;
 		$venue -> type ( 'whatson_venue' ) ;
 		return $venue -> fetch ( $dbh ) ;

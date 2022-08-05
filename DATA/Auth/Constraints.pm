@@ -1,4 +1,4 @@
-package SiteFunk::Auth::Constraints ;
+package DATA::Auth::Constraints ;
 
 use strict ;
 use warnings ;
@@ -8,7 +8,7 @@ use base qw / Exporter / ;
 use Carp ;
 use DateTime ;
 use Digest::MD5 qw / md5_hex / ;
-use SiteFunk::Auth::User ;
+use DATA::Auth::User ;
 
 use Data::FormValidator::Constraints qw /
 	email
@@ -59,7 +59,7 @@ Tests supplied login credentials to see if they match what we have on record.
 
       my $data = $dfv -> get_filtered_data ( ) ;
 
-		my $user = new SiteFunk::Auth::User ;
+		my $user = new DATA::Auth::User ;
 		$user -> userid ( $data -> { $userid } ) ;
 
 		my $result = $user -> fetch ( $dbh ) ;
@@ -161,9 +161,9 @@ is actually known to be a representative of those societies.
 
       my $data = $dfv -> get_filtered_data ( ) ;
 
-      use SiteFunk::WhatsOn::Contact ;
+      use DATA::WhatsOn::Contact ;
 
-      my $contact = new SiteFunk::WhatsOn::Contact ;
+      my $contact = new DATA::WhatsOn::Contact ;
 
       $contact -> email ( $value ) ;
       return $contact -> representative ( $dbh ) ;
@@ -190,9 +190,9 @@ Validates that a registering user is a committee member.
 
 		my $data = $dfv -> get_filtered_data ( ) ;
 
-		use SiteFunk::WhatsOn::Contact ;
+		use DATA::WhatsOn::Contact ;
 
-		my $contact = new SiteFunk::WhatsOn::Contact ;
+		my $contact = new DATA::WhatsOn::Contact ;
 
 		$contact -> email ( $value ) ;
 		return $contact -> committee_member ( $dbh ) ;
@@ -218,7 +218,7 @@ userid is not present.
 
 		my $dfv = shift ;
 
-		my $user = new SiteFunk::Auth::User ;
+		my $user = new DATA::Auth::User ;
 
 		my $data = $dfv -> get_filtered_data ;
 
@@ -273,7 +273,7 @@ database.
 
 		my ( $dfv , $value ) = @_ ;
 
-		my $user = new SiteFunk::Auth::User ;
+		my $user = new DATA::Auth::User ;
 		# User the session userid in case user_userid field is also changed
 		$user -> userid ( $session -> param ( 'userid' ) ) ;
 		$user -> fetch ( $dbh ) ;
@@ -299,7 +299,7 @@ or by email.
 
       my ( $dfv , $value ) = @_ ;
 
-		my $user = new SiteFunk::Auth::User ;
+		my $user = new DATA::Auth::User ;
 
 		if ( $dfv -> get_current_constraint_field eq 'user_userid' ) {
 
@@ -340,7 +340,7 @@ requires a valid user_secret to authorise it.
 
 		my @keys = keys %{ $data } ;
 
-		my $user = new SiteFunk::Auth::User ;
+		my $user = new DATA::Auth::User ;
 
 		if ( grep /^user_userid$/ , @keys ) {
 
@@ -450,7 +450,7 @@ sub email_taken {
 
 		my ( $dfv , $value ) = @_ ;
 
-		my $user = new SiteFunk::Auth::User ;
+		my $user = new DATA::Auth::User ;
 		$user -> email ( $value ) ;
 		return $user -> fetch ( $dbh ) ;
 

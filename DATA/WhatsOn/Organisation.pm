@@ -1,15 +1,15 @@
-package SiteFunk::WhatsOn::Organisation ;
+package DATA::WhatsOn::Organisation ;
 
-=head1 SiteFunk::WhatsOn::Organisation
+=head1 DATA::WhatsOn::Organisation
 
 =cut
 
 use strict ;
 use Carp ;
 use Hash::Case::Lower ;
-use SiteFunk::WhatsOn::Event ;
-use SiteFunk::WhatsOn::Organisation::Function ;
-use SiteFunk::WhatsOn::Organisation::Handle ;
+use DATA::WhatsOn::Event ;
+use DATA::WhatsOn::Organisation::Function ;
+use DATA::WhatsOn::Organisation::Handle ;
 
 sub new {
 
@@ -306,7 +306,7 @@ ORG:
            $address3 , $address4 , $postcode , $function , $function_email )
 			= split /\|/ , $rec ;
 
-		my $org = new SiteFunk::WhatsOn::Organisation ;
+		my $org = new DATA::WhatsOn::Organisation ;
 		$org -> name ( $name ) ;
 		$org -> type ( $type ) ;
 		$org -> email ( $email ) ;
@@ -326,7 +326,7 @@ ORG_FUN:
 
 			if ( $function ne '' ) {
 
-				my $org_fun = new SiteFunk::WhatsOn::Organisation::Function ;
+				my $org_fun = new DATA::WhatsOn::Organisation::Function ;
 				$org_fun -> name ( $function ) ;
 				$org_fun -> email ( $function_email ) ;
 
@@ -440,18 +440,18 @@ sub fetch {
         $self -> address4       ( $row -> { address4        } ) ;
         $self -> postcode       ( $row -> { postcode        } ) ;
 
-        SiteFunk::WhatsOn::Organisation::Function
+        DATA::WhatsOn::Organisation::Function
           -> organisation_rowid ( $self -> rowid ) ;
 
-        my @functions = SiteFunk::WhatsOn::Organisation::Function
+        my @functions = DATA::WhatsOn::Organisation::Function
           -> fetch ( $dbh ) ;
 
         $self -> functions ( @functions ) ;
 
-        SiteFunk::WhatsOn::Organisation::Handle
+        DATA::WhatsOn::Organisation::Handle
           -> organisation_rowid ( $self -> rowid ) ;
 
-        my @handles = SiteFunk::WhatsOn::Organisation::Handle
+        my @handles = DATA::WhatsOn::Organisation::Handle
           -> fetch ( $dbh ) ;
 
         $self -> handles ( @handles ) ;
@@ -524,7 +524,7 @@ sub fetch {
 
 		while ( my $row = $sth -> fetchrow_hashref ) {
 
-			my $org = new SiteFunk::WhatsOn::Organisation ;
+			my $org = new DATA::WhatsOn::Organisation ;
 
 			$org -> rowid				( $row -> { rowid				} ) ;
 			$org -> name				( $row -> { name				} ) ;
@@ -620,7 +620,7 @@ Fetch the coming events organised by a society
 
    while ( my $row = $sth -> fetchrow_hashref ) {
 
-      my $event = new SiteFunk::WhatsOn::Event ;
+      my $event = new DATA::WhatsOn::Event ;
 
       $event -> dates ( $row -> { dates } ) ;
       $event -> name ( $row -> { name } ) ;
@@ -665,7 +665,7 @@ sub list {
 
    while ( my $row = $sth -> fetchrow_hashref ) {
 
-      my $society = new SiteFunk::WhatsOn::Organisation ;
+      my $society = new DATA::WhatsOn::Organisation ;
 
       $society -> rowid ( $row -> { rowid } ) ;
       $society -> name ( $row -> { name } ) ;
@@ -781,7 +781,7 @@ sub save {
 
 		$self -> fetch ( $dbh ) ;
 
-		SiteFunk::WhatsOn::Organisation::Function
+		DATA::WhatsOn::Organisation::Function
 			-> organisation_rowid ( $self -> rowid ) ;
 
 		foreach my $function ( @{ $self -> functions } ) {

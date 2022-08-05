@@ -1,8 +1,8 @@
-package SiteFunk::Auth ;
+package DATA::Auth ;
 
-=head1 SiteFunk::Auth
+=head1 DATA::Auth
 
-This module implements SiteFunk's user authentication and account mangement
+This module implements DATA's user authentication and account mangement
 functionality.
 
 =cut
@@ -11,10 +11,10 @@ functionality.
 use strict ;
 use warnings ;
 
-use base qw / SiteFunk::Main / ;
+use base qw / DATA::Main / ;
 
-use SiteFunk::Auth::Constraints ;
-use SiteFunk::Auth::User ;
+use DATA::Auth::Constraints ;
+use DATA::Auth::User ;
 
 use App::Genpass ;
 use Data::FormValidator::Constraints qw / email	/ ;
@@ -233,7 +233,7 @@ Process an attempt to authenticate
    ) || return \$self -> check_rm_error_page ;
 
 	# We have logged on okay so user must exist. Fetch it for the role.
-   my $user = new SiteFunk::Auth::User ;
+   my $user = new DATA::Auth::User ;
    $user -> userid ( scalar $query -> param ( 'user_userid' ) ) ;
 	$user -> fetch ( $self -> dbh ) ;
 
@@ -583,7 +583,7 @@ required.
       $complete_registration_form ,
    ) || return \$self -> check_rm_error_page ;
 
-	my $user = new SiteFunk::Auth::User ;
+	my $user = new DATA::Auth::User ;
 
    $user -> userid ( scalar $self -> query -> param ( 'user_userid' ) ) ;
    $user -> email ( scalar $self -> query -> param ( 'user_email' ) ) ;
@@ -725,7 +725,7 @@ society.
       $confirm_registeration_form ,
    ) || return \$self -> check_rm_error_page ;
 
-	my $user = new SiteFunk::Auth::User ;
+	my $user = new DATA::Auth::User ;
 
    $user -> email ( scalar $self -> query -> param ( 'user_email' ) ) ;
    $user -> first_name ( scalar $self -> query -> param ( 'user_first_name' ) ) ;
@@ -803,7 +803,7 @@ Confirm a registration by clicking on the link in the email sent.
       $confirm_email_profile ,
    ) || return \$self -> check_rm_error_page ;
 
-	my $user = new SiteFunk::Auth::User ;
+	my $user = new DATA::Auth::User ;
 	$user -> email ( $self -> param ( 'email' ) ) ;
 	$user -> fetch ( $self -> dbh ) ;
 	$user -> status ( 'CONFIRMED' ) ;
@@ -873,7 +873,7 @@ sub resend_confirmation_email {
       &_resend_confirmation_email ( $dbh ) ,
    ) || return \$self -> check_rm_error_page ;
 
-	my $user = new SiteFunk::Auth::User ;
+	my $user = new DATA::Auth::User ;
 	$user -> email ( scalar $query -> param ( 'user_email' ) ) ;
 	$user -> fetch ( $dbh ) ;
 	$user -> secret ( &_secret ) ;
@@ -953,7 +953,7 @@ Send the user a reminder of their userid
       $userid_reminder ,
    ) || return \$self -> check_rm_error_page ;
 
-   my $user = new SiteFunk::Auth::User ;
+   my $user = new DATA::Auth::User ;
 
    $user -> email ( scalar $self -> query -> param ( 'user_email' ) ) ;
 
@@ -1020,7 +1020,7 @@ sub request_password_reset {
 
 	my $query = $self -> query ;
 
-	my $user = new SiteFunk::Auth::User ;
+	my $user = new DATA::Auth::User ;
 	$user -> userid ( scalar $query -> param ( 'user_userid' ) ) ;
 	$user -> fetch ( $dbh ) ;
 	$user -> secret ( &_secret ) ;
@@ -1086,7 +1086,7 @@ sub show_password_reset_page {
       $validation_profile
    ) || return \$self -> check_rm_error_page ;
 
-	my $user = new SiteFunk::Auth::User ;
+	my $user = new DATA::Auth::User ;
 	$user -> userid ( $query -> param ( 'user_userid' ) ) ;
 	$user -> fetch ( $self -> dbh ) ;
 
@@ -1153,7 +1153,7 @@ sub reset_password {
 
 	my $query = $self -> query ;
 
-	my $user = new SiteFunk::Auth::User ;
+	my $user = new DATA::Auth::User ;
 	$user -> userid ( scalar $query -> param ( 'user_userid' ) ) ;
 	$user -> fetch ( $dbh ) ;
 
@@ -1232,7 +1232,7 @@ sub old_reset_password {
 # All is well, set up the password reset
 #
 
-		my $user = new SiteFunk::Auth::User ;
+		my $user = new DATA::Auth::User ;
 		$user -> userid ( scalar $query -> param ( 'user_userid' ) ) ;
 		$user -> fetch ( $self -> dbh ) ;
 		$user -> secret ( &_secret ) ;
@@ -1256,7 +1256,7 @@ sub old_reset_password {
 # The userid exists but is not confirmed
 #
 
-		my $user = new SiteFunk::Auth::User ;
+		my $user = new DATA::Auth::User ;
 		$user -> userid ( scalar $query -> param ( 'user_userid' ) ) ;
 		$user -> fetch ( $self -> dbh ) ;
 
@@ -1280,7 +1280,7 @@ sub request_password {
 
    my $query = $self -> query ;
 
-   my $user = new SiteFunk::Auth::User ;
+   my $user = new DATA::Auth::User ;
 
    $user -> userid ( scalar $query -> param ( 'userid' ) ) ;
    $user -> email ( scalar $query -> param ( 'email' ) ) ;
@@ -1367,7 +1367,7 @@ sub update_account {
 
 				# If the user_email is changed then user_confirm_email is mandated
 				my ( $dfv , $email ) = @_ ;
-				my $user = new SiteFunk::Auth::User ;
+				my $user = new DATA::Auth::User ;
 				# Use the session userid in case user_userid field is also changed
 				$user -> userid ( $self -> session -> param ( 'userid' ) ) ;
 				$user -> fetch ( $self -> dbh ) ;
@@ -1454,7 +1454,7 @@ sub update_account {
       $update_account_form ,
    ) || return \$self -> check_rm_error_page ;
 
-	my $user = new SiteFunk::Auth::User ;
+	my $user = new DATA::Auth::User ;
 
 	# Use the session userid rather than the userid in the query object. The
 	# userid in the query object may represent a change that is yet to be applied
@@ -1554,7 +1554,7 @@ Updates the password of the currently logged on user
       &_update_password_form ,
    ) || return \$self -> check_rm_error_page ;
 
-   my $user = new SiteFunk::Auth::User ;
+   my $user = new DATA::Auth::User ;
 
    $user -> userid ( scalar $self -> session -> param ( 'userid' ) ) ;
    $user -> password ( scalar $query -> param ( 'password' ) ) ;

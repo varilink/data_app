@@ -1,21 +1,21 @@
-package SiteFunk::WhatsOn ;
+package DATA::WhatsOn ;
 
-=head1 SiteFunk::WhatsOn
+=head1 DATA::WhatsOn
 
 =cut
 
 use strict ;
 
-use base qw / SiteFunk::Main / ;
+use base qw / DATA::Main / ;
 
 use Encode qw / encode / ;
 use HTML::HTMLDoc ;
 
-use SiteFunk::Auth::Constraints ;
-use SiteFunk::WhatsOn::Constraints ;
-use SiteFunk::WhatsOn::Contact ;
-use SiteFunk::WhatsOn::Event ;
-use SiteFunk::WhatsOn::Organisation ;
+use DATA::Auth::Constraints ;
+use DATA::WhatsOn::Constraints ;
+use DATA::WhatsOn::Contact ;
+use DATA::WhatsOn::Event ;
+use DATA::WhatsOn::Organisation ;
 
 use Data::FormValidator::Constraints qw / email	/ ;
 use Data::FormValidator::Constraints::DateTime qw / :all / ;
@@ -298,11 +298,11 @@ sent via eamil to the webmin.
 	# we may utilise one of the methods that the object gives us at some point.
 
 	# Contact
-	my $contact = new SiteFunk::WhatsOn::Contact ;
+	my $contact = new DATA::WhatsOn::Contact ;
 	$contact -> email ( scalar $query -> param ( 'contact_email' ) ) ;
 
 	# Event
-	my $event = new SiteFunk::WhatsOn::Event ;
+	my $event = new DATA::WhatsOn::Event ;
 	$event -> name ( scalar $query -> param ( 'event_name' ) ) ;
 	$event -> start_date ( scalar $query -> param ( 'event_start_date' ) ) ;
 	if ( scalar $query -> param ( 'event_end_date' ) ) {
@@ -317,13 +317,13 @@ sent via eamil to the webmin.
 
 	# Venue - Try fetch on name to see if it is already known or not.
 	$event -> venue_name ( scalar $query -> param ( 'event_venue' ) ) ;
-	my $venue = new SiteFunk::WhatsOn::Organisation ;
+	my $venue = new DATA::WhatsOn::Organisation ;
 	$venue -> name ( scalar $event -> venue_name ) ;
 	$event -> venue_rowid ( $venue -> rowid )
 	if ( $venue -> fetch ( $self -> dbh ) && $venue -> type eq 'whatson_venue' ) ;
 
 	# Society - Get the name using the rowid that's provided by the form
-	my $society = new SiteFunk::WhatsOn::Organisation ;
+	my $society = new DATA::WhatsOn::Organisation ;
 	$society -> rowid ( scalar $query -> param ( 'event_society' ) ) ;
 	$society -> fetch ( $self -> dbh ) ;
 	$event -> society_name ( $society -> name ) ;
@@ -364,7 +364,7 @@ printing.
 	# Turn on the unicode flag for data retrieved from the database
 	$self -> dbh -> { sqlite_unicode } = 1 ;
 
-	my @events = SiteFunk::WhatsOn::Event -> fetch ( $self -> dbh , $filter ) ;
+	my @events = DATA::WhatsOn::Event -> fetch ( $self -> dbh , $filter ) ;
 
 	foreach my $event ( @events ) {
 
@@ -503,7 +503,7 @@ sub _authorised {
 		# as one of the query object parameters. Check to see if there is a
 		# corresponding society_rowid.
 
-		my $event = new SiteFunk::WhatsOn::Event ;
+		my $event = new DATA::WhatsOn::Event ;
 		$event -> rowid ( $query -> param ( 'event_rowid' ) ) ;
 		$event -> fetch ( $self -> dbh ) ;
 		$society_rowid = $event -> society_rowid if $event -> society_rowid ;
@@ -513,7 +513,7 @@ sub _authorised {
 		# This is an event page display (as opposed to action) so we have the event
 		# rowid as an application parameter and must check to see if there is a
 		# corresponding society_rowid.
-		my $event = new SiteFunk::WhatsOn::Event ;
+		my $event = new DATA::WhatsOn::Event ;
 		$event -> rowid ( $self -> param ( 'rowid' ) ) ;
 		$event -> fetch ( $self -> dbh ) ;
 		$society_rowid = $event -> society_rowid if $event -> society_rowid ;
@@ -636,7 +636,7 @@ sub event_programme {
 	if ( defined $query -> param ( 'delete' ) ) {
 
 		# This is a request to delete
-		my $event = new SiteFunk::WhatsOn::Event ;
+		my $event = new DATA::WhatsOn::Event ;
 		# The delete button is only enabled where there is a rowid
 		# So we can safely assume that it is present without validating
 		$event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
@@ -748,7 +748,7 @@ sub event_programme {
 
 	# We have passed validation, build and save the event object
 
-	my $event = new SiteFunk::WhatsOn::Event ;
+	my $event = new DATA::WhatsOn::Event ;
 
 	# event_rowid
 	if ( scalar $query -> param ( 'event_rowid' ) ) {
@@ -827,7 +827,7 @@ sub event_programme {
 	$updated = 1 if scalar $query -> param ( 'event_rowid' ) &&
 		$event -> venue_name ne scalar $query -> param ( 'event_venue' ) ;
 	if ( scalar $query -> param ( 'event_venue' ) ) {
-		my $venue = new SiteFunk::WhatsOn::Organisation ;
+		my $venue = new DATA::WhatsOn::Organisation ;
 		$venue -> name ( scalar $query -> param ( 'event_venue' ) ) ;
 		$venue -> type ( 'whatson_venue' ) ;
 		$venue -> fetch ( $self -> dbh ) ;
@@ -935,7 +935,7 @@ sub event_online {
 	if ( defined $query -> param ( 'delete' ) ) {
 
 		# This is a request to delete
-		my $event = new SiteFunk::WhatsOn::Event ;
+		my $event = new DATA::WhatsOn::Event ;
 		# The delete button is only enabled where there is a rowid
 		# So we can safely assume that it is present without validating
 		$event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
@@ -1040,7 +1040,7 @@ sub event_online {
 # been a change to the value that was already stored.
 
 	# Fetch
-	my $event = new SiteFunk::WhatsOn::Event ;
+	my $event = new DATA::WhatsOn::Event ;
 	$event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
 	$event -> fetch ( $self -> dbh ) ;
 
@@ -1200,7 +1200,7 @@ Adds or updates a member society record.
 	my $results = $self -> check_rm ( 'form_response' , $organisation_form )
 	|| return \$self -> check_rm_error_page ;
 
-	my $organisation = new SiteFunk::WhatsOn::Organisation ;
+	my $organisation = new DATA::WhatsOn::Organisation ;
 
 	$organisation
 		-> rowid				( scalar $query -> param ( 'organisation_rowid'				) ) ;

@@ -1,6 +1,6 @@
-package SiteFunk::Project::Source::Parser ;
+package DATA::Project::Source::Parser ;
 
-=head1 SiteFunk::Project::Source Parser
+=head1 DATA::Project::Source Parser
 
 This module exports a parse method that can be applied to Gulp page, partial and
 layout template files to convert them in to Templage Toolkit page and include
@@ -190,7 +190,7 @@ PREPARSE:
 
 			my $needed = $name =~ /^(\w+)_(header|footer)$/ ? $1 : 'default' ;
 
-			my $project = new SiteFunk::Project ( $source -> sitename ) ;
+			my $project = new DATA::Project ( $source -> sitename ) ;
 
 			my @layouts = $project -> layouts ;
 

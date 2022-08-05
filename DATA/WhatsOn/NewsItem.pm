@@ -1,6 +1,6 @@
-package SiteFunk::WhatsOn::NewsItem ;
+package DATA::WhatsOn::NewsItem ;
 
-=head1 SiteFunk::WhatsOn::NewsItem
+=head1 DATA::WhatsOn::NewsItem
 
 =cut
 
@@ -253,7 +253,7 @@ sub fetch {
 
 		while ( my $row = $sth -> fetchrow_hashref ) {
 
-			my $newsitem = new SiteFunk::WhatsOn::NewsItem ;
+			my $newsitem = new DATA::WhatsOn::NewsItem ;
 
 			$newsitem -> rowid				( $row -> { rowid					} ) ;
 			$newsitem -> published_date	( $row -> { published_date		} ) ;

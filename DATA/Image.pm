@@ -1,14 +1,14 @@
-package SiteFunk::Image ;
+package DATA::Image ;
 
-=head1 SiteFunk::Image
+=head1 DATA::Image
 
-SiteFunk image upload (from own PC) or copy (from external website) handler.
+DATA image upload (from own PC) or copy (from external website) handler.
 
 =cut
 
 use strict ;
 
-use base qw / SiteFunk::Main / ;
+use base qw / DATA::Main / ;
 
 use Data::FormValidator ;
 use Data::FormValidator::Constraints::Upload qw /
@@ -18,7 +18,7 @@ use Data::FormValidator::Constraints::Upload qw /
 	image_min_dimensions
 / ;
 use JSON ;
-use SiteFunk::Image::Constraints ;
+use DATA::Image::Constraints ;
 
 sub _filepath {
 
@@ -184,7 +184,7 @@ within our domain) image and pipes it back to TinyMCE as if it was local.
 
 	}
 
-	my $image = SiteFunk::Image::Constraints -> image ;
+	my $image = DATA::Image::Constraints -> image ;
 	my $type = $image -> { MIME_TYPE } ;
 	$response = $image -> { BLOB } ;
 

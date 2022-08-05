@@ -1,6 +1,6 @@
-package SiteFunk::Project ;
+package DATA::Project ;
 
-=head1 SiteFunk::Project
+=head1 DATA::Project
 
 A Foundation Project
 
@@ -15,12 +15,12 @@ use File::Basename ;
 use File::Find ;
 use File::Path qw / make_path remove_tree / ;
 
-use SiteFunk::Project::Image ;
-use SiteFunk::Project::Javascript ;
-use SiteFunk::Project::Layout ;
-use SiteFunk::Project::Page ;
-use SiteFunk::Project::Partial ;
-use SiteFunk::Project::Stylesheet ;
+use DATA::Project::Image ;
+use DATA::Project::Javascript ;
+use DATA::Project::Layout ;
+use DATA::Project::Page ;
+use DATA::Project::Partial ;
+use DATA::Project::Stylesheet ;
 
 use YAML qw / LoadFile / ;
 
@@ -118,7 +118,7 @@ sub images {
 
 		if ( -f $file ) {
 
-			my $image = new SiteFunk::Project::Image ( $sitename ) ;
+			my $image = new DATA::Project::Image ( $sitename ) ;
 			$image -> load ( $file ) ;
 			push @{ $self -> { IMAGES} } , $image ;
 
@@ -151,7 +151,7 @@ sub javascripts {
 
 		if ( -f $file ) {
 
-			my $javascript = new SiteFunk::Project::Javascript ( $sitename ) ;
+			my $javascript = new DATA::Project::Javascript ( $sitename ) ;
 			$javascript -> load ( $file ) ;
 			push @{ $self -> { JAVASCRIPTS } } , $javascript ;
 
@@ -186,7 +186,7 @@ sub layouts {
 
 		if ( _isHTML $file ) {
 
-			my $layout = new SiteFunk::Project::Layout ( $sitename ) ;
+			my $layout = new DATA::Project::Layout ( $sitename ) ;
 			$layout -> load ( $file ) ;
 			push @{ $project -> { LAYOUTS } } , $layout ;
 
@@ -222,7 +222,7 @@ sub pages {
 
 		if ( _isHTML $file ) {
 
-			my $page = new SiteFunk::Project::Page ( $sitename ) ;
+			my $page = new DATA::Project::Page ( $sitename ) ;
 			$page -> load ( $file ) ;
 			push @{ $self -> { PAGES } } , $page ;
 
@@ -255,7 +255,7 @@ sub partials {
 
 		if ( _isHTML $file ) {
 
-			my $partial = new SiteFunk::Project::Partial ( $sitename ) ;
+			my $partial = new DATA::Project::Partial ( $sitename ) ;
 			$partial -> load ( $file ) ;
 			push @{ $self -> { PARTIALS } } , $partial ;
 
@@ -288,7 +288,7 @@ sub stylesheets {
 
 		if ( -f $file ) {
 
-			my $stylesheet = new SiteFunk::Project::Stylesheet ( $sitename ) ;
+			my $stylesheet = new DATA::Project::Stylesheet ( $sitename ) ;
 			$stylesheet -> load ( $file ) ;
 			push @{ $self -> { STYLESHEETS } } , $stylesheet ;
 
@@ -405,7 +405,7 @@ sub config {
 
 	) ;
 
-	$conf -> save_file ( "$HOME/vhosts/$sitename/sitefunk.cfg" ) ;
+	$conf -> save_file ( "$HOME/vhosts/$sitename/DATA.cfg" ) ;
 
 }
 

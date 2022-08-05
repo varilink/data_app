@@ -1,9 +1,9 @@
-package SiteFunk::Plugin::Template ;
+package DATA::Plugin::Template ;
 
-=head1 SiteFunk::Plugin::Template
+=head1 DATA::Plugin::Template
 
-Template plugin for SiteFunk applications. Implements template configuration and
-actions that are required for all SiteFunk applications.
+Template plugin for DATA applications. Implements template configuration and
+actions that are required for all DATA applications.
 
 =cut
 
@@ -34,7 +34,7 @@ sub _init {
 
 =head2 Hooks
 
-This plugin installs the following hooks in to a SiteFunk application
+This plugin installs the following hooks in to a DATA application
 
 =cut
 

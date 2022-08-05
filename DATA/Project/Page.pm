@@ -1,12 +1,12 @@
-package SiteFunk::Project::Page ;
+package DATA::Project::Page ;
 
-=head1 SiteFunk::Project::Page
+=head1 DATA::Project::Page
 
 =cut
 
 use strict ;
 
-use base qw / SiteFunk::Project::Source / ;
+use base qw / DATA::Project::Source / ;
 
 sub role {
 

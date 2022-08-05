@@ -1,6 +1,6 @@
-package SiteFunk::Image::Constraints ;
+package DATA::Image::Constraints ;
 
-=head1 SiteFunk::Image::Constraints
+=head1 DATA::Image::Constraints
 
 Constraints applied to an image referenced by its URL, i.e. the validated value
 is the URL of the image. These can be applied to an image that's either hosted

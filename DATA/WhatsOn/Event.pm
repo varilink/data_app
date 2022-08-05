@@ -1,6 +1,6 @@
-package SiteFunk::WhatsOn::Event ;
+package DATA::WhatsOn::Event ;
 
-=head1 SiteFunk::WhatsOn::Event
+=head1 DATA::WhatsOn::Event
 
 =cut
 
@@ -10,7 +10,7 @@ use warnings ;
 use Carp ;
 use Encode qw / encode decode / ;
 
-use SiteFunk::WhatsOn::Organisation ;
+use DATA::WhatsOn::Organisation ;
 
 #
 # Internal methods, not for use from outside of this package
@@ -664,7 +664,7 @@ sub fetch {
 
 	   while ( my $row = $sth -> fetchrow_hashref ) {
 
-	      my $event = new SiteFunk::WhatsOn::Event ;
+	      my $event = new DATA::WhatsOn::Event ;
 
 	      $event -> rowid ( $row -> { rowid } ) ;
 	      $event -> dates ( $row -> { dates } ) ;
@@ -752,7 +752,7 @@ insert of a new event.
 
     if  ( $self -> venue_name && !$self -> venue_rowid ) {
 
-      my $venue = new SiteFunk::WhatsOn::Organisation ;
+      my $venue = new DATA::WhatsOn::Organisation ;
       $venue -> name ( $self -> venue_name ) ;
       $venue -> fetch ( $dbh ) ;
       $self -> venue_rowid ( $venue -> rowid ) ;
@@ -761,7 +761,7 @@ insert of a new event.
 
     if ( $self -> society_name && !$self -> society_rowid ) {
 
-      my $society = new SiteFunk::WhatsOn::Organisation ;
+      my $society = new DATA::WhatsOn::Organisation ;
       $society -> name ( $self -> society_name ) ;
       $society -> fetch ( $dbh ) ;
       $self -> society_rowid ( $society -> rowid ) ;

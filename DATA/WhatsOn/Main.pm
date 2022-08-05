@@ -1,12 +1,12 @@
-package SiteFunk::WhatsOn::Main
+package DATA::WhatsOn::Main
 
-=head1 SiteFunk::WhatsOn::Main
+=head1 DATA::WhatsOn::Main
 
 =cut
 
 use strict ;
 
-use base qw / SiteFunk::Main / ;
+use base qw / DATA::Main / ;
 
 1 ;
 

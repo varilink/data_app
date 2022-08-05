@@ -1,6 +1,6 @@
-package SiteFunk::Auth::Dispatch ;
+package DATA::Auth::Dispatch ;
 
-=head1 SiteFunk::Auth::Dispatch
+=head1 DATA::Auth::Dispatch
 
 =cut
 
@@ -12,7 +12,7 @@ sub dispatch_args {
 
    return {
 
-      prefix => 'SiteFunk' ,
+      prefix => 'DATA' ,
 
       table => [
 

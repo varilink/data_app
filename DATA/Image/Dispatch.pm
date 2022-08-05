@@ -1,6 +1,6 @@
-package SiteFunk::Image::Dispatch ;
+package DATA::Image::Dispatch ;
 
-=head1 SiteFunk::Image::Dispatch
+=head1 DATA::Image::Dispatch
 
 =cut
 
@@ -12,7 +12,7 @@ sub dispatch_args {
 
    return {
 
-      prefix => 'SiteFunk' ,
+      prefix => 'DATA' ,
 
       table => [
 

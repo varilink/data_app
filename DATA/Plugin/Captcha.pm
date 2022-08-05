@@ -1,6 +1,6 @@
-package SiteFunk::Plugin::Captcha ;
+package DATA::Plugin::Captcha ;
 
-=head1 SiteFunk::Plugin::Captcha
+=head1 DATA::Plugin::Captcha
 
 CGI:Application integration with Google's reCAPTCHA
 

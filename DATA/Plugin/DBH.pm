@@ -1,4 +1,4 @@
-package SiteFunk::Plugin::DBH ;
+package DATA::Plugin::DBH ;
 
 use strict ;
 

@@ -1,4 +1,4 @@
-package SiteFunk::Plugin::Email ;
+package DATA::Plugin::Email ;
 
 use strict ;
 

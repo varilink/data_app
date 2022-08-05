@@ -1,12 +1,12 @@
-package SiteFunk::Action ;
+package DATA::Action ;
 
-=head1 SiteFunk::Action
+=head1 DATA::Action
 
 =cut
 
 use strict ;
 
-use base qw / SiteFunk::Main / ;
+use base qw / DATA::Main / ;
 
 use Carp ;
 
@@ -14,8 +14,8 @@ use CGI::Application::Plugin::Forward ;
 use CGI::Application::Plugin::Redirect ;
 use CGI::Application::Plugin::ValidateRM ;
 
-use SiteFunk::Plugin::Email ;
-use SiteFunk::Plugin::ValidateRM ;
+use DATA::Plugin::Email ;
+use DATA::Plugin::ValidateRM ;
 
 sub cgiapp_init {
 

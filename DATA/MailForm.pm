@@ -1,6 +1,6 @@
-package SiteFunk::MailForm ;
+package DATA::MailForm ;
 
-=head1 SiteFunk::MailForm
+=head1 DATA::MailForm
 
 Application that provides a general purpose mail form run mode EVENTUALLY.
 For the moment we have a separate run_mode for each occurrence of a mail form.
@@ -9,7 +9,7 @@ For the moment we have a separate run_mode for each occurrence of a mail form.
 
 use strict ;
 
-use base qw / SiteFunk::Action / ;
+use base qw / DATA::Action / ;
 
 sub cgiapp_init {
 
@@ -38,7 +38,7 @@ Submit a mail form enquring about membership for a society.
 
    my $form = sub {
 
-      use SiteFunk::Auth::Constraints qw /
+      use DATA::Auth::Constraints qw /
          credentials_match
       / ;
 

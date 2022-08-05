@@ -1,6 +1,6 @@
-package SiteFunk::Auth::User ;
+package DATA::Auth::User ;
 
-=head1 SiteFunk::Auth::User
+=head1 DATA::Auth::User
 
 Implements the User domain object for the Auth application.
 
@@ -226,7 +226,7 @@ USER:
 		my ( $userid , $password , $email , $first_name , $surname , $role )
 			= split /\|/ , $rec ;
 
-		my $user = new SiteFunk::Auth::User ;
+		my $user = new DATA::Auth::User ;
 		$user -> userid ( $userid ) ;
       $user -> role ( $role ) ;
 		$user -> password ( $password ) ;
@@ -345,7 +345,7 @@ or via email.
 
 		while ( my $row = $sth -> fetchrow_hashref ) {
 
-			my $user = new SiteFunk::Auth::User ;
+			my $user = new DATA::Auth::User ;
 
 			$user -> _fetched ( 1 ) ;
 			$user -> rowid ( $row -> { rowid } ) ;

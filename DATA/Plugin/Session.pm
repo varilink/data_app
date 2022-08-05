@@ -1,4 +1,4 @@
-package SiteFunk::Plugin::Session ;
+package DATA::Plugin::Session ;
 
 use strict ;
 

@@ -1,8 +1,8 @@
-package SiteFunk::WhatsOn::Soc;
+package DATA::WhatsOn::Soc;
 
 use strict;
 use CGI;
-use base qw(SiteFunk::WhatsOn::DBFile::DomainClass);
+use base qw(DATA::WhatsOn::DBFile::DomainClass);
 
 ##########################
 ### Object constructor ###

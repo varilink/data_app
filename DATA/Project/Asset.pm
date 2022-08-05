@@ -1,6 +1,6 @@
-package SiteFunk::Project::Asset ;
+package DATA::Project::Asset ;
 
-=head1 SiteFunk::Project::Asset
+=head1 DATA::Project::Asset
 
 =cut
 

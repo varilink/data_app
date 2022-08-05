@@ -1,9 +1,9 @@
-package SiteFunk::WhatsOn::Contact::Organisation ;
+package DATA::WhatsOn::Contact::Organisation ;
 
-=head1 SiteFunk::WhatsOn::Contact::Organsiation
+=head1 DATA::WhatsOn::Contact::Organsiation
 
 Class for handling the organisations associated with a contact. See class
-SiteFunk::WhatsOn::Organisation::Contact for the complementary class for
+DATA::WhatsOn::Organisation::Contact for the complementary class for
 handling contacts associated with an organisation.
 
 =cut
@@ -137,7 +137,7 @@ sub fetch {
 
 	while ( my $row = $sth -> fetchrow_hashref ) {
 
-		my $organisation = new SiteFunk::WhatsOn::Contact::Organisation ;
+		my $organisation = new DATA::WhatsOn::Contact::Organisation ;
 
 		$organisation -> person_rowid ( $row -> { person_rowid } ) ;
 		$organisation -> organisation_rowid ( $row -> { organisation_rowid } ) ;

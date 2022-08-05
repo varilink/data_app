@@ -1,6 +1,6 @@
-package SiteFunk::Project::Source ;
+package DATA::Project::Source ;
 
-=head1 SiteFunk::Project::Source
+=head1 DATA::Project::Source
 
 =cut
 
@@ -10,7 +10,7 @@ use Cwd ;
 use File::Basename ;
 use File::Path qw / make_path / ;
 
-use SiteFunk::Project::Source::Parser ;
+use DATA::Project::Source::Parser ;
 
 sub new {
 

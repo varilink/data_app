@@ -1,4 +1,4 @@
-package SiteFunk::WhatsOn::Organisation::Contact ;
+package DATA::WhatsOn::Organisation::Contact ;
 
 use strict ;
 use Carp ;
@@ -88,7 +88,7 @@ sub fetch {
 
 	while ( my $row = $sth -> fetchrow_hashref ) {
 
-		my $function = new SiteFunk::WhatsOn::Organisation::Function ;
+		my $function = new DATA::WhatsOn::Organisation::Function ;
 
 		$function -> organisation_rowid ( $row -> { organisation_rowid } ) ;
 		$function -> name ( $row -> { name } ) ;

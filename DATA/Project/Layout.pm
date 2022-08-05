@@ -1,12 +1,12 @@
-package SiteFunk::Project::Layout ;
+package DATA::Project::Layout ;
 
-=head1 SiteFunk::Project::Layout
+=head1 DATA::Project::Layout
 
 =cut
 
 use strict ;
 
-use base qw / SiteFunk::Project::Source / ;
+use base qw / DATA::Project::Source / ;
 
 sub output {
 

@@ -1,6 +1,6 @@
-package SiteFunk::Auth::Request ;
+package DATA::Auth::Request ;
 
-=head1 SiteFunk::Auth::Request
+=head1 DATA::Auth::Request
 
 CGI application that handles requests for secured resources. Tests whether the
 request comes from an authenticated user and if access to the resource is
@@ -53,7 +53,7 @@ Tests whether a request to access a protected resource is permitted.
 
       my $conf = new Config::Context (
 
-         file => "$home/conf/sitefunk.cfg" ,
+         file => "$home/conf/DATA.cfg" ,
 
          driver => 'ConfigGeneral' ,
 

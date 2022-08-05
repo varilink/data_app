@@ -1,6 +1,6 @@
-package SiteFunk::Main ;
+package DATA::Main ;
 
-=head1 SiteFunk::Main
+=head1 DATA::Main
 
 =cut
 
@@ -14,17 +14,17 @@ use CGI::Application::Plugin::Config::Context ;
 use CGI::Application::Plugin::DBH qw /dbh_config dbh/ ;
 use CGI::Application::Plugin::Session ;
 
-# Use SiteFunk customisation of CGI::Application::Plugin::Config::Context
-use SiteFunk::Plugin::Config ;
+# Use DATA customisation of CGI::Application::Plugin::Config::Context
+use DATA::Plugin::Config ;
 
-# Use other SiteFunk customisations of CGI:Application plugins
-use SiteFunk::Plugin::DBH ;
-use SiteFunk::Plugin::Session ;
-use SiteFunk::Plugin::Template ;
+# Use other DATA customisations of CGI:Application plugins
+use DATA::Plugin::DBH ;
+use DATA::Plugin::Session ;
+use DATA::Plugin::Template ;
 
 # Embed the components for embedding in pages
-use SiteFunk::Auth::Component ;
-use SiteFunk::WhatsOn::Component ;
+use DATA::Auth::Component ;
+use DATA::WhatsOn::Component ;
 
 use Carp ;
 
@@ -32,8 +32,8 @@ use CGI::Application::Plugin::Forward ;
 use CGI::Application::Plugin::Redirect ;
 use CGI::Application::Plugin::ValidateRM ;
 
-use SiteFunk::Plugin::Email ;
-use SiteFunk::Plugin::ValidateRM ;
+use DATA::Plugin::Email ;
+use DATA::Plugin::ValidateRM ;
 
 sub cgiapp_init {
 
@@ -89,7 +89,7 @@ sub auto_run_mode {
 =head3 auto_run_mode
 
 Provides an automatic run mode for ALL page displays. Only form action run modes
-are then required to be explicitly defined in action packages for each SiteFunk
+are then required to be explicitly defined in action packages for each DATA
 application, e.g. "Auth", "WhatsOn", etc.
 
 =cut

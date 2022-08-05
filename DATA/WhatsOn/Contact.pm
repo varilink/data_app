@@ -1,11 +1,11 @@
-package SiteFunk::WhatsOn::Contact ;
+package DATA::WhatsOn::Contact ;
 
 use Carp ;
 use strict ;
 use warnings ;
 
-use SiteFunk::WhatsOn::Organisation ;
-use SiteFunk::WhatsOn::Contact::Organisation ;
+use DATA::WhatsOn::Organisation ;
+use DATA::WhatsOn::Contact::Organisation ;
 
 use String::Random ;
 
@@ -202,7 +202,7 @@ sub organisations {
 =head3 organisations
 
 Sets or returns a reference to an array containing object instances of
-SiteFunk::WhatsOn::Contact::Organisation
+DATA::WhatsOn::Contact::Organisation
 
 =cut
 
@@ -240,7 +240,7 @@ sub add_org {
 
 	unless ( $existing_relationship ) {
 
-		my $org = new SiteFunk::WhatsOn::Contact::Organisation ;
+		my $org = new DATA::WhatsOn::Contact::Organisation ;
 		$org -> person_rowid ( $self -> rowid ) if $self -> rowid ;
 		$org -> name ( $org_in ) ;
 		$org -> role ( $role_in) if $role_in ;
@@ -316,7 +316,7 @@ CON:
 		# Parse record
 
 		# Create Contact
-		my $con = new SiteFunk::WhatsOn::Contact ; 
+		my $con = new DATA::WhatsOn::Contact ; 
 		$con -> email ( $email ) ;
 		$con -> first_name ( $first_name ) ;
 		$con -> surname ( $surname ) ;
@@ -337,7 +337,7 @@ CON_ORG:
 			if ( $org_name ne '' ) {
 
 				# Create contact organisation
-				my $con_org = new SiteFunk::WhatsOn::Contact::Organisation ;
+				my $con_org = new DATA::WhatsOn::Contact::Organisation ;
 				$con_org -> name ( $org_name ) ;
 				$con_org -> role ( $role ) ;
 				$con_org -> primary_contact ( $primary_contact ) ;
@@ -452,10 +452,10 @@ sub fetch {
 
 		unless ( $filter -> { no_orgs } ) {
 
-			SiteFunk::WhatsOn::Contact::Organisation
+			DATA::WhatsOn::Contact::Organisation
 				-> person_rowid ( $self -> rowid ) ;
 
-			my @organisations = SiteFunk::WhatsOn::Contact::Organisation
+			my @organisations = DATA::WhatsOn::Contact::Organisation
 				-> fetch ( $dbh ) ;
 
 			$self -> organisations ( \@organisations ) ;
@@ -537,7 +537,7 @@ sub fetch {
 
 		while ( my $row = $sth -> fetchrow_hashref ) {
 
-			my $contact = new SiteFunk::WhatsOn::Contact ;
+			my $contact = new DATA::WhatsOn::Contact ;
 
 		   $contact -> rowid					( $row -> { rowid					} ) ;
 		   $contact -> email	
@@ -559,10 +559,10 @@ sub fetch {
 			# Move this to the main query perhaps as something smarter?
 			unless ( $filter -> { no_orgs } ) {
 
-				SiteFunk::WhatsOn::Contact::Organisation
+				DATA::WhatsOn::Contact::Organisation
 					-> person_rowid ( $contact -> rowid ) ;
 
-				my @organisations = SiteFunk::WhatsOn::Contact::Organisation
+				my @organisations = DATA::WhatsOn::Contact::Organisation
 					-> fetch ( $dbh ) ;
 
 				$contact -> organisations ( \@organisations ) ;
@@ -627,7 +627,7 @@ sub save {
 
 		$sth -> execute ;
 
-		SiteFunk::WhatsOn::Contact::Organisation
+		DATA::WhatsOn::Contact::Organisation
 			-> person_rowid ( $self -> rowid ) ;
 
 		foreach my $con_org ( @{ $self -> organisations } ) {
@@ -690,12 +690,12 @@ sub save {
 
 		$self -> fetch ( $dbh , { no_orgs => 1 } ) ;
 
-		SiteFunk::WhatsOn::Contact::Organisation
+		DATA::WhatsOn::Contact::Organisation
 			-> person_rowid ( $self -> rowid ) ;
 
 		foreach my $con_org ( @{ $self -> organisations } ) {
 
-			my $organisation = new SiteFunk::WhatsOn::Organisation ;
+			my $organisation = new DATA::WhatsOn::Organisation ;
 			$organisation -> name ( $con_org -> name ) ;
 			$organisation -> fetch ( $dbh ) ;
 			$con_org -> organisation_rowid ( $organisation -> rowid ) ;			
@@ -756,7 +756,7 @@ sub list {
 
    while ( my $row = $sth -> fetchrow_hashref ) {
 
-      my $contact = new SiteFunk::WhatsOn::Contact ;
+      my $contact = new DATA::WhatsOn::Contact ;
 
       $contact -> rowid ( $row -> { rowid } ) ;
       $contact -> email ( $row -> { email } ) ;
@@ -884,7 +884,7 @@ sub add {
 
 		) ;
 
-		my $organisation = new SiteFunk::WhatsOn::Organisation ;
+		my $organisation = new DATA::WhatsOn::Organisation ;
 		$organisation -> name ( $con_in_org -> name ) ;
 		$organisation -> fetch ( $dbh ) ;
 
