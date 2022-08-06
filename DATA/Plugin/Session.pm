@@ -4,6 +4,20 @@ use strict ;
 
 use base qw / Exporter / ;
 
+sub _init {
+
+  my $self = shift ;
+
+  $self -> session_config (
+    CGI_SESSION_OPTIONS => [
+      "driver:File" , $self->query , { Directory => '/cookies' }
+    ] ,
+    COOKIE_PARAMS => { -path  => '/' } ,
+    SEND_COOKIE => 1
+  ) ;
+
+}
+
 sub _postrun {
 
    my $c = shift ;
@@ -16,6 +30,12 @@ sub _postrun {
 sub import {
 
    my $caller = scalar caller ;
+
+   $caller -> add_callback (
+
+    'init' , \&_init
+
+   ) ;
 
    $caller -> add_callback (
 

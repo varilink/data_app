@@ -121,7 +121,7 @@ Upload a file from the users own PC
 	my $filepath = $self -> _filepath ( $suffix ) ;
 
 	unless (
-		open ( LOCAL , ">/var/local/www-data$filepath" )
+		open ( LOCAL , ">$filepath" )
 	) {
 		$self -> header_props ( -status => '400' ) ;
 		$response =

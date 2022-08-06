@@ -24,22 +24,22 @@ use String::Random ;
 
 my $_messages = {
 
-   # A hash reference containing messages associated with constraints
+	# A hash reference containing messages associated with constraints
 
 	credentials_match		=> 'credentials_match'	,
-	email_confirmed      => 'email_confirmed'		,
-	email_free		      => 'email_free'			,
-	email_valid          => 'email_valid'			,
-	not_a_robot          => 'not_a_robot'			,
-	password_complex     => 'password_complex'	,
-	password_confirmed   => 'password_confirmed'	,
-	contact_valid 			=> 'contact_valid'		,
-	user_confirmed			=> 'user_confirmed'		,
+	email_confirmed			=> 'email_confirmed'		,
+	email_free					=> 'email_free'					,
+	email_valid					=> 'email_valid'				,
+	not_a_robot					=> 'not_a_robot'				,
+	password_complex		=> 'password_complex'		,
+	password_confirmed	=> 'password_confirmed'	,
+	contact_valid 			=> 'contact_valid'			,
+	user_confirmed			=> 'user_confirmed'			,
 	user_not_confirmed	=> 'user_not_confirmed'	,
-	user_exists				=> 'user_exists'			,
-	userid_long_enough   => 'userid_long_enough'	,
-	userid_unique        => 'userid_unique'		,
-	userid_valid         => 'userid_valid'			,
+	user_exists					=> 'user_exists'				,
+	userid_long_enough	=> 'userid_long_enough'	,
+	userid_unique				=> 'userid_unique'			,
+	userid_valid				=> 'userid_valid'				,
 
 } ;
 
@@ -121,67 +121,26 @@ Process an attempt to authenticate
 
 =cut
 
-   my $self = shift ;
+	my $self = shift ;
 	my $query = $self -> query ;
 
 	my $env = $self -> conf -> param ( 'env' ) ;
 
-   my $login_form = sub {
+	my $login_form = sub {
 
-		if ( $env -> { disable_recaptcha } ) {
+		if ( $env -> { use_captcha } ) {
 
-	      return {
+			# We are using Google reCAPTCHA in this environment
 
-	         required => [ qw /
-					user_userid
-	            user_password
-	         / ] ,
+			return {
 
-	         constraint_methods => {
-
-					user_userid => [
-						{
-							constraint_method => user_exists ( $self -> dbh ) ,
-							name => 'user_exists'
-						} ,
-						{
-							constraint_method => FV_or (
-								FV_not ( user_exists ( $self -> dbh ) ) ,
-								user_confirmed ( $self -> dbh )
-							) ,
-							name => 'user_confirmed'
-						} ,
-					] ,
-
-					user_password => {
-						constraint_method => credentials_match (
-							$self -> dbh ,
-							{ fields => [ qw / user_userid / ] }
-						) ,
-						name => 'credentials_match'
-					} ,
-
-	         } ,
-
-	         msgs => {
-
-	            constraints => $_messages
-
-	         }
-
-	      } ; # End of return statement
-
-		} else {
-
-	      return {
-
-	         required => [ qw /
+				required => [ qw /
 					g-recaptcha-response
 					user_userid
-	            user_password
-	         / ] ,
+					user_password
+				/ ] ,
 
-	         constraint_methods => {
+				constraint_methods => {
 
 					'g-recaptcha-response' => {
 						constraint_method => not_a_robot (
@@ -212,19 +171,64 @@ Process an attempt to authenticate
 						name => 'credentials_match'
 					} ,
 
-	         } ,
+				} ,
 
-	         msgs => {
+				msgs => {
 
-	            constraints => $_messages
+					constraints => $_messages
 
-	         }
+				}
 
-	      } ; # End of return statement
+			} ; # End of return statement
+
+		} else {
+
+			# We are NOT using Google reCAPTCHA in this environment
+
+			return {
+
+				required => [ qw /
+					user_userid
+					user_password
+				/ ] ,
+
+				constraint_methods => {
+
+					user_userid => [
+						{
+							constraint_method => user_exists ( $self -> dbh ) ,
+							name => 'user_exists'
+						} ,
+						{
+							constraint_method => FV_or (
+								FV_not ( user_exists ( $self -> dbh ) ) ,
+								user_confirmed ( $self -> dbh )
+							) ,
+							name => 'user_confirmed'
+						} ,
+					] ,
+
+					user_password => {
+						constraint_method => credentials_match (
+							$self -> dbh ,
+							{ fields => [ qw / user_userid / ] }
+						) ,
+						name => 'credentials_match'
+					} ,
+
+	  		} ,
+
+				msgs => {
+
+					constraints => $_messages
+
+				}
+
+			} ; # End of return statement
 
 		}
 
-   } ; # End of login_form sub
+	} ; # End of login_form sub
 
    my $results = $self -> check_rm (
       'form_response' ,
@@ -242,9 +246,8 @@ Process an attempt to authenticate
 	$self -> session -> param ( 'role' , $user -> role ) ;
 	$self -> session -> flush ;
 
-   # Not sure if I should redirect here. There's been no database update but
-   # then again, I have modified the session.
-   my $tmpl = $self -> template -> load ( $query -> param ( 'onSuccess' ) ) ;
+   # Add a cookie to the outgoing headers containing the session
+	 $self -> session_cookie ;
 
    $self -> redirect ( $query -> param ( 'onSuccess' ) ) ;
 

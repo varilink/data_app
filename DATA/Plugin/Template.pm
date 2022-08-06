@@ -50,11 +50,13 @@ the init hook to ensure that the configuration is loaded first.
 
   my $self = shift ;
 
+  my $env = $self -> conf -> param ( 'env' ) ;
+
   my @tmpl_paths = ( ) ;
 
   foreach my $tmpl_path ( @{ $self -> conf -> param ( 'tmpl_path' ) } ) {
 
-    push @tmpl_paths , $self -> param ( 'home' ) . '/' . $tmpl_path ;
+    push @tmpl_paths , $env -> { tmpl_path } . '/' . $tmpl_path ;
 
   }
 

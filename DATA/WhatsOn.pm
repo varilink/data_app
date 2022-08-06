@@ -351,6 +351,7 @@ printing.
 
 	my $self = shift ;
 	my $query = $self -> query ;
+	my $env = $self -> conf -> param ( 'env' ) ;
 
 #-------------------------------------------------------------------------------
 
@@ -404,9 +405,7 @@ printing.
     $htmldoc -> set_footer ( '.' , '.' , '.' ) ;
     $htmldoc -> set_header ( '.' , 'l' , '1' ) ;
     $htmldoc -> set_html_content ( encode ( 'iso-8859-1' , $$html ) ) ;
-    $htmldoc -> set_logoimage (
-			$self -> param ( 'home' ) . '/htdocs/assets/img/logo.jpg'
-		) ;
+    $htmldoc -> set_logoimage ( $env -> { assets } . '/img/logo.jpg' ) ;
 		# Set page up for A5 or A4. Note that A4 is the default page size.
     if ( $pagesize eq 'A5' ) {
       $htmldoc -> set_fontsize ( 10 ) ;
@@ -445,9 +444,7 @@ printing.
   $htmldoc -> set_footer ( '.' , '.' , '.' ) ;
   $htmldoc -> set_header ( '.' , 'l' , '.' ) ;
   $htmldoc -> set_html_content ( encode ( 'iso-8859-1' , $$html ) ) ;
-	$htmldoc -> set_logoimage (
-		$self -> param ( 'home' ) . '/htdocs/assets/img/logo.jpg'
-	) ;
+	$htmldoc -> set_logoimage ( $env -> { assets } . '/img/logo.jpg' ) ;
   # Set page up for A5 or A4. Note that A4 is the default page size.
   if ( $pagesize eq 'A5' ) {
     $htmldoc -> set_fontsize ( 10 ) ;

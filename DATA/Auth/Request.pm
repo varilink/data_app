@@ -14,17 +14,19 @@ use base qw / CGI::Application / ;
 
 use CGI::Application::Plugin::Session ;
 
+use DATA::Plugin::Session ;
+
 use Config::Context ;
 
 sub cgiapp_init {
 
-   my $self = shift ;
+  my $self = shift ;
 
-   $self -> run_modes ( [
+  $self -> run_modes ( [
 
-      'request'         ,
+    'request'         ,
 
-   ] ) ;
+  ] ) ;
 
 }
 
@@ -36,14 +38,14 @@ Tests whether a request to access a protected resource is permitted.
 
 =cut
 
-   my $self = shift ;
+  my $self = shift ;
 
-   my $query = $self -> query ;
+  my $query = $self -> query ;
 
-	if ( $self -> session -> param ( 'userid' ) ) {
+  if ( $self -> session -> param ( 'userid' ) ) {
 
-      # Already authenticated, check if authorised
-      
+    # Already authenticated, check if authorised
+
 		# Get the target
 		my $target = $query -> env -> { 'HTTP_X_ORIGINAL_URI' } ;
 		$target =~ s/\/+/\//g ; # Replace one or more / with a single /
@@ -53,7 +55,7 @@ Tests whether a request to access a protected resource is permitted.
 
       my $conf = new Config::Context (
 
-         file => "$home/conf/DATA.cfg" ,
+         file => "$ENV{'DATA_CONF'}/data.cfg" ,
 
          driver => 'ConfigGeneral' ,
 
