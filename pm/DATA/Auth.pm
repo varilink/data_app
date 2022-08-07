@@ -1340,9 +1340,6 @@ sub update_account {
   my $self = shift ;
   my $query = $self -> query ;
 
-  use Data::Dumper ;
-  print STDERR Dumper $query -> param ;
-
   my $update_account_form = {
 
     required => [ qw /

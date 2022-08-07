@@ -377,13 +377,9 @@ sub save {
 
     # This is an update
 
-    print STDERR "I am in the update routine\n" ;
-
     my $sth ;
 
     if ( $self -> rowid ) {
-
-      print STDERR "And I have gone down the rowid leg\n" ;
 
       $sth = $dbh -> prepare (
 
@@ -404,8 +400,6 @@ sub save {
       $sth -> bind_param ( ':rowid'    , $self -> rowid      ) ;
 
     } else {
-
-      print STDERR "And I have gone down the userid leg\n" ;
 
       $sth = $dbh -> prepare (
 
