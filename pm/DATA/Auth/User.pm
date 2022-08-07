@@ -224,7 +224,7 @@ USER:
     chomp $rec ;
 
     my ( $userid , $password , $email , $first_name , $surname , $role )
-      = split /\|/ , $rec ;
+      = split ( /\|/ , $rec ) ;
 
     my $user = new DATA::Auth::User ;
     $user -> userid ( $userid ) ;
