@@ -42,8 +42,8 @@ sub cgiapp_init {
 
   $self -> run_modes (
 
-    'form_response'  => 'form_response'  ,
-    'throw_error'    => 'throw_error'    ,
+    'form_response'  => 'form_response' ,
+    'throw_error'   => 'throw_error'   ,
     'AUTOLOAD'      => \&auto_run_mode
 
   ) ;

@@ -30,23 +30,23 @@ my $_messages = {
 
     # A hash reference containing messages associated with constraints
 
-    contact_is_subscribed            => 'contact_is_subscribed'          ,
-    contact_not_subscribed          => 'contact_not_subscribed'          ,
-    email_confirmed                  => 'email_confirmed'                ,
-    email_valid                      => 'email_valid'                    ,
-    end_date_not_before_start_date  => 'end_date_not_before_start_date'  ,
-    end_date_valid                  => 'end_date_valid'                  ,
-    event_description_valid          => 'event_description_valid'        ,
-    event_image_provided            => 'event_image_provided'            ,
-    event_image_valid                => 'event_image_valid'              ,
-    event_status_valid              => 'event_status_valid'              ,
-    event_use_desc_valid            => 'event_use_desc_valid'            ,
-    not_a_robot                      => 'not_a_robot'                    ,
-    start_date_after_today          => 'start_date_after_today'          ,
-    start_date_valid                => 'start_date_valid'                ,
-    status_valid                    => 'status_valid'                    ,
-    unsubscribe_valid                => 'unsubscribe_valid'              ,
-    venue_exists                    => 'venue_exists'                    ,
+    contact_is_subscribed          => 'contact_is_subscribed'          ,
+    contact_not_subscribed         => 'contact_not_subscribed'         ,
+    email_confirmed                => 'email_confirmed'                ,
+    email_valid                    => 'email_valid'                    ,
+    end_date_not_before_start_date => 'end_date_not_before_start_date' ,
+    end_date_valid                 => 'end_date_valid'                 ,
+    event_description_valid        => 'event_description_valid'        ,
+    event_image_provided           => 'event_image_provided'           ,
+    event_image_valid              => 'event_image_valid'              ,
+    event_status_valid             => 'event_status_valid'             ,
+    event_use_desc_valid           => 'event_use_desc_valid'           ,
+    not_a_robot                    => 'not_a_robot'                    ,
+    start_date_after_today         => 'start_date_after_today'         ,
+    start_date_valid               => 'start_date_valid'               ,
+    status_valid                   => 'status_valid'                   ,
+    unsubscribe_valid              => 'unsubscribe_valid'              ,
+    venue_exists                   => 'venue_exists'                   ,
 
   } , # End of constraints hash
 
@@ -72,22 +72,22 @@ sub setup {
     #
 
     # Send an expression of interest for join DATA to the webmin
-    'join_us'              =>  'join_us'              ,
+    'join_us'             =>  'join_us'            ,
     # Notify the webmin of an event
-    'notify_event'        => 'notify_event'          ,
+    'notify_event'        => 'notify_event'         ,
     # Return a PDF cotaining coming events in a one page, printable format
-    'printed_listing'      => 'printed_listing'      ,
+    'printed_listing'     => 'printed_listing'     ,
 
     #
     # Event Management
     #
 
     # Add or update an event (programme listing)
-    'event_programme'      => 'event_programme'      ,
+    'event_programme'     => 'event_programme'      ,
     # Update an event (oneline promotion)
-    'event_online'        => 'event_online'          ,
+    'event_online'        => 'event_online'         ,
     # Show an event programme listing for rep update
-    'rep_event_programme'  => 'rep_event_display'    ,
+    'rep_event_programme' => 'rep_event_display'    ,
     # Show an event online listing for rep update
     'rep_event_online'    => 'rep_event_display'    ,
 
@@ -96,9 +96,9 @@ sub setup {
     #
 
     # Add or update an organisation
-    'organisation'        => 'organisation'          ,
+    'organisation'        => 'organisation'         ,
     # Show society details for update
-    'rep_society'          => 'rep_society_display'  ,
+    'rep_society'         => 'rep_society_display' ,
     # Show society contacts
     'rep_contacts'        => 'rep_society_display'  ,
 
@@ -160,7 +160,7 @@ join. The enquiry gets emailed to the webmin.
     push @{ $join_us_form -> { required } } , 'g-recaptcha-response' ;
 
     $join_us_form -> { constraint_methods } -> { 'g-recaptcha-response' } = {
-      constraint_method  => not_a_robot ( $env -> { recaptcha_secret_key } ) ,
+      constraint_method => not_a_robot ( $env -> { recaptcha_secret_key } ) ,
       name              => 'not_a_robot'
     }
 
