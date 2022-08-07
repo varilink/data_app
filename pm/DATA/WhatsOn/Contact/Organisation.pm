@@ -9,6 +9,7 @@ handling contacts associated with an organisation.
 =cut
 
 use strict ;
+use warnings ;
 use Carp ;
 
 # Define class variable so that person rowid doesn't have to be set for every
@@ -64,21 +65,21 @@ sub organisation_rowid {
 
    my $self = shift ;
    if ( @_ ) { $self -> { ORGANISATION_ROWID } = shift }
-   return $self -> { ORGANISATION_ROWID } ; 
+   return $self -> { ORGANISATION_ROWID } ;
 }
 
 sub role {
 
    my $self = shift ;
    if ( @_ ) { $self -> { ROLE } = shift }
-   return $self -> { ROLE } ; 
+   return $self -> { ROLE } ;
 }
 
 sub status {
 
    my $self = shift ;
    if ( @_ ) { $self -> { STATUS } = shift }
-   return $self -> { STATUS } ; 
+   return $self -> { STATUS } ;
 }
 
 sub primary_contact {

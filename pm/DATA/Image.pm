@@ -7,6 +7,7 @@ DATA image upload (from own PC) or copy (from external website) handler.
 =cut
 
 use strict ;
+use warnings ;
 
 use base qw / DATA::Main / ;
 

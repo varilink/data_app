@@ -4,6 +4,9 @@ package DATA::Image::Dispatch ;
 
 =cut
 
+use strict ;
+use warnings ;
+
 use base 'CGI::Application::Dispatch::PSGI' ;
 
 sub dispatch_args {

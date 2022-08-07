@@ -8,6 +8,7 @@ actions that are required for all DATA applications.
 =cut
 
 use strict ;
+use warnings ;
 
 use base qw / Exporter / ;
 

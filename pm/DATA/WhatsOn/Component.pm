@@ -5,6 +5,7 @@ package DATA::WhatsOn::Component ;
 =cut
 
 use strict ;
+use warnings ;
 
 use base qw / Exporter / ;
 

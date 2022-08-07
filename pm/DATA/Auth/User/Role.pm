@@ -1,6 +1,7 @@
 package DATA::Auth::User::Role ;
 
 use strict ;
+use warnings ;
 use Carp ;
 
 our $userid ;

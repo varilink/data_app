@@ -5,6 +5,7 @@ package DATA::Main ;
 =cut
 
 use strict ;
+use warnings ;
 
 use base qw / CGI::Application / ;
 

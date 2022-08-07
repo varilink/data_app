@@ -5,6 +5,7 @@ package DATA::WhatsOn::Society ;
 =cut
 
 use strict ;
+use warnings ;
 use Carp ;
 
 sub new {
@@ -81,7 +82,7 @@ sub email {
 
    my $self = shift ;
    if ( @_ ) { $self -> { EMAIL } = shift }
-   return $self -> { EMAIL } ; 
+   return $self -> { EMAIL } ;
 }
 
 sub address1 {
@@ -140,7 +141,7 @@ sub postcode {
 
    my $self = shift ;
    if ( @_ ) { $self -> { POSTCODE } = shift }
-   return $self -> { POSTCODE } ; 
+   return $self -> { POSTCODE } ;
 }
 
 sub website {
@@ -237,7 +238,7 @@ Fetch the coming events organised by a society
 
    $sth -> bind_param ( ':society' , $self -> rowid ) ;
 
-   $sth -> execute ;             
+   $sth -> execute ;
 
    while ( my $row = $sth -> fetchrow_hashref ) {
 

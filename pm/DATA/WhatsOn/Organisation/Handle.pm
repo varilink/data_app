@@ -1,6 +1,7 @@
 package DATA::WhatsOn::Organisation::Handle ;
 
 use strict ;
+use warnings ;
 use Carp ;
 
 our $organisation_rowid ;

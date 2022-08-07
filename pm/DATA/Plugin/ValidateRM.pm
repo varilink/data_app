@@ -1,6 +1,7 @@
 package DATA::Plugin::ValidateRM ;
 
 use strict ;
+use warnings ;
 
 use base qw / Exporter / ;
 
@@ -42,4 +43,3 @@ sub import {
 }
 
 1 ;
-

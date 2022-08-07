@@ -1,6 +1,7 @@
 package DATA::WhatsOn::Soc;
 
 use strict;
+use warnings ;
 use CGI;
 use base qw(DATA::WhatsOn::DBFile::DomainClass);
 
@@ -111,14 +112,14 @@ sub postcode {
 
    my $self = shift;
    if (@_) { $self->{DATA}->{POSTCODE} = shift }
-   return $self->{DATA}->{POSTCODE}; 
+   return $self->{DATA}->{POSTCODE};
 }
 
 sub e_mail {
 
    my $self = shift;
    if (@_) { $self->{DATA}->{E_MAIL} = shift }
-   return $self->{DATA}->{E_MAIL}; 
+   return $self->{DATA}->{E_MAIL};
 }
 
 sub website {

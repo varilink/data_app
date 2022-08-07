@@ -7,6 +7,7 @@ Plugin to load the application configuration in to any DATA application.
 =cut
 
 use strict ;
+use warnings ;
 
 use base qw / Exporter / ;
 

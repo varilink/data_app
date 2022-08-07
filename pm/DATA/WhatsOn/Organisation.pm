@@ -5,6 +5,7 @@ package DATA::WhatsOn::Organisation ;
 =cut
 
 use strict ;
+use warnings ;
 use Carp ;
 use Hash::Case::Lower ;
 use DATA::WhatsOn::Event ;

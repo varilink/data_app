@@ -7,6 +7,7 @@ CGI:Application integration with Google's reCAPTCHA
 =cut
 
 use strict ;
+use warnings ;
 
 use base qw / Exporter / ;
 

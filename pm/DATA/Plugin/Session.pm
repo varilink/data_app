@@ -1,6 +1,7 @@
 package DATA::Plugin::Session ;
 
 use strict ;
+use warnings ;
 
 use base qw / Exporter / ;
 

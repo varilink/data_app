@@ -9,6 +9,7 @@ restricted to specific roles whether that user is authorised.
 =cut
 
 use strict ;
+use warnings ;
 
 use base qw / CGI::Application / ;
 
