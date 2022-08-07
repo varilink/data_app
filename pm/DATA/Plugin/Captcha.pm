@@ -40,6 +40,8 @@ Verify's a user's reCAPTCHA response
       'https://www.google.com/recaptcha/api/siteverify' ,
 
       {
+         # See:
+         # https://github.com/varilink/data-app/issues/15
          secret => '6LcreBcTAAAAAGX1e7pY8Hv6ayKJbshxW_JoZ3rn' ,
          response => $captcha ,
       } ,
@@ -56,6 +58,10 @@ sub import {
 
    $caller -> add_callback (
 
+       # Again, see:
+       # https://github.com/varilink/data-app/issues/15
+       # Specifically the comment about how this import does not appear to be
+       # using the correct method name.
       'init' , \&_init
 
    ) ;
