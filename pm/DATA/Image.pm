@@ -189,27 +189,6 @@ within our domain) image and pipes it back to TinyMCE as if it was local.
   my $type = $image -> { MIME_TYPE } ;
   $response = $image -> { BLOB } ;
 
-#  my $suffix ;
-#  if     ( $type eq 'image/jpeg' )  { $suffix = 'jpg' }
-#  elsif  ( $type eq 'image/gif' )  { $suffix = 'gif' }
-#  elsif  ( $type eq 'image/png' )  { $suffix = 'png' } ;
-
-#  my $filepath = $self -> _filepath ( $suffix ) ;
-
-#  unless (
-#    open ( LOCAL , ">/var/local/www-data$filepath" )
-#  ) {
-#    $self -> header_props ( -status => '400' ) ;
-#    $response =
-#      'Error uploading, please report to admin@derbyartsandtheatre.org.uk' ;
-#    goto RESPONSE ;
-#  } ;
-
-#  print LOCAL $blob ;
-#  close LOCAL ;
-
-#  $response = encode_json ( { 'location' => $filepath } ) ;
-
   $self -> header_props ( -type => $type ) ;
 
 RESPONSE:
