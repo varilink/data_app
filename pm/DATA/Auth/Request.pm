@@ -46,12 +46,12 @@ Tests whether a request to access a protected resource is permitted.
 
     # Already authenticated, check if authorised
 
-		# Get the target
-		my $target = $query -> env -> { 'HTTP_X_ORIGINAL_URI' } ;
-		$target =~ s/\/+/\//g ; # Replace one or more / with a single /
+    # Get the target
+    my $target = $query -> env -> { 'HTTP_X_ORIGINAL_URI' } ;
+    $target =~ s/\/+/\//g ; # Replace one or more / with a single /
 
-		# Get the configuration location
-		my $home = $query -> env -> { 'HTTP_X_CONFIG' } ;
+    # Get the configuration location
+    my $home = $query -> env -> { 'HTTP_X_CONFIG' } ;
 
       my $conf = new Config::Context (
 
@@ -59,52 +59,52 @@ Tests whether a request to access a protected resource is permitted.
 
          driver => 'ConfigGeneral' ,
 
-      	match_sections => [
+        match_sections => [
 
-         	{
-         	   name => 'Location' ,
-         	   match_type => 'path' ,
-         	} ,
-         	{
-         	   name => 'LocationMatch' ,
-         	   match_type => 'regex' ,
-         	} ,
+           {
+              name => 'Location' ,
+              match_type => 'path' ,
+           } ,
+           {
+              name => 'LocationMatch' ,
+              match_type => 'regex' ,
+           } ,
 
-	      ] ,
+        ] ,
 
-   	   driver_options => {
+        driver_options => {
 
-   	      ConfigGeneral => {
-   	         -AllowMultiOptions => 'yes' ,
-   	         -IncludeDirectories => 'yes' ,
-   	         -MergeDuplicateOptions => 'no' ,
-   	         -UseApacheInclude => 'yes' ,
-   	      } ,
+           ConfigGeneral => {
+              -AllowMultiOptions => 'yes' ,
+              -IncludeDirectories => 'yes' ,
+              -MergeDuplicateOptions => 'no' ,
+              -UseApacheInclude => 'yes' ,
+           } ,
 
-   	   } ,
+        } ,
 
-   	) ;
+     ) ;
 
-		my $config = $conf -> context ( $target ) ;
+    my $config = $conf -> context ( $target ) ;
 
-		if ( $config -> { 'role' } ) {
+    if ( $config -> { 'role' } ) {
 
-			# This area of the site requires that the user has a specific role.
-			# Check that they do.
+      # This area of the site requires that the user has a specific role.
+      # Check that they do.
 
-			$self -> session -> param ( 'role' ) eq $config -> { 'role' }
-	         ? $self -> header_props ( -status => '200' )
-			   : $self -> header_props ( -status => '403' ) ;
+      $self -> session -> param ( 'role' ) eq $config -> { 'role' }
+           ? $self -> header_props ( -status => '200' )
+         : $self -> header_props ( -status => '403' ) ;
 
-		} else {
+    } else {
 
-			# This area of the site is secure but does not require that the user
-			# has a specific role. It is sufficient just that they are
-			# authenticated.
+      # This area of the site is secure but does not require that the user
+      # has a specific role. It is sufficient just that they are
+      # authenticated.
 
-			$self -> header_props ( -status => '200' ) ;
+      $self -> header_props ( -status => '200' ) ;
 
-		}
+    }
 
    } else {
 

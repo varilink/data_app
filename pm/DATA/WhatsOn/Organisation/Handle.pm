@@ -13,7 +13,7 @@ sub new {
   $self -> { ORGANISATION_ROWID } = undef ;
   $self -> { TYPE } = undef ;
   $self -> { ADDRESS } = undef ;
-	$self -> { FETCHED } = undef ;
+  $self -> { FETCHED } = undef ;
 
   bless ( $self , $class ) ;
   return $self ;

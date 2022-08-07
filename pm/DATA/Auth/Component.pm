@@ -57,17 +57,17 @@ Display details of the currently authenticated user
 =cut
 
    my $self = shift ;
-	my $containing_template = shift ;
+  my $containing_template = shift ;
 
-	# This component gets the details for the user corresponding to the current,
-	# authenticated session, rather than being passed search keys.
+  # This component gets the details for the user corresponding to the current,
+  # authenticated session, rather than being passed search keys.
    my $user = new DATA::Auth::User ;
    $user -> userid ( $self -> session -> param ( 'userid' ) ) ;
    $user -> fetch ( $self -> dbh ) ;
 
-	my $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
+  my $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
 
-	my $output = "[% auth_current_user ( caller = \"$caller\" ) %]" ;
+  my $output = "[% auth_current_user ( caller = \"$caller\" ) %]" ;
 
    my $tmpl = $self -> template -> load ( \$output ) ;
 

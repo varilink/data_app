@@ -13,7 +13,7 @@ sub new {
    $self -> { ORGANISATION_ROWID } = undef ;
    $self -> { NAME } = undef ;
    $self -> { EMAIL } = undef ;
-	$self -> { FETCHED } = undef ;
+  $self -> { FETCHED } = undef ;
 
    bless ( $self , $class ) ;
    return $self ;
@@ -22,31 +22,31 @@ sub new {
 
 sub _fetched {
 
-	my $self = shift ;
+  my $self = shift ;
    if ( @_ ) { $self -> { FETCHED } = shift }
-	return $self -> { FETCHED } ;
+  return $self -> { FETCHED } ;
 
 }
 
 sub organisation_rowid {
 
-	my $proto = shift ;
+  my $proto = shift ;
 
-	if ( ref $proto ) {
+  if ( ref $proto ) {
 
-		# Called as object method
+    # Called as object method
 
-		my $self = $proto ;
-	   if ( @_ ) { $self -> { ORGANISATION_ROWID } = shift }
-	   return $self -> { ORGANISATION_ROWID } ;
+    my $self = $proto ;
+     if ( @_ ) { $self -> { ORGANISATION_ROWID } = shift }
+     return $self -> { ORGANISATION_ROWID } ;
 
-	} else {
+  } else {
 
-		# Called as class method
-		if ( @_ ) { $organisation_rowid = shift }
-		return $organisation_rowid ;
+    # Called as class method
+    if ( @_ ) { $organisation_rowid = shift }
+    return $organisation_rowid ;
 
-	}
+  }
 
 }
 
@@ -68,64 +68,64 @@ sub email {
 
 sub fetch {
 
-	my ( $class , $dbh ) = @_ ;
+  my ( $class , $dbh ) = @_ ;
 
-	if ( ref $class ) { confess 'Class method called as object method' }
+  if ( ref $class ) { confess 'Class method called as object method' }
 
-	my $sth = $dbh -> prepare (
+  my $sth = $dbh -> prepare (
 
-		'SELECT *
-			FROM whatson_organisation_function
+    'SELECT *
+      FROM whatson_organisation_function
         WHERE organisation_rowid = :organisation_rowid'
 
-	) ;
+  ) ;
 
-	$sth -> bind_param ( ':organisation_rowid' , $organisation_rowid ) ;
+  $sth -> bind_param ( ':organisation_rowid' , $organisation_rowid ) ;
 
-	$sth -> execute ;
+  $sth -> execute ;
 
-	my @functions = ( ) ;
+  my @functions = ( ) ;
 
-	while ( my $row = $sth -> fetchrow_hashref ) {
+  while ( my $row = $sth -> fetchrow_hashref ) {
 
-		my $function = new DATA::WhatsOn::Organisation::Function ;
+    my $function = new DATA::WhatsOn::Organisation::Function ;
 
-		$function -> organisation_rowid ( $row -> { organisation_rowid } ) ;
-		$function -> name ( $row -> { name } ) ;
-		$function -> email ( $row -> { email } ) ;
-		$function -> _fetched  ( 1 ) ;
+    $function -> organisation_rowid ( $row -> { organisation_rowid } ) ;
+    $function -> name ( $row -> { name } ) ;
+    $function -> email ( $row -> { email } ) ;
+    $function -> _fetched  ( 1 ) ;
 
-		push @functions , $function ;
+    push @functions , $function ;
 
-	}
+  }
 
-	return @functions ;
+  return @functions ;
 
 }
 
 sub save {
 
-	my ( $self , $dbh ) = @_ ;
+  my ( $self , $dbh ) = @_ ;
 
-	my $sth ;
+  my $sth ;
 
-	if ( $self -> _fetched ) {
+  if ( $self -> _fetched ) {
 
-		# This is an update
+    # This is an update
 
-	} else {
+  } else {
 
-		# This is an insert
+    # This is an insert
 
-		my $this_org_rowid ;
+    my $this_org_rowid ;
 
-		$self -> organisation_rowid
-			? $this_org_rowid = $self -> organisation_rowid
-			: $this_org_rowid = $organisation_rowid ;
+    $self -> organisation_rowid
+      ? $this_org_rowid = $self -> organisation_rowid
+      : $this_org_rowid = $organisation_rowid ;
 
-		$sth = $dbh -> prepare (
+    $sth = $dbh -> prepare (
 
-			'INSERT
+      'INSERT
             INTO whatson_organisation_function (
                    organisation_rowid  ,
                    name                ,
@@ -134,18 +134,18 @@ sub save {
                    :name               ,
                    :email              )'
 
-		) ;
+    ) ;
 
       $sth -> bind_param (
-			':organisation_rowid' , $this_org_rowid ) ;
+      ':organisation_rowid' , $this_org_rowid ) ;
       $sth -> bind_param (
-			':name'               , $self -> name               ) ;
+      ':name'               , $self -> name               ) ;
       $sth -> bind_param (
-			':email'              , $self -> email              ) ;
+      ':email'              , $self -> email              ) ;
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-	}
+  }
 
 }
 

@@ -17,7 +17,7 @@ use DATA::WhatsOn::Contact ;
 use DATA::WhatsOn::Event ;
 use DATA::WhatsOn::Organisation ;
 
-use Data::FormValidator::Constraints qw / email	/ ;
+use Data::FormValidator::Constraints qw / email  / ;
 use Data::FormValidator::Constraints::DateTime qw / :all / ;
 use Data::FormValidator::Constraints::MethodsFactory qw / :bool :set / ;
 
@@ -25,83 +25,83 @@ use String::Random ;
 
 my $_messages = {
 
-	constraints => {
+  constraints => {
 
-		# A hash reference containing messages associated with constraints
+    # A hash reference containing messages associated with constraints
 
-		contact_is_subscribed						=> 'contact_is_subscribed'					,
-		contact_not_subscribed					=> 'contact_not_subscribed'					,
-		email_confirmed									=> 'email_confirmed'								,
-		email_valid											=> 'email_valid'										,
-		end_date_not_before_start_date	=> 'end_date_not_before_start_date'	,
-		end_date_valid									=> 'end_date_valid'									,
-		event_description_valid					=> 'event_description_valid'				,
-		event_image_provided						=> 'event_image_provided'						,
-		event_image_valid								=> 'event_image_valid'							,
-		event_status_valid							=> 'event_status_valid'							,
-		event_use_desc_valid						=> 'event_use_desc_valid'						,
-		not_a_robot											=> 'not_a_robot'										,
-		start_date_after_today					=> 'start_date_after_today'					,
-		start_date_valid								=> 'start_date_valid'								,
-		status_valid										=> 'status_valid'										,
-		unsubscribe_valid								=> 'unsubscribe_valid'							,
-		venue_exists										=> 'venue_exists'										,
+    contact_is_subscribed            => 'contact_is_subscribed'          ,
+    contact_not_subscribed          => 'contact_not_subscribed'          ,
+    email_confirmed                  => 'email_confirmed'                ,
+    email_valid                      => 'email_valid'                    ,
+    end_date_not_before_start_date  => 'end_date_not_before_start_date'  ,
+    end_date_valid                  => 'end_date_valid'                  ,
+    event_description_valid          => 'event_description_valid'        ,
+    event_image_provided            => 'event_image_provided'            ,
+    event_image_valid                => 'event_image_valid'              ,
+    event_status_valid              => 'event_status_valid'              ,
+    event_use_desc_valid            => 'event_use_desc_valid'            ,
+    not_a_robot                      => 'not_a_robot'                    ,
+    start_date_after_today          => 'start_date_after_today'          ,
+    start_date_valid                => 'start_date_valid'                ,
+    status_valid                    => 'status_valid'                    ,
+    unsubscribe_valid                => 'unsubscribe_valid'              ,
+    venue_exists                    => 'venue_exists'                    ,
 
-	} , # End of constraints hash
+  } , # End of constraints hash
 
 } ; # End of $_messages hash
 
 sub _secret {
 
-	# Internal method that is called whenever we want a secret string
-	my $string = new String::Random ;
-	my $secret = $string -> randregex ( '[a-z0-9]{20}' ) ;
-	return $secret ;
+  # Internal method that is called whenever we want a secret string
+  my $string = new String::Random ;
+  my $secret = $string -> randregex ( '[a-z0-9]{20}' ) ;
+  return $secret ;
 
 }
 
 sub setup {
 
-	my $self = shift ;
+  my $self = shift ;
 
-	$self -> run_modes ( {
+  $self -> run_modes ( {
 
-		#
-		# Public Actions
-		#
+    #
+    # Public Actions
+    #
 
-		# Send an expression of interest for join DATA to the webmin
-		'join_us'							=>	'join_us'							,
-		# Notify the webmin of an event
-		'notify_event'				=> 'notify_event'					,
-		# Return a PDF cotaining coming events in a one page, printable format
-		'printed_listing'			=> 'printed_listing'			,
+    # Send an expression of interest for join DATA to the webmin
+    'join_us'              =>  'join_us'              ,
+    # Notify the webmin of an event
+    'notify_event'        => 'notify_event'          ,
+    # Return a PDF cotaining coming events in a one page, printable format
+    'printed_listing'      => 'printed_listing'      ,
 
-		#
-		# Event Management
-		#
+    #
+    # Event Management
+    #
 
-		# Add or update an event (programme listing)
-		'event_programme'			=> 'event_programme'			,
-		# Update an event (oneline promotion)
-		'event_online'				=> 'event_online'					,
-		# Show an event programme listing for rep update
-		'rep_event_programme'	=> 'rep_event_display'		,
-		# Show an event online listing for rep update
-		'rep_event_online'		=> 'rep_event_display'		,
+    # Add or update an event (programme listing)
+    'event_programme'      => 'event_programme'      ,
+    # Update an event (oneline promotion)
+    'event_online'        => 'event_online'          ,
+    # Show an event programme listing for rep update
+    'rep_event_programme'  => 'rep_event_display'    ,
+    # Show an event online listing for rep update
+    'rep_event_online'    => 'rep_event_display'    ,
 
-		#
-		# Organisation Management
-		#
+    #
+    # Organisation Management
+    #
 
-		# Add or update an organisation
-		'organisation'				=> 'organisation'					,
-		# Show society details for update
-		'rep_society'					=> 'rep_society_display'	,
-		# Show society contacts
-		'rep_contacts'				=> 'rep_society_display'	,
+    # Add or update an organisation
+    'organisation'        => 'organisation'          ,
+    # Show society details for update
+    'rep_society'          => 'rep_society_display'  ,
+    # Show society contacts
+    'rep_contacts'        => 'rep_society_display'  ,
 
-	} ) ;
+  } ) ;
 
 } # End of setup sub
 
@@ -121,75 +121,75 @@ join. The enquiry gets emailed to the webmin.
 
 =cut
 
-	my $self = shift ;
-	my $query = $self -> query ;
-	my $env = $self -> conf -> param ( 'env' ) ;
+  my $self = shift ;
+  my $query = $self -> query ;
+  my $env = $self -> conf -> param ( 'env' ) ;
 
-	my $join_us_form = {
+  my $join_us_form = {
 
-		required => [ qw /
-			contact_email
-			contact_confirm_email
-			contact_message
-		/ ] ,
+    required => [ qw /
+      contact_email
+      contact_confirm_email
+      contact_message
+    / ] ,
 
-		constraint_methods => {
+    constraint_methods => {
 
-			contact_email => {
-				constraint_method	=> email ,
-				name							=> 'email_valid'
-			} ,
+      contact_email => {
+        constraint_method  => email ,
+        name              => 'email_valid'
+      } ,
 
-			contact_confirm_email => {
-				constraint_method => FV_eq_with ( 'contact_email' ) ,
-				name => 'email_confirmed'
-			} ,
+      contact_confirm_email => {
+        constraint_method => FV_eq_with ( 'contact_email' ) ,
+        name => 'email_confirmed'
+      } ,
 
-		} , # End of constraint_methods
+    } , # End of constraint_methods
 
-		msgs => $_messages
+    msgs => $_messages
 
-	} ; # End of $join_us_form profile
+  } ; # End of $join_us_form profile
 
 #-------------------------------------------------------------------------------
 # Add recaptcha check unless recaptcha is disabled for this environment
 
-	unless ( $env -> { disable_recaptcha } ) {
+  unless ( $env -> { disable_recaptcha } ) {
 
-		push @{ $join_us_form -> { required } } , 'g-recaptcha-response' ;
+    push @{ $join_us_form -> { required } } , 'g-recaptcha-response' ;
 
-		$join_us_form -> { constraint_methods } -> { 'g-recaptcha-response' } = {
-			constraint_method	=> not_a_robot ( $env -> { recaptcha_secret_key } ) ,
-			name							=> 'not_a_robot'
-		}
+    $join_us_form -> { constraint_methods } -> { 'g-recaptcha-response' } = {
+      constraint_method  => not_a_robot ( $env -> { recaptcha_secret_key } ) ,
+      name              => 'not_a_robot'
+    }
 
-	}
+  }
 
 #-------------------------------------------------------------------------------
 # Validate the inputs
 
-	my $results = $self -> check_rm ( 'form_response' , $join_us_form )
-	|| return \$self -> check_rm_error_page ;
+  my $results = $self -> check_rm ( 'form_response' , $join_us_form )
+  || return \$self -> check_rm_error_page ;
 
 #-------------------------------------------------------------------------------
 # We have passed validation, send the message to webmin and redirect
 
-	my $webmin = $env -> { webmin } ;
-	my $contact_email = scalar $query -> param ( 'contact_email' ) ;
-	my $contact_message = scalar $query -> param ( 'contact_message' ) ;
+  my $webmin = $env -> { webmin } ;
+  my $contact_email = scalar $query -> param ( 'contact_email' ) ;
+  my $contact_message = scalar $query -> param ( 'contact_message' ) ;
 
-	$self -> sendmail (
-		$webmin ,
-		'DATA Diary - Membership Enquiry' ,
-		{
-			contact => {
-				email => $contact_email ,
-				message => $contact_message
-			}
-		}
-	) ;
+  $self -> sendmail (
+    $webmin ,
+    'DATA Diary - Membership Enquiry' ,
+    {
+      contact => {
+        email => $contact_email ,
+        message => $contact_message
+      }
+    }
+  ) ;
 
-	$self -> redirect ( $env -> { root } . $query -> param ( 'onSuccess' ) ) ;
+  $self -> redirect ( $env -> { root } . $query -> param ( 'onSuccess' ) ) ;
 
 }
 
@@ -202,141 +202,141 @@ sent via eamil to the webmin.
 
 =cut
 
-	my $self = shift ;
-	my $query = $self -> query ;
-	my $env = $self -> conf -> param ( 'env' ) ;
+  my $self = shift ;
+  my $query = $self -> query ;
+  my $env = $self -> conf -> param ( 'env' ) ;
 
-	my $notify_event_form = {
+  my $notify_event_form = {
 
-		required => [ qw /
-			contact_email
-			contact_confirm_email
-			event_name
-			event_start_date
-			event_society
-			event_venue
-			event_box_office
-		/ ] , # End of required array
+    required => [ qw /
+      contact_email
+      contact_confirm_email
+      event_name
+      event_start_date
+      event_society
+      event_venue
+      event_box_office
+    / ] , # End of required array
 
-		optional => [ qw /
-			event_end_date
-			event_times
-		/ ] , # End of optional array
+    optional => [ qw /
+      event_end_date
+      event_times
+    / ] , # End of optional array
 
-		constraint_methods => {
+    constraint_methods => {
 
-			contact_email => {
-				constraint_method	=> email ,
-				name							=> 'email_valid'
-			} ,
+      contact_email => {
+        constraint_method  => email ,
+        name              => 'email_valid'
+      } ,
 
-			contact_confirm_email => {
-				constraint_method	=> FV_eq_with ( 'contact_email' ) ,
-				name							=> 'email_confirmed'
-			} ,
+      contact_confirm_email => {
+        constraint_method  => FV_eq_with ( 'contact_email' ) ,
+        name              => 'email_confirmed'
+      } ,
 
-			event_start_date => [
-				{
-					constraint_method	=> to_datetime ( '%d/%m/%Y' ) ,
-					name							=> 'start_date_valid'
-				} ,
-				{
-					constraint_method	=> FV_and (
-						to_datetime ( '%d/%m/%Y' ) ,	after_today ( '%d/%m/%Y' )
-					) ,
-					name							=> 'start_date_after_today'
-				} ,
-			] , # End of event_start_date array
+      event_start_date => [
+        {
+          constraint_method  => to_datetime ( '%d/%m/%Y' ) ,
+          name              => 'start_date_valid'
+        } ,
+        {
+          constraint_method  => FV_and (
+            to_datetime ( '%d/%m/%Y' ) ,  after_today ( '%d/%m/%Y' )
+          ) ,
+          name              => 'start_date_after_today'
+        } ,
+      ] , # End of event_start_date array
 
-			event_end_date => [
-				{
-					constraint_method	=> to_datetime ( '%d/%m/%Y' ) ,
-					name							=> 'end_date_valid'
-				} ,
-				{
-					constraint_method	=> FV_and (
-						to_datetime ( '%d/%m/%Y' ) ,
-						FV_not ( before_datetime ( '%d/%m/%Y' , 'event_start_date' ) )
-					) ,
-					name							=> 'end_date_not_before_start_date'
-				} ,
-			] , # End of event_end_date array
+      event_end_date => [
+        {
+          constraint_method  => to_datetime ( '%d/%m/%Y' ) ,
+          name              => 'end_date_valid'
+        } ,
+        {
+          constraint_method  => FV_and (
+            to_datetime ( '%d/%m/%Y' ) ,
+            FV_not ( before_datetime ( '%d/%m/%Y' , 'event_start_date' ) )
+          ) ,
+          name              => 'end_date_not_before_start_date'
+        } ,
+      ] , # End of event_end_date array
 
-		} , # End of constraint_methods hash
+    } , # End of constraint_methods hash
 
-		msgs => $_messages
+    msgs => $_messages
 
-	} ; # End of $notify_event_form profile
+  } ; # End of $notify_event_form profile
 
 #-------------------------------------------------------------------------------
 # Add recaptcha check unless recaptcha is disabled for this environment
 
-	unless ( $env -> { disable_recaptcha } ) {
+  unless ( $env -> { disable_recaptcha } ) {
 
-		push @{ $notify_event_form -> { required } } , 'g-recaptcha-response' ;
+    push @{ $notify_event_form -> { required } } , 'g-recaptcha-response' ;
 
-		$notify_event_form
-		-> { constraint_methods } -> { 'g-recaptcha-response' } = {
-			constraint_method	=> not_a_robot ( $env -> { recaptcha_secret_key } ) ,
-			name							=> 'not_a_robot'
-		}
+    $notify_event_form
+    -> { constraint_methods } -> { 'g-recaptcha-response' } = {
+      constraint_method  => not_a_robot ( $env -> { recaptcha_secret_key } ) ,
+      name              => 'not_a_robot'
+    }
 
-	}
+  }
 
 #-------------------------------------------------------------------------------
 # Validate the inputs
 
-	my $results = $self -> check_rm ( 'form_response' , $notify_event_form )
-	|| return \$self -> check_rm_error_page ;
+  my $results = $self -> check_rm ( 'form_response' , $notify_event_form )
+  || return \$self -> check_rm_error_page ;
 
 #-------------------------------------------------------------------------------
 # We have passed validation, send the message to webmin and redirect
 
-	# We don't particularly need to use a Contact or an Event object since we're
-	# only copying values over to embed in the email templte. However, it's a
-	# convenient way of creating a hash with the correct keys in it. Who knows,
-	# we may utilise one of the methods that the object gives us at some point.
+  # We don't particularly need to use a Contact or an Event object since we're
+  # only copying values over to embed in the email templte. However, it's a
+  # convenient way of creating a hash with the correct keys in it. Who knows,
+  # we may utilise one of the methods that the object gives us at some point.
 
-	# Contact
-	my $contact = new DATA::WhatsOn::Contact ;
-	$contact -> email ( scalar $query -> param ( 'contact_email' ) ) ;
+  # Contact
+  my $contact = new DATA::WhatsOn::Contact ;
+  $contact -> email ( scalar $query -> param ( 'contact_email' ) ) ;
 
-	# Event
-	my $event = new DATA::WhatsOn::Event ;
-	$event -> name ( scalar $query -> param ( 'event_name' ) ) ;
-	$event -> start_date ( scalar $query -> param ( 'event_start_date' ) ) ;
-	if ( scalar $query -> param ( 'event_end_date' ) ) {
-		$event -> end_date ( scalar $query -> param ( 'event_end_date' ) ) ;
-	} else {
-		$event -> end_date ( scalar $query -> param ( 'event_start_date' ) ) ;
-	}
-	$event -> dates ( scalar $query -> param ( 'event_dates' ) ) ;
-	$event -> times ( scalar $query -> param ( 'event_times' ) ) ;
-	$event -> presented_by ( scalar $query -> param ( 'event_presented_by' ) ) ;
-	$event -> box_office ( $query -> param ( 'event_box_office' ) ) ;
+  # Event
+  my $event = new DATA::WhatsOn::Event ;
+  $event -> name ( scalar $query -> param ( 'event_name' ) ) ;
+  $event -> start_date ( scalar $query -> param ( 'event_start_date' ) ) ;
+  if ( scalar $query -> param ( 'event_end_date' ) ) {
+    $event -> end_date ( scalar $query -> param ( 'event_end_date' ) ) ;
+  } else {
+    $event -> end_date ( scalar $query -> param ( 'event_start_date' ) ) ;
+  }
+  $event -> dates ( scalar $query -> param ( 'event_dates' ) ) ;
+  $event -> times ( scalar $query -> param ( 'event_times' ) ) ;
+  $event -> presented_by ( scalar $query -> param ( 'event_presented_by' ) ) ;
+  $event -> box_office ( $query -> param ( 'event_box_office' ) ) ;
 
-	# Venue - Try fetch on name to see if it is already known or not.
-	$event -> venue_name ( scalar $query -> param ( 'event_venue' ) ) ;
-	my $venue = new DATA::WhatsOn::Organisation ;
-	$venue -> name ( scalar $event -> venue_name ) ;
-	$event -> venue_rowid ( $venue -> rowid )
-	if ( $venue -> fetch ( $self -> dbh ) && $venue -> type eq 'whatson_venue' ) ;
+  # Venue - Try fetch on name to see if it is already known or not.
+  $event -> venue_name ( scalar $query -> param ( 'event_venue' ) ) ;
+  my $venue = new DATA::WhatsOn::Organisation ;
+  $venue -> name ( scalar $event -> venue_name ) ;
+  $event -> venue_rowid ( $venue -> rowid )
+  if ( $venue -> fetch ( $self -> dbh ) && $venue -> type eq 'whatson_venue' ) ;
 
-	# Society - Get the name using the rowid that's provided by the form
-	my $society = new DATA::WhatsOn::Organisation ;
-	$society -> rowid ( scalar $query -> param ( 'event_society' ) ) ;
-	$society -> fetch ( $self -> dbh ) ;
-	$event -> society_name ( $society -> name ) ;
+  # Society - Get the name using the rowid that's provided by the form
+  my $society = new DATA::WhatsOn::Organisation ;
+  $society -> rowid ( scalar $query -> param ( 'event_society' ) ) ;
+  $society -> fetch ( $self -> dbh ) ;
+  $event -> society_name ( $society -> name ) ;
 
-	# Send the message
-	my $webmin = $env -> { webmin } ;
-	$self -> sendmail (
-		$webmin ,
-		'DATA Diary - Event Notification' ,
-		{ contact => $contact , event => $event }
-	) ;
+  # Send the message
+  my $webmin = $env -> { webmin } ;
+  $self -> sendmail (
+    $webmin ,
+    'DATA Diary - Event Notification' ,
+    { contact => $contact , event => $event }
+  ) ;
 
-	$self -> redirect ( $env -> { root } . $query -> param ( 'onSuccess' ) ) ;
+  $self -> redirect ( $env -> { root } . $query -> param ( 'onSuccess' ) ) ;
 
 }
 
@@ -349,64 +349,64 @@ printing.
 
 =cut
 
-	my $self = shift ;
-	my $query = $self -> query ;
-	my $env = $self -> conf -> param ( 'env' ) ;
+  my $self = shift ;
+  my $query = $self -> query ;
+  my $env = $self -> conf -> param ( 'env' ) ;
 
 #-------------------------------------------------------------------------------
 
 # Retrieve Data
 
-	my $filter = {
-		from		=> 'now'				,
-		status	=> 'PUBLISHED'
-	} ;
+  my $filter = {
+    from    => 'now'        ,
+    status  => 'PUBLISHED'
+  } ;
 
-	# Turn on the unicode flag for data retrieved from the database
-	$self -> dbh -> { sqlite_unicode } = 1 ;
+  # Turn on the unicode flag for data retrieved from the database
+  $self -> dbh -> { sqlite_unicode } = 1 ;
 
-	my @events = DATA::WhatsOn::Event -> fetch ( $self -> dbh , $filter ) ;
+  my @events = DATA::WhatsOn::Event -> fetch ( $self -> dbh , $filter ) ;
 
-	foreach my $event ( @events ) {
+  foreach my $event ( @events ) {
 
-		$event -> dates ( $event -> dates_derived )
-			unless $event -> dates ;
+    $event -> dates ( $event -> dates_derived )
+      unless $event -> dates ;
 
-		$event -> times ( '7.30pm' )
-			unless $event -> times ;
+    $event -> times ( '7.30pm' )
+      unless $event -> times ;
 
-		$event -> presented_by ( $event -> society_name )
-			unless $event -> presented_by ;
+    $event -> presented_by ( $event -> society_name )
+      unless $event -> presented_by ;
 
-	}
+  }
 
 #-------------------------------------------------------------------------------
 
 # Produce Output as HTML
 
-	my $tmpl = $self -> template -> load ;
-	$tmpl -> param ( 'events' => \@events ) ;
-	my $pagesize = $query -> param ( 'pagesize' ) ;
-	$tmpl -> param ( 'pagesize' => $pagesize ) ;
+  my $tmpl = $self -> template -> load ;
+  $tmpl -> param ( 'events' => \@events ) ;
+  my $pagesize = $query -> param ( 'pagesize' ) ;
+  $tmpl -> param ( 'pagesize' => $pagesize ) ;
 
-	my $limit ;
+  my $limit ;
 
-	# Keep increasing the number of events to find where we go to two pages
-	for ( my $this_limit = 1 ; $this_limit <= scalar @events ; $this_limit++ ) {
+  # Keep increasing the number of events to find where we go to two pages
+  for ( my $this_limit = 1 ; $this_limit <= scalar @events ; $this_limit++ ) {
 
-		# Generate the HTML
-		$tmpl -> param ( 'limit' => $this_limit ) ;
-		my $html = $tmpl -> output ;
+    # Generate the HTML
+    $tmpl -> param ( 'limit' => $this_limit ) ;
+    my $html = $tmpl -> output ;
 
-		# Set up the htmldoc object
-		my $htmldoc = new HTML::HTMLDoc ;
-		$htmldoc -> set_bodyfont ( 'Arial' ) ;
+    # Set up the htmldoc object
+    my $htmldoc = new HTML::HTMLDoc ;
+    $htmldoc -> set_bodyfont ( 'Arial' ) ;
     $htmldoc -> set_charset ( 'iso-8859-1' ) ;
     $htmldoc -> set_footer ( '.' , '.' , '.' ) ;
     $htmldoc -> set_header ( '.' , 'l' , '1' ) ;
     $htmldoc -> set_html_content ( encode ( 'iso-8859-1' , $$html ) ) ;
     $htmldoc -> set_logoimage ( $env -> { assets } . '/img/logo.jpg' ) ;
-		# Set page up for A5 or A4. Note that A4 is the default page size.
+    # Set page up for A5 or A4. Note that A4 is the default page size.
     if ( $pagesize eq 'A5' ) {
       $htmldoc -> set_fontsize ( 10 ) ;
       $htmldoc -> set_page_size ( '148x210mm' ) ;
@@ -422,20 +422,20 @@ printing.
       $htmldoc -> set_bottom_margin ( 20 , 'mm' ) ;
     }
 
-		# Find when this_limit takes us beyond page one
+    # Find when this_limit takes us beyond page one
     my $pdf = $htmldoc -> generate_pdf ;
     my $error =  $htmldoc -> error ;
     $error =~ /PAGES:\s(\d+)/s ;
     last if $1 >= 2 ;
 
-		# We're still on page one, capture the limit
+    # We're still on page one, capture the limit
     $limit = $this_limit ;
 
-	}
+  }
 
-	# Regenerate the HTML with the limit we have determined fills one page
-	$tmpl -> param ( 'limit' => $limit ) ;
-	my $html = $tmpl -> output ;
+  # Regenerate the HTML with the limit we have determined fills one page
+  $tmpl -> param ( 'limit' => $limit ) ;
+  my $html = $tmpl -> output ;
 
   # Regenerate the PDF with the page number in the footer this time
   my $htmldoc = new HTML::HTMLDoc ;
@@ -444,7 +444,7 @@ printing.
   $htmldoc -> set_footer ( '.' , '.' , '.' ) ;
   $htmldoc -> set_header ( '.' , 'l' , '.' ) ;
   $htmldoc -> set_html_content ( encode ( 'iso-8859-1' , $$html ) ) ;
-	$htmldoc -> set_logoimage ( $env -> { assets } . '/img/logo.jpg' ) ;
+  $htmldoc -> set_logoimage ( $env -> { assets } . '/img/logo.jpg' ) ;
   # Set page up for A5 or A4. Note that A4 is the default page size.
   if ( $pagesize eq 'A5' ) {
     $htmldoc -> set_fontsize ( 10 ) ;
@@ -463,12 +463,12 @@ printing.
 
   # Regenerate the PDF, this time it should fill a single page
   my $pdf = $htmldoc -> generate_pdf ;
-	my $output = $pdf -> to_string ;
-	$self -> header_add (
-		-type									=> 'application/pdf'										,
-		-Content_Disposition	=> 'attachment; filename="events.PDF"'	,
-		-Content_Length				=> length $output
-	) ;
+  my $output = $pdf -> to_string ;
+  $self -> header_add (
+    -type                  => 'application/pdf'                    ,
+    -Content_Disposition  => 'attachment; filename="events.PDF"'  ,
+    -Content_Length        => length $output
+  ) ;
 
   return $output ;
 
@@ -476,116 +476,116 @@ printing.
 
 sub _authorised {
 
-	# This is an internal subroutine that implements a data based _authorisation
-	# check prior to executing the run mode. The associated data based rules are
-	# as follows:
-	# 1. A user with the role of 'admin' can do anything;
-	# 2. A user with the role of 'rep' can only update the societies that they
-	#    represent and can only update the events associated with those societies.
+  # This is an internal subroutine that implements a data based _authorisation
+  # check prior to executing the run mode. The associated data based rules are
+  # as follows:
+  # 1. A user with the role of 'admin' can do anything;
+  # 2. A user with the role of 'rep' can only update the societies that they
+  #    represent and can only update the events associated with those societies.
 
-	my ( $self , $rmObj ) = @_ ; # $rmObj = 'event' or 'society'
-	my $query = $self -> query ;
+  my ( $self , $rmObj ) = @_ ; # $rmObj = 'event' or 'society'
+  my $query = $self -> query ;
 
-	my $society_rowid ; # Ready to be allocated a value immediately below
+  my $society_rowid ; # Ready to be allocated a value immediately below
 
-	if ( $rmObj eq 'event' && $query -> param ( 'event_society') ) {
+  if ( $rmObj eq 'event' && $query -> param ( 'event_society') ) {
 
-		# This is an event action (as opposed to page display) with the
-		# society_rowid as one of the query object parameters.
-		$society_rowid = scalar $query -> param ( 'event_society') ;
+    # This is an event action (as opposed to page display) with the
+    # society_rowid as one of the query object parameters.
+    $society_rowid = scalar $query -> param ( 'event_society') ;
 
-	} elsif ( $rmObj eq 'event' && $query -> param ( 'event_rowid' ) ) {
+  } elsif ( $rmObj eq 'event' && $query -> param ( 'event_rowid' ) ) {
 
-		# This is an event action (as opposed to page display) with the event_rowid
-		# as one of the query object parameters. Check to see if there is a
-		# corresponding society_rowid.
+    # This is an event action (as opposed to page display) with the event_rowid
+    # as one of the query object parameters. Check to see if there is a
+    # corresponding society_rowid.
 
-		my $event = new DATA::WhatsOn::Event ;
-		$event -> rowid ( $query -> param ( 'event_rowid' ) ) ;
-		$event -> fetch ( $self -> dbh ) ;
-		$society_rowid = $event -> society_rowid if $event -> society_rowid ;
+    my $event = new DATA::WhatsOn::Event ;
+    $event -> rowid ( $query -> param ( 'event_rowid' ) ) ;
+    $event -> fetch ( $self -> dbh ) ;
+    $society_rowid = $event -> society_rowid if $event -> society_rowid ;
 
-	} elsif ( $rmObj eq 'event' && $self -> param ( 'rowid' ) ) {
+  } elsif ( $rmObj eq 'event' && $self -> param ( 'rowid' ) ) {
 
-		# This is an event page display (as opposed to action) so we have the event
-		# rowid as an application parameter and must check to see if there is a
-		# corresponding society_rowid.
-		my $event = new DATA::WhatsOn::Event ;
-		$event -> rowid ( $self -> param ( 'rowid' ) ) ;
-		$event -> fetch ( $self -> dbh ) ;
-		$society_rowid = $event -> society_rowid if $event -> society_rowid ;
+    # This is an event page display (as opposed to action) so we have the event
+    # rowid as an application parameter and must check to see if there is a
+    # corresponding society_rowid.
+    my $event = new DATA::WhatsOn::Event ;
+    $event -> rowid ( $self -> param ( 'rowid' ) ) ;
+    $event -> fetch ( $self -> dbh ) ;
+    $society_rowid = $event -> society_rowid if $event -> society_rowid ;
 
-	} elsif ( $rmObj eq 'society' && $query -> param ( 'organisation_rowid' ) ) {
+  } elsif ( $rmObj eq 'society' && $query -> param ( 'organisation_rowid' ) ) {
 
-		# This is a society action (as opposed to page display) with the
-		# organisation_rowid (which corresponds to the society_rowid) as one of the
-		# query parameter objects.
-		$society_rowid = scalar $query -> param ( 'organisation_rowid' ) ;
+    # This is a society action (as opposed to page display) with the
+    # organisation_rowid (which corresponds to the society_rowid) as one of the
+    # query parameter objects.
+    $society_rowid = scalar $query -> param ( 'organisation_rowid' ) ;
 
-	} elsif ( $rmObj eq 'society' && $self -> param ( 'rowid') ) {
+  } elsif ( $rmObj eq 'society' && $self -> param ( 'rowid') ) {
 
-		# This is a society page display (as opposed to action) so the society
-		# rowid is an application parameter.
-		$society_rowid = $self -> param ( 'rowid' ) ;
+    # This is a society page display (as opposed to action) so the society
+    # rowid is an application parameter.
+    $society_rowid = $self -> param ( 'rowid' ) ;
 
-	} else {
+  } else {
 
-		# We could conceivably end up here if an event is added or updated with no
-		# associated society OR if a society is being added and doesn't yet have a
-		# rowid assigned. If that's the case then the user role MUST be 'admin'
-		# and they will be authorised through their role alone.
+    # We could conceivably end up here if an event is added or updated with no
+    # associated society OR if a society is being added and doesn't yet have a
+    # rowid assigned. If that's the case then the user role MUST be 'admin'
+    # and they will be authorised through their role alone.
 
-	}
+  }
 
-	# Build an input hash of the parameters required for the authorisation check
-	my $input_hash = {
-		society_rowid	=> $society_rowid	,
-		user_role			=> $self -> session -> param ( 'role' )		,
-		user_userid		=> $self -> session	-> param ( 'userid' )	,
-	} ;
+  # Build an input hash of the parameters required for the authorisation check
+  my $input_hash = {
+    society_rowid  => $society_rowid  ,
+    user_role      => $self -> session -> param ( 'role' )    ,
+    user_userid    => $self -> session  -> param ( 'userid' )  ,
+  } ;
 
-	my $dfv_profile = {
+  my $dfv_profile = {
 
-		required => [ qw /
-			user_role
-			user_userid
-		/ ] ,
+    required => [ qw /
+      user_role
+      user_userid
+    / ] ,
 
-		# Admins can be acting on an event that is not associated with a society
-		optional => [ qw /
-			society_rowid
-		/ ] ,
+    # Admins can be acting on an event that is not associated with a society
+    optional => [ qw /
+      society_rowid
+    / ] ,
 
-		# Reps MUST always act on behalf of a member society whereas admins may
-		# not; for exmaple, when they create an event that isn't linked to a
-		# member society.
-		dependencies => {
-			'user_role' => {
-				rep => [ qw / society_rowid / ] ,
-			} ,
-		} ,
+    # Reps MUST always act on behalf of a member society whereas admins may
+    # not; for exmaple, when they create an event that isn't linked to a
+    # member society.
+    dependencies => {
+      'user_role' => {
+        rep => [ qw / society_rowid / ] ,
+      } ,
+    } ,
 
-		constraint_methods => {
+    constraint_methods => {
 
-			user_userid => {
-				constraint_method => user_is_authorised ( $self -> dbh )
-			}
+      user_userid => {
+        constraint_method => user_is_authorised ( $self -> dbh )
+      }
 
-		}
+    }
 
-	} ;
+  } ;
 
-	my $results = Data::FormValidator -> check ( $input_hash , $dfv_profile ) ;
+  my $results = Data::FormValidator -> check ( $input_hash , $dfv_profile ) ;
 
-	if ( %{ $results -> invalid } ) {
+  if ( %{ $results -> invalid } ) {
 
-		return 0 ; # Unauthorised
+    return 0 ; # Unauthorised
 
-	} else {
+  } else {
 
-		return 1 ; # Authorised
+    return 1 ; # Authorised
 
-	}
+  }
 
 }
 
@@ -601,13 +601,13 @@ sub event_programme {
 
 =cut
 
-	my $self = shift ;
-	my $query = $self -> query ;
+  my $self = shift ;
+  my $query = $self -> query ;
 
-	# Initialise redirect with the root
-	# We will append the location within the root according to the submit button
-	my $env = $self -> conf -> param ( 'env' ) ;
-	my $redirect = $env -> { root } ;
+  # Initialise redirect with the root
+  # We will append the location within the root according to the submit button
+  my $env = $self -> conf -> param ( 'env' ) ;
+  my $redirect = $env -> { root } ;
 
 #-------------------------------------------------------------------------------
 
@@ -615,12 +615,12 @@ sub event_programme {
 # Check the authorisation of the user before we go any further
 #
 
-	unless ( _authorised ( $self , 'event' ) ) {
+  unless ( _authorised ( $self , 'event' ) ) {
 
-		$redirect .= '/unauthorised' ;
-		goto REDIRECT ;
+    $redirect .= '/unauthorised' ;
+    goto REDIRECT ;
 
-	}
+  }
 
 #-------------------------------------------------------------------------------
 
@@ -630,18 +630,18 @@ sub event_programme {
 # updates.
 #
 
-	if ( defined $query -> param ( 'delete' ) ) {
+  if ( defined $query -> param ( 'delete' ) ) {
 
-		# This is a request to delete
-		my $event = new DATA::WhatsOn::Event ;
-		# The delete button is only enabled where there is a rowid
-		# So we can safely assume that it is present without validating
-		$event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
-		$event -> delete ( $self -> dbh ) ;
-		$redirect .= $self -> conf -> param ( 'onDelete' ) ;
-		goto REDIRECT ;
+    # This is a request to delete
+    my $event = new DATA::WhatsOn::Event ;
+    # The delete button is only enabled where there is a rowid
+    # So we can safely assume that it is present without validating
+    $event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
+    $event -> delete ( $self -> dbh ) ;
+    $redirect .= $self -> conf -> param ( 'onDelete' ) ;
+    goto REDIRECT ;
 
-	}
+  }
 
 #-------------------------------------------------------------------------------
 
@@ -649,248 +649,248 @@ sub event_programme {
 # We have an add or update
 #
 
-	my $event_form = {
+  my $event_form = {
 
-		required => [ qw /
-			event_name
-			event_start_date
-			event_status
-		/ ] , # End of required array
+    required => [ qw /
+      event_name
+      event_start_date
+      event_status
+    / ] , # End of required array
 
-		optional => [ qw /
-			event_box_office
-			event_dates
-			event_end_date
-			event_presented_by
-			event_rowid
-			event_society
-			event_times
-			event_venue
-		/ ] , # End of optional array
+    optional => [ qw /
+      event_box_office
+      event_dates
+      event_end_date
+      event_presented_by
+      event_rowid
+      event_society
+      event_times
+      event_venue
+    / ] , # End of optional array
 
-		require_some => {
+    require_some => {
 
-			# We require at least one of event_society and event_presented_by
-			society_or_presented_by => [ qw /
-				event_society
-				event_presented_by
-			/ ] ,
+      # We require at least one of event_society and event_presented_by
+      society_or_presented_by => [ qw /
+        event_society
+        event_presented_by
+      / ] ,
 
-		} , # End of require_some hash
+    } , # End of require_some hash
 
-		dependencies => {
+    dependencies => {
 
-			# If event status is Published,
-			# require event_venue and event_box_office
-			'event_status' => {
-				PUBLISHED => [ qw / event_venue event_box_office / ] ,
-			}
+      # If event status is Published,
+      # require event_venue and event_box_office
+      'event_status' => {
+        PUBLISHED => [ qw / event_venue event_box_office / ] ,
+      }
 
-		} , # End of dependencies hash
+    } , # End of dependencies hash
 
-		constraint_methods => {
+    constraint_methods => {
 
-			event_end_date => [
-				{
-					constraint_method => to_datetime ( '%d/%m/%Y' ) ,
-					name => 'end_date_valid'
-				} ,
-				{
-					constraint_method => FV_or (
-						FV_not ( to_datetime ( '%d/%m/%Y' ) ) ,
-						FV_not (
-							before_datetime ( '%d/%m/%Y' , 'event_start_date' )
-						)
-					) ,
-					name => 'end_date_not_before_start_date'
-				} ,
-			] , # End of event_end_date array
+      event_end_date => [
+        {
+          constraint_method => to_datetime ( '%d/%m/%Y' ) ,
+          name => 'end_date_valid'
+        } ,
+        {
+          constraint_method => FV_or (
+            FV_not ( to_datetime ( '%d/%m/%Y' ) ) ,
+            FV_not (
+              before_datetime ( '%d/%m/%Y' , 'event_start_date' )
+            )
+          ) ,
+          name => 'end_date_not_before_start_date'
+        } ,
+      ] , # End of event_end_date array
 
-			event_start_date => [
-				{
-					constraint_method => to_datetime ( '%d/%m/%Y' ) ,
-					name => 'start_date_valid'
-				} ,
-				{
-					constraint_method => FV_or (
-						FV_not ( to_datetime ( '%d/%m/%Y' ) ) ,
-						after_today ( '%d/%m/%Y' )
-					) ,
-					name => 'start_date_after_today'
-				} ,
-			] , # End of event_start_date array
+      event_start_date => [
+        {
+          constraint_method => to_datetime ( '%d/%m/%Y' ) ,
+          name => 'start_date_valid'
+        } ,
+        {
+          constraint_method => FV_or (
+            FV_not ( to_datetime ( '%d/%m/%Y' ) ) ,
+            after_today ( '%d/%m/%Y' )
+          ) ,
+          name => 'start_date_after_today'
+        } ,
+      ] , # End of event_start_date array
 
-			event_status => {
-				constraint_method =>
-					FV_set ( 1 , qw / PUBLISHED PLACEHOLDER / ) ,
-					name => 'event_status_valid'
-			} , # End of event_status hash
+      event_status => {
+        constraint_method =>
+          FV_set ( 1 , qw / PUBLISHED PLACEHOLDER / ) ,
+          name => 'event_status_valid'
+      } , # End of event_status hash
 
-			event_venue => {
-				constraint_method =>
-					venue_exists ( $self -> dbh ) ,
-					name => 'venue_exists'
-			} , # End of event_venue hash
+      event_venue => {
+        constraint_method =>
+          venue_exists ( $self -> dbh ) ,
+          name => 'venue_exists'
+      } , # End of event_venue hash
 
-		} , # End of constraint_methods hash
+    } , # End of constraint_methods hash
 
-		msgs => $_messages
+    msgs => $_messages
 
-	} ; # End of $event_form
+  } ; # End of $event_form
 
-	my $results = $self -> check_rm (
-		'form_response' ,
-		$event_form  ,
-	) || return \$self -> check_rm_error_page ;
+  my $results = $self -> check_rm (
+    'form_response' ,
+    $event_form  ,
+  ) || return \$self -> check_rm_error_page ;
 
-	# We have passed validation, build and save the event object
+  # We have passed validation, build and save the event object
 
-	my $event = new DATA::WhatsOn::Event ;
+  my $event = new DATA::WhatsOn::Event ;
 
-	# event_rowid
-	if ( scalar $query -> param ( 'event_rowid' ) ) {
+  # event_rowid
+  if ( scalar $query -> param ( 'event_rowid' ) ) {
 
-		$event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
+    $event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
 
-		# Need a fetch here for the online promotion values, which aren't part
-		# of the programme listing run mode.
+    # Need a fetch here for the online promotion values, which aren't part
+    # of the programme listing run mode.
 
-		$event -> fetch ( $self -> dbh ) ;
+    $event -> fetch ( $self -> dbh ) ;
 
-	} else {
+  } else {
 
-		$event -> use_desc ( 0 ) ;
+    $event -> use_desc ( 0 ) ;
 
-	}
+  }
 
 #-------------------------------------------------------------------------------
 # Process each update in turn. Log if we have updated existing event details.
 
-	my $updated = 0 ; # Boolean to capture if details have been updated
+  my $updated = 0 ; # Boolean to capture if details have been updated
 
-	# event_name
-	$updated = 1 if scalar $query -> param ( 'event_rowid' )
-		&& $event -> name ne scalar $query -> param ( 'event_name' ) ;
-	$event -> name ( scalar $query -> param ( 'event_name' ) ) ;
+  # event_name
+  $updated = 1 if scalar $query -> param ( 'event_rowid' )
+    && $event -> name ne scalar $query -> param ( 'event_name' ) ;
+  $event -> name ( scalar $query -> param ( 'event_name' ) ) ;
 
-	# event_status
-	$updated = 1 if scalar $query -> param ( 'event_rowid' )
-		&& $event -> status ne scalar $query -> param ( 'event_status' ) ;
-	$event -> status ( scalar $query -> param ( 'event_status' ) ) ;
+  # event_status
+  $updated = 1 if scalar $query -> param ( 'event_rowid' )
+    && $event -> status ne scalar $query -> param ( 'event_status' ) ;
+  $event -> status ( scalar $query -> param ( 'event_status' ) ) ;
 
-	# event_start_date
-	$updated = 1 if scalar $query -> param ( 'event_rowid' )
-		&& $event -> start_date ne scalar $query -> param ( 'event_start_date' ) ;
-	$event -> start_date ( scalar $query -> param ( 'event_start_date' ) ) ;
+  # event_start_date
+  $updated = 1 if scalar $query -> param ( 'event_rowid' )
+    && $event -> start_date ne scalar $query -> param ( 'event_start_date' ) ;
+  $event -> start_date ( scalar $query -> param ( 'event_start_date' ) ) ;
 
-	# event_end_date
-	$updated = 1 if scalar $query -> param ( 'event_rowid' )
-		&& $event -> end_date ne scalar $query -> param ( 'event_end_date' ) ;
-	if ( scalar $query -> param ( 'event_end_date' ) ) {
-		$event -> end_date ( scalar $query -> param ( 'event_end_date' ) ) ;
-	} else {
-		# Default event end_date to event start_date if not provided
-		$event -> end_date ( scalar $query -> param ( 'event_start_date' ) ) ;
-	}
+  # event_end_date
+  $updated = 1 if scalar $query -> param ( 'event_rowid' )
+    && $event -> end_date ne scalar $query -> param ( 'event_end_date' ) ;
+  if ( scalar $query -> param ( 'event_end_date' ) ) {
+    $event -> end_date ( scalar $query -> param ( 'event_end_date' ) ) ;
+  } else {
+    # Default event end_date to event start_date if not provided
+    $event -> end_date ( scalar $query -> param ( 'event_start_date' ) ) ;
+  }
 
-	# event_dates
-	$updated = 1 if scalar $query -> param ( 'event_rowid' )
-		&& $event -> dates ne scalar $query -> param ( 'event_dates' ) ;
-	if ( scalar $query -> param ( 'event_dates' ) ) {
-		$event -> dates ( scalar $query -> param ( 'event_dates' ) ) ;
-	} else {
-		# Derive event dates from event start_date and event end_date
-		$event -> dates ( $event -> dates_derived ) ;
-	}
+  # event_dates
+  $updated = 1 if scalar $query -> param ( 'event_rowid' )
+    && $event -> dates ne scalar $query -> param ( 'event_dates' ) ;
+  if ( scalar $query -> param ( 'event_dates' ) ) {
+    $event -> dates ( scalar $query -> param ( 'event_dates' ) ) ;
+  } else {
+    # Derive event dates from event start_date and event end_date
+    $event -> dates ( $event -> dates_derived ) ;
+  }
 
-	# event_times
-	$updated = 1 if scalar $query -> param ( 'event_rowid' )
-		&& $event -> times ne scalar $query -> param ( 'event_times' ) ;
-	scalar $query -> param ( 'event_times' )
-		? $event -> times ( scalar $query -> param ( 'event_times' ) )
-		: $event -> times ( '7.30pm' ) ;
+  # event_times
+  $updated = 1 if scalar $query -> param ( 'event_rowid' )
+    && $event -> times ne scalar $query -> param ( 'event_times' ) ;
+  scalar $query -> param ( 'event_times' )
+    ? $event -> times ( scalar $query -> param ( 'event_times' ) )
+    : $event -> times ( '7.30pm' ) ;
 
-	# event_society
-	$updated = 1 if scalar $query -> param ( 'event_rowid' )
-		&& $event -> society_rowid ne scalar $query -> param ( 'event_society' ) ;
-	$event -> society_rowid ( scalar $query -> param ( 'event_society' ) ) ;
+  # event_society
+  $updated = 1 if scalar $query -> param ( 'event_rowid' )
+    && $event -> society_rowid ne scalar $query -> param ( 'event_society' ) ;
+  $event -> society_rowid ( scalar $query -> param ( 'event_society' ) ) ;
 
-	# event_presented_by
-	$updated = 1 if scalar $query -> param ( 'event_rowid' ) &&
-		$event -> presented_by ne scalar $query -> param ( 'event_presented_by' ) ;
-	$event -> presented_by ( scalar $query -> param ( 'event_presented_by' ) ) ;
+  # event_presented_by
+  $updated = 1 if scalar $query -> param ( 'event_rowid' ) &&
+    $event -> presented_by ne scalar $query -> param ( 'event_presented_by' ) ;
+  $event -> presented_by ( scalar $query -> param ( 'event_presented_by' ) ) ;
 
-	# event_venue
-	$updated = 1 if scalar $query -> param ( 'event_rowid' ) &&
-		$event -> venue_name ne scalar $query -> param ( 'event_venue' ) ;
-	if ( scalar $query -> param ( 'event_venue' ) ) {
-		my $venue = new DATA::WhatsOn::Organisation ;
-		$venue -> name ( scalar $query -> param ( 'event_venue' ) ) ;
-		$venue -> type ( 'whatson_venue' ) ;
-		$venue -> fetch ( $self -> dbh ) ;
-		$event -> venue_rowid ( $venue -> rowid ) ;
-	}
+  # event_venue
+  $updated = 1 if scalar $query -> param ( 'event_rowid' ) &&
+    $event -> venue_name ne scalar $query -> param ( 'event_venue' ) ;
+  if ( scalar $query -> param ( 'event_venue' ) ) {
+    my $venue = new DATA::WhatsOn::Organisation ;
+    $venue -> name ( scalar $query -> param ( 'event_venue' ) ) ;
+    $venue -> type ( 'whatson_venue' ) ;
+    $venue -> fetch ( $self -> dbh ) ;
+    $event -> venue_rowid ( $venue -> rowid ) ;
+  }
 
-	# event_box_office
-	$updated = 1 if scalar $query -> param ( 'event_rowid' ) &&
-		$event -> box_office ne scalar $query -> param ( 'event_box_office' ) ;
-	$event -> box_office ( scalar $query -> param ( 'event_box_office' ) ) ;
+  # event_box_office
+  $updated = 1 if scalar $query -> param ( 'event_rowid' ) &&
+    $event -> box_office ne scalar $query -> param ( 'event_box_office' ) ;
+  $event -> box_office ( scalar $query -> param ( 'event_box_office' ) ) ;
 
 #-------------------------------------------------------------------------------
 # Save the results and notify the webmin that this has happened
 
-	# Save will give us back the event rowid, whether it's an update or an insert
-	my $rowid = $event -> save ( $self -> dbh ) ;
+  # Save will give us back the event rowid, whether it's an update or an insert
+  my $rowid = $event -> save ( $self -> dbh ) ;
 
-	my $webmin = $env -> { webmin } ;
+  my $webmin = $env -> { webmin } ;
 
-	$self -> sendmail (
-		$webmin																							,
-		'DATA Diary - Event Programme Listing'							,
-		{
-			event => $event																		,
-			userid => $self -> session	-> param ( 'userid' )	,
-		}																										,
-	) ;
+  $self -> sendmail (
+    $webmin                                              ,
+    'DATA Diary - Event Programme Listing'              ,
+    {
+      event => $event                                    ,
+      userid => $self -> session  -> param ( 'userid' )  ,
+    }                                                    ,
+  ) ;
 
 #-------------------------------------------------------------------------------
 # Determine where to go based on the save mode selected by the user
 
-	if ( defined $query -> param ( 'save_and_continue' ) ) {
+  if ( defined $query -> param ( 'save_and_continue' ) ) {
 
-		$redirect .= $self -> conf -> param ( 'onSaveAndContinue' ) ;
+    $redirect .= $self -> conf -> param ( 'onSaveAndContinue' ) ;
 
-	} elsif ( defined $query -> param ( 'save_and_exit' ) ) {
+  } elsif ( defined $query -> param ( 'save_and_exit' ) ) {
 
-		$redirect .= $self -> conf -> param ( 'onSaveAndExit' ) ;
+    $redirect .= $self -> conf -> param ( 'onSaveAndExit' ) ;
 
-	} elsif ( defined $query -> param ( 'save_and_online' ) ) {
+  } elsif ( defined $query -> param ( 'save_and_online' ) ) {
 
-		$redirect .= $self -> conf -> param ( 'onSaveAndOnline' ) ;
+    $redirect .= $self -> conf -> param ( 'onSaveAndOnline' ) ;
 
-	} elsif ( defined $query -> param ( 'save_and_preview' ) ) {
+  } elsif ( defined $query -> param ( 'save_and_preview' ) ) {
 
-		$redirect .= $self -> conf -> param ( 'onSaveAndPreview' ) ;
+    $redirect .= $self -> conf -> param ( 'onSaveAndPreview' ) ;
 
-	}
+  }
 
 
 #-------------------------------------------------------------------------------
 # Check if they've updated the programme listing and have a custom online card
 
-	# Updated flag set above & if use_desc = 1 or 2 (true), we have a custom card
-	if ( $updated && $event -> use_desc ) {
+  # Updated flag set above & if use_desc = 1 or 2 (true), we have a custom card
+  if ( $updated && $event -> use_desc ) {
 
-		$self -> session -> param ( 'show_warning' , 'event_updated' ) ;
-		$self -> session -> flush ;
+    $self -> session -> param ( 'show_warning' , 'event_updated' ) ;
+    $self -> session -> flush ;
 
-	}
+  }
 
 REDIRECT:
-	my $role = $self -> session -> param ( 'role' ) ;
-	$redirect =~ s/:role/$role/;
-	$redirect =~ s/:rowid/$rowid/;
-	$self -> redirect ( $redirect ) ;
+  my $role = $self -> session -> param ( 'role' ) ;
+  $redirect =~ s/:role/$role/;
+  $redirect =~ s/:rowid/$rowid/;
+  $self -> redirect ( $redirect ) ;
 
 }
 
@@ -900,13 +900,13 @@ sub event_online {
 
 =cut
 
-	my $self = shift ;
-	my $query = $self -> query ;
+  my $self = shift ;
+  my $query = $self -> query ;
 
-	# Initialise redirect with the root
-	# We will append the location within the root according to the submit button
-	my $env = $self -> conf -> param ( 'env' ) ;
-	my $redirect = $env -> { root } ;
+  # Initialise redirect with the root
+  # We will append the location within the root according to the submit button
+  my $env = $self -> conf -> param ( 'env' ) ;
+  my $redirect = $env -> { root } ;
 
 #-------------------------------------------------------------------------------
 
@@ -914,12 +914,12 @@ sub event_online {
 # Check the authorisation of the user before we go any further
 #
 
-	unless ( _authorised ( $self , 'event' ) ) {
+  unless ( _authorised ( $self , 'event' ) ) {
 
-		$redirect .= '/unauthorised' ;
-		goto REDIRECT ;
+    $redirect .= '/unauthorised' ;
+    goto REDIRECT ;
 
-	}
+  }
 
 #-------------------------------------------------------------------------------
 
@@ -929,18 +929,18 @@ sub event_online {
 # updates.
 #
 
-	if ( defined $query -> param ( 'delete' ) ) {
+  if ( defined $query -> param ( 'delete' ) ) {
 
-		# This is a request to delete
-		my $event = new DATA::WhatsOn::Event ;
-		# The delete button is only enabled where there is a rowid
-		# So we can safely assume that it is present without validating
-		$event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
-		$event -> delete ( $self -> dbh ) ;
-		$redirect .= $self -> conf -> param ( 'onDelete' ) ;
-		got REDIRECT ;
+    # This is a request to delete
+    my $event = new DATA::WhatsOn::Event ;
+    # The delete button is only enabled where there is a rowid
+    # So we can safely assume that it is present without validating
+    $event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
+    $event -> delete ( $self -> dbh ) ;
+    $redirect .= $self -> conf -> param ( 'onDelete' ) ;
+    got REDIRECT ;
 
-	}
+  }
 
 #-------------------------------------------------------------------------------
 
@@ -948,155 +948,155 @@ sub event_online {
 # We have an add or update
 #
 
-	my $event_form = {
+  my $event_form = {
 
-		required => [ qw /
-			event_use_desc
-		/ ] , # End of required array
+    required => [ qw /
+      event_use_desc
+    / ] , # End of required array
 
-		optional => [ qw /
-			mceEventDescription
-			mceEventImage
-		/ ] , # End of optional array
+    optional => [ qw /
+      mceEventDescription
+      mceEventImage
+    / ] , # End of optional array
 
-		dependencies => {
+    dependencies => {
 
-			# Require description and imagae according to event_use_desc
-			'event_use_desc' => {
-				1 => [ qw / mceEventDescription mceEventImage / ] ,
-				2 => [ qw / mceEventDescription / ] ,
-			}
+      # Require description and imagae according to event_use_desc
+      'event_use_desc' => {
+        1 => [ qw / mceEventDescription mceEventImage / ] ,
+        2 => [ qw / mceEventDescription / ] ,
+      }
 
-		} , # End of dependencies hash
+    } , # End of dependencies hash
 
-		constraint_methods => {
+    constraint_methods => {
 
-			event_use_desc => {
-				constraint_method	=> FV_set_num ( 1 , ( 0 , 1 , 2 ) ) ,
-				name							=> 'event_use_desc_valid'
-			} , # End of event_use_desc hash
+      event_use_desc => {
+        constraint_method  => FV_set_num ( 1 , ( 0 , 1 , 2 ) ) ,
+        name              => 'event_use_desc_valid'
+      } , # End of event_use_desc hash
 
-			mceEventDescription => {
-				constraint_method	=> event_description_valid ,
-				name							=> 'event_description_valid'
-			} , # End of mceEventDescription hash
+      mceEventDescription => {
+        constraint_method  => event_description_valid ,
+        name              => 'event_description_valid'
+      } , # End of mceEventDescription hash
 
-			mceEventImage => {
-				constraint_method =>	event_image_valid ( $env -> { root } ) ,
-				name							=> 'event_image_valid'
-			} , # End of mceEventImage hash
+      mceEventImage => {
+        constraint_method =>  event_image_valid ( $env -> { root } ) ,
+        name              => 'event_image_valid'
+      } , # End of mceEventImage hash
 
-		} , # End of constraint_methods hash
+    } , # End of constraint_methods hash
 
-		msgs => $_messages
+    msgs => $_messages
 
-	} ; # End of event_form sub
+  } ; # End of event_form sub
 
-	# If mceEventImage is the 'click_me' image then this is effecitvely null input
-	$query -> param ( 'mceEventImage' , '' )
-		if $query -> param ( 'mceEventImage' ) eq $query -> param ( 'click_me' ) ;
+  # If mceEventImage is the 'click_me' image then this is effecitvely null input
+  $query -> param ( 'mceEventImage' , '' )
+    if $query -> param ( 'mceEventImage' ) eq $query -> param ( 'click_me' ) ;
 
-	my $results = $self -> check_rm ( 'form_response' , $event_form )
-		|| return \$self -> check_rm_error_page ;
+  my $results = $self -> check_rm ( 'form_response' , $event_form )
+    || return \$self -> check_rm_error_page ;
 
-	# We have passed validation, build and save the event object
+  # We have passed validation, build and save the event object
 
-	# If mceEventDescription matches the default event description then this is
-	# effectively null input and so we null it out so that we dont store anything
-	# for the description. This would effectively be denormalisation. Note that
-	# we do not do this prior to validation as we don't want to tell people they
-	# haven't given any input if they say yes to a custom description and then
-	# don't actually edit the default description.
-	$query -> param ( 'mceEventDescription' , '' )
-		if $query -> param ( 'mceEventDescription' )
-		eq $query -> param ( 'event_default_description' ) ;
+  # If mceEventDescription matches the default event description then this is
+  # effectively null input and so we null it out so that we dont store anything
+  # for the description. This would effectively be denormalisation. Note that
+  # we do not do this prior to validation as we don't want to tell people they
+  # haven't given any input if they say yes to a custom description and then
+  # don't actually edit the default description.
+  $query -> param ( 'mceEventDescription' , '' )
+    if $query -> param ( 'mceEventDescription' )
+    eq $query -> param ( 'event_default_description' ) ;
 
 #-------------------------------------------------------------------------------
 # mceEventImage contains the HTML in the image card section but we only
 # want to store the URL of any image that's been selected.
 
-	my $image = '' ;
+  my $image = '' ;
 
-	if ( $query -> param ( 'mceEventImage' ) ) {
+  if ( $query -> param ( 'mceEventImage' ) ) {
 
-		my $html = scalar $query -> param ( 'mceEventImage' ) ;
-		$html =~ /^
-			<p>
-				<img\s
-					src="(.+?)"\s
-					(?:width="\d+"\sheight="\d+"\s)?
-				\/>
-			<\/p>
-		$/x ;
-		$image = $1 ;
+    my $html = scalar $query -> param ( 'mceEventImage' ) ;
+    $html =~ /^
+      <p>
+        <img\s
+          src="(.+?)"\s
+          (?:width="\d+"\sheight="\d+"\s)?
+        \/>
+      <\/p>
+    $/x ;
+    $image = $1 ;
 
-	}
+  }
 
 #-------------------------------------------------------------------------------
 # Fetch the event object and process each update in turn logging if there has
 # been a change to the value that was already stored.
 
-	# Fetch
-	my $event = new DATA::WhatsOn::Event ;
-	$event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
-	$event -> fetch ( $self -> dbh ) ;
+  # Fetch
+  my $event = new DATA::WhatsOn::Event ;
+  $event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
+  $event -> fetch ( $self -> dbh ) ;
 
-	my $updated = 0 ; # Boolean to capture if details have been updated
+  my $updated = 0 ; # Boolean to capture if details have been updated
 
-	$updated = 1
-	if scalar $query -> param ( 'event_use_desc' ) ne $event -> use_desc ;
-	$event -> use_desc ( scalar $query -> param ( 'event_use_desc' ) ) ;
+  $updated = 1
+  if scalar $query -> param ( 'event_use_desc' ) ne $event -> use_desc ;
+  $event -> use_desc ( scalar $query -> param ( 'event_use_desc' ) ) ;
 
-	$updated = 1
-	if scalar $query -> param ( 'mceEventDescription' ) ne $event -> description ;
-	$event -> description ( scalar $query -> param ( 'mceEventDescription' ) ) ;
+  $updated = 1
+  if scalar $query -> param ( 'mceEventDescription' ) ne $event -> description ;
+  $event -> description ( scalar $query -> param ( 'mceEventDescription' ) ) ;
 
-	$updated = 1 if $image ne $event -> image ;
-	$event -> image ( $image ) ;
+  $updated = 1 if $image ne $event -> image ;
+  $event -> image ( $image ) ;
 
 #-------------------------------------------------------------------------------
 # Save the results and notify the webmin that this has happened
 
-	# Save will give us back the event rowid, whether it's an update or an insert
-	my $rowid = $event -> save ( $self -> dbh ) ;
+  # Save will give us back the event rowid, whether it's an update or an insert
+  my $rowid = $event -> save ( $self -> dbh ) ;
 
-	my $webmin = $env -> { webmin } ;
+  my $webmin = $env -> { webmin } ;
 
-	$self -> sendmail (
-		$webmin																							,
-		'DATA Diary - Event Online Promotion'								,
-		{
-			event => $event																		,
-			userid => $self -> session	-> param ( 'userid' )	,
-		}																										,
-	) ;
+  $self -> sendmail (
+    $webmin                                              ,
+    'DATA Diary - Event Online Promotion'                ,
+    {
+      event => $event                                    ,
+      userid => $self -> session  -> param ( 'userid' )  ,
+    }                                                    ,
+  ) ;
 
 #-------------------------------------------------------------------------------
 # Determine where to go based on the save mode selected by the user
 
 if ( defined $query -> param ( 'save_and_continue' ) ) {
 
-	$redirect .= $self -> conf -> param ( 'onSaveAndContinue' ) ;
+  $redirect .= $self -> conf -> param ( 'onSaveAndContinue' ) ;
 
 } elsif ( defined $query -> param ( 'save_and_exit' ) ) {
 
-	$redirect .= $self -> conf -> param ( 'onSaveAndExit' ) ;
+  $redirect .= $self -> conf -> param ( 'onSaveAndExit' ) ;
 
 } elsif ( defined $query -> param ( 'save_and_programme' ) ) {
 
-	$redirect .= $self -> conf -> param ( 'onSaveAndProgramme' ) ;
+  $redirect .= $self -> conf -> param ( 'onSaveAndProgramme' ) ;
 
 } elsif ( defined $query -> param ( 'save_and_preview' ) ) {
 
-	$redirect .= $self -> conf -> param ( 'onSaveAndPreview' ) ;
+  $redirect .= $self -> conf -> param ( 'onSaveAndPreview' ) ;
 
 }
 
 REDIRECT:
-	my $role = $self -> session -> param ( 'role' ) ;
-	$redirect =~ s/:role/$role/;
-	$redirect =~ s/:rowid/$rowid/;
-	$self -> redirect ( $redirect ) ;
+  my $role = $self -> session -> param ( 'role' ) ;
+  $redirect =~ s/:role/$role/;
+  $redirect =~ s/:rowid/$rowid/;
+  $self -> redirect ( $redirect ) ;
 
 }
 
@@ -1111,19 +1111,19 @@ are directed to here in this module instead.
 
 =cut
 
-	my $self = shift ;
-	my $env = $self -> conf -> param ( 'env' ) ;
+  my $self = shift ;
+  my $env = $self -> conf -> param ( 'env' ) ;
 
-	if ( _authorised ( $self , 'event' ) ) {
+  if ( _authorised ( $self , 'event' ) ) {
 
-		my $tmpl = $self -> template -> load ;
-		return $tmpl -> output ;
+    my $tmpl = $self -> template -> load ;
+    return $tmpl -> output ;
 
-	} else {
+  } else {
 
-		return $self -> redirect ( $env -> { root } . 'unauthorised' ) ;
+    return $self -> redirect ( $env -> { root } . 'unauthorised' ) ;
 
-	}
+  }
 
 }
 
@@ -1145,13 +1145,13 @@ Adds or updates a member society record.
 
 =cut
 
-	my $self = shift ;
-	my $query = $self -> query ;
+  my $self = shift ;
+  my $query = $self -> query ;
 
-	# Initialise redirect with the root
-	# We will append the location within the root later
-	my $env = $self -> conf -> param ( 'env' ) ;
-	my $redirect = $env -> { root } ;
+  # Initialise redirect with the root
+  # We will append the location within the root later
+  my $env = $self -> conf -> param ( 'env' ) ;
+  my $redirect = $env -> { root } ;
 
 #-------------------------------------------------------------------------------
 
@@ -1159,67 +1159,67 @@ Adds or updates a member society record.
 # Check the authorisation of the user before we go any further
 #
 
-	unless ( _authorised ( $self , 'society' ) ) {
+  unless ( _authorised ( $self , 'society' ) ) {
 
-		$redirect .= '/unauthorised' ;
-		goto REDIRECT ;
+    $redirect .= '/unauthorised' ;
+    goto REDIRECT ;
 
-	}
+  }
 
-	my $organisation_form = {
+  my $organisation_form = {
 
-		required => [ qw /
-			organisation_name
-			organisation_status
-			organisation_type
-		/ ] ,
+    required => [ qw /
+      organisation_name
+      organisation_status
+      organisation_type
+    / ] ,
 
-		optional => [ qw /
-			organisation_description
-			organisation_email
-			organisation_rowid
-			organisation_website
-		/ ] ,
+    optional => [ qw /
+      organisation_description
+      organisation_email
+      organisation_rowid
+      organisation_website
+    / ] ,
 
-		constraint_methods => {
+    constraint_methods => {
 
-			organisation_status => {
-				constraint_method	=> FV_set ( 1 , qw / ACTIVE INACTIVE / ) ,
-				name							=> 'status_valid'
-			} ,
+      organisation_status => {
+        constraint_method  => FV_set ( 1 , qw / ACTIVE INACTIVE / ) ,
+        name              => 'status_valid'
+      } ,
 
-		} ,
+    } ,
 
-		msgs => $_messages
+    msgs => $_messages
 
-	} ; # End of organisation_form profile
+  } ; # End of organisation_form profile
 
-	my $results = $self -> check_rm ( 'form_response' , $organisation_form )
-	|| return \$self -> check_rm_error_page ;
+  my $results = $self -> check_rm ( 'form_response' , $organisation_form )
+  || return \$self -> check_rm_error_page ;
 
-	my $organisation = new DATA::WhatsOn::Organisation ;
+  my $organisation = new DATA::WhatsOn::Organisation ;
 
-	$organisation
-		-> rowid				( scalar $query -> param ( 'organisation_rowid'				) ) ;
-	$organisation
-		-> type					( scalar $query -> param ( 'organisation_type'				) ) ;
-	$organisation
-		-> name					( scalar $query -> param ( 'organisation_name'				) ) ;
-	$organisation
-		-> status				( scalar $query -> param ( 'organisation_status'			) ) ;
-	$organisation
-		-> website			( scalar $query -> param ( 'organisation_website'			) ) ;
-	$organisation
-		-> email				( scalar $query -> param ( 'organisation_email'				) ) ;
-	$organisation
-		-> description	( scalar $query -> param ( 'organisation_description'	) ) ;
+  $organisation
+    -> rowid        ( scalar $query -> param ( 'organisation_rowid'        ) ) ;
+  $organisation
+    -> type          ( scalar $query -> param ( 'organisation_type'        ) ) ;
+  $organisation
+    -> name          ( scalar $query -> param ( 'organisation_name'        ) ) ;
+  $organisation
+    -> status        ( scalar $query -> param ( 'organisation_status'      ) ) ;
+  $organisation
+    -> website      ( scalar $query -> param ( 'organisation_website'      ) ) ;
+  $organisation
+    -> email        ( scalar $query -> param ( 'organisation_email'        ) ) ;
+  $organisation
+    -> description  ( scalar $query -> param ( 'organisation_description'  ) ) ;
 
-	$organisation -> save ( $self -> dbh ) ;
+  $organisation -> save ( $self -> dbh ) ;
 
-	$redirect .= scalar $query -> param ( 'onSuccess' ) ;
+  $redirect .= scalar $query -> param ( 'onSuccess' ) ;
 
 REDIRECT:
-	$self -> redirect ( $redirect ) ;
+  $self -> redirect ( $redirect ) ;
 
 } # End of organisation sub
 
@@ -1234,19 +1234,19 @@ are directed to here in this module instead.
 
 =cut
 
-	my $self = shift ;
-	my $env = $self -> conf -> param ( 'env' ) ;
+  my $self = shift ;
+  my $env = $self -> conf -> param ( 'env' ) ;
 
-	if ( _authorised ( $self , 'society' ) ) {
+  if ( _authorised ( $self , 'society' ) ) {
 
-		my $tmpl = $self -> template -> load ;
-		return $tmpl -> output ;
+    my $tmpl = $self -> template -> load ;
+    return $tmpl -> output ;
 
-	} else {
+  } else {
 
-		return $self -> redirect ( $env -> { root } . 'unauthorised' ) ;
+    return $self -> redirect ( $env -> { root } . 'unauthorised' ) ;
 
-	}
+  }
 
 }
 

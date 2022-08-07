@@ -8,8 +8,8 @@ sub _init {
 
    my $self = shift ;
 
-	my $env = $self -> conf -> param ( 'env' ) ;
-	my $database =	$env -> { database } ;
+  my $env = $self -> conf -> param ( 'env' ) ;
+  my $database =  $env -> { database } ;
 
    $self -> dbh_config (
 
@@ -19,8 +19,8 @@ sub _init {
 
    ) ;
 
-	# I dont fully understand why but do NOT enable the sqlite_unicode flag here
-	# $self -> dbh -> { sqlite_unicode } = 1 ;
+  # I dont fully understand why but do NOT enable the sqlite_unicode flag here
+  # $self -> dbh -> { sqlite_unicode } = 1 ;
 
 }
 

@@ -10,26 +10,26 @@ use base qw / DATA::Project::Source / ;
 
 sub role {
 
-	my $self = shift ;
+  my $self = shift ;
 
-	my $role = undef ;
+  my $role = undef ;
 
-	if ( $self -> path =~ /src\/pages\/secure\/(\w+)\// ) { $role = $1 }
+  if ( $self -> path =~ /src\/pages\/secure\/(\w+)\// ) { $role = $1 }
 
-	return $role ;
+  return $role ;
 
 }
 
 sub run_mode {
 
-	my $self = shift ;
+  my $self = shift ;
 
-	my $run_mode ;
+  my $run_mode ;
 
-	if ( $self -> role ) { $run_mode = $self -> role . '_' . $self -> name }
-	else { $run_mode = $self -> name } ;
+  if ( $self -> role ) { $run_mode = $self -> role . '_' . $self -> name }
+  else { $run_mode = $self -> name } ;
 
-	return $run_mode ;
+  return $run_mode ;
 
 }
 

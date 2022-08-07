@@ -108,11 +108,11 @@ error messages in to the relevant form.
 
    #my $context = $config -> context ( $query -> param ( 'onError' ) ) ;
 
-	#print 'On error=' . $query -> param ( 'onError' ) . "\n" ;
+  #print 'On error=' . $query -> param ( 'onError' ) . "\n" ;
 
    #$self -> param ( page_run_mode => $context -> { rm } ) ;
 
-	#my @tmpl_paths = ( ) ;
+  #my @tmpl_paths = ( ) ;
 
    #foreach my $tmpl_path ( @{ $context -> { tmpl_path } } ) {
 

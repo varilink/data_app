@@ -94,43 +94,43 @@ sub dispatch_args {
 
          } ,
 
-	'userid_reminder' => {
+  'userid_reminder' => {
 
-	   # Request a reminder of your userid via email
+     # Request a reminder of your userid via email
 
-	   app => 'Main' ,
-	   rm => 'userid_reminder' ,
+     app => 'Main' ,
+     rm => 'userid_reminder' ,
 
-	} ,
-
-
-	'userid_reminder_sent' => {
-
-	   # Confirmation that a userid reminder has been sent
-
-	   app => 'Main' ,
-	   rm => 'userid_reminder_sent' ,
-
-	} ,
-
-	'request_password' => {
-
-	   # Request a reminder of your userid via email
-
-	   app => 'Main' ,
-	   rm => 'request_password' ,
-
-	} ,
+  } ,
 
 
-	'password_sent' => {
+  'userid_reminder_sent' => {
 
-	   # Confirmation that a userid reminder has been sent
+     # Confirmation that a userid reminder has been sent
 
-	   app => 'Main' ,
-	   rm => 'password_sent' ,
+     app => 'Main' ,
+     rm => 'userid_reminder_sent' ,
 
-	} ,
+  } ,
+
+  'request_password' => {
+
+     # Request a reminder of your userid via email
+
+     app => 'Main' ,
+     rm => 'request_password' ,
+
+  } ,
+
+
+  'password_sent' => {
+
+     # Confirmation that a userid reminder has been sent
+
+     app => 'Main' ,
+     rm => 'password_sent' ,
+
+  } ,
 
 ###
 ### The administration area pages

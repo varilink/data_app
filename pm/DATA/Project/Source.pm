@@ -18,141 +18,141 @@ sub new {
 
 =cut
 
-	my $proto = shift ;
-	my $class = ref $proto || $proto ;
-	my $self = { } ;
-	$self -> { CONTENT } = ( ) ;
-	$self -> { NAME } = undef ;
-	$self -> { PATH } = undef ;
-	$self -> { MODE } = undef ;
-	# name can be set by the constructor if passed as a parameter
-	if ( @_ ) { $self -> { SITENAME } = shift }
-	else { $self -> { SITENAME } = undef } ;
+  my $proto = shift ;
+  my $class = ref $proto || $proto ;
+  my $self = { } ;
+  $self -> { CONTENT } = ( ) ;
+  $self -> { NAME } = undef ;
+  $self -> { PATH } = undef ;
+  $self -> { MODE } = undef ;
+  # name can be set by the constructor if passed as a parameter
+  if ( @_ ) { $self -> { SITENAME } = shift }
+  else { $self -> { SITENAME } = undef } ;
 
-	bless $self , $class ;
-	return $self ;
+  bless $self , $class ;
+  return $self ;
 
 }
 
 sub content {
 
-	my $self = shift ;
-	if ( @_ ) {
-		my ( $input , $type ) = @_ ;
-		$self -> { CONTENT } = $input ;
-	}
-	return $self -> { CONTENT } ; 
+  my $self = shift ;
+  if ( @_ ) {
+    my ( $input , $type ) = @_ ;
+    $self -> { CONTENT } = $input ;
+  }
+  return $self -> { CONTENT } ; 
 
 }
 
 sub name {
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { NAME } = shift }
-	return $self -> { NAME } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { NAME } = shift }
+  return $self -> { NAME } ;
 
 }
 
 sub mode {
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { MODE } = shift }
-	return $self -> { MODE } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { MODE } = shift }
+  return $self -> { MODE } ;
 
 }
 
 sub path {
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { PATH } = shift }
-	return $self -> { PATH } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { PATH } = shift }
+  return $self -> { PATH } ;
 
 }
 
 sub sitename {
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { SITENAME } = shift }
-	return $self -> { SITENAME } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { SITENAME } = shift }
+  return $self -> { SITENAME } ;
 
 }
 
 sub output {
 
-	my ( $self , $output ) = @_ ;
+  my ( $self , $output ) = @_ ;
 
-	my $name = $self -> name ;
-	my $path = $self -> path ;
+  my $name = $self -> name ;
+  my $path = $self -> path ;
 
-	my $sitename = $self -> sitename ;
+  my $sitename = $self -> sitename ;
 
-	my $out ;
+  my $out ;
 
-	if ( $self -> type eq 'page' ) {
+  if ( $self -> type eq 'page' ) {
 
-		my $run_mode = $self -> run_mode ;
-		$out = "$HOME/vhosts/$sitename/$path$run_mode.tt" ;
+    my $run_mode = $self -> run_mode ;
+    $out = "$HOME/vhosts/$sitename/$path$run_mode.tt" ;
 
-	} elsif ( $self -> type eq 'partial' ) {
+  } elsif ( $self -> type eq 'partial' ) {
 
-		$out = "$HOME/vhosts/$sitename/$path$name.tt" ;
+    $out = "$HOME/vhosts/$sitename/$path$name.tt" ;
 
-	}
+  }
 
-	my $dir = dirname ( $out ) ;
+  my $dir = dirname ( $out ) ;
 
-	make_path ( $dir ) ;
+  make_path ( $dir ) ;
 
-	open TT , '>' , $out ;
+  open TT , '>' , $out ;
 
-	print TT $output ;
-	
-	close TT ;	
+  print TT $output ;
+  
+  close TT ;  
 
 }
 
 sub type {
 
-	my $self = shift ;
+  my $self = shift ;
 
-	my $type ;
+  my $type ;
 
-	if ( $self -> path =~ /^src\/partials/ ) { $type = 'partial' }
-	elsif ( $self -> path =~ /^src\/pages/ ) { $type = 'page' }
+  if ( $self -> path =~ /^src\/partials/ ) { $type = 'partial' }
+  elsif ( $self -> path =~ /^src\/pages/ ) { $type = 'page' }
 
-	return $type ;
+  return $type ;
 
 }
 
 sub load {
 
-	my ( $self , $file ) = @_ ;
+  my ( $self , $file ) = @_ ;
 
-	my $pwd = cwd ;
+  my $pwd = cwd ;
 
-	my ( $name , $path , $suffix ) = fileparse ( $pwd . '/' . $file , '.html' ) ;
+  my ( $name , $path , $suffix ) = fileparse ( $pwd . '/' . $file , '.html' ) ;
 
-	my $root = $HOME . '/Projects/' . $self -> sitename ;
+  my $root = $HOME . '/Projects/' . $self -> sitename ;
 
-	$path =~ /$root\/(.*)/ ;
+  $path =~ /$root\/(.*)/ ;
 
-	my $relpath = $1 ;
+  my $relpath = $1 ;
 
-	open GULP , $file ;
-	my @lines = <GULP> ;
-	close GULP ;
+  open GULP , $file ;
+  my @lines = <GULP> ;
+  close GULP ;
 
-	$self -> name ( $name ) ;
-	$self -> path ( $relpath ) ;
-	$self -> content ( \@lines ) ;
+  $self -> name ( $name ) ;
+  $self -> path ( $relpath ) ;
+  $self -> content ( \@lines ) ;
 
 }
 
 sub template {
 
-	my $self = shift ;
+  my $self = shift ;
 
-	return parse ( $self ) ;
+  return parse ( $self ) ;
 
 }
 

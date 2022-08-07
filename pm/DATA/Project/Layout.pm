@@ -10,7 +10,7 @@ use base qw / DATA::Project::Source / ;
 
 sub output {
 
-	die "Call of output method not valid for a Layout\n" ;
+  die "Call of output method not valid for a Layout\n" ;
 
 }
 

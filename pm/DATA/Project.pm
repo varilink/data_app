@@ -26,22 +26,22 @@ use YAML qw / LoadFile / ;
 
 sub _isHTML {
 
-	my $file = shift ;
+  my $file = shift ;
 
-	if ( -f $file ) {
+  if ( -f $file ) {
 
-		my $pwd = cwd ;
+    my $pwd = cwd ;
 
-		my ( $name , $path , $suffix )
-			= fileparse ( $pwd . '/' . $file , '.html' ) ;
+    my ( $name , $path , $suffix )
+      = fileparse ( $pwd . '/' . $file , '.html' ) ;
 
-		$suffix eq '.html' ? return 1 : return undef ;
+    $suffix eq '.html' ? return 1 : return undef ;
 
-	} else {
+  } else {
 
-	return undef ;
+  return undef ;
 
-	}
+  }
 
 }
 
@@ -51,27 +51,27 @@ sub new {
 
 =cut
 
-	my $proto = shift ;
-	my $class = ref $proto || $proto ;
+  my $proto = shift ;
+  my $class = ref $proto || $proto ;
 
-	my $self = { } ;
+  my $self = { } ;
 
-	# name can be set by the constructor if passed as a parameter
-	if ( @_ ) {
-		$self -> { NAME } = shift
-	} else {
-		$self -> { NAME } = undef
-	} ;
-	$self -> { MODE } = undef ;
-	$self -> { IMAGES } = [ ] ;
-	$self -> { JAVASCRIPTS } = [ ] ;
-	$self -> { LAYOUTS } = [ ] ;
-	$self -> { PAGES } = [ ] ;
-	$self -> { PARTIALS } = [ ] ;
-	$self -> { STYLESHEETS } = [ ] ;
+  # name can be set by the constructor if passed as a parameter
+  if ( @_ ) {
+    $self -> { NAME } = shift
+  } else {
+    $self -> { NAME } = undef
+  } ;
+  $self -> { MODE } = undef ;
+  $self -> { IMAGES } = [ ] ;
+  $self -> { JAVASCRIPTS } = [ ] ;
+  $self -> { LAYOUTS } = [ ] ;
+  $self -> { PAGES } = [ ] ;
+  $self -> { PARTIALS } = [ ] ;
+  $self -> { STYLESHEETS } = [ ] ;
 
-	bless $self , $class ;
-	return $self ;
+  bless $self , $class ;
+  return $self ;
 
 }
 
@@ -83,9 +83,9 @@ The name of the project
 
 =cut
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { NAME } = shift }
-	return $self -> { NAME } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { NAME } = shift }
+  return $self -> { NAME } ;
 
 }
 
@@ -97,9 +97,9 @@ The mode, which is one of deploy or test
 
 =cut
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { MODE } = shift }
-	return $self -> { MODE } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { MODE } = shift }
+  return $self -> { MODE } ;
 
 }
 
@@ -109,30 +109,30 @@ sub images {
 
 =cut
 
-	my $self = shift ;
-	my $sitename = $self -> name ;
+  my $self = shift ;
+  my $sitename = $self -> name ;
 
-	sub _image {
+  sub _image {
 
-		my $file = $_ ;
+    my $file = $_ ;
 
-		if ( -f $file ) {
+    if ( -f $file ) {
 
-			my $image = new DATA::Project::Image ( $sitename ) ;
-			$image -> load ( $file ) ;
-			push @{ $self -> { IMAGES} } , $image ;
+      my $image = new DATA::Project::Image ( $sitename ) ;
+      $image -> load ( $file ) ;
+      push @{ $self -> { IMAGES} } , $image ;
 
-		} 
+    } 
 
-	} # end of the subroutine _image
+  } # end of the subroutine _image
 
-	unless ( @{ $self -> { IMAGES } } ) {
+  unless ( @{ $self -> { IMAGES } } ) {
 
-		find ( \&_image , "$HOME/Projects/$sitename/dist/assets/img" ) ;
+    find ( \&_image , "$HOME/Projects/$sitename/dist/assets/img" ) ;
 
-	}
+  }
 
-	return @{ $self -> { IMAGES } } ;
+  return @{ $self -> { IMAGES } } ;
 
 }
 
@@ -142,30 +142,30 @@ sub javascripts {
 
 =cut
 
-	my $self = shift ;
-	my $sitename = $self -> name ;
+  my $self = shift ;
+  my $sitename = $self -> name ;
 
-	sub _javascript {
+  sub _javascript {
 
-		my $file = $_ ;
+    my $file = $_ ;
 
-		if ( -f $file ) {
+    if ( -f $file ) {
 
-			my $javascript = new DATA::Project::Javascript ( $sitename ) ;
-			$javascript -> load ( $file ) ;
-			push @{ $self -> { JAVASCRIPTS } } , $javascript ;
+      my $javascript = new DATA::Project::Javascript ( $sitename ) ;
+      $javascript -> load ( $file ) ;
+      push @{ $self -> { JAVASCRIPTS } } , $javascript ;
 
-		} 
+    } 
 
-	} # end of the subroutine _javascript
+  } # end of the subroutine _javascript
 
-	unless ( @{ $self -> { JAVASCRIPTS } } ) {
+  unless ( @{ $self -> { JAVASCRIPTS } } ) {
 
-		find ( \&_javascript , "$HOME/Projects/$sitename/dist/assets/js" ) ;
+    find ( \&_javascript , "$HOME/Projects/$sitename/dist/assets/js" ) ;
 
-	}
+  }
 
-	return @{ $self -> { JAVASCRIPTS } } ;
+  return @{ $self -> { JAVASCRIPTS } } ;
 
 }
 
@@ -175,35 +175,35 @@ sub layouts {
 
 =cut
 
-	my $self = shift ;
-	my $sitename = $self -> name ;
+  my $self = shift ;
+  my $sitename = $self -> name ;
 
-	sub _layout {
+  sub _layout {
 
-		my $project = shift ; # Deliberately passed as a parameter to localise
+    my $project = shift ; # Deliberately passed as a parameter to localise
 
-		my $file = $_ ;
+    my $file = $_ ;
 
-		if ( _isHTML $file ) {
+    if ( _isHTML $file ) {
 
-			my $layout = new DATA::Project::Layout ( $sitename ) ;
-			$layout -> load ( $file ) ;
-			push @{ $project -> { LAYOUTS } } , $layout ;
+      my $layout = new DATA::Project::Layout ( $sitename ) ;
+      $layout -> load ( $file ) ;
+      push @{ $project -> { LAYOUTS } } , $layout ;
 
-		} 
+    } 
 
-	} # end of the subroutine _layout
+  } # end of the subroutine _layout
 
-	unless ( @{ $self -> { LAYOUTS } } ) {
+  unless ( @{ $self -> { LAYOUTS } } ) {
 
-		find (
-			{ wanted => sub { _layout ( $self ) } } ,
-			"$HOME/Projects/$sitename/src/layouts"
-		) ;
+    find (
+      { wanted => sub { _layout ( $self ) } } ,
+      "$HOME/Projects/$sitename/src/layouts"
+    ) ;
 
-	}
+  }
 
-	return @{ $self -> { LAYOUTS } } ;
+  return @{ $self -> { LAYOUTS } } ;
 
 }
 
@@ -213,30 +213,30 @@ sub pages {
 
 =cut
 
-	my $self = shift ;
-	my $sitename = $self -> name ;
+  my $self = shift ;
+  my $sitename = $self -> name ;
 
-	sub _page {
+  sub _page {
 
-		my $file = $_ ;
+    my $file = $_ ;
 
-		if ( _isHTML $file ) {
+    if ( _isHTML $file ) {
 
-			my $page = new DATA::Project::Page ( $sitename ) ;
-			$page -> load ( $file ) ;
-			push @{ $self -> { PAGES } } , $page ;
+      my $page = new DATA::Project::Page ( $sitename ) ;
+      $page -> load ( $file ) ;
+      push @{ $self -> { PAGES } } , $page ;
 
-		} 
+    } 
 
-	} # end of the subroutine _page
+  } # end of the subroutine _page
 
-	unless ( @{ $self -> { PAGES } } ) {
+  unless ( @{ $self -> { PAGES } } ) {
 
-		find ( \&_page , "$HOME/Projects/$sitename/src/pages" ) ;
+    find ( \&_page , "$HOME/Projects/$sitename/src/pages" ) ;
 
-	}
+  }
 
-	return @{ $self -> { PAGES } } ;
+  return @{ $self -> { PAGES } } ;
 
 }
 
@@ -246,30 +246,30 @@ sub partials {
 
 =cut
 
-	my $self = shift ;
-	my $sitename = $self -> name ;
+  my $self = shift ;
+  my $sitename = $self -> name ;
 
-	sub _partial {
+  sub _partial {
 
-		my $file = $_ ;
+    my $file = $_ ;
 
-		if ( _isHTML $file ) {
+    if ( _isHTML $file ) {
 
-			my $partial = new DATA::Project::Partial ( $sitename ) ;
-			$partial -> load ( $file ) ;
-			push @{ $self -> { PARTIALS } } , $partial ;
+      my $partial = new DATA::Project::Partial ( $sitename ) ;
+      $partial -> load ( $file ) ;
+      push @{ $self -> { PARTIALS } } , $partial ;
 
-		} 
+    } 
 
-	} # end of the subroutine _partial
+  } # end of the subroutine _partial
 
-	unless ( @{ $self -> { PARTIALS } } ) {
+  unless ( @{ $self -> { PARTIALS } } ) {
 
-		find ( \&_partial , "$HOME/Projects/$sitename/src/partials" ) ;
+    find ( \&_partial , "$HOME/Projects/$sitename/src/partials" ) ;
 
-	}
+  }
 
-	return @{ $self -> { PARTIALS } } ;
+  return @{ $self -> { PARTIALS } } ;
 
 }
 
@@ -279,30 +279,30 @@ sub stylesheets {
 
 =cut
 
-	my $self = shift ;
-	my $sitename = $self -> name ;
+  my $self = shift ;
+  my $sitename = $self -> name ;
 
-	sub _stylesheet {
+  sub _stylesheet {
 
-		my $file = $_ ;
+    my $file = $_ ;
 
-		if ( -f $file ) {
+    if ( -f $file ) {
 
-			my $stylesheet = new DATA::Project::Stylesheet ( $sitename ) ;
-			$stylesheet -> load ( $file ) ;
-			push @{ $self -> { STYLESHEETS } } , $stylesheet ;
+      my $stylesheet = new DATA::Project::Stylesheet ( $sitename ) ;
+      $stylesheet -> load ( $file ) ;
+      push @{ $self -> { STYLESHEETS } } , $stylesheet ;
 
-		} 
+    } 
 
-	} # end of the subroutine _stylesheet
+  } # end of the subroutine _stylesheet
 
-	unless ( @{ $self -> { STYLESHEETS } } ) {
+  unless ( @{ $self -> { STYLESHEETS } } ) {
 
-		find ( \&_stylesheet , "$HOME/Projects/$sitename/dist/assets/css" ) ;
+    find ( \&_stylesheet , "$HOME/Projects/$sitename/dist/assets/css" ) ;
 
-	}
+  }
 
-	return @{ $self -> { STYLESHEETS } } ;
+  return @{ $self -> { STYLESHEETS } } ;
 
 }
 
@@ -314,98 +314,98 @@ Might just do this in the constructor?
 
 =cut
 
-	my $self = shift ;
+  my $self = shift ;
 
-	my $sitename = $self -> name ;
+  my $sitename = $self -> name ;
 
-	if ( $self -> mode eq 'test' ) {
-		remove_tree ( "$HOME/vhosts/$sitename" ) ;
-	} elsif ( $self -> mode eq 'deploy' ) {
-		remove_tree ( "$HOME/vhosts/$sitename/src" ) ;
-	}
+  if ( $self -> mode eq 'test' ) {
+    remove_tree ( "$HOME/vhosts/$sitename" ) ;
+  } elsif ( $self -> mode eq 'deploy' ) {
+    remove_tree ( "$HOME/vhosts/$sitename/src" ) ;
+  }
 
 }
 
 sub config {
 
-	my $self = shift ;
-	my $sitename = $self -> name ;
+  my $self = shift ;
+  my $sitename = $self -> name ;
 
-	my @includes = ( ) ;
-	my @locations = ( );
+  my @includes = ( ) ;
+  my @locations = ( );
 
-	# Iterate through the pages and add:
-	# 1. A template include path for every folder that contains pages.
-	# 2. A location for every page, with its associated run mode.
-	foreach my $page ( $self -> pages ) {
+  # Iterate through the pages and add:
+  # 1. A template include path for every folder that contains pages.
+  # 2. A location for every page, with its associated run mode.
+  foreach my $page ( $self -> pages ) {
 
-		my $path = $page -> path ;
+    my $path = $page -> path ;
 
-		push @includes , $path unless grep /^$path$/ , @includes ;
+    push @includes , $path unless grep /^$path$/ , @includes ;
 
-		$path =~ s/^src\/pages// ;
+    $path =~ s/^src\/pages// ;
 
-		push @locations , {
-			$path . $page -> name => { rm => $page -> run_mode }
-		} ;
-			
+    push @locations , {
+      $path . $page -> name => { rm => $page -> run_mode }
+    } ;
+      
 
-	}
+  }
 
-	# Iterate through the partials and add:
-	# 1. A template include page for every folder that contains partials.
-	foreach my $partial ( $self -> partials ) {
+  # Iterate through the partials and add:
+  # 1. A template include page for every folder that contains partials.
+  foreach my $partial ( $self -> partials ) {
 
-		my $path = $partial -> path ;
+    my $path = $partial -> path ;
 
-		push @includes , $path unless grep /^$path$/ , @includes ;
+    push @includes , $path unless grep /^$path$/ , @includes ;
 
-	}
+  }
 
-	# Iterate through the actions and add a run mode for each
-	my $actions = LoadFile "$HOME/Projects/$sitename/src/data/action.yml" ;
+  # Iterate through the actions and add a run mode for each
+  my $actions = LoadFile "$HOME/Projects/$sitename/src/data/action.yml" ;
 
-	foreach my $action ( @{ $actions } ) {
-		
-		push @locations , $action ;
+  foreach my $action ( @{ $actions } ) {
+    
+    push @locations , $action ;
 
-	}
+  }
 
-	# Get the mapping of roles to locations from the role YAML file in the data
-	# folder.
-	my $roles = LoadFile "$HOME/Projects/$sitename/src/data/role.yml" ;
+  # Get the mapping of roles to locations from the role YAML file in the data
+  # folder.
+  my $roles = LoadFile "$HOME/Projects/$sitename/src/data/role.yml" ;
 
-	foreach my $name ( keys %{ $roles } ) {
+  foreach my $name ( keys %{ $roles } ) {
 
-		my $role = $roles -> { $name } ;
-		push @locations , {
-			$role -> { Location } => { role => $name }
-		}
+    my $role = $roles -> { $name } ;
+    push @locations , {
+      $role -> { Location } => { role => $name }
+    }
 
-	}
+  }
 
-	# Get the environment parameters
-	my $env = LoadFile "$HOME/Projects/$sitename/src/data/env.yml" ;
+  # Get the environment parameters
+  my $env = LoadFile "$HOME/Projects/$sitename/src/data/env.yml" ;
 
-	my %config = (
+  my %config = (
 
-		app => 'Main' ,
+    app => 'Main' ,
 
-		env => $env ,
+    env => $env ,
 
-		tmpl_path => [ @includes ] ,
+    tmpl_path => [ @includes ] ,
 
-		Location => [ @locations ] ,
+    Location => [ @locations ] ,
 
-	) ;
+  ) ;
 
-	my $conf = new Config::General (
+  my $conf = new Config::General (
 
-		-ConfigHash => \%config
+    -ConfigHash => \%config
 
-	) ;
+  ) ;
 
-	$conf -> save_file ( "$HOME/vhosts/$sitename/DATA.cfg" ) ;
+  $conf -> save_file ( "$HOME/vhosts/$sitename/DATA.cfg" ) ;
 
 }
 
@@ -418,35 +418,35 @@ unique name.
 
 =cut
 
-	my $self = shift ;
+  my $self = shift ;
 
-	my @names      = ( ) ; # The names of the tempate files
-	my @duplicates = ( ) ; # Any names that have been flagged as duplicated
-	my @files      = ( ) ; # The offending files with duplicate names
+  my @names      = ( ) ; # The names of the tempate files
+  my @duplicates = ( ) ; # Any names that have been flagged as duplicated
+  my @files      = ( ) ; # The offending files with duplicate names
 
-	foreach my $template ( $self -> pages , $self -> partials ) {
+  foreach my $template ( $self -> pages , $self -> partials ) {
 
-		my $name = $template -> name ;
+    my $name = $template -> name ;
 
-		if ( grep /^$name$/ , @names ) {
-			push @duplicates , $template -> name
-		}
+    if ( grep /^$name$/ , @names ) {
+      push @duplicates , $template -> name
+    }
 
-		push @names , $template -> name ;
+    push @names , $template -> name ;
 
-	}
+  }
 
-	foreach my $template ( $self -> pages , $self -> partials ) {
+  foreach my $template ( $self -> pages , $self -> partials ) {
 
-		my $name = $template -> name ;
+    my $name = $template -> name ;
 
-		if ( grep /^$name$/ , @duplicates ) {
-			push @files , $template -> path . $template -> name
-		}
+    if ( grep /^$name$/ , @duplicates ) {
+      push @files , $template -> path . $template -> name
+    }
 
-	}
+  }
 
-	return @files ;
+  return @files ;
 
 }
 
@@ -456,30 +456,30 @@ sub write_pages {
 
 =cut
 
-	my $self = shift ;
+  my $self = shift ;
 
-	my $sitename = $self -> name ;
+  my $sitename = $self -> name ;
 
-	foreach my $page ( $self -> pages ) {
+  foreach my $page ( $self -> pages ) {
 
-		my $path = $page -> path ;
-		my $name = $page -> name ;
+    my $path = $page -> path ;
+    my $name = $page -> name ;
 
-		my $out = "$HOME/vhosts/$sitename/$path$name.tt" ;
+    my $out = "$HOME/vhosts/$sitename/$path$name.tt" ;
 
-		my $dir = dirname ( $out ) ;
+    my $dir = dirname ( $out ) ;
 
-		make_path ( $dir ) ;
+    make_path ( $dir ) ;
 
-		print "$out\n" ;
+    print "$out\n" ;
 
-		open TT , '>' , $out ;
+    open TT , '>' , $out ;
 
-		print TT $page -> template ;
-	
-		close TT ;
+    print TT $page -> template ;
+  
+    close TT ;
 
-	}
+  }
 
 }
 

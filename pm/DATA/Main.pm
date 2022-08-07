@@ -37,27 +37,27 @@ use DATA::Plugin::ValidateRM ;
 
 sub cgiapp_init {
 
-	my $self = shift ;
+  my $self = shift ;
 
-	$self -> run_modes (
+  $self -> run_modes (
 
-		'form_response'	=> 'form_response'	,
-		'throw_error'		=> 'throw_error'		,
-		'AUTOLOAD'			=> \&auto_run_mode
+    'form_response'  => 'form_response'  ,
+    'throw_error'    => 'throw_error'    ,
+    'AUTOLOAD'      => \&auto_run_mode
 
-	) ;
+  ) ;
 
 }
 
 sub cgiapp_postrun {
 
-	my $self = shift ;
+  my $self = shift ;
 
-	# Set the session parameter precursor to the name of this run mode just before
-	# exiting. That way the next invoked run mode will know what its precursor
-	# run mode was.
-	$self -> session -> param ( 'precursor' , $self -> get_current_runmode ) ;
-	$self -> session -> flush ;
+  # Set the session parameter precursor to the name of this run mode just before
+  # exiting. That way the next invoked run mode will know what its precursor
+  # run mode was.
+  $self -> session -> param ( 'precursor' , $self -> get_current_runmode ) ;
+  $self -> session -> flush ;
 
 }
 
@@ -77,10 +77,10 @@ configured to have a URL mapped to this run mode.
 
 =cut
 
-	my $self = shift ;
+  my $self = shift ;
 
-	$self -> header_props ( -status => '500' ) ;
-	return ;
+  $self -> header_props ( -status => '500' ) ;
+  return ;
 
 }
 
@@ -94,78 +94,78 @@ application, e.g. "Auth", "WhatsOn", etc.
 
 =cut
 
-	my ( $self , $run_mode ) = @_ ;
+  my ( $self , $run_mode ) = @_ ;
 
-	my $tmpl = $self -> template -> load ;
+  my $tmpl = $self -> template -> load ;
 
-	if (
-		$run_mode ne 'not_found'
-		# nginx internal redirects to not_found retain the original request URI,
-		# which might be associated with a response run mode. It is the request URI
-		# that is used for the context matching in Config::Context so, if we don't
-		# have this exclusion we end up thinking that not_found has the precursor.
-		&&
-		$run_mode ne 'error'
-		# Similarly for nginx internal redirects to error.
-		&&
-		$self -> conf -> param ( 'precursor' )
-		# This is a response mode, i.e. it has a mandated precursor run mode set in
-		# the application's configuration file. We know that it is genuine and NOT
-		# the result of an nginx internal redirect.
-	) {
+  if (
+    $run_mode ne 'not_found'
+    # nginx internal redirects to not_found retain the original request URI,
+    # which might be associated with a response run mode. It is the request URI
+    # that is used for the context matching in Config::Context so, if we don't
+    # have this exclusion we end up thinking that not_found has the precursor.
+    &&
+    $run_mode ne 'error'
+    # Similarly for nginx internal redirects to error.
+    &&
+    $self -> conf -> param ( 'precursor' )
+    # This is a response mode, i.e. it has a mandated precursor run mode set in
+    # the application's configuration file. We know that it is genuine and NOT
+    # the result of an nginx internal redirect.
+  ) {
 
-		if (
+    if (
 
-			$self -> session -> param ( 'precursor' )
-				ne $self -> conf -> param ( 'precursor' )
-			# The session parameter that was set by the last run mode that ran is NOT
-			# the name of the mandated precursor run mode
-			&&
-			$self -> session -> param ( 'precursor' )
-				ne $self -> get_current_runmode
-			# Nor is the session parameter that was set by the last run mode the
-			# name of the current run mode (the refresh page scenario)
+      $self -> session -> param ( 'precursor' )
+        ne $self -> conf -> param ( 'precursor' )
+      # The session parameter that was set by the last run mode that ran is NOT
+      # the name of the mandated precursor run mode
+      &&
+      $self -> session -> param ( 'precursor' )
+        ne $self -> get_current_runmode
+      # Nor is the session parameter that was set by the last run mode the
+      # name of the current run mode (the refresh page scenario)
 
-		) {
+    ) {
 
-			# This run mode has not been called via a rediret from the mandated
-			# precursor run mode nor has it been called by a refresh of itself.
-			# Raise a 404 not found and bale out.
+      # This run mode has not been called via a rediret from the mandated
+      # precursor run mode nor has it been called by a refresh of itself.
+      # Raise a 404 not found and bale out.
 
-			$self -> header_add ( -status => '404' ) ;
-			return ;
+      $self -> header_add ( -status => '404' ) ;
+      return ;
 
-		}
+    }
 
-		# Populate the template with any parameters from the precursor
-		$tmpl -> param ( %{ $self -> session -> param ( 'tmpl_params' ) } )
-			if $self -> session -> param ( 'tmpl_params' ) ;
+    # Populate the template with any parameters from the precursor
+    $tmpl -> param ( %{ $self -> session -> param ( 'tmpl_params' ) } )
+      if $self -> session -> param ( 'tmpl_params' ) ;
 
-	} else {
+  } else {
 
-		# Clear all template parameters passed in the session to response run modes
-		# via a redirect. These will be recycled during refreshes of a response run
-		# mode but immediately we see a non response display run mode we need to
-		# clear the slate.
-		$self -> session -> clear ( [ 'tmpl_params' ] ) ;
-		$self -> session -> flush ;
+    # Clear all template parameters passed in the session to response run modes
+    # via a redirect. These will be recycled during refreshes of a response run
+    # mode but immediately we see a non response display run mode we need to
+    # clear the slate.
+    $self -> session -> clear ( [ 'tmpl_params' ] ) ;
+    $self -> session -> flush ;
 
-	}
+  }
 
-	if ( $self -> session -> param ( 'show_warning') ) {
+  if ( $self -> session -> param ( 'show_warning') ) {
 
-		# An action run mode has set show_warning in the session. Translate this to
-		# the show_warning template parameter and clear the show_warning instruction
-		# from the session.
-		$tmpl -> param (
-			'show_warning' => $self -> session -> param ( 'show_warning' )
-		) ;
-		$self -> session -> clear ( [ 'show_warning' ] ) ;
-		$self -> session -> flush ;
+    # An action run mode has set show_warning in the session. Translate this to
+    # the show_warning template parameter and clear the show_warning instruction
+    # from the session.
+    $tmpl -> param (
+      'show_warning' => $self -> session -> param ( 'show_warning' )
+    ) ;
+    $self -> session -> clear ( [ 'show_warning' ] ) ;
+    $self -> session -> flush ;
 
-	}
+  }
 
-	return $tmpl -> output ;
+  return $tmpl -> output ;
 
 }
 
@@ -184,10 +184,10 @@ possibly to send output to the log rather than the browser.
 
 =cut
 
-	my $inputs = @_ ;
+  my $inputs = @_ ;
 
-	use Data::Dumper ;
-	print Dumper ( @_ ) ;
+  use Data::Dumper ;
+  print Dumper ( @_ ) ;
 
 }
 
@@ -200,26 +200,26 @@ error messages in to the relevant form.
 
 =cut
 
-	# This will always be called with errors to display
-	my ( $self , $errs ) = @_ ;
+  # This will always be called with errors to display
+  my ( $self , $errs ) = @_ ;
 
-	my $query = $self -> query ;
+  my $query = $self -> query ;
 
-	my $tmpl = $self -> template -> load ( $query -> param ( 'onError' ) ) ;
+  my $tmpl = $self -> template -> load ( $query -> param ( 'onError' ) ) ;
 
-	my $params = { } ;
+  my $params = { } ;
 
-	foreach my $param ( $query -> param ) {
+  foreach my $param ( $query -> param ) {
 
-		my $value = $query -> param ( $param ) ;
-		$params -> { $param } = $value ;
+    my $value = $query -> param ( $param ) ;
+    $params -> { $param } = $value ;
 
-	}
+  }
 
-	$tmpl -> param ( $errs ) ;
-	$tmpl -> param ( $params ) ;
+  $tmpl -> param ( $errs ) ;
+  $tmpl -> param ( $params ) ;
 
-	return $tmpl -> output ;
+  return $tmpl -> output ;
 
 }
 

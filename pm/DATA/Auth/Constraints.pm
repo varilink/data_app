@@ -11,34 +11,34 @@ use Digest::MD5 qw / md5_hex / ;
 use DATA::Auth::User ;
 
 use Data::FormValidator::Constraints qw /
-	email
-	FV_eq_with
-	FV_min_length
+  email
+  FV_eq_with
+  FV_min_length
 / ;
 
 use Data::FormValidator::Constraints::MethodsFactory qw /
-	:bool
+  :bool
 / ;
 
 our @EXPORT = qw /
 
    credentials_match
-	email
-	FV_eq_with
-	FV_min_length
-	FV_and
-	FV_not
-	not_a_robot
-	password_complex
+  email
+  FV_eq_with
+  FV_min_length
+  FV_and
+  FV_not
+  not_a_robot
+  password_complex
    representative_known
    committee_member
-	user_confirmed
-	user_email_unchanged
+  user_confirmed
+  user_email_unchanged
    user_exists
-	user_secret_valid
-	user_userid_unchanged
-	userid_valid
-	email_taken
+  user_secret_valid
+  user_userid_unchanged
+  userid_valid
+  email_taken
 
 / ;
 
@@ -59,14 +59,14 @@ Tests supplied login credentials to see if they match what we have on record.
 
       my $data = $dfv -> get_filtered_data ( ) ;
 
-		my $user = new DATA::Auth::User ;
-		$user -> userid ( $data -> { $userid } ) ;
+    my $user = new DATA::Auth::User ;
+    $user -> userid ( $data -> { $userid } ) ;
 
-		my $result = $user -> fetch ( $dbh ) ;
-		
-		$user -> fetch ( $dbh ) && md5_hex ( $value ) eq $user -> password
-			? return 1
-			: return 0 ;
+    my $result = $user -> fetch ( $dbh ) ;
+    
+    $user -> fetch ( $dbh ) && md5_hex ( $value ) eq $user -> password
+      ? return 1
+      : return 0 ;
 
    }
 
@@ -74,71 +74,71 @@ Tests supplied login credentials to see if they match what we have on record.
 
 sub not_a_robot {
 
-	my $recaptcha_secret_key = shift ;
+  my $recaptcha_secret_key = shift ;
 
-	return sub {
+  return sub {
 
-		my ( $dfv , $value ) = @_ ;
+    my ( $dfv , $value ) = @_ ;
 
-		$dfv -> name_this ( 'not_a_robot' ) ;
+    $dfv -> name_this ( 'not_a_robot' ) ;
 
-		use LWP::UserAgent ;
+    use LWP::UserAgent ;
 
-		my $user_agent = new LWP::UserAgent (
+    my $user_agent = new LWP::UserAgent (
 
-			# Ensure valid certificate
-			ssl_opts => { verify_hostname => 1 }
+      # Ensure valid certificate
+      ssl_opts => { verify_hostname => 1 }
 
-		) ;
+    ) ;
 
-		my $response = $user_agent -> post (
+    my $response = $user_agent -> post (
 
-			'https://www.google.com/recaptcha/api/siteverify' ,
+      'https://www.google.com/recaptcha/api/siteverify' ,
 
-			{
-				secret => $recaptcha_secret_key ,
-				response => $value ,
-			} ,
+      {
+        secret => $recaptcha_secret_key ,
+        response => $value ,
+      } ,
 
-		) ;
+    ) ;
 
-		my $json_text = $response -> content ;
+    my $json_text = $response -> content ;
 
-		use JSON ;
+    use JSON ;
 
-		my $json = new JSON ;
+    my $json = new JSON ;
 
-		my $perl_scalar = $json -> decode ( $json_text ) ;
+    my $perl_scalar = $json -> decode ( $json_text ) ;
 
-		my	$response_code = $perl_scalar -> { success } ;
+    my  $response_code = $perl_scalar -> { success } ;
 
-		return $response_code ;
+    return $response_code ;
 
-	}
+  }
 
 }
 
 sub password_complex {
 
-	return sub {
+  return sub {
 
-		my ( $dfv , $value ) = @_ ;
+    my ( $dfv , $value ) = @_ ;
 
-		$dfv -> name_this ( 'password_complex' ) ;
+    $dfv -> name_this ( 'password_complex' ) ;
 
       use Data::Password::Check ;
 
       my $check = Data::Password::Check -> check ( {
          'password' => $value ,
          'tests' => [ 'length' , 'alphanumeric_only' , 'alphanumeric' ] ,
-			'min_length' => 8 ,
-		} ) ;
+      'min_length' => 8 ,
+    } ) ;
 
-		$check -> has_errors
-			? return undef
-			: return 1 ; 
+    $check -> has_errors
+      ? return undef
+      : return 1 ; 
 
-	}
+  }
 
 }
 
@@ -157,7 +157,7 @@ is actually known to be a representative of those societies.
 
       my $dfv = shift ;
 
-		my $value = $dfv -> get_current_constraint_value ;
+    my $value = $dfv -> get_current_constraint_value ;
 
       my $data = $dfv -> get_filtered_data ( ) ;
 
@@ -180,24 +180,24 @@ Validates that a registering user is a committee member.
 
 =cut
 
-	my ( $dbh ) = shift ;
+  my ( $dbh ) = shift ;
 
-	return sub {
+  return sub {
 
-		my $dfv = shift ;
+    my $dfv = shift ;
 
-		my $value = $dfv -> get_current_constraint_value ;
+    my $value = $dfv -> get_current_constraint_value ;
 
-		my $data = $dfv -> get_filtered_data ( ) ;
+    my $data = $dfv -> get_filtered_data ( ) ;
 
-		use DATA::WhatsOn::Contact ;
+    use DATA::WhatsOn::Contact ;
 
-		my $contact = new DATA::WhatsOn::Contact ;
+    my $contact = new DATA::WhatsOn::Contact ;
 
-		$contact -> email ( $value ) ;
-		return $contact -> committee_member ( $dbh ) ;
+    $contact -> email ( $value ) ;
+    return $contact -> committee_member ( $dbh ) ;
 
-	}
+  }
 
 }
 
@@ -212,45 +212,45 @@ userid is not present.
 
 =cut
 
-	my $dbh = shift ;
+  my $dbh = shift ;
 
-	return sub {
+  return sub {
 
-		my $dfv = shift ;
+    my $dfv = shift ;
 
-		my $user = new DATA::Auth::User ;
+    my $user = new DATA::Auth::User ;
 
-		my $data = $dfv -> get_filtered_data ;
+    my $data = $dfv -> get_filtered_data ;
 
-		my @keys = keys %{ $data } ;
+    my @keys = keys %{ $data } ;
 
-		if ( grep /^user_userid$/ , @keys ) {
+    if ( grep /^user_userid$/ , @keys ) {
 
-			$user -> userid ( $data -> { user_userid } ) ;
+      $user -> userid ( $data -> { user_userid } ) ;
 
-		} elsif ( grep /^user_email$/ , @keys ) {
+    } elsif ( grep /^user_email$/ , @keys ) {
 
-			$user -> email ( $data -> { user_email } ) ;
+      $user -> email ( $data -> { user_email } ) ;
 
-		} else {
+    } else {
 
-			# I've been called and neither the userid nor the email is present, so
-			# die.
+      # I've been called and neither the userid nor the email is present, so
+      # die.
 
-			croak
-				"user_confirmed constraint called with neither userid nor email" ;
+      croak
+        "user_confirmed constraint called with neither userid nor email" ;
 
-		}
+    }
 
-		# Always use this in conjunction with a user_exists check and then this
-		# line become redundant.
-		unless ( $user -> fetch ( $dbh ) ) { return undef } ;
+    # Always use this in conjunction with a user_exists check and then this
+    # line become redundant.
+    unless ( $user -> fetch ( $dbh ) ) { return undef } ;
 
-		$user -> status eq 'CONFIRMED'
-			? return 1
-			: return undef ;
+    $user -> status eq 'CONFIRMED'
+      ? return 1
+      : return undef ;
 
-	}
+  }
 
 }
 
@@ -267,20 +267,20 @@ database.
 
 =cut
 
-	my ( $dbh , $session ) = @_ ;
+  my ( $dbh , $session ) = @_ ;
 
-	return sub {
+  return sub {
 
-		my ( $dfv , $value ) = @_ ;
+    my ( $dfv , $value ) = @_ ;
 
-		my $user = new DATA::Auth::User ;
-		# User the session userid in case user_userid field is also changed
-		$user -> userid ( $session -> param ( 'userid' ) ) ;
-		$user -> fetch ( $dbh ) ;
-		if ( $user -> email eq $value ) { return 1 }
-		else { return 0 } ;
+    my $user = new DATA::Auth::User ;
+    # User the session userid in case user_userid field is also changed
+    $user -> userid ( $session -> param ( 'userid' ) ) ;
+    $user -> fetch ( $dbh ) ;
+    if ( $user -> email eq $value ) { return 1 }
+    else { return 0 } ;
 
-	}
+  }
 
 }
 
@@ -299,23 +299,23 @@ or by email.
 
       my ( $dfv , $value ) = @_ ;
 
-		my $user = new DATA::Auth::User ;
+    my $user = new DATA::Auth::User ;
 
-		if ( $dfv -> get_current_constraint_field eq 'user_userid' ) {
+    if ( $dfv -> get_current_constraint_field eq 'user_userid' ) {
 
-			$user -> userid ( $value ) ;
+      $user -> userid ( $value ) ;
 
-		} elsif ( $dfv -> get_current_constraint_field eq 'user_email' ) {
+    } elsif ( $dfv -> get_current_constraint_field eq 'user_email' ) {
 
-			$user -> email ( $value ) ;
+      $user -> email ( $value ) ;
 
-		} else {
+    } else {
 
-			# If we end up here something is wrong and we could throw an exception.
+      # If we end up here something is wrong and we could throw an exception.
 
-		}
+    }
 
-		return $user -> fetch ( $dbh ) ;
+    return $user -> fetch ( $dbh ) ;
 
    }
 
@@ -330,68 +330,68 @@ requires a valid user_secret to authorise it.
 
 =cut
 
-	my $dbh = shift ;
+  my $dbh = shift ;
 
-	return sub {
+  return sub {
 
-		my ( $dfv , $user_secret ) = @_ ;
+    my ( $dfv , $user_secret ) = @_ ;
 
-		my $data = $dfv -> get_filtered_data ;
+    my $data = $dfv -> get_filtered_data ;
 
-		my @keys = keys %{ $data } ;
+    my @keys = keys %{ $data } ;
 
-		my $user = new DATA::Auth::User ;
+    my $user = new DATA::Auth::User ;
 
-		if ( grep /^user_userid$/ , @keys ) {
+    if ( grep /^user_userid$/ , @keys ) {
 
-			$user -> userid ( $data -> { user_userid } ) ;
+      $user -> userid ( $data -> { user_userid } ) ;
 
-		} elsif ( grep /^user_email$/ , @keys ) {
+    } elsif ( grep /^user_email$/ , @keys ) {
 
-			$user -> email ( $data -> { user_email } ) ;
+      $user -> email ( $data -> { user_email } ) ;
 
-		} else {
+    } else {
 
-			# I've been called and neither the userid nor the email is present, so
-			# die.
+      # I've been called and neither the userid nor the email is present, so
+      # die.
 
-			croak
-				"user_confirmed constraint called with neither userid nor email" ;
+      croak
+        "user_confirmed constraint called with neither userid nor email" ;
 
-		}
+    }
 
-		return 0 unless $user -> fetch ( $dbh ) ;
+    return 0 unless $user -> fetch ( $dbh ) ;
 
-		# If there isn't a secret or a datetime set then this constraint must fail
-		return 0 unless $user -> secret && $user -> datetime ;
+    # If there isn't a secret or a datetime set then this constraint must fail
+    return 0 unless $user -> secret && $user -> datetime ;
 
-		# Now compare the provided user_secret with the secret stored in the user
-		# object.
+    # Now compare the provided user_secret with the secret stored in the user
+    # object.
 
-		my $rc = 0 ;
+    my $rc = 0 ;
 
-		my $secret_created_at = new DateTime (
-			year			=> substr ( $user -> datetime , 0	, 4 ) ,
-			month			=> substr ( $user -> datetime , 5	, 2 ) ,
-			day			=> substr ( $user -> datetime , 8	, 2 ) ,
-			hour			=> substr ( $user -> datetime , 11	, 2 ) ,
-			minute		=> substr ( $user -> datetime , 14	, 2 ) ,
-			second		=> substr ( $user -> datetime , 17	, 2 ) ,
-			time_zone	=>	'UTC'
-		) ;
+    my $secret_created_at = new DateTime (
+      year      => substr ( $user -> datetime , 0  , 4 ) ,
+      month      => substr ( $user -> datetime , 5  , 2 ) ,
+      day      => substr ( $user -> datetime , 8  , 2 ) ,
+      hour      => substr ( $user -> datetime , 11  , 2 ) ,
+      minute    => substr ( $user -> datetime , 14  , 2 ) ,
+      second    => substr ( $user -> datetime , 17  , 2 ) ,
+      time_zone  =>  'UTC'
+    ) ;
 
-		my $now = DateTime -> now ;
+    my $now = DateTime -> now ;
 
-		my $secret_age =
-			$now -> subtract_datetime_absolute ( $secret_created_at ) ;
+    my $secret_age =
+      $now -> subtract_datetime_absolute ( $secret_created_at ) ;
 
-		$rc = 1 if
-			$user -> secret eq $user_secret &&
-			$secret_age -> in_units ( 'seconds' ) <= 60 * 60 * 48 ;
+    $rc = 1 if
+      $user -> secret eq $user_secret &&
+      $secret_age -> in_units ( 'seconds' ) <= 60 * 60 * 48 ;
 
-		return $rc ;
+    return $rc ;
 
-	}
+  }
 
 }
 
@@ -407,16 +407,16 @@ will.
 
 =cut
 
-	my $session = shift ;
+  my $session = shift ;
 
-	return sub {
+  return sub {
 
-		my ( $dfv , $value ) = @_ ;
+    my ( $dfv , $value ) = @_ ;
 
-		if ( $value eq $session -> param ( 'userid' ) ) { return 1 }
-		else { return 0 } ;
+    if ( $value eq $session -> param ( 'userid' ) ) { return 1 }
+    else { return 0 } ;
 
-	}
+  }
 
 }
 
@@ -428,33 +428,33 @@ This constaint tests if a userid is a valid format.
 
 =cut
 
-	return sub {
+  return sub {
 
-		my ( $dfv , $value ) = @_ ;
+    my ( $dfv , $value ) = @_ ;
 
-		$dfv -> name_this ( 'userid_valid' ) ;
+    $dfv -> name_this ( 'userid_valid' ) ;
 
-		$value =~ m/[^a-zA-Z0-9]/
-			? return undef
-			: return 1 ;
+    $value =~ m/[^a-zA-Z0-9]/
+      ? return undef
+      : return 1 ;
 
-	}
+  }
 
 }
 
 sub email_taken {
 
-	my $dbh = shift ;
+  my $dbh = shift ;
 
-	return sub {
+  return sub {
 
-		my ( $dfv , $value ) = @_ ;
+    my ( $dfv , $value ) = @_ ;
 
-		my $user = new DATA::Auth::User ;
-		$user -> email ( $value ) ;
-		return $user -> fetch ( $dbh ) ;
+    my $user = new DATA::Auth::User ;
+    $user -> email ( $value ) ;
+    return $user -> fetch ( $dbh ) ;
 
-	}
+  }
 
 }
 

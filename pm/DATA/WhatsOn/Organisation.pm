@@ -259,96 +259,96 @@ Returns the organisation as an unblessed hash with lower case keys
 
 =cut
 
-	my $self = shift ;
+  my $self = shift ;
 
-	my %organisation = %{ $self } ;
-	tie my %hash , 'Hash::Case::Lower' , \%organisation ;
+  my %organisation = %{ $self } ;
+  tie my %hash , 'Hash::Case::Lower' , \%organisation ;
 
-	if ( $hash { 'address1' } || $hash { 'address2' } || $hash { 'address3' } ||
-	     $hash { 'address4' } || $hash { 'postcode' } )
-		{ $hash { 'location' } = 1 }
-	else
-		{ $hash { 'location' } = 0 }
+  if ( $hash { 'address1' } || $hash { 'address2' } || $hash { 'address3' } ||
+       $hash { 'address4' } || $hash { 'postcode' } )
+    { $hash { 'location' } = 1 }
+  else
+    { $hash { 'location' } = 0 }
 
-	my @functions ;
+  my @functions ;
 
-	foreach my $function ( @{ $hash { 'functions' } } ) {
+  foreach my $function ( @{ $hash { 'functions' } } ) {
 
-		my %function = %{ $function } ;
-		tie my %subhash , 'Hash::Case::Lower' , \%function ;
-		push @functions , \%subhash ;
+    my %function = %{ $function } ;
+    tie my %subhash , 'Hash::Case::Lower' , \%function ;
+    push @functions , \%subhash ;
 
-	}
+  }
 
-	@{ $hash { 'functions' } } = @functions ;
+  @{ $hash { 'functions' } } = @functions ;
 
-	return %hash ;
+  return %hash ;
 
 }
 
 sub load {
 
-	my ( $class , $path , $dbh ) = @_ ;
+  my ( $class , $path , $dbh ) = @_ ;
 
-	if ( ref $class ) { confess 'Class method called as object method' }
+  if ( ref $class ) { confess 'Class method called as object method' }
 
-	open my $fh , '<' , $path ;
+  open my $fh , '<' , $path ;
 
-	my $rec = <$fh> ;
+  my $rec = <$fh> ;
 
 ORG:
 
-	while ( $rec ) {
+  while ( $rec ) {
 
-		chomp $rec ;
+    chomp $rec ;
 
-		my ( $name , $type , $status , $email , $website ,   $address1 , $address2 ,
+    my ( $name , $type , $status , $email , $website ,   $address1 , $address2 ,
            $address3 , $address4 , $postcode , $function , $function_email )
-			= split /\|/ , $rec ;
+      = split /\|/ , $rec ;
 
-		my $org = new DATA::WhatsOn::Organisation ;
-		$org -> name ( $name ) ;
-		$org -> type ( $type ) ;
-		$org -> email ( $email ) ;
-		$org -> website ( $website ) ;
-		$org -> status ( $status ) ;
-		$org -> address1 ( $address1 ) ;
-		$org -> address2 ( $address2 ) ;
-		$org -> address3 ( $address3 ) ;
-		$org -> address4 ( $address4 ) ;
-		$org -> postcode ( $postcode ) ;
+    my $org = new DATA::WhatsOn::Organisation ;
+    $org -> name ( $name ) ;
+    $org -> type ( $type ) ;
+    $org -> email ( $email ) ;
+    $org -> website ( $website ) ;
+    $org -> status ( $status ) ;
+    $org -> address1 ( $address1 ) ;
+    $org -> address2 ( $address2 ) ;
+    $org -> address3 ( $address3 ) ;
+    $org -> address4 ( $address4 ) ;
+    $org -> postcode ( $postcode ) ;
 
-		my $prev_name = $name ;
+    my $prev_name = $name ;
 
 ORG_FUN:
 
-		while ( $name eq $prev_name ) {
+    while ( $name eq $prev_name ) {
 
-			if ( $function ne '' ) {
+      if ( $function ne '' ) {
 
-				my $org_fun = new DATA::WhatsOn::Organisation::Function ;
-				$org_fun -> name ( $function ) ;
-				$org_fun -> email ( $function_email ) ;
+        my $org_fun = new DATA::WhatsOn::Organisation::Function ;
+        $org_fun -> name ( $function ) ;
+        $org_fun -> email ( $function_email ) ;
 
-				$org -> functions ( $org_fun ) ;
+        $org -> functions ( $org_fun ) ;
 
-			}
+      }
 
-			$rec = <$fh> ;
+      $rec = <$fh> ;
 
-			chomp $rec ;
+      chomp $rec ;
 
-			( $name , $type , $email , $website , $status , $address1 , $address2 ,
+      ( $name , $type , $email , $website , $status , $address1 , $address2 ,
            $address3 , $address4 , $postcode , $function , $function_email )
-				= split /\|/ , $rec ;
+        = split /\|/ , $rec ;
 
-		} # End of ORG_RUN
+    } # End of ORG_RUN
 
-		$org -> save ( $dbh ) ;
+    $org -> save ( $dbh ) ;
 
-	} # End of ORG
+  } # End of ORG
 
-	close $fh ;
+  close $fh ;
 
 }
 
@@ -458,95 +458,95 @@ sub fetch {
 
         return 1 ; # Tell the caller it was a success
 
-		} else {
+    } else {
 
-			return 0 ; # Tell the caller it was a failure
+      return 0 ; # Tell the caller it was a failure
 
-		}
+    }
 
-	} else {
+  } else {
 
-		# Called as class, fetch a list of organisations
+    # Called as class, fetch a list of organisations
 
-		my $class = $proto ;
+    my $class = $proto ;
 
-		my $filter = shift if @_ ;
+    my $filter = shift if @_ ;
 
-		#
-		# Filter should be a hash reference that optionally contains values for
-		# the following keys.
-		#
-		# type:
-		# If set will only retrive organisations whose type matches the value set.
-		# is fetched. If not set or not set to one of these values then
-		# organsiations of all types will be fetched.
-		#
-		# status:
-		# If set will only retrieve organisations whose status matches.
-		#
-		# userid:
-		# If set will only retrieve organisations that userid is a member of.
-		#
+    #
+    # Filter should be a hash reference that optionally contains values for
+    # the following keys.
+    #
+    # type:
+    # If set will only retrive organisations whose type matches the value set.
+    # is fetched. If not set or not set to one of these values then
+    # organsiations of all types will be fetched.
+    #
+    # status:
+    # If set will only retrieve organisations whose status matches.
+    #
+    # userid:
+    # If set will only retrieve organisations that userid is a member of.
+    #
 
-		my $where = '' ; # Ready to build according to the filter
+    my $where = '' ; # Ready to build according to the filter
 
-		# Add a type clause if specified
-		$where .= 'type = \'' . $filter -> { type } . '\''
-			if $filter -> { type } ;
+    # Add a type clause if specified
+    $where .= 'type = \'' . $filter -> { type } . '\''
+      if $filter -> { type } ;
 
-		# Add a status clause if specified
-		if ( $filter -> { status } ) {
-			$where .= ' AND ' if $where ;
-			$where .= 'status = \'' . $filter -> { status } . '\'' ;
-		}
+    # Add a status clause if specified
+    if ( $filter -> { status } ) {
+      $where .= ' AND ' if $where ;
+      $where .= 'status = \'' . $filter -> { status } . '\'' ;
+    }
 
-		# Add a userid clause if specified
-		if ( $filter -> { userid } ) {
-			$where .= ' AND ' if $where ;
-			$where .= 'rowid IN (
-	         SELECT organisation_rowid
-				  FROM whatson_contact_organisation
-				 WHERE person_rowid = (
-					SELECT rowid
-					  FROM whatson_contact
-					 WHERE userid = \'' . $filter -> { userid } . '\' ) )' ;
-		}
+    # Add a userid clause if specified
+    if ( $filter -> { userid } ) {
+      $where .= ' AND ' if $where ;
+      $where .= 'rowid IN (
+           SELECT organisation_rowid
+          FROM whatson_contact_organisation
+         WHERE person_rowid = (
+          SELECT rowid
+            FROM whatson_contact
+           WHERE userid = \'' . $filter -> { userid } . '\' ) )' ;
+    }
 
-		my $stmt = 'SELECT * FROM whatson_organisation' ;
-		$stmt .= ' WHERE ' . $where if $where ;
-		$stmt .= ' ORDER BY name' ;
+    my $stmt = 'SELECT * FROM whatson_organisation' ;
+    $stmt .= ' WHERE ' . $where if $where ;
+    $stmt .= ' ORDER BY name' ;
 
-		my $sth = $dbh -> prepare ( $stmt ) ;
+    my $sth = $dbh -> prepare ( $stmt ) ;
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-		my @orgs ;
+    my @orgs ;
 
-		while ( my $row = $sth -> fetchrow_hashref ) {
+    while ( my $row = $sth -> fetchrow_hashref ) {
 
-			my $org = new DATA::WhatsOn::Organisation ;
+      my $org = new DATA::WhatsOn::Organisation ;
 
-			$org -> rowid				( $row -> { rowid				} ) ;
-			$org -> name				( $row -> { name				} ) ;
-			$org -> type				( $row -> { type				} ) ;
-			$org -> status				( $row -> { status			} ) ;
-			$org -> paid_in_period	( $row -> { paid_in_period	} ) ;
-			$org -> email				( $row -> { email				} ) ;
-			$org -> website			( $row -> { website			} ) ;
-			$org -> description		( $row -> { description		} ) ;
-			$org -> address1			( $row -> { address1			} ) ;
-			$org -> address2			( $row -> { address2			} ) ;
-			$org -> address3			( $row -> { address3			} ) ;
-			$org -> address4			( $row -> { address4			} ) ;
-			$org -> postcode			( $row -> { postcode			} ) ;
+      $org -> rowid        ( $row -> { rowid        } ) ;
+      $org -> name        ( $row -> { name        } ) ;
+      $org -> type        ( $row -> { type        } ) ;
+      $org -> status        ( $row -> { status      } ) ;
+      $org -> paid_in_period  ( $row -> { paid_in_period  } ) ;
+      $org -> email        ( $row -> { email        } ) ;
+      $org -> website      ( $row -> { website      } ) ;
+      $org -> description    ( $row -> { description    } ) ;
+      $org -> address1      ( $row -> { address1      } ) ;
+      $org -> address2      ( $row -> { address2      } ) ;
+      $org -> address3      ( $row -> { address3      } ) ;
+      $org -> address4      ( $row -> { address4      } ) ;
+      $org -> postcode      ( $row -> { postcode      } ) ;
 
-			push @orgs , $org ;
+      push @orgs , $org ;
 
-		}
+    }
 
-	   return @orgs ;
+     return @orgs ;
 
-	}
+  }
 
 }
 
@@ -689,108 +689,108 @@ sub save {
 
    my ( $self , $dbh ) = @_ ;
 
-	if ( $self -> rowid ) {
+  if ( $self -> rowid ) {
 
-		# This is an update
+    # This is an update
 
-		my $sth = $dbh -> prepare (
+    my $sth = $dbh -> prepare (
 
-			'UPDATE whatson_organisation
-             SET name				= :name				,
-                 type				= :type				,
-                 status				= :status			,
-			        paid_in_period	= :paid_in_period	,
-                 email				= :email				,
-                 website			= :website			,
-                 description		= :description		,
-                 address1			= :address1			,
-                 address2			= :address2			,
-                 address3			= :address3			,
-                 address4			= :address4			,
-                 postcode			= :postcode
+      'UPDATE whatson_organisation
+             SET name        = :name        ,
+                 type        = :type        ,
+                 status        = :status      ,
+              paid_in_period  = :paid_in_period  ,
+                 email        = :email        ,
+                 website      = :website      ,
+                 description    = :description    ,
+                 address1      = :address1      ,
+                 address2      = :address2      ,
+                 address3      = :address3      ,
+                 address4      = :address4      ,
+                 postcode      = :postcode
            WHERE rowid = :rowid'
 
-		) ;
+    ) ;
 
-		$sth -> bind_param ( ':name'				, $self -> name				) ;
-		$sth -> bind_param ( ':type'				, $self -> type				) ;
-		$sth -> bind_param ( ':status'			, $self -> status				) ;
-		$sth -> bind_param ( ':paid_in_period'	, $self -> paid_in_period	) ;
-		$sth -> bind_param ( ':email'				, $self -> email				) ;
-		$sth -> bind_param ( ':website'			, $self -> website			) ;
-		$sth -> bind_param ( ':description'		, $self -> description		) ;
-		$sth -> bind_param ( ':address1'			, $self -> address1			) ;
-		$sth -> bind_param ( ':address2'			, $self -> address2			) ;
-		$sth -> bind_param ( ':address3'			, $self -> address3			) ;
-		$sth -> bind_param ( ':address4'			, $self -> address4			) ;
-		$sth -> bind_param ( ':postcode'			, $self -> postcode			) ;
-		$sth -> bind_param ( ':rowid'				, $self -> rowid				) ;
+    $sth -> bind_param ( ':name'        , $self -> name        ) ;
+    $sth -> bind_param ( ':type'        , $self -> type        ) ;
+    $sth -> bind_param ( ':status'      , $self -> status        ) ;
+    $sth -> bind_param ( ':paid_in_period'  , $self -> paid_in_period  ) ;
+    $sth -> bind_param ( ':email'        , $self -> email        ) ;
+    $sth -> bind_param ( ':website'      , $self -> website      ) ;
+    $sth -> bind_param ( ':description'    , $self -> description    ) ;
+    $sth -> bind_param ( ':address1'      , $self -> address1      ) ;
+    $sth -> bind_param ( ':address2'      , $self -> address2      ) ;
+    $sth -> bind_param ( ':address3'      , $self -> address3      ) ;
+    $sth -> bind_param ( ':address4'      , $self -> address4      ) ;
+    $sth -> bind_param ( ':postcode'      , $self -> postcode      ) ;
+    $sth -> bind_param ( ':rowid'        , $self -> rowid        ) ;
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-	} else {
+  } else {
 
-		# This is an insert
+    # This is an insert
 
-	   my $sth = $dbh -> prepare (
+     my $sth = $dbh -> prepare (
 
-   	   'INSERT
-   	      INTO whatson_organisation (
-   	              name				,
-   	              type				,
-   	              status				,
-			           paid_in_period	,
-   	              email				,
-   	              website			,
-   	              description		,
-   	              address1			,
-   	              address2			,
-   	              address3			,
-   	              address4			,
-   	              postcode
-   	  ) VALUES ( :name				,
-			          :type				,
-			          :status				,
-			          :paid_in_period	,
-			          :email				,
-			          :website			,
-			          :description		,
-			          :address1			,
-			          :address2			,
-			          :address3			,
-			          :address4			,
-			          :postcode
-		  )'
+        'INSERT
+           INTO whatson_organisation (
+                   name        ,
+                   type        ,
+                   status        ,
+                 paid_in_period  ,
+                   email        ,
+                   website      ,
+                   description    ,
+                   address1      ,
+                   address2      ,
+                   address3      ,
+                   address4      ,
+                   postcode
+       ) VALUES ( :name        ,
+                :type        ,
+                :status        ,
+                :paid_in_period  ,
+                :email        ,
+                :website      ,
+                :description    ,
+                :address1      ,
+                :address2      ,
+                :address3      ,
+                :address4      ,
+                :postcode
+      )'
 
-   	) ;
+     ) ;
 
-		$sth -> bind_param ( ':name'				, $self -> name				) ;
-		$sth -> bind_param ( ':type'				, $self -> type				) ;
-		$sth -> bind_param ( ':status'			, $self -> status				) ;
-		$sth -> bind_param ( ':paid_in_period'	, $self -> paid_in_period	) ;
-		$sth -> bind_param ( ':email'				, $self -> email				) ;
-		$sth -> bind_param ( ':website'			, $self -> website			) ;
-		$sth -> bind_param ( ':description'		, $self -> description		) ;
-		$sth -> bind_param ( ':address1'			, $self -> address1			) ;
-		$sth -> bind_param ( ':address2'			, $self -> address2			) ;
-		$sth -> bind_param ( ':address3'			, $self -> address3			) ;
-		$sth -> bind_param ( ':address4'			, $self -> address4			) ;
-		$sth -> bind_param ( ':postcode'			, $self -> postcode			) ;
+    $sth -> bind_param ( ':name'        , $self -> name        ) ;
+    $sth -> bind_param ( ':type'        , $self -> type        ) ;
+    $sth -> bind_param ( ':status'      , $self -> status        ) ;
+    $sth -> bind_param ( ':paid_in_period'  , $self -> paid_in_period  ) ;
+    $sth -> bind_param ( ':email'        , $self -> email        ) ;
+    $sth -> bind_param ( ':website'      , $self -> website      ) ;
+    $sth -> bind_param ( ':description'    , $self -> description    ) ;
+    $sth -> bind_param ( ':address1'      , $self -> address1      ) ;
+    $sth -> bind_param ( ':address2'      , $self -> address2      ) ;
+    $sth -> bind_param ( ':address3'      , $self -> address3      ) ;
+    $sth -> bind_param ( ':address4'      , $self -> address4      ) ;
+    $sth -> bind_param ( ':postcode'      , $self -> postcode      ) ;
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-		$self -> fetch ( $dbh ) ;
+    $self -> fetch ( $dbh ) ;
 
-		DATA::WhatsOn::Organisation::Function
-			-> organisation_rowid ( $self -> rowid ) ;
+    DATA::WhatsOn::Organisation::Function
+      -> organisation_rowid ( $self -> rowid ) ;
 
-		foreach my $function ( @{ $self -> functions } ) {
+    foreach my $function ( @{ $self -> functions } ) {
 
          $function -> save ( $dbh ) ;
 
       } ;
 
-	}
+  }
 
 }
 

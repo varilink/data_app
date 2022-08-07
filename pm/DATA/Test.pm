@@ -9,26 +9,26 @@ use base qw / DATA::Main / ;
 
 sub setup {
 
-	my $self = shift ;
+  my $self = shift ;
 
-	$self -> run_modes ( {
+  $self -> run_modes ( {
 
-		'test' => 'test'
+    'test' => 'test'
 
-	} ) ;
+  } ) ;
 
 }
 
 sub test {
 
-	my $self = shift ;
+  my $self = shift ;
 
-	my $query = $self -> query ;
+  my $query = $self -> query ;
 
-	print STDERR "\n\n\nI have got in to the test routing\n\n\n" ;
+  print STDERR "\n\n\nI have got in to the test routing\n\n\n" ;
 
-	use Data::Dumper ;
-	print STDERR Dumper $query ;
+  use Data::Dumper ;
+  print STDERR Dumper $query ;
 
 }
 

@@ -18,17 +18,17 @@ sub new {
    my $proto = shift ;
    my $class = ref ( $proto ) || $proto ;
    my $self = { } ;
-	$self -> { FETCHED } = 0 ; # Will be updated to 1 or true after a fetch
+  $self -> { FETCHED } = 0 ; # Will be updated to 1 or true after a fetch
    $self -> { USERID } = '' ;
    $self -> { ROLE } = '' ;
    $self -> { EMAIL } = undef ;
    $self -> { FIRST_NAME } = '' ;
    $self -> { SURNAME } = '' ;
    $self -> { PASSWORD } = '' ;
-	$self -> { STATUS } = '' ;
-	$self -> { SECRET } = '' ;
-	$self -> { DATETIME } = '' ;
-	$self -> { ROWID } = undef ;
+  $self -> { STATUS } = '' ;
+  $self -> { SECRET } = '' ;
+  $self -> { DATETIME } = '' ;
+  $self -> { ROWID } = undef ;
    bless( $self , $class) ;
    return $self ;
 
@@ -36,9 +36,9 @@ sub new {
 
 sub _fetched {
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { _FETCHED } = shift }
-	return $self -> { _FETCHED } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { _FETCHED } = shift }
+  return $self -> { _FETCHED } ;
 
 }
 
@@ -124,12 +124,12 @@ Password accessor method
 
    if ( @_ ) {
 
-		# If the password isn't a hash then hash it
-		my $input = shift ;
-		if ( $input =~ /^[0-9a-f]{32}$/ ) { $self -> { PASSWORD } = $input }
-		else { $self -> { PASSWORD } = md5_hex $input }
+    # If the password isn't a hash then hash it
+    my $input = shift ;
+    if ( $input =~ /^[0-9a-f]{32}$/ ) { $self -> { PASSWORD } = $input }
+    else { $self -> { PASSWORD } = md5_hex $input }
 
-	}
+  }
 
    return $self -> { PASSWORD } ;
 
@@ -157,9 +157,9 @@ Secret accessor method
 
 =cut
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { SECRET } = shift }
-	return $self -> { SECRET } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { SECRET } = shift }
+  return $self -> { SECRET } ;
 
 }
 
@@ -171,9 +171,9 @@ Datetime accessor method
 
 =cut
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { DATETIME } = shift }
-	return $self -> { DATETIME } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { DATETIME } = shift }
+  return $self -> { DATETIME } ;
 
 }
 
@@ -185,9 +185,9 @@ Rowid (person rowid) accessor method
 
 =cut
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { ROWID } = shift }
-	return $self -> { ROWID } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { ROWID } = shift }
+  return $self -> { ROWID } ;
 
 }
 
@@ -200,48 +200,48 @@ objects.
 
 sub as_hash {
 
-	my $self = shift ;
-	my %user = %{ $self } ;
-	tie my %hash , 'Hash::Case::Lower' , \%user ;
-	return %hash ;
+  my $self = shift ;
+  my %user = %{ $self } ;
+  tie my %hash , 'Hash::Case::Lower' , \%user ;
+  return %hash ;
 
 }
 
 sub load {
 
-	my ( $class , $path , $dbh ) = @_ ;
+  my ( $class , $path , $dbh ) = @_ ;
 
-	if ( ref $class ) { confess 'Class method called as object method' }
+  if ( ref $class ) { confess 'Class method called as object method' }
 
-	open my $fh , '<' , $path ;
+  open my $fh , '<' , $path ;
 
-	my $rec = <$fh> ;
+  my $rec = <$fh> ;
 
 USER:
 
-	while ( $rec ) {
+  while ( $rec ) {
 
-		chomp $rec ;
+    chomp $rec ;
 
-		my ( $userid , $password , $email , $first_name , $surname , $role )
-			= split /\|/ , $rec ;
+    my ( $userid , $password , $email , $first_name , $surname , $role )
+      = split /\|/ , $rec ;
 
-		my $user = new DATA::Auth::User ;
-		$user -> userid ( $userid ) ;
+    my $user = new DATA::Auth::User ;
+    $user -> userid ( $userid ) ;
       $user -> role ( $role ) ;
-		$user -> password ( $password ) ;
-		$user -> email ( $email ) ;
-		$user -> first_name ( $first_name ) ;
-		$user -> surname ( $surname ) ;
-		$user -> status ( 'CONFIRMED' ) ;
+    $user -> password ( $password ) ;
+    $user -> email ( $email ) ;
+    $user -> first_name ( $first_name ) ;
+    $user -> surname ( $surname ) ;
+    $user -> status ( 'CONFIRMED' ) ;
 
-		$user -> save ( $dbh ) ;
+    $user -> save ( $dbh ) ;
 
-		$rec = <$fh> ;
+    $rec = <$fh> ;
 
-	} # End of USER
+  } # End of USER
 
-	close $fh ;
+  close $fh ;
 
 }
 
@@ -254,233 +254,233 @@ or via email.
 
 =cut
 
-	my $proto = shift ;
-	my $dbh = shift ;
+  my $proto = shift ;
+  my $dbh = shift ;
 
-	my $sth ;
+  my $sth ;
 
-	if ( ref $proto ) {
+  if ( ref $proto ) {
 
-		# Called as an object, fetch and individual user
+    # Called as an object, fetch and individual user
 
-		my $self = $proto ;
+    my $self = $proto ;
 
-		my $class = ref $proto ;
+    my $class = ref $proto ;
 
-		if ( $self -> userid ) {
+    if ( $self -> userid ) {
 
-			$sth = $dbh -> prepare (
+      $sth = $dbh -> prepare (
 
-				'SELECT *
-				   FROM auth_user
-				  WHERE userid = :userid'
+        'SELECT *
+           FROM auth_user
+          WHERE userid = :userid'
 
-			) ;
+      ) ;
 
-			$sth -> bind_param ( ':userid' , $self -> userid ) ;
+      $sth -> bind_param ( ':userid' , $self -> userid ) ;
 
-		} elsif ( $self -> email ) {
+    } elsif ( $self -> email ) {
 
-			$sth = $dbh -> prepare (
+      $sth = $dbh -> prepare (
 
-				'SELECT *
-					FROM auth_user
-				  WHERE email = :email'
+        'SELECT *
+          FROM auth_user
+          WHERE email = :email'
 
-			) ;
+      ) ;
 
-			$sth -> bind_param ( ':email' , $self -> email ) ;
+      $sth -> bind_param ( ':email' , $self -> email ) ;
 
-		}
+    }
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-		my $row ;
+    my $row ;
 
-		if ( $row = $sth -> fetchrow_hashref ) {
+    if ( $row = $sth -> fetchrow_hashref ) {
 
-			$self -> _fetched ( 1 ) ;
-			$self -> rowid     ( $row -> { rowid     } ) ;
-			$self -> userid     ( $row -> { userid     } ) ;
-			$self -> role     ( $row -> { role     } ) ;
-			$self -> email      ( $row -> { email      } ) ;
-			$self -> first_name ( $row -> { first_name } ) ;
-			$self -> surname    ( $row -> { surname    } ) ;
-			$self -> password   ( $row -> { password   } ) ;
-			$self -> status     ( $row -> { status     } ) ;
-			$self -> secret     ( $row -> { secret     } ) ;
-			if ( $row -> { datetime } ) {
-				$self -> datetime ( new DateTime (
-					year   => substr ( $row -> { datetime } , 0  , 4 ) ,
-				   month  => substr ( $row -> { datetime } , 5  , 2 ) ,
-				   day    => substr ( $row -> { datetime } , 8  , 2 ) ,
-		         hour   => substr ( $row -> { datetime } , 11 , 2 ) ,
-				   minute => substr ( $row -> { datetime } , 14 , 2 ) ,
-				   second => substr ( $row -> { datetime } , 17 , 2 ) ,
-			   ) )
-			}
+      $self -> _fetched ( 1 ) ;
+      $self -> rowid     ( $row -> { rowid     } ) ;
+      $self -> userid     ( $row -> { userid     } ) ;
+      $self -> role     ( $row -> { role     } ) ;
+      $self -> email      ( $row -> { email      } ) ;
+      $self -> first_name ( $row -> { first_name } ) ;
+      $self -> surname    ( $row -> { surname    } ) ;
+      $self -> password   ( $row -> { password   } ) ;
+      $self -> status     ( $row -> { status     } ) ;
+      $self -> secret     ( $row -> { secret     } ) ;
+      if ( $row -> { datetime } ) {
+        $self -> datetime ( new DateTime (
+          year   => substr ( $row -> { datetime } , 0  , 4 ) ,
+           month  => substr ( $row -> { datetime } , 5  , 2 ) ,
+           day    => substr ( $row -> { datetime } , 8  , 2 ) ,
+             hour   => substr ( $row -> { datetime } , 11 , 2 ) ,
+           minute => substr ( $row -> { datetime } , 14 , 2 ) ,
+           second => substr ( $row -> { datetime } , 17 , 2 ) ,
+         ) )
+      }
 
-			return 1 ;
+      return 1 ;
 
-		} else {
+    } else {
 
-			return 0 ;
+      return 0 ;
 
-		}
+    }
 
-	} else {
+  } else {
 
-		# Called as a class, fetch a list of users
+    # Called as a class, fetch a list of users
 
-		my $class = $proto ;
+    my $class = $proto ;
 
-		my $sth = $dbh -> prepare (
+    my $sth = $dbh -> prepare (
 
-			'SELECT *
-			   FROM auth_user'
+      'SELECT *
+         FROM auth_user'
 
-		) ;			
+    ) ;      
 
-		my @users ;
+    my @users ;
 
-		while ( my $row = $sth -> fetchrow_hashref ) {
+    while ( my $row = $sth -> fetchrow_hashref ) {
 
-			my $user = new DATA::Auth::User ;
+      my $user = new DATA::Auth::User ;
 
-			$user -> _fetched ( 1 ) ;
-			$user -> rowid ( $row -> { rowid } ) ;
-			$user -> userid     ( $row -> { userid     } ) ;
-			$user -> role     ( $row -> { role     } ) ;
-			$user -> email      ( $row -> { email      } ) ;
-			$user -> first_name ( $row -> { first_name } ) ;
-			$user -> surname    ( $row -> { surname    } ) ;
-			$user -> password   ( $row -> { password   } ) ;
-			$user -> status     ( $row -> { status     } ) ;
-			$user -> secret     ( $row -> { secret     } ) ;
-			$user -> datetime   ( $row -> { datetime   } ) ;
+      $user -> _fetched ( 1 ) ;
+      $user -> rowid ( $row -> { rowid } ) ;
+      $user -> userid     ( $row -> { userid     } ) ;
+      $user -> role     ( $row -> { role     } ) ;
+      $user -> email      ( $row -> { email      } ) ;
+      $user -> first_name ( $row -> { first_name } ) ;
+      $user -> surname    ( $row -> { surname    } ) ;
+      $user -> password   ( $row -> { password   } ) ;
+      $user -> status     ( $row -> { status     } ) ;
+      $user -> secret     ( $row -> { secret     } ) ;
+      $user -> datetime   ( $row -> { datetime   } ) ;
 
-			push @users , $user ;
+      push @users , $user ;
 
-		}
+    }
 
-		return @users ;
+    return @users ;
 
-	}
+  }
 
 }
 
 sub save {
 
-	my ( $self , $dbh ) = @_ ;
+  my ( $self , $dbh ) = @_ ;
 
-	if ( $self -> _fetched ) {
+  if ( $self -> _fetched ) {
 
-		# This is an update
+    # This is an update
 
-		print STDERR "I am in the update routine\n" ;
+    print STDERR "I am in the update routine\n" ;
 
-		my $sth ;
+    my $sth ;
 
-		if ( $self -> rowid ) {
+    if ( $self -> rowid ) {
 
-			print STDERR "And I have gone down the rowid leg\n" ;
+      print STDERR "And I have gone down the rowid leg\n" ;
 
-			$sth = $dbh -> prepare (
+      $sth = $dbh -> prepare (
 
-				'UPDATE auth_user
-				    SET userid     = :userid     ,
-				        role       = :role       ,
-						  email      = :email      ,
-   	              first_name = :first_name ,
-   	              surname    = :surname    ,
-   	              password   = :password   ,
-   	              status     = :status     ,
-   	              secret     = :secret     ,
-   	              datetime   = :datetime
-				  WHERE rowid = :rowid' 
+        'UPDATE auth_user
+            SET userid     = :userid     ,
+                role       = :role       ,
+              email      = :email      ,
+                   first_name = :first_name ,
+                   surname    = :surname    ,
+                   password   = :password   ,
+                   status     = :status     ,
+                   secret     = :secret     ,
+                   datetime   = :datetime
+          WHERE rowid = :rowid' 
 
-			) ;
+      ) ;
 
-			$sth -> bind_param ( ':rowid'		, $self -> rowid			) ;
+      $sth -> bind_param ( ':rowid'    , $self -> rowid      ) ;
 
-		} else {
+    } else {
 
-			print STDERR "And I have gone down the userid leg\n" ;
+      print STDERR "And I have gone down the userid leg\n" ;
 
-			$sth = $dbh -> prepare (
+      $sth = $dbh -> prepare (
 
-				'UPDATE auth_user
-				    SET role       = :role       ,
-						  email      = :email      ,
-   	              first_name = :first_name ,
-   	              surname    = :surname    ,
-   	              password   = :password   ,
-   	              status     = :status     ,
-   	              secret     = :secret     ,
-   	              datetime   = :datetime
-				  WHERE userid = :userid' 
+        'UPDATE auth_user
+            SET role       = :role       ,
+              email      = :email      ,
+                   first_name = :first_name ,
+                   surname    = :surname    ,
+                   password   = :password   ,
+                   status     = :status     ,
+                   secret     = :secret     ,
+                   datetime   = :datetime
+          WHERE userid = :userid' 
 
-			) ;
+      ) ;
 
-		}
+    }
 
-		$sth -> bind_param ( ':userid'		, $self -> userid			) ;
-		$sth -> bind_param ( ':role'			, $self -> role			) ;
-		$sth -> bind_param ( ':email'			, $self -> email			) ;
-		$sth -> bind_param ( ':first_name'	, $self -> first_name	) ;
-		$sth -> bind_param ( ':surname'		, $self -> surname		) ;
-		$sth -> bind_param ( ':password'		, $self -> password		) ;
-		$sth -> bind_param ( ':status'		, $self -> status			) ;
-		$sth -> bind_param ( ':secret'		, $self -> secret			) ;
-		$sth -> bind_param ( ':datetime'		, $self -> datetime		) ;
+    $sth -> bind_param ( ':userid'    , $self -> userid      ) ;
+    $sth -> bind_param ( ':role'      , $self -> role      ) ;
+    $sth -> bind_param ( ':email'      , $self -> email      ) ;
+    $sth -> bind_param ( ':first_name'  , $self -> first_name  ) ;
+    $sth -> bind_param ( ':surname'    , $self -> surname    ) ;
+    $sth -> bind_param ( ':password'    , $self -> password    ) ;
+    $sth -> bind_param ( ':status'    , $self -> status      ) ;
+    $sth -> bind_param ( ':secret'    , $self -> secret      ) ;
+    $sth -> bind_param ( ':datetime'    , $self -> datetime    ) ;
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-	} else {
+  } else {
 
-		# This is an insert
+    # This is an insert
 
-		my $sth = $dbh -> prepare (
+    my $sth = $dbh -> prepare (
 
-			'INSERT
-			   INTO auth_user (
-			           userid      ,
+      'INSERT
+         INTO auth_user (
+                 userid      ,
                     role        ,
-			           email       ,
-			           first_name  ,
-			           surname     ,
-			           password    ,
-			           status      ,
-			           secret      ,
-			           datetime
-		 ) VALUES (   :userid     , 
+                 email       ,
+                 first_name  ,
+                 surname     ,
+                 password    ,
+                 status      ,
+                 secret      ,
+                 datetime
+     ) VALUES (   :userid     , 
                     :role       ,
                     :email      ,
-			           :first_name ,
-			           :surname    ,
-			           :password   ,
-			           :status     ,
-			           :secret     ,
-			           :datetime
-		 )'
+                 :first_name ,
+                 :surname    ,
+                 :password   ,
+                 :status     ,
+                 :secret     ,
+                 :datetime
+     )'
 
-		) ;
+    ) ;
 
-		$sth -> bind_param ( ':userid'     , $self -> userid     ) ;
-		$sth -> bind_param ( ':role'       , $self -> role       ) ;
-		$sth -> bind_param ( ':email'      , $self -> email      ) ;
-		$sth -> bind_param ( ':first_name' , $self -> first_name ) ;
-		$sth -> bind_param ( ':surname'    , $self -> surname    ) ;
-		$sth -> bind_param ( ':password'   , $self -> password   ) ;
-		$sth -> bind_param ( ':status'     , $self -> status     ) ;
-		$sth -> bind_param
-			( ':secret' , $self -> secret ? $self -> secret : '' ) ;
-		$sth -> bind_param ( ':datetime'   , $self -> datetime
-			? $self -> datetime -> strftime ( "%Y-%m-%d %H:%M:%S" ) : '' ) ;
+    $sth -> bind_param ( ':userid'     , $self -> userid     ) ;
+    $sth -> bind_param ( ':role'       , $self -> role       ) ;
+    $sth -> bind_param ( ':email'      , $self -> email      ) ;
+    $sth -> bind_param ( ':first_name' , $self -> first_name ) ;
+    $sth -> bind_param ( ':surname'    , $self -> surname    ) ;
+    $sth -> bind_param ( ':password'   , $self -> password   ) ;
+    $sth -> bind_param ( ':status'     , $self -> status     ) ;
+    $sth -> bind_param
+      ( ':secret' , $self -> secret ? $self -> secret : '' ) ;
+    $sth -> bind_param ( ':datetime'   , $self -> datetime
+      ? $self -> datetime -> strftime ( "%Y-%m-%d %H:%M:%S" ) : '' ) ;
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-	}
+  }
 
 }
 
@@ -520,9 +520,9 @@ Insert a user to the database.
    $sth -> bind_param ( 5 , md5 ( $self -> password ) ) ;
    $sth -> bind_param ( 6 , $self -> status ) ;
    $sth -> bind_param ( 7 , $self -> secret ) ;
-	$sth -> bind_param (
-		8 , $self -> datetime -> strftime ( "%Y-%m-%d %H:%M:%S" )
-	) ;
+  $sth -> bind_param (
+    8 , $self -> datetime -> strftime ( "%Y-%m-%d %H:%M:%S" )
+  ) ;
 
    $sth -> execute ;
 
@@ -537,17 +537,17 @@ Store a user in the database. Performs either an insert or an update.
 
 =cut
 
-	my ( $self , $dbh ) = @_ ;
+  my ( $self , $dbh ) = @_ ;
 
-	my $sth ;
+  my $sth ;
 
-	if ( $self -> rowid ) {
+  if ( $self -> rowid ) {
 
-		# We have a rowid so this is an update
+    # We have a rowid so this is an update
 
-		$sth = $dbh -> prepare (
+    $sth = $dbh -> prepare (
 
-			'UPDATE auth_user
+      'UPDATE auth_user
              SET userid     = :userid     ,
                  email      = :email      ,
                  first_name = :first_name ,
@@ -558,17 +558,17 @@ Store a user in the database. Performs either an insert or an update.
                  datetime   = :datetime
            WHERE rowid      = :rowid'
 
-		) ;
+    ) ;
 
-		$sth -> bind_param ( ':rowid' , $self -> rowid ) ;
+    $sth -> bind_param ( ':rowid' , $self -> rowid ) ;
 
-	} else {
+  } else {
 
-		# We don't have a rowid so this is an insert
+    # We don't have a rowid so this is an insert
 
-		$sth = $dbh -> prepare (
+    $sth = $dbh -> prepare (
 
-			'INSERT
+      'INSERT
             INTO auth_user ( userid      ,
                              email       ,
                              first_name  ,
@@ -586,50 +586,50 @@ Store a user in the database. Performs either an insert or an update.
                              :secret     ,
                              :datetime )' 
 
-		) ;
+    ) ;
 
-	}
+  }
 
-	$sth -> bind_param ( ':userid' , $self -> userid ) ;
-	$sth -> bind_param ( ':email' , $self -> email ) ;
-	$sth -> bind_param ( ':first_name' , $self -> first_name ) ;
-	$sth -> bind_param ( ':surname' , $self -> surname ) ;
-	$self -> password =~ /^[a-zA-Z0-9]+$/
-		? $sth -> bind_param ( ':password' , md5 ( $self -> password ) )
-		: $sth -> bind_param ( ':password' , $self -> password ) ;
-	$sth -> bind_param ( ':status' , $self -> status ) ;
-	$sth -> bind_param ( ':secret' , $self -> secret ) ;
-	$sth -> bind_param (
-		':datetime' , $self -> datetime -> strftime ( "%Y-%m-%d %H:%M:%S" )
-	) ;
+  $sth -> bind_param ( ':userid' , $self -> userid ) ;
+  $sth -> bind_param ( ':email' , $self -> email ) ;
+  $sth -> bind_param ( ':first_name' , $self -> first_name ) ;
+  $sth -> bind_param ( ':surname' , $self -> surname ) ;
+  $self -> password =~ /^[a-zA-Z0-9]+$/
+    ? $sth -> bind_param ( ':password' , md5 ( $self -> password ) )
+    : $sth -> bind_param ( ':password' , $self -> password ) ;
+  $sth -> bind_param ( ':status' , $self -> status ) ;
+  $sth -> bind_param ( ':secret' , $self -> secret ) ;
+  $sth -> bind_param (
+    ':datetime' , $self -> datetime -> strftime ( "%Y-%m-%d %H:%M:%S" )
+  ) ;
 
-	$sth -> execute ;
+  $sth -> execute ;
 
-	if ( !$self -> rowid && $self -> roles ) {
+  if ( !$self -> rowid && $self -> roles ) {
 
-		# We have inserted a new auth_user and it has roles defined.
-		# We need to insert the roles too.
+    # We have inserted a new auth_user and it has roles defined.
+    # We need to insert the roles too.
 
-		foreach my $role ( @{ $self -> roles } ) {
+    foreach my $role ( @{ $self -> roles } ) {
 
-			$sth = $dbh -> prepare (
+      $sth = $dbh -> prepare (
 
-				'INSERT
-      		   INTO auth_user_role ( userid  ,
-      		                         role      )
-      		 VALUES                ( :userid ,
-      		                         :role     )'
+        'INSERT
+             INTO auth_user_role ( userid  ,
+                                   role      )
+           VALUES                ( :userid ,
+                                   :role     )'
 
-			) ;
+      ) ;
 
-			$sth -> bind_param ( ':userid' , $self -> userid ) ;
-			$sth -> bind_param ( ':role' , $role ) ;
+      $sth -> bind_param ( ':userid' , $self -> userid ) ;
+      $sth -> bind_param ( ':role' , $role ) ;
 
-			$sth -> execute ;
+      $sth -> execute ;
 
-		} # End foreach
+    } # End foreach
 
-	}
+  }
 
 }
 
@@ -641,26 +641,26 @@ Class method to generate a password
 
 =cut
 
-	my $proto = shift ;
+  my $proto = shift ;
 
-	use App::Genpass ;
-	my $genpass = App::Genpass -> new ;
-	my $password = $genpass -> generate ( 1 ) ;
+  use App::Genpass ;
+  my $genpass = App::Genpass -> new ;
+  my $password = $genpass -> generate ( 1 ) ;
 
-	if ( ref $proto ) {
+  if ( ref $proto ) {
 
-		# Called as an object, populate self with the generated password
-		my $self = $proto ;
-		my $class = ref $proto ;
-		$self -> password ( $password ) ;
+    # Called as an object, populate self with the generated password
+    my $self = $proto ;
+    my $class = ref $proto ;
+    $self -> password ( $password ) ;
 
-	} else {
+  } else {
 
-		# Called as a class, return the generated password
-		my $class = $proto ;
-		return $password ;
+    # Called as a class, return the generated password
+    my $class = $proto ;
+    return $password ;
 
-	}
+  }
 
 }
 
@@ -672,21 +672,21 @@ Test if there is already a userid registered for the email address.
 
 =cut
 
-	my ( $self , $dbh ) = @_ ;
+  my ( $self , $dbh ) = @_ ;
 
-	my $sth = $dbh -> prepare (
+  my $sth = $dbh -> prepare (
 
-		'SELECT NULL
-		   FROM auth_user
-		  WHERE email= :email'
+    'SELECT NULL
+       FROM auth_user
+      WHERE email= :email'
 
-	) ;
+  ) ;
 
-	$sth -> bind_param ( ':email' , $self -> email ) ;
-	$sth -> execute ;
+  $sth -> bind_param ( ':email' , $self -> email ) ;
+  $sth -> execute ;
 
-	if ( my $row = $sth -> fetchrow_hashref ) { return 1 }
-	else { return 0 }
+  if ( my $row = $sth -> fetchrow_hashref ) { return 1 }
+  else { return 0 }
 
 }
 
@@ -698,21 +698,21 @@ Test if a userid is a duplicate of one already known.
 
 =cut
 
-	my ( $self , $dbh ) = @_ ;
+  my ( $self , $dbh ) = @_ ;
 
-	my $sth = $dbh -> prepare (
+  my $sth = $dbh -> prepare (
 
-		'SELECT NULL
-		   FROM auth_user
-		  WHERE userid = :userid'
+    'SELECT NULL
+       FROM auth_user
+      WHERE userid = :userid'
 
-	) ;
+  ) ;
 
-	$sth -> bind_param ( ':userid' , $self -> userid ) ;
-	$sth -> execute ;
+  $sth -> bind_param ( ':userid' , $self -> userid ) ;
+  $sth -> execute ;
 
-	if ( my $row = $sth -> fetchrow_hashref ) { return 1 }
-	else { return 0 }
+  if ( my $row = $sth -> fetchrow_hashref ) { return 1 }
+  else { return 0 }
 
 }
 

@@ -95,12 +95,12 @@ This hook also ensures that the template output is UTF8 encoded.
 
   #-----------------------------------------------------------------------------
   # Pass the PSGI environment to the template
-	$tmpl -> param ( 'psgi' => $self -> query -> env ) ;
+  $tmpl -> param ( 'psgi' => $self -> query -> env ) ;
 
   #-----------------------------------------------------------------------------
   # Pass the CGI application configuration to the template
-	my $env = $self -> conf -> param ( 'env' ) ;
-	$tmpl -> param ( 'conf' => $env ) ;
+  my $env = $self -> conf -> param ( 'env' ) ;
+  $tmpl -> param ( 'conf' => $env ) ;
 
   #-----------------------------------------------------------------------------
   # Convert the session to a template parameter called session.
@@ -115,14 +115,14 @@ This hook also ensures that the template output is UTF8 encoded.
   $tmpl -> param ( 'session' => $session ) ;
 
   #-----------------------------------------------------------------------------
-	# Populate the template with all cookies
+  # Populate the template with all cookies
   my @cookies = $self -> query -> cookie ;
   my $cookies = { } ;
   foreach my $cookie ( @cookies ) {
     $cookies -> { $cookie } = $self -> query -> cookie ( $cookie ) unless
     $cookie eq 'csrftoken' || $cookie eq 'CGISESSID' || $cookie eq 'sessionid' ;
   }
-	$tmpl -> param ( 'cookies' , $cookies ) ;
+  $tmpl -> param ( 'cookies' , $cookies ) ;
 
   #-----------------------------------------------------------------------------
   # Populate the template with the current CGI Application parameters
@@ -134,9 +134,9 @@ This hook also ensures that the template output is UTF8 encoded.
     }
   }
 
-	# Since we're processing a template we must be about to output a web page.
-	# Set the appropriate content type header.
-	$self -> header_add ( -type => 'text/html; charset=utf-8' ) ;
+  # Since we're processing a template we must be about to output a web page.
+  # Set the appropriate content type header.
+  $self -> header_add ( -type => 'text/html; charset=utf-8' ) ;
 
 }
 

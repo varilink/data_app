@@ -18,11 +18,11 @@ sub new {
    my $self = { } ;
    $self -> { ROWID } = undef ;
    $self -> { PUBLISHED_DATE } = '' ;
-	$self -> { TITLE } = '' ;
-	$self -> { IMAGE } = '' ;
-	$self -> { MAILCHIMP_IMAGE } = '' ;
-	$self -> { PRECIS } = '' ;
-	$self -> { ITEM_TEXT } = '' ;
+  $self -> { TITLE } = '' ;
+  $self -> { IMAGE } = '' ;
+  $self -> { MAILCHIMP_IMAGE } = '' ;
+  $self -> { PRECIS } = '' ;
+  $self -> { ITEM_TEXT } = '' ;
   $self -> { TEMP } = {} ;
 
    bless ( $self , $class ) ;
@@ -198,78 +198,78 @@ sub fetch {
 
 =cut
 
-	my $proto = shift ;
-	my $dbh = shift ;
-	my $filter = shift if @_ ;
+  my $proto = shift ;
+  my $dbh = shift ;
+  my $filter = shift if @_ ;
 
-	if ( ref $proto ) {
+  if ( ref $proto ) {
 
-		# Called as object, fetch an individual news item
+    # Called as object, fetch an individual news item
 
-		my $self = $proto ;
+    my $self = $proto ;
 
-		my $sth = $dbh -> prepare (
-			'SELECT * FROM whatson_news_item WHERE rowid = :rowid'
-		) ;
+    my $sth = $dbh -> prepare (
+      'SELECT * FROM whatson_news_item WHERE rowid = :rowid'
+    ) ;
 
       $sth -> bind_param ( ':rowid' , $self -> rowid ) ;
 
-	   $sth -> execute ;
+     $sth -> execute ;
 
-		if ( my $row = $sth -> fetchrow_hashref ) {
+    if ( my $row = $sth -> fetchrow_hashref ) {
 
-		   $self -> rowid					( $row -> { rowid					} ) ;
-	   	$self -> published_date		( $row -> { published_date		} ) ;
-	 	  	$self -> title					( $row -> { title					} ) ;
-	 	  	$self -> image					( $row -> { image					} ) ;
-	 	  	$self -> mailchimp_image	( $row -> { mailchimp_image	} ) ;
-	 	  	$self -> precis				( $row -> { precis				} ) ;
-	 	  	$self -> item_text			( $row -> { item_text			} ) ;
+       $self -> rowid          ( $row -> { rowid          } ) ;
+       $self -> published_date    ( $row -> { published_date    } ) ;
+         $self -> title          ( $row -> { title          } ) ;
+         $self -> image          ( $row -> { image          } ) ;
+         $self -> mailchimp_image  ( $row -> { mailchimp_image  } ) ;
+         $self -> precis        ( $row -> { precis        } ) ;
+         $self -> item_text      ( $row -> { item_text      } ) ;
 
-			return 1 ; # Tell the caller it was a success
+      return 1 ; # Tell the caller it was a success
 
-		} else {
+    } else {
 
-			return 0 ; # Tell the caller it was a failure
+      return 0 ; # Tell the caller it was a failure
 
-		}
+    }
 
-	} else {
+  } else {
 
-		# Called as class, fetch a list of news items
+    # Called as class, fetch a list of news items
 
-		my $class = $proto ;
+    my $class = $proto ;
 
-		my $stmt
-			= 'SELECT * FROM whatson_news_item ORDER BY published_date DESC, rowid DESC' ;
+    my $stmt
+      = 'SELECT * FROM whatson_news_item ORDER BY published_date DESC, rowid DESC' ;
 
-		$stmt .= ' LIMIT ' . $filter -> { limit } if $filter -> { limit } ;
+    $stmt .= ' LIMIT ' . $filter -> { limit } if $filter -> { limit } ;
 
-		my $sth = $dbh -> prepare ( $stmt ) ;
+    my $sth = $dbh -> prepare ( $stmt ) ;
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-		my @newsitems ;
+    my @newsitems ;
 
-		while ( my $row = $sth -> fetchrow_hashref ) {
+    while ( my $row = $sth -> fetchrow_hashref ) {
 
-			my $newsitem = new DATA::WhatsOn::NewsItem ;
+      my $newsitem = new DATA::WhatsOn::NewsItem ;
 
-			$newsitem -> rowid				( $row -> { rowid					} ) ;
-			$newsitem -> published_date	( $row -> { published_date		} ) ;
-			$newsitem -> title				( $row -> { title					} ) ;
-			$newsitem -> image				( $row -> { image					} ) ;
-			$newsitem -> mailchimp_image	( $row -> { mailchimp_image	} ) ;
-			$newsitem -> precis				( $row -> { precis				} ) ;
-			$newsitem -> item_text			( $row -> { item_text			} ) ;
+      $newsitem -> rowid        ( $row -> { rowid          } ) ;
+      $newsitem -> published_date  ( $row -> { published_date    } ) ;
+      $newsitem -> title        ( $row -> { title          } ) ;
+      $newsitem -> image        ( $row -> { image          } ) ;
+      $newsitem -> mailchimp_image  ( $row -> { mailchimp_image  } ) ;
+      $newsitem -> precis        ( $row -> { precis        } ) ;
+      $newsitem -> item_text      ( $row -> { item_text      } ) ;
 
-			push @newsitems , $newsitem ;
+      push @newsitems , $newsitem ;
 
-		}
+    }
 
-	   return @newsitems ;
+     return @newsitems ;
 
-	}
+  }
 
 }
 
@@ -279,65 +279,65 @@ sub save {
 
    my $published_date = _strtodate ( $self -> published_date ) ;
 
-	if ( $self -> rowid ) {
+  if ( $self -> rowid ) {
 
-		# This is an update
+    # This is an update
 
-		my $sth = $dbh -> prepare ('
+    my $sth = $dbh -> prepare ('
 
-			UPDATE	whatson_news_item
-			SET		published_date		= :published_date	,
-						title					= :title				,
-						image					= :image				,
-						precis				= :precis			,
-						item_text			= :item_text
-			WHERE		rowid					= :rowid
+      UPDATE  whatson_news_item
+      SET    published_date    = :published_date  ,
+            title          = :title        ,
+            image          = :image        ,
+            precis        = :precis      ,
+            item_text      = :item_text
+      WHERE    rowid          = :rowid
 
-		') ;
+    ') ;
 
-		$sth -> bind_param ( ':published_date'	, $published_date		) ;
-		$sth -> bind_param ( ':title'				, $self -> title		) ;
-		$sth -> bind_param ( ':image'				, $self -> image		) ;
-		$sth -> bind_param ( ':precis'			, $self -> precis		) ;
-		$sth -> bind_param ( ':item_text'		, $self -> item_text	) ;
-		$sth -> bind_param ( ':rowid'				, $self -> rowid		) ;
+    $sth -> bind_param ( ':published_date'  , $published_date    ) ;
+    $sth -> bind_param ( ':title'        , $self -> title    ) ;
+    $sth -> bind_param ( ':image'        , $self -> image    ) ;
+    $sth -> bind_param ( ':precis'      , $self -> precis    ) ;
+    $sth -> bind_param ( ':item_text'    , $self -> item_text  ) ;
+    $sth -> bind_param ( ':rowid'        , $self -> rowid    ) ;
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-	} else {
+  } else {
 
-		# This is an insert
+    # This is an insert
 
-	   my $sth = $dbh -> prepare ('
+     my $sth = $dbh -> prepare ('
 
-			INSERT
-			INTO			whatson_news_item	(
-								published_date		,
-								title					,
-								image					,
-								precis				,
-								item_text
-			) VALUES (
-								:published_date	,
-								:title				,
-								:image				,
-								:precis				,
-								:item_text
-			)
+      INSERT
+      INTO      whatson_news_item  (
+                published_date    ,
+                title          ,
+                image          ,
+                precis        ,
+                item_text
+      ) VALUES (
+                :published_date  ,
+                :title        ,
+                :image        ,
+                :precis        ,
+                :item_text
+      )
 
-   	') ;
+     ') ;
 
-		$sth -> bind_param ( ':published_date'	, $published_date		) ;
-		$sth -> bind_param ( ':title'				, $self -> title		) ;
-		$sth -> bind_param ( ':image'				, $self -> image		) ;
-		$sth -> bind_param ( ':precis'			, $self -> precis		) ;
-		$sth -> bind_param ( ':item_text'		, $self -> item_text	) ;
+    $sth -> bind_param ( ':published_date'  , $published_date    ) ;
+    $sth -> bind_param ( ':title'        , $self -> title    ) ;
+    $sth -> bind_param ( ':image'        , $self -> image    ) ;
+    $sth -> bind_param ( ':precis'      , $self -> precis    ) ;
+    $sth -> bind_param ( ':item_text'    , $self -> item_text  ) ;
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-		$self -> fetch ( $dbh ) ;
+    $self -> fetch ( $dbh ) ;
 
-	}
+  }
 
 }
 

@@ -11,10 +11,10 @@ use String::Random ;
 
 sub _secret {
 
-	# Internal method that is called whenever we want a secret string
-	my $string = new String::Random ;
-	my $secret = $string -> randregex ( '[a-z0-9]{20}' ) ;
-	return $secret ;
+  # Internal method that is called whenever we want a secret string
+  my $string = new String::Random ;
+  my $secret = $string -> randregex ( '[a-z0-9]{20}' ) ;
+  return $secret ;
 
 }
 
@@ -27,8 +27,8 @@ sub new {
    $self -> { EMAIL } = '' ;
    $self -> { FIRST_NAME } = '' ;
    $self -> { SURNAME } = '' ;
-	$self -> { SUBSCRIBER } = 0 ;
-	$self -> { SECRET } = '' ;
+  $self -> { SUBSCRIBER } = 0 ;
+  $self -> { SECRET } = '' ;
    $self -> { TITLE } = '' ;
    $self -> { TELEPHONE } = '' ;
    $self -> { ADDRESS1 } = '' ;
@@ -36,8 +36,8 @@ sub new {
    $self -> { ADDRESS3 } = '' ;
    $self -> { ADDRESS4 } = '' ;
    $self -> { POSTCODE } = '' ;
-	$self -> { ROLE } = '' ;
-	$self -> { PRIMARY_CONTACT } = 0 ;
+  $self -> { ROLE } = '' ;
+  $self -> { PRIMARY_CONTACT } = 0 ;
    $self -> { ORGANISATIONS } = [ ] ;
 
    bless ( $self , $class ) ;
@@ -78,17 +78,17 @@ sub surname {
 
 sub subscriber {
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { SUBSCRIBER } = shift }
-	return $self -> { SUBSCRIBER } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { SUBSCRIBER } = shift }
+  return $self -> { SUBSCRIBER } ;
 
 }
 
 sub secret {
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { SECRET } = shift }
-	return $self -> { SECRET } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { SECRET } = shift }
+  return $self -> { SECRET } ;
 
 }
 
@@ -218,37 +218,37 @@ sub add_org {
 
 =cut
 
-	my $self	= shift					;	# Contact object
-	my $org_in		= shift			;	# Name of organisation supplied
-	my $role_in		= shift if @_	;	# Role supplied (optional)
+  my $self  = shift          ;  # Contact object
+  my $org_in    = shift      ;  # Name of organisation supplied
+  my $role_in    = shift if @_  ;  # Role supplied (optional)
 
-	my $existing_relationship = 0 ;
-	my @orgs = ( ) ;
+  my $existing_relationship = 0 ;
+  my @orgs = ( ) ;
 
-	foreach my $org ( @{ $self -> organisations } ) {
+  foreach my $org ( @{ $self -> organisations } ) {
 
-		if ( $org -> name eq $org_in ) {
+    if ( $org -> name eq $org_in ) {
 
-			$org -> role ( $role_in ) if $role_in ;
-			$existing_relationship = 1 ;
+      $org -> role ( $role_in ) if $role_in ;
+      $existing_relationship = 1 ;
 
-		}
+    }
 
-		push @orgs , ( $org ) ;
+    push @orgs , ( $org ) ;
 
-	}
+  }
 
-	unless ( $existing_relationship ) {
+  unless ( $existing_relationship ) {
 
-		my $org = new DATA::WhatsOn::Contact::Organisation ;
-		$org -> person_rowid ( $self -> rowid ) if $self -> rowid ;
-		$org -> name ( $org_in ) ;
-		$org -> role ( $role_in) if $role_in ;
-		push @orgs , ( $org ) ;
+    my $org = new DATA::WhatsOn::Contact::Organisation ;
+    $org -> person_rowid ( $self -> rowid ) if $self -> rowid ;
+    $org -> name ( $org_in ) ;
+    $org -> role ( $role_in) if $role_in ;
+    push @orgs , ( $org ) ;
 
-	}
+  }
 
-	$self -> organisations ( \@orgs ) ;
+  $self -> organisations ( \@orgs ) ;
 
 }
 
@@ -260,24 +260,24 @@ Returns the contact as an unblessed hash with lower case keys
 
 =cut
 
-	my $self = shift ;
+  my $self = shift ;
 
-	my %contact = %{ $self } ;
-	tie my %hash , 'Hash::Case::Lower' , \%contact ;
+  my %contact = %{ $self } ;
+  tie my %hash , 'Hash::Case::Lower' , \%contact ;
 
-	my @organisations ;
+  my @organisations ;
 
-	foreach my $organisation ( @{ $hash { 'organisations' } } ) {
+  foreach my $organisation ( @{ $hash { 'organisations' } } ) {
 
-		my %organisation = %{ $organisation } ;
-		tie my %subhash , 'Hash::Case::Lower' , \%organisation ;
-		push @organisations , \%subhash ;
+    my %organisation = %{ $organisation } ;
+    tie my %subhash , 'Hash::Case::Lower' , \%organisation ;
+    push @organisations , \%subhash ;
 
-	}
+  }
 
-	@{ $hash { 'organisations' } } = @organisations ;
+  @{ $hash { 'organisations' } } = @organisations ;
 
-	return %hash ;
+  return %hash ;
 
 }
 
@@ -287,74 +287,74 @@ sub load {
 
    if ( ref $class ) { confess 'Class method called as object method' }
 
-	my (
-		$email , $first_name , $name , $org_name , $primary_contact , $role ,
-		$surname , $title
-	) ;
+  my (
+    $email , $first_name , $name , $org_name , $primary_contact , $role ,
+    $surname , $title
+  ) ;
 
    open my $fh , '<' , $path ;
 
-	my $rec = <$fh> ;
+  my $rec = <$fh> ;
 
-	my $process_rec = sub {
+  my $process_rec = sub {
 
-		chomp $rec ;
+    chomp $rec ;
 
-		( $email , $name , $title , $role , $primary_contact , $org_name )
-			= split /\|/ , $rec ;
-		$name =~ /^(.*)\s([\w\-]*?)$/ ;
-		( $first_name , $surname ) = ( $1 , $2 ) ;
+    ( $email , $name , $title , $role , $primary_contact , $org_name )
+      = split /\|/ , $rec ;
+    $name =~ /^(.*)\s([\w\-]*?)$/ ;
+    ( $first_name , $surname ) = ( $1 , $2 ) ;
 
-		return 1 ;
+    return 1 ;
 
-	} ;
+  } ;
 
 CON:
 
-	while ( $rec && &$process_rec ) {
+  while ( $rec && &$process_rec ) {
 
-		# Parse record
+    # Parse record
 
-		# Create Contact
-		my $con = new DATA::WhatsOn::Contact ; 
-		$con -> email ( $email ) ;
-		$con -> first_name ( $first_name ) ;
-		$con -> surname ( $surname ) ;
-		$con -> title ( $title ) ;
+    # Create Contact
+    my $con = new DATA::WhatsOn::Contact ; 
+    $con -> email ( $email ) ;
+    $con -> first_name ( $first_name ) ;
+    $con -> surname ( $surname ) ;
+    $con -> title ( $title ) ;
 
-		# Set sensible default values for new fields
-		$con -> subscriber ( 1 ) ;
-		$con -> secret ( &_secret ) ;
+    # Set sensible default values for new fields
+    $con -> subscriber ( 1 ) ;
+    $con -> secret ( &_secret ) ;
 
-		my $prev_email = $email ;
+    my $prev_email = $email ;
 
 CON_ORG:
 
-		my @con_orgs = ( ) ;			
+    my @con_orgs = ( ) ;      
 
-		while ( $rec && &$process_rec && $email eq $prev_email ) {
+    while ( $rec && &$process_rec && $email eq $prev_email ) {
 
-			if ( $org_name ne '' ) {
+      if ( $org_name ne '' ) {
 
-				# Create contact organisation
-				my $con_org = new DATA::WhatsOn::Contact::Organisation ;
-				$con_org -> name ( $org_name ) ;
-				$con_org -> role ( $role ) ;
-				$con_org -> primary_contact ( $primary_contact ) ;
+        # Create contact organisation
+        my $con_org = new DATA::WhatsOn::Contact::Organisation ;
+        $con_org -> name ( $org_name ) ;
+        $con_org -> role ( $role ) ;
+        $con_org -> primary_contact ( $primary_contact ) ;
 
-				push @con_orgs , ( $con_org ) ;
+        push @con_orgs , ( $con_org ) ;
 
-			}
+      }
 
-			$rec = <$fh> ;
+      $rec = <$fh> ;
 
-		} # End CON_ORG
+    } # End CON_ORG
 
-		$con -> organisations ( \@con_orgs ) ; # Always pass an array reference
+    $con -> organisations ( \@con_orgs ) ; # Always pass an array reference
 
-		$con -> save ( $dbh ) ;
+    $con -> save ( $dbh ) ;
 
-	} # End CON
+  } # End CON
 
    close $fh ;
 
@@ -366,235 +366,235 @@ sub fetch {
 
 =cut
 
-	my $proto = shift ; # Can be an object or class
-	my $dbh = shift ;
+  my $proto = shift ; # Can be an object or class
+  my $dbh = shift ;
 
-	#
-	# Filter should be a hash reference that optionally contains values for
-	# the following keys
-	#
-	# org_id:
-	# The organisation that the contact must be in.
-	#
+  #
+  # Filter should be a hash reference that optionally contains values for
+  # the following keys
+  #
+  # org_id:
+  # The organisation that the contact must be in.
+  #
 
-	my $filter = shift if @_ ;
+  my $filter = shift if @_ ;
 
    my $sth ;
 
-	if ( ref $proto ) {
+  if ( ref $proto ) {
 
-		# Called as object, fetch an individual contact
-		my $self = $proto ;
+    # Called as object, fetch an individual contact
+    my $self = $proto ;
 
-	   if ( $self -> rowid ) {
+     if ( $self -> rowid ) {
 
-   	   $sth = $dbh -> prepare (
+        $sth = $dbh -> prepare (
 
-   	      'SELECT *
-   	         FROM whatson_contact
-   	        WHERE rowid = :rowid'
+           'SELECT *
+              FROM whatson_contact
+             WHERE rowid = :rowid'
 
-   	   ) ;
+        ) ;
 
-	      $sth -> bind_param ( ':rowid' , $self -> rowid ) ;
+        $sth -> bind_param ( ':rowid' , $self -> rowid ) ;
 
-	   } elsif ( $self -> email ) {
+     } elsif ( $self -> email ) {
 
-	      $sth = $dbh -> prepare (
+        $sth = $dbh -> prepare (
 
-	         'SELECT rowid , *
-	            FROM whatson_contact
-	           WHERE email = :email'
+           'SELECT rowid , *
+              FROM whatson_contact
+             WHERE email = :email'
 
-			) ;
+      ) ;
 
-	      $sth -> bind_param ( ':email' , $self -> email ) ;
+        $sth -> bind_param ( ':email' , $self -> email ) ;
 
-	   } elsif ( $self -> surname && $self -> first_name ) {
+     } elsif ( $self -> surname && $self -> first_name ) {
 
-			# This is a dangerous option of last resort. It is susceptible to
-			# error if we have two entries with the same surname and first_name.
+      # This is a dangerous option of last resort. It is susceptible to
+      # error if we have two entries with the same surname and first_name.
 
-			$sth = $dbh -> prepare (
+      $sth = $dbh -> prepare (
 
-				'SELECT rowid, *
-				   FROM whatson_contact
-				  WHERE first_name = :first_name
-				    AND surname = :surname'
+        'SELECT rowid, *
+           FROM whatson_contact
+          WHERE first_name = :first_name
+            AND surname = :surname'
 
-			) ;
+      ) ;
 
-			$sth -> bind_param ( ':surname' , $self -> surname ) ;
-			$sth -> bind_param ( ':first_name' , $self -> first_name ) ;
+      $sth -> bind_param ( ':surname' , $self -> surname ) ;
+      $sth -> bind_param ( ':first_name' , $self -> first_name ) ;
 
-		}
+    }
 
-	   $sth -> execute ;
+     $sth -> execute ;
 
-	   my $row ;
+     my $row ;
 
-	   return 0 unless $row = $sth -> fetchrow_hashref ;
+     return 0 unless $row = $sth -> fetchrow_hashref ;
 
-	   $self -> rowid			( $row -> { rowid			} ) ;
-	   $self -> email			( 
-		$row -> { email } ? $row -> { email } : '' ) ; # Convert null to empty string
-	   $self -> first_name	( $row -> { first_name	} ) ;
-	   $self -> surname		( $row -> { surname		} ) ;
-	   $self -> subscriber	( $row -> { subscriber	} ) ;
-	   $self -> secret   	( $row -> { secret	} ) ;
-	   $self -> title			( $row -> { title			} ) ;
-	   $self -> telephone	( $row -> { telephone	} ) ;
-   	$self -> address1		( $row -> { address1		} ) ;
-   	$self -> address2		( $row -> { address2		} ) ;
-   	$self -> address3		( $row -> { address3		} ) ;
-   	$self -> address4		( $row -> { address4		} ) ;
-   	$self -> postcode		( $row -> { postcode		} ) ;
+     $self -> rowid      ( $row -> { rowid      } ) ;
+     $self -> email      ( 
+    $row -> { email } ? $row -> { email } : '' ) ; # Convert null to empty string
+     $self -> first_name  ( $row -> { first_name  } ) ;
+     $self -> surname    ( $row -> { surname    } ) ;
+     $self -> subscriber  ( $row -> { subscriber  } ) ;
+     $self -> secret     ( $row -> { secret  } ) ;
+     $self -> title      ( $row -> { title      } ) ;
+     $self -> telephone  ( $row -> { telephone  } ) ;
+     $self -> address1    ( $row -> { address1    } ) ;
+     $self -> address2    ( $row -> { address2    } ) ;
+     $self -> address3    ( $row -> { address3    } ) ;
+     $self -> address4    ( $row -> { address4    } ) ;
+     $self -> postcode    ( $row -> { postcode    } ) ;
 
-		unless ( $filter -> { no_orgs } ) {
+    unless ( $filter -> { no_orgs } ) {
 
-			DATA::WhatsOn::Contact::Organisation
-				-> person_rowid ( $self -> rowid ) ;
+      DATA::WhatsOn::Contact::Organisation
+        -> person_rowid ( $self -> rowid ) ;
 
-			my @organisations = DATA::WhatsOn::Contact::Organisation
-				-> fetch ( $dbh ) ;
+      my @organisations = DATA::WhatsOn::Contact::Organisation
+        -> fetch ( $dbh ) ;
 
-			$self -> organisations ( \@organisations ) ;
+      $self -> organisations ( \@organisations ) ;
 
-		}
+    }
 
-		return 1 ;
+    return 1 ;
 
-	} else {
+  } else {
 
-		# Called as a class, fetch a list of contacts
+    # Called as a class, fetch a list of contacts
 
-		my $class = $proto ;
+    my $class = $proto ;
 
-		my $sth ;
-		
-		if ( $filter -> { org_id } ) {
+    my $sth ;
+    
+    if ( $filter -> { org_id } ) {
 
-			$sth = $dbh -> prepare (
+      $sth = $dbh -> prepare (
 
-				'SELECT con.rowid								AS rowid					,
-				        con.email								AS email					,
-				        con.first_name						AS first_name			,
-				        con.surname							AS surname				,
-				        con.subscriber						AS subscriber			,
-				        con.secret							AS secret				,
-				        con.title								AS title					,
-				        con.telephone						AS telephone			,
-	   	           con.address1							AS address1				,
-				        con.address2							AS address2				,
-				        con.address3							AS address3				,
-				        con.address4							AS address4				,
-				        con.postcode							AS postcode				,
-				        org.role								AS role					,
-				        org.primary_contact				AS primary_contact
-				   FROM whatson_contact						con						,
-				        whatson_contact_organisation	org
-				  WHERE con.rowid = org.person_rowid
-				    AND org.organisation_rowid = :org_id_in
-			  ORDER BY con.surname , con.first_name
-				'
+        'SELECT con.rowid                AS rowid          ,
+                con.email                AS email          ,
+                con.first_name            AS first_name      ,
+                con.surname              AS surname        ,
+                con.subscriber            AS subscriber      ,
+                con.secret              AS secret        ,
+                con.title                AS title          ,
+                con.telephone            AS telephone      ,
+                  con.address1              AS address1        ,
+                con.address2              AS address2        ,
+                con.address3              AS address3        ,
+                con.address4              AS address4        ,
+                con.postcode              AS postcode        ,
+                org.role                AS role          ,
+                org.primary_contact        AS primary_contact
+           FROM whatson_contact            con            ,
+                whatson_contact_organisation  org
+          WHERE con.rowid = org.person_rowid
+            AND org.organisation_rowid = :org_id_in
+        ORDER BY con.surname , con.first_name
+        '
 
-			) ;	
+      ) ;  
 
-	      $sth -> bind_param ( ':org_id_in' , $filter -> { org_id } ) ;
+        $sth -> bind_param ( ':org_id_in' , $filter -> { org_id } ) ;
 
-		} else {
+    } else {
 
-			# No parameters pass, so return a list of all contacts
+      # No parameters pass, so return a list of all contacts
 
-			$sth = $dbh -> prepare (
+      $sth = $dbh -> prepare (
 
-				'SELECT con.rowid								AS rowid					,
-				        con.email								AS email					,
-				        con.first_name						AS first_name			,
-				        con.surname							AS surname				,
-				        con.subscriber						AS subscriber			,
-				        con.secret							AS secret				,
-				        con.title								AS title					,
-				        con.telephone						AS telephone			,
-	   	           con.address1							AS address1				,
-				        con.address2							AS address2				,
-				        con.address3							AS address3				,
-				        con.address4							AS address4				,
-				        con.postcode							AS postcode          ,
-				        null									AS role					,
-				        null									AS primary_contact
-				   FROM whatson_contact con
-			  ORDER BY con.surname , con.first_name
-				'
+        'SELECT con.rowid                AS rowid          ,
+                con.email                AS email          ,
+                con.first_name            AS first_name      ,
+                con.surname              AS surname        ,
+                con.subscriber            AS subscriber      ,
+                con.secret              AS secret        ,
+                con.title                AS title          ,
+                con.telephone            AS telephone      ,
+                  con.address1              AS address1        ,
+                con.address2              AS address2        ,
+                con.address3              AS address3        ,
+                con.address4              AS address4        ,
+                con.postcode              AS postcode          ,
+                null                  AS role          ,
+                null                  AS primary_contact
+           FROM whatson_contact con
+        ORDER BY con.surname , con.first_name
+        '
 
-			) ;	
+      ) ;  
 
-		}
+    }
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-		my @contacts ;
+    my @contacts ;
 
-		while ( my $row = $sth -> fetchrow_hashref ) {
+    while ( my $row = $sth -> fetchrow_hashref ) {
 
-			my $contact = new DATA::WhatsOn::Contact ;
+      my $contact = new DATA::WhatsOn::Contact ;
 
-		   $contact -> rowid					( $row -> { rowid					} ) ;
-		   $contact -> email	
-				( $row -> { email	} ? $row -> { email } : '' ) ;
-		   $contact -> first_name			( $row -> { first_name			} ) ;
-		   $contact -> surname				( $row -> { surname				} ) ;
-		   $contact -> subscriber			( $row -> { subscriber			} ) ;
-		   $contact -> secret				( $row -> { secret				} ) ;
-		   $contact -> title					( $row -> { title					} ) ;
-		   $contact -> telephone			( $row -> { telephone			} ) ;
-			$contact -> address1				( $row -> { address1				} ) ;
-			$contact -> address2				( $row -> { address2				} ) ;
-			$contact -> address3				( $row -> { address3				} ) ;
-			$contact -> address4				( $row -> { address4				} ) ;
-			$contact -> postcode 		   ( $row -> { postcode				} ) ;
-			$contact -> role					( $row -> { role					} ) ;
-			$contact -> primary_contact	( $row -> { primary_contact	} ) ;
+       $contact -> rowid          ( $row -> { rowid          } ) ;
+       $contact -> email  
+        ( $row -> { email  } ? $row -> { email } : '' ) ;
+       $contact -> first_name      ( $row -> { first_name      } ) ;
+       $contact -> surname        ( $row -> { surname        } ) ;
+       $contact -> subscriber      ( $row -> { subscriber      } ) ;
+       $contact -> secret        ( $row -> { secret        } ) ;
+       $contact -> title          ( $row -> { title          } ) ;
+       $contact -> telephone      ( $row -> { telephone      } ) ;
+      $contact -> address1        ( $row -> { address1        } ) ;
+      $contact -> address2        ( $row -> { address2        } ) ;
+      $contact -> address3        ( $row -> { address3        } ) ;
+      $contact -> address4        ( $row -> { address4        } ) ;
+      $contact -> postcode        ( $row -> { postcode        } ) ;
+      $contact -> role          ( $row -> { role          } ) ;
+      $contact -> primary_contact  ( $row -> { primary_contact  } ) ;
 
-			# Move this to the main query perhaps as something smarter?
-			unless ( $filter -> { no_orgs } ) {
+      # Move this to the main query perhaps as something smarter?
+      unless ( $filter -> { no_orgs } ) {
 
-				DATA::WhatsOn::Contact::Organisation
-					-> person_rowid ( $contact -> rowid ) ;
+        DATA::WhatsOn::Contact::Organisation
+          -> person_rowid ( $contact -> rowid ) ;
 
-				my @organisations = DATA::WhatsOn::Contact::Organisation
-					-> fetch ( $dbh ) ;
+        my @organisations = DATA::WhatsOn::Contact::Organisation
+          -> fetch ( $dbh ) ;
 
-				$contact -> organisations ( \@organisations ) ;
+        $contact -> organisations ( \@organisations ) ;
 
-			}
+      }
 
-			push @contacts , $contact ;
+      push @contacts , $contact ;
 
-		}
+    }
 
-		return @contacts ;
+    return @contacts ;
 
-	}
+  }
 
 }
 
 sub save {
 
-	my ( $self , $dbh ) = @_ ;
+  my ( $self , $dbh ) = @_ ;
 
-	if ( $self -> rowid ) {
+  if ( $self -> rowid ) {
 
-		# This is an update
+    # This is an update
 
-		my $sth = $dbh -> prepare (
+    my $sth = $dbh -> prepare (
 
-			'UPDATE whatson_contact
+      'UPDATE whatson_contact
              SET email      = :email      ,
                  first_name = :first_name ,
                  surname    = :surname    ,
                  subscriber = :subscriber ,
-			        secret     = :secret     ,
+              secret     = :secret     ,
                  title      = :title      ,
                  telephone  = :telephone  ,
                  address1   = :address1   ,
@@ -604,106 +604,106 @@ sub save {
                  postcode   = :postcode
            WHERE rowid = :rowid'
 
-		) ;
+    ) ;
 
-		$sth -> bind_param ( ':rowid'			, $self -> rowid			) ;
+    $sth -> bind_param ( ':rowid'      , $self -> rowid      ) ;
 
-		# Convert empty string to undef before storing it to get a null value in
-		# the database. This is necessary because email is unique in the database
-		# and so storing as empty strings would conflict with that constraint.		
-		$sth -> bind_param (
-			':email'	, $self -> email ? $self -> email : undef	) ;
-		$sth -> bind_param ( ':first_name'	, $self -> first_name	) ;
-		$sth -> bind_param ( ':surname'		, $self -> surname		) ;
-		$sth -> bind_param ( ':subscriber'	, $self -> subscriber	) ;
-		$sth -> bind_param ( ':secret'		, $self -> secret			) ;
-		$sth -> bind_param ( ':title'			, $self -> title			) ;
-		$sth -> bind_param ( ':telephone'	, $self -> telephone		) ;
-		$sth -> bind_param ( ':address1'		, $self -> address1		) ;
-		$sth -> bind_param ( ':address2'		, $self -> address2		) ;
-		$sth -> bind_param ( ':address3'		, $self -> address3		) ;
-		$sth -> bind_param ( ':address4'		, $self -> address4		) ;
-		$sth -> bind_param ( ':postcode'		, $self -> postcode		) ;
+    # Convert empty string to undef before storing it to get a null value in
+    # the database. This is necessary because email is unique in the database
+    # and so storing as empty strings would conflict with that constraint.    
+    $sth -> bind_param (
+      ':email'  , $self -> email ? $self -> email : undef  ) ;
+    $sth -> bind_param ( ':first_name'  , $self -> first_name  ) ;
+    $sth -> bind_param ( ':surname'    , $self -> surname    ) ;
+    $sth -> bind_param ( ':subscriber'  , $self -> subscriber  ) ;
+    $sth -> bind_param ( ':secret'    , $self -> secret      ) ;
+    $sth -> bind_param ( ':title'      , $self -> title      ) ;
+    $sth -> bind_param ( ':telephone'  , $self -> telephone    ) ;
+    $sth -> bind_param ( ':address1'    , $self -> address1    ) ;
+    $sth -> bind_param ( ':address2'    , $self -> address2    ) ;
+    $sth -> bind_param ( ':address3'    , $self -> address3    ) ;
+    $sth -> bind_param ( ':address4'    , $self -> address4    ) ;
+    $sth -> bind_param ( ':postcode'    , $self -> postcode    ) ;
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-		DATA::WhatsOn::Contact::Organisation
-			-> person_rowid ( $self -> rowid ) ;
+    DATA::WhatsOn::Contact::Organisation
+      -> person_rowid ( $self -> rowid ) ;
 
-		foreach my $con_org ( @{ $self -> organisations } ) {
-			$con_org -> save ( $dbh ) ;
-		} ;
+    foreach my $con_org ( @{ $self -> organisations } ) {
+      $con_org -> save ( $dbh ) ;
+    } ;
 
 
-	} else {
+  } else {
 
-		# This is an insert
+    # This is an insert
 
-		my $sth = $dbh -> prepare (
+    my $sth = $dbh -> prepare (
 
-			'INSERT
-			   INTO whatson_contact (
-			           email       ,
+      'INSERT
+         INTO whatson_contact (
+                 email       ,
                     first_name  ,
-			           surname     ,
-			           subscriber  ,
-			           secret      ,	
-			           title       ,
-			           telephone   ,
-			           address1    ,
-			           address2    ,
-			           address3    ,
-			           address4    ,
-			           postcode
-		  ) VALUES (  :email      ,
-			           :first_name ,
-			           :surname    ,
-			           :subscriber ,
-		              :secret     ,
-			           :title      ,
-			           :telephone  ,
-			           :address1   ,
-			           :address2   ,
-			           :address3   ,
-			           :address4   ,
-			           :postcode
-		  )'
+                 surname     ,
+                 subscriber  ,
+                 secret      ,  
+                 title       ,
+                 telephone   ,
+                 address1    ,
+                 address2    ,
+                 address3    ,
+                 address4    ,
+                 postcode
+      ) VALUES (  :email      ,
+                 :first_name ,
+                 :surname    ,
+                 :subscriber ,
+                  :secret     ,
+                 :title      ,
+                 :telephone  ,
+                 :address1   ,
+                 :address2   ,
+                 :address3   ,
+                 :address4   ,
+                 :postcode
+      )'
 
-		) ;
+    ) ;
 
-		# Convert to empty string to undef before storing it to get a null value		
-		$sth -> bind_param (
-			':email'	, $self -> email ? $self -> email : undef	) ;
-		$sth -> bind_param ( ':first_name'	, $self -> first_name	) ;
-		$sth -> bind_param ( ':surname'		, $self -> surname		) ;
-		$sth -> bind_param ( ':subscriber'	, $self -> subscriber	) ;
-		$sth -> bind_param ( ':secret'		, $self -> secret			) ;
-		$sth -> bind_param ( ':title'			, $self -> title			) ;
-		$sth -> bind_param ( ':telephone' 	, $self -> telephone		) ;
-		$sth -> bind_param ( ':address1'  	, $self -> address1		) ;
-		$sth -> bind_param ( ':address2'  	, $self -> address2		) ;
-		$sth -> bind_param ( ':address3'  	, $self -> address3		) ;
-		$sth -> bind_param ( ':address4'  	, $self -> address4		) ;
-		$sth -> bind_param ( ':postcode'  	, $self -> postcode		) ;
+    # Convert to empty string to undef before storing it to get a null value    
+    $sth -> bind_param (
+      ':email'  , $self -> email ? $self -> email : undef  ) ;
+    $sth -> bind_param ( ':first_name'  , $self -> first_name  ) ;
+    $sth -> bind_param ( ':surname'    , $self -> surname    ) ;
+    $sth -> bind_param ( ':subscriber'  , $self -> subscriber  ) ;
+    $sth -> bind_param ( ':secret'    , $self -> secret      ) ;
+    $sth -> bind_param ( ':title'      , $self -> title      ) ;
+    $sth -> bind_param ( ':telephone'   , $self -> telephone    ) ;
+    $sth -> bind_param ( ':address1'    , $self -> address1    ) ;
+    $sth -> bind_param ( ':address2'    , $self -> address2    ) ;
+    $sth -> bind_param ( ':address3'    , $self -> address3    ) ;
+    $sth -> bind_param ( ':address4'    , $self -> address4    ) ;
+    $sth -> bind_param ( ':postcode'    , $self -> postcode    ) ;
 
-		$sth -> execute ;
+    $sth -> execute ;
 
-		$self -> fetch ( $dbh , { no_orgs => 1 } ) ;
+    $self -> fetch ( $dbh , { no_orgs => 1 } ) ;
 
-		DATA::WhatsOn::Contact::Organisation
-			-> person_rowid ( $self -> rowid ) ;
+    DATA::WhatsOn::Contact::Organisation
+      -> person_rowid ( $self -> rowid ) ;
 
-		foreach my $con_org ( @{ $self -> organisations } ) {
+    foreach my $con_org ( @{ $self -> organisations } ) {
 
-			my $organisation = new DATA::WhatsOn::Organisation ;
-			$organisation -> name ( $con_org -> name ) ;
-			$organisation -> fetch ( $dbh ) ;
-			$con_org -> organisation_rowid ( $organisation -> rowid ) ;			
-			$con_org -> save ( $dbh ) ;
+      my $organisation = new DATA::WhatsOn::Organisation ;
+      $organisation -> name ( $con_org -> name ) ;
+      $organisation -> fetch ( $dbh ) ;
+      $con_org -> organisation_rowid ( $organisation -> rowid ) ;      
+      $con_org -> save ( $dbh ) ;
 
-		} ;
+    } ;
 
-	}
+  }
 
 }
 
@@ -781,18 +781,18 @@ member socities. Returs true if it does and false if it doesn't.
 
 =cut
 
-	my ( $self , $dbh ) = @_ ;
+  my ( $self , $dbh ) = @_ ;
 
-	my $sth = $dbh -> prepare (
+  my $sth = $dbh -> prepare (
 
-		'SELECT NULL
-		   FROM whatson_organisation				org    	,
-		        whatson_contact_organisation	con_org	,
-		        whatson_contact						con
-		  WHERE con.email 				= :email
-		    AND con_org.person_rowid	= con.rowid
-		    AND org.rowid					= con_org.organisation_rowid
-		    AND org.type					= \'whatson_society\''
+    'SELECT NULL
+       FROM whatson_organisation        org      ,
+            whatson_contact_organisation  con_org  ,
+            whatson_contact            con
+      WHERE con.email         = :email
+        AND con_org.person_rowid  = con.rowid
+        AND org.rowid          = con_org.organisation_rowid
+        AND org.type          = \'whatson_society\''
 
    ) ;
 
@@ -801,8 +801,8 @@ member socities. Returs true if it does and false if it doesn't.
    $sth -> execute ;
 
    $sth -> fetchrow_hashref
-		? return 1
-		: return 0 ;
+    ? return 1
+    : return 0 ;
 
 }
 
@@ -814,21 +814,21 @@ Tests if an email address corresponds to a known DATA committee member.
 
 =cut
 
-	my ( $self , $dbh ) = @_ ;
+  my ( $self , $dbh ) = @_ ;
 
-	my $sth = $dbh -> prepare (
+  my $sth = $dbh -> prepare (
 
-		'SELECT NULL
-		   FROM whatson_organisation				org    	,
-		        whatson_contact_organisation	con_org	,
-		        whatson_contact						con
-		  WHERE con.email 				= :email
-		    AND con_org.person_rowid	= con.rowid
-		    AND con_org.role IN (
-		        \'Secretary\' , \'Treasurer\' , \'Chairman\' , \'Committee\' )
-		    AND org.rowid					= con_org.organisation_rowid
-		    AND org.name					= \'DATA\'
-		    AND org.type					= \'whatson_organisation\''
+    'SELECT NULL
+       FROM whatson_organisation        org      ,
+            whatson_contact_organisation  con_org  ,
+            whatson_contact            con
+      WHERE con.email         = :email
+        AND con_org.person_rowid  = con.rowid
+        AND con_org.role IN (
+            \'Secretary\' , \'Treasurer\' , \'Chairman\' , \'Committee\' )
+        AND org.rowid          = con_org.organisation_rowid
+        AND org.name          = \'DATA\'
+        AND org.type          = \'whatson_organisation\''
 
    ) ;
 
@@ -837,8 +837,8 @@ Tests if an email address corresponds to a known DATA committee member.
    $sth -> execute ;
 
    $sth -> fetchrow_hashref
-		? return 1
-		: return 0 ;
+    ? return 1
+    : return 0 ;
 
 }
 
@@ -861,20 +861,20 @@ sub add {
 
    ) ;
 
-	$sth -> bind_param ( 1 , $self -> email ) ;
-	$sth -> bind_param ( 2 , $self -> first_name ) ;
-	$sth -> bind_param ( 3 , $self -> surname ) ;
-	$sth -> bind_param ( 4 , $self -> title ) ;
+  $sth -> bind_param ( 1 , $self -> email ) ;
+  $sth -> bind_param ( 2 , $self -> first_name ) ;
+  $sth -> bind_param ( 3 , $self -> surname ) ;
+  $sth -> bind_param ( 4 , $self -> title ) ;
 
    $sth -> execute ;
 
-	$self -> fetch ( $dbh ) ;
+  $self -> fetch ( $dbh ) ;
 
-	foreach my $con_in_org ( @{ $self -> organisations } ) {
+  foreach my $con_in_org ( @{ $self -> organisations } ) {
 
-		$sth = $dbh -> prepare (
+    $sth = $dbh -> prepare (
 
-			'INSERT
+      'INSERT
             INTO whatson_contact_organisation (
                     person_rowid          ,
                     organisation_rowid    ,
@@ -882,22 +882,22 @@ sub add {
                     primary_contact
         ) VALUES ( ?1 , ?2 , ?3 , ?4 )'
 
-		) ;
+    ) ;
 
-		my $organisation = new DATA::WhatsOn::Organisation ;
-		$organisation -> name ( $con_in_org -> name ) ;
-		$organisation -> fetch ( $dbh ) ;
+    my $organisation = new DATA::WhatsOn::Organisation ;
+    $organisation -> name ( $con_in_org -> name ) ;
+    $organisation -> fetch ( $dbh ) ;
 
-		$sth -> bind_param ( 1 , $self -> rowid ) ;
-		$sth -> bind_param ( 2 , $organisation -> rowid ) ;
-		$sth -> bind_param ( 3 ,
-			$con_in_org -> role ? $con_in_org -> role : undef
-		) ;
+    $sth -> bind_param ( 1 , $self -> rowid ) ;
+    $sth -> bind_param ( 2 , $organisation -> rowid ) ;
+    $sth -> bind_param ( 3 ,
+      $con_in_org -> role ? $con_in_org -> role : undef
+    ) ;
       $sth -> bind_param ( 4 , $con_in_org -> primary_contact ) ;
 
-	   $sth -> execute ;
+     $sth -> execute ;
 
-	}
+  }
 
 }
 

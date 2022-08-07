@@ -144,7 +144,7 @@ sub liForRead {
 
 }
 
-sub TrForUpdate	 {
+sub TrForUpdate   {
 
    my $self = shift;
    my $seqno = $self->seqno();

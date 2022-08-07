@@ -91,19 +91,19 @@ sub whatson_contacts {
 =cut
 
    my $self = shift ;
-	my $containing_tmpl = shift ;
+  my $containing_tmpl = shift ;
 
-	# This component can optionally take a number of positional (note, position
-	# is therefore important) parameters.
+  # This component can optionally take a number of positional (note, position
+  # is therefore important) parameters.
 
-	my $filter ;
-	$filter -> { org_id }	= shift if @_ ; # Organisation Identifier
+  my $filter ;
+  $filter -> { org_id }  = shift if @_ ; # Organisation Identifier
 
    my @contacts = DATA::WhatsOn::Contact -> fetch (
-		$self -> dbh , $filter
-	) ;
+    $self -> dbh , $filter
+  ) ;
 
-	my $output = "[% whatson_contacts %]" ;
+  my $output = "[% whatson_contacts %]" ;
 
    my $tmpl = $self -> template -> load ( \$output ) ;
 
@@ -124,10 +124,10 @@ sub whatson_event {
 
   my $params = shift if @_ ;
 
-	# Controls what data will be returned
-	my $filter = $params -> { filter } if $params -> { filter } ;
-	# Controls component behaviour, e.g. where or not defaults are returned
-	my $behaviour = $params -> { behaviour } if $params -> { behaviour } ;
+  # Controls what data will be returned
+  my $filter = $params -> { filter } if $params -> { filter } ;
+  # Controls component behaviour, e.g. where or not defaults are returned
+  my $behaviour = $params -> { behaviour } if $params -> { behaviour } ;
 
    my $event = new DATA::WhatsOn::Event ;
 
@@ -135,48 +135,48 @@ sub whatson_event {
 
    if ( $event -> fetch ( $self -> dbh , $filter ) ) {
 
-		if ( $behaviour -> { defaults } ) {
+    if ( $behaviour -> { defaults } ) {
 
-			# Apply some of the default values on optional fields
+      # Apply some of the default values on optional fields
 
-			$event -> dates ( $event -> dates_derived )
-				unless $event -> dates ;
+      $event -> dates ( $event -> dates_derived )
+        unless $event -> dates ;
 
-			$event -> times ( '7.30pm' )
-				unless $event -> times ;
+      $event -> times ( '7.30pm' )
+        unless $event -> times ;
 
-			$event -> presented_by ( $event -> society_name )
-				unless $event -> presented_by ;
+      $event -> presented_by ( $event -> society_name )
+        unless $event -> presented_by ;
 
-		}
+    }
 
-		my $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
+    my $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
 
-		my $output = "[% whatson_event ( caller = \"$caller\" ) %]" ;
+    my $output = "[% whatson_event ( caller = \"$caller\" ) %]" ;
 
-   	my $tmpl = $self -> template -> load ( \$output ) ;
+     my $tmpl = $self -> template -> load ( \$output ) ;
 
-   	$tmpl -> param ( event => $event ) ;
+     $tmpl -> param ( event => $event ) ;
 
-   	return $tmpl -> output ;
+     return $tmpl -> output ;
 
-	} else {
+  } else {
 
-		if (
-			$filter -> { userid }								&&
-			delete $filter -> { userid }						&&
-			$event -> fetch ( $self -> dbh , $filter )
-		) {
+    if (
+      $filter -> { userid }                &&
+      delete $filter -> { userid }            &&
+      $event -> fetch ( $self -> dbh , $filter )
+    ) {
 
-			$self -> header_props ( -status => '403' ) ;
+      $self -> header_props ( -status => '403' ) ;
 
-		} else {
+    } else {
 
-			$self -> header_props ( -status => '404' ) ;
+      $self -> header_props ( -status => '404' ) ;
 
-		}
+    }
 
-	}
+  }
 
 }
 
@@ -192,13 +192,13 @@ sub whatson_events {
   my $params = shift if @_ ;
 
   # Controls what data will be returned
-	my $filter = $params -> { filter } if $params ;
-	# Controls component behaviour, e.g. where or not defaults are returned
-	my $behaviour = $params -> { behaviour } if $params -> { behaviour } ;
+  my $filter = $params -> { filter } if $params ;
+  # Controls component behaviour, e.g. where or not defaults are returned
+  my $behaviour = $params -> { behaviour } if $params -> { behaviour } ;
 
-	my @events = ( ) ;
+  my @events = ( ) ;
 
-	@events = DATA::WhatsOn::Event -> fetch ( $self -> dbh , $filter ) ;
+  @events = DATA::WhatsOn::Event -> fetch ( $self -> dbh , $filter ) ;
 
   foreach my $event ( @events ) {
 
@@ -229,7 +229,7 @@ sub whatson_events {
 
     }
 
-	}
+  }
 
   my $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
 
@@ -250,7 +250,7 @@ sub whatson_news_item {
 =cut
 
    my $self = shift ;
-	my $containing_template = shift ;
+  my $containing_template = shift ;
 
    my $rowid = $self -> param ( 'rowid' ) ;
 
@@ -260,22 +260,22 @@ sub whatson_news_item {
 
    if ( $news_item -> fetch ( $self -> dbh ) ) {
 
-		my $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
+    my $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
 
-		my $output = "[% whatson_news_item ( caller = \"$caller\" ) %]" ;
+    my $output = "[% whatson_news_item ( caller = \"$caller\" ) %]" ;
 
-   	my $tmpl = $self -> template -> load ( \$output ) ;
+     my $tmpl = $self -> template -> load ( \$output ) ;
 
-   	$tmpl -> param ( news_item => $news_item ) ;
+     $tmpl -> param ( news_item => $news_item ) ;
 
-   	return $tmpl -> output ;
+     return $tmpl -> output ;
 
-	} else {
+  } else {
 
-		# Set the redirect headers for the application to not found
-		$self -> redirect ( '/not_found' ) ;
+    # Set the redirect headers for the application to not found
+    $self -> redirect ( '/not_found' ) ;
 
-	}
+  }
 
 }
 
@@ -285,43 +285,43 @@ sub whatson_news_items {
 
 =cut
 
-	my $self = shift ;
-	my $containing_template = shift ;
+  my $self = shift ;
+  my $containing_template = shift ;
 
-	my $params = shift if @_ ;
+  my $params = shift if @_ ;
 
-	my @news_items = ( ) ;
+  my @news_items = ( ) ;
 
-	my $filter = $params -> { filter } if $params ;
+  my $filter = $params -> { filter } if $params ;
 
-	@news_items =
-		DATA::WhatsOn::NewsItem -> fetch ( $self -> dbh , $filter ) ;
+  @news_items =
+    DATA::WhatsOn::NewsItem -> fetch ( $self -> dbh , $filter ) ;
 
-	my $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
+  my $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
 
-	my $output = "[% whatson_news_items ( caller = \"$caller\" ) %]" ;
+  my $output = "[% whatson_news_items ( caller = \"$caller\" ) %]" ;
 
-	my $tmpl = $self -> template -> load ( \$output ) ;
+  my $tmpl = $self -> template -> load ( \$output ) ;
 
-	$tmpl -> param ( news_items => \@news_items ) ;
+  $tmpl -> param ( news_items => \@news_items ) ;
 
-	return $tmpl -> output ;
+  return $tmpl -> output ;
 
 }
 
 sub whatson_society {
 
    my $self = shift ;
-	my $containing_template = shift ;
+  my $containing_template = shift ;
 
-	my $params = shift if @_ ;
+  my $params = shift if @_ ;
 
-	# Controls what data will be returned
-	my $filter = $params -> { filter } if $params ;
+  # Controls what data will be returned
+  my $filter = $params -> { filter } if $params ;
 
-	#my $filter = { } ;
-	$filter -> { type }		= 'whatson_society' ;
-	#$filter -> { status }	= shift if @_ ;
+  #my $filter = { } ;
+  $filter -> { type }    = 'whatson_society' ;
+  #$filter -> { status }  = shift if @_ ;
 
    #my $rowid = $self -> param ( 'rowid' ) ;
 
@@ -331,33 +331,33 @@ sub whatson_society {
 
    if ( $society -> fetch ( $self -> dbh , $filter ) ) {
 
-		my $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
+    my $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
 
-		my $output = "[% whatson_society ( caller = \"$caller\" ) %]" ;
+    my $output = "[% whatson_society ( caller = \"$caller\" ) %]" ;
 
-   	my $tmpl = $self -> template -> load ( \$output ) ;
+     my $tmpl = $self -> template -> load ( \$output ) ;
 
-   	$tmpl -> param ( society => $society ) ;
+     $tmpl -> param ( society => $society ) ;
 
-   	return $tmpl -> output ;
+     return $tmpl -> output ;
 
-	} else {
+  } else {
 
-		if (
-			$filter -> { userid }								&&
-			delete $filter -> { userid }						&&
-			$society -> fetch ( $self -> dbh , $filter )
-		) {
+    if (
+      $filter -> { userid }                &&
+      delete $filter -> { userid }            &&
+      $society -> fetch ( $self -> dbh , $filter )
+    ) {
 
-			$self -> header_props ( -status => '403' ) ;
+      $self -> header_props ( -status => '403' ) ;
 
-		} else {
+    } else {
 
-			$self -> header_props ( -status => '404' ) ;
+      $self -> header_props ( -status => '404' ) ;
 
-		}
+    }
 
-	}
+  }
 
 }
 
@@ -370,36 +370,36 @@ List all the societies
 =cut
 
    my $self =  shift ;
-	my $containing_template = shift ;
+  my $containing_template = shift ;
 
-	my $params = shift if @_ ;
+  my $params = shift if @_ ;
 
-	# Controls what data will be returned
-	my $filter = $params -> { filter } if $params ;
+  # Controls what data will be returned
+  my $filter = $params -> { filter } if $params ;
 
-	# This component can optionally take a number of positional (note, position
-	# is therefore important) parameters.
+  # This component can optionally take a number of positional (note, position
+  # is therefore important) parameters.
 
-	$filter -> { type } = 'whatson_society' ;
+  $filter -> { type } = 'whatson_society' ;
 
-	#$filter -> { status }	= shift if @_ ; # Status of organisations
-	#$filter -> { userid }	= shift if @_ ; # Userid of member society rep
+  #$filter -> { status }  = shift if @_ ; # Status of organisations
+  #$filter -> { userid }  = shift if @_ ; # Userid of member society rep
 
    my @societies = DATA::WhatsOn::Organisation -> fetch (
-		$self -> dbh , $filter
-	) ;
+    $self -> dbh , $filter
+  ) ;
 
-	my $caller ;
+  my $caller ;
 
-	if (
-		$containing_template -> param ( 'template' ) -> { 'name' } eq 'input text'
-	) {
-		$caller = $containing_template -> param ( 'template' ) -> { 'caller' } ;
-	} else {
-		$caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
-	}
+  if (
+    $containing_template -> param ( 'template' ) -> { 'name' } eq 'input text'
+  ) {
+    $caller = $containing_template -> param ( 'template' ) -> { 'caller' } ;
+  } else {
+    $caller = $containing_template -> param ( 'template' ) -> { 'name' } ;
+  }
 
-	my $output = "[% whatson_societies ( caller = \"$caller\" ) %]" ;
+  my $output = "[% whatson_societies ( caller = \"$caller\" ) %]" ;
 
    my $tmpl = $self -> template -> load ( \$output ) ;
 
@@ -415,35 +415,35 @@ sub whatson_venue {
 
 =cut
 
-	my $self = shift ;
-	my $containing_template = shift ;
+  my $self = shift ;
+  my $containing_template = shift ;
 
-	my $params = shift if @_ ;
+  my $params = shift if @_ ;
 
-	# Controls what data will be returned
-	my $filter = $params -> { filter } if $params ;
+  # Controls what data will be returned
+  my $filter = $params -> { filter } if $params ;
 
    my $event_rowid = $filter -> { event } ;
 
-	my $event = new DATA::WhatsOn::Event ;
-	$event -> rowid ( $event_rowid ) ;
-	$event -> fetch ( $self -> dbh ) ;
+  my $event = new DATA::WhatsOn::Event ;
+  $event -> rowid ( $event_rowid ) ;
+  $event -> fetch ( $self -> dbh ) ;
 
-	my $output = '[% whatson_venue %]' ;
+  my $output = '[% whatson_venue %]' ;
 
-	my $tmpl = $self -> template -> load ( \$output ) ;
+  my $tmpl = $self -> template -> load ( \$output ) ;
 
-	if ( $event -> venue_rowid ) {
+  if ( $event -> venue_rowid ) {
 
-		my $venue = new DATA::WhatsOn::Organisation ;
-		$venue -> rowid ( $event -> venue_rowid ) ;
-		$venue -> fetch ( $self -> dbh ) ;
+    my $venue = new DATA::WhatsOn::Organisation ;
+    $venue -> rowid ( $event -> venue_rowid ) ;
+    $venue -> fetch ( $self -> dbh ) ;
 
-		$tmpl -> param ( venue => $venue ) ;
+    $tmpl -> param ( venue => $venue ) ;
 
-	}
+  }
 
-	return $tmpl -> output ;
+  return $tmpl -> output ;
 
 }
 
@@ -453,29 +453,29 @@ sub whatson_venues {
 
 =cut
 
-	my $self = shift ;
-	my $containing_template = shift ;
+  my $self = shift ;
+  my $containing_template = shift ;
 
-	my $filter ;
+  my $filter ;
 
-	if ( my $param = shift ) {
+  if ( my $param = shift ) {
 
-		# A parameter has been supplied. For this component that can only be a
-		# status filter.
+    # A parameter has been supplied. For this component that can only be a
+    # status filter.
 
-		$filter = { type => 'whatson_venue' , status => $param } ;
+    $filter = { type => 'whatson_venue' , status => $param } ;
 
-	} else {
+  } else {
 
-		$filter = { type => 'whatson_venue' } ;
+    $filter = { type => 'whatson_venue' } ;
 
-	}
+  }
 
    my @venues = DATA::WhatsOn::Organisation -> fetch (
-		$self -> dbh , $filter
-	) ;
+    $self -> dbh , $filter
+  ) ;
 
-	my $output = '[% whatson_venues %]' ;
+  my $output = '[% whatson_venues %]' ;
 
    my $tmpl = $self -> template -> load ( \$output ) ;
 

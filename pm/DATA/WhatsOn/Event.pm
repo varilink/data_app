@@ -132,54 +132,54 @@ Derives the dates range from the start_date and end_date
 
 =cut
 
-	my $self = shift ;
+  my $self = shift ;
 
-	my @months = (
-		'Jan' , 'Feb' , 'Mar' , 'Apr' , 'May' , 'Jun' ,
-		'Jul' , 'Aug' , 'Sep' ,	'Oct' , 'Nov' , 'Dec'
-	) ;
+  my @months = (
+    'Jan' , 'Feb' , 'Mar' , 'Apr' , 'May' , 'Jun' ,
+    'Jul' , 'Aug' , 'Sep' ,  'Oct' , 'Nov' , 'Dec'
+  ) ;
 
-	my $dates = '' ;
+  my $dates = '' ;
 
-	if ( $self -> end_date eq $self -> start_date ) {
+  if ( $self -> end_date eq $self -> start_date ) {
 
-		# Single day event
+    # Single day event
 
-		$dates = sprintf (
-			"%01d %s"																,
-			( substr $self -> start_date , 0 , 2 )							,
-			$months [ ( substr $self -> start_date , 3 , 2 ) - 1 ]
-		) ;
+    $dates = sprintf (
+      "%01d %s"                                ,
+      ( substr $self -> start_date , 0 , 2 )              ,
+      $months [ ( substr $self -> start_date , 3 , 2 ) - 1 ]
+    ) ;
 
-	} elsif (
-		substr ( $self -> start_date , 3 , 2 ) eq
-		substr ( $self -> end_date , 3 , 2 )
-	) {
+  } elsif (
+    substr ( $self -> start_date , 3 , 2 ) eq
+    substr ( $self -> end_date , 3 , 2 )
+  ) {
 
-		# Multiple day event within single month
+    # Multiple day event within single month
 
-		$dates = sprintf (
-			"%01d - %01d %s"														,
-			( substr $self -> start_date , 0 , 2 )							,
-			( substr $self -> end_date , 0 , 2 )							,
-			$months [ ( substr $self -> start_date , 3 , 2 ) - 1 ]
-		) ;
+    $dates = sprintf (
+      "%01d - %01d %s"                            ,
+      ( substr $self -> start_date , 0 , 2 )              ,
+      ( substr $self -> end_date , 0 , 2 )              ,
+      $months [ ( substr $self -> start_date , 3 , 2 ) - 1 ]
+    ) ;
 
-	} else {
+  } else {
 
-		# Event spans months
+    # Event spans months
 
-		$dates = sprintf (
-			"%01d %s - %01d %s"													,
-			( substr $self -> start_date , 0 , 2 )							,
-			$months [ ( substr $self -> start_date , 3 , 2 ) - 1 ]	,
-			( substr $self -> end_date , 0 , 2 )							,
-			$months [ ( substr $self -> end_date , 3 , 2 ) - 1 ]
-		) ;
+    $dates = sprintf (
+      "%01d %s - %01d %s"                          ,
+      ( substr $self -> start_date , 0 , 2 )              ,
+      $months [ ( substr $self -> start_date , 3 , 2 ) - 1 ]  ,
+      ( substr $self -> end_date , 0 , 2 )              ,
+      $months [ ( substr $self -> end_date , 3 , 2 ) - 1 ]
+    ) ;
 
-	}
+  }
 
-	return $dates ;
+  return $dates ;
 
 }
 
@@ -421,9 +421,9 @@ sub image {
 
 =cut
 
-	my $self = shift ;
-	if ( @_ ) { $self -> { IMAGE } = shift }
-	return $self -> { IMAGE } ;
+  my $self = shift ;
+  if ( @_ ) { $self -> { IMAGE } = shift }
+  return $self -> { IMAGE } ;
 
 }
 
@@ -451,12 +451,12 @@ sub as_hash {
 
 =cut
 
-	my $self = shift ;
+  my $self = shift ;
 
-	my %event = %{ $self } ;
-	tie my %hash , 'Hash::Case::Lower' , \%event ;
+  my %event = %{ $self } ;
+  tie my %hash , 'Hash::Case::Lower' , \%event ;
 
-	return %hash ;
+  return %hash ;
 
 }
 
@@ -469,7 +469,7 @@ sub fetch {
   my $proto = shift ;
   my $dbh = shift ;
 
-  my $where = '' ;	# Where clause that reflects the filter if one is provided.
+  my $where = '' ;  # Where clause that reflects the filter if one is provided.
 
   my $filter = shift if @_ ;
 
@@ -499,7 +499,7 @@ sub fetch {
   if ( $filter -> { to } && $filter -> { to } ne 'this-year' ) {
     $where .= ' AND ' if $where ;
     $where .= 'date ( start_date ) <= date ( \'' . $filter -> { to } . '\' )' ;
-	}
+  }
 
   # Add a status clause if specified
   if ( $filter -> { status } && $filter -> { status } ) {
@@ -517,17 +517,17 @@ sub fetch {
 
       $where .= ' AND ' if $where ;
       $where .=
-				"society_rowid IN (
-					SELECT rowid
-					        FROM whatson_organisation
-					       WHERE type = 'whatson_society'
-				            AND rowid IN (
-						SELECT organisation_rowid
-						  FROM whatson_contact_organisation
-						 WHERE person_rowid = (
-							SELECT rowid
-							  FROM whatson_contact
-							 WHERE userid = :userid ) ) )" ;
+        "society_rowid IN (
+          SELECT rowid
+                  FROM whatson_organisation
+                 WHERE type = 'whatson_society'
+                    AND rowid IN (
+            SELECT organisation_rowid
+              FROM whatson_contact_organisation
+             WHERE person_rowid = (
+              SELECT rowid
+                FROM whatson_contact
+               WHERE userid = :userid ) ) )" ;
 
     }
 
@@ -583,20 +583,20 @@ sub fetch {
       # is a member of.
 
       my $stmt =
-				"SELECT start_date , end_date
-				 FROM whatson_event
-			   WHERE $where
-				  AND society_rowid IN (
-							SELECT rowid
-							  FROM whatson_organisation
-							 WHERE type = 'whatson_society'
-							   AND rowid IN (
-										SELECT organisation_rowid
-										  FROM whatson_contact_organisation
-										 WHERE person_rowid = (
-													SELECT rowid
-													  FROM whatson_contact
-													 WHERE userid = :userid ) ) )" ;
+        "SELECT start_date , end_date
+         FROM whatson_event
+         WHERE $where
+          AND society_rowid IN (
+              SELECT rowid
+                FROM whatson_organisation
+               WHERE type = 'whatson_society'
+                 AND rowid IN (
+                    SELECT organisation_rowid
+                      FROM whatson_contact_organisation
+                     WHERE person_rowid = (
+                          SELECT rowid
+                            FROM whatson_contact
+                           WHERE userid = :userid ) ) )" ;
 
       my $sth = $dbh -> prepare ( $stmt ) ;
 
@@ -639,57 +639,57 @@ sub fetch {
 
     }
 
-		if ( $filter -> { society } ) {
+    if ( $filter -> { society } ) {
 
-			# Restrict to the events organised by a specific member society
-			$where .= ' AND ' if $where ;
-			$where .= 'society_rowid = ' . $filter -> { society } ;
+      # Restrict to the events organised by a specific member society
+      $where .= ' AND ' if $where ;
+      $where .= 'society_rowid = ' . $filter -> { society } ;
 
-		}
+    }
 
-		# Add a limit clause if specified. We append this to the where clause
-		# but strictly speaking it isn't part of the where clause but no matter.
-		my $limit .= ' LIMIT ' . $filter -> { limit } if $filter -> { limit } ;
+    # Add a limit clause if specified. We append this to the where clause
+    # but strictly speaking it isn't part of the where clause but no matter.
+    my $limit .= ' LIMIT ' . $filter -> { limit } if $filter -> { limit } ;
 
-		my $stmt = 'SELECT * FROM whatson_event' ;
-		$stmt .= ' WHERE ' . $where if $where ;
-		$stmt .= ' ORDER BY date ( start_date ) , date ( end_date ) , rowid' ;
-		$stmt .= $limit if $limit ;
+    my $stmt = 'SELECT * FROM whatson_event' ;
+    $stmt .= ' WHERE ' . $where if $where ;
+    $stmt .= ' ORDER BY date ( start_date ) , date ( end_date ) , rowid' ;
+    $stmt .= $limit if $limit ;
 
-		my $sth = $dbh -> prepare ( $stmt ) ;
+    my $sth = $dbh -> prepare ( $stmt ) ;
 
-	   $sth -> execute ;
+     $sth -> execute ;
 
-	   my @events ;
+     my @events ;
 
-	   while ( my $row = $sth -> fetchrow_hashref ) {
+     while ( my $row = $sth -> fetchrow_hashref ) {
 
-	      my $event = new DATA::WhatsOn::Event ;
+        my $event = new DATA::WhatsOn::Event ;
 
-	      $event -> rowid ( $row -> { rowid } ) ;
-	      $event -> dates ( $row -> { dates } ) ;
-	      $event -> name ( $row -> { name } ) ;
-	      $event -> start_date ( $row -> { start_date } ) ;
-	      $event -> end_date ( $row -> { end_date } ) ;
-	      $event -> status ( $row -> { status } ) ;
-	      $event -> venue_rowid ( $row -> { venue_rowid } ) ;
-	      $event -> venue_name ( $row -> { venue_name } || '' ) ;
-	      $event -> society_rowid ( $row -> { society_rowid } ) ;
-	      $event -> society_name ( $row -> { society_name } || '' ) ;
-	      $event -> presented_by ( $row -> { presented_by } ) ;
-	      $event -> times ( $row -> { times } ) ;
-	      $event -> box_office ( $row -> { box_office } ) ;
-	      $event -> use_desc ( $row -> { use_desc } ) ;
-	      $event -> description ( $row -> { description } ) ;
-	      $event -> image ( $row -> { image } ) ;
+        $event -> rowid ( $row -> { rowid } ) ;
+        $event -> dates ( $row -> { dates } ) ;
+        $event -> name ( $row -> { name } ) ;
+        $event -> start_date ( $row -> { start_date } ) ;
+        $event -> end_date ( $row -> { end_date } ) ;
+        $event -> status ( $row -> { status } ) ;
+        $event -> venue_rowid ( $row -> { venue_rowid } ) ;
+        $event -> venue_name ( $row -> { venue_name } || '' ) ;
+        $event -> society_rowid ( $row -> { society_rowid } ) ;
+        $event -> society_name ( $row -> { society_name } || '' ) ;
+        $event -> presented_by ( $row -> { presented_by } ) ;
+        $event -> times ( $row -> { times } ) ;
+        $event -> box_office ( $row -> { box_office } ) ;
+        $event -> use_desc ( $row -> { use_desc } ) ;
+        $event -> description ( $row -> { description } ) ;
+        $event -> image ( $row -> { image } ) ;
 
-	      push @events , $event ;
+        push @events , $event ;
 
-	   }
+     }
 
-	   return @events ;
+     return @events ;
 
-	}
+  }
 
 }
 
@@ -768,7 +768,7 @@ insert of a new event.
 
     }
 
-		$sth = $dbh -> prepare (
+    $sth = $dbh -> prepare (
 
       'INSERT INTO event (
         name            ,
@@ -876,31 +876,31 @@ for a post that includes the full detail via a link to the event page.
     year  => substr ( $self -> end_date , 6 , 4 ) ,
     month => substr ( $self -> end_date , 3 , 2 ) ,
     day   => substr ( $self -> end_date , 0 , 2 )
-	) ;
+  ) ;
 
-  my $days_ahead	=
-		( $start_date -> subtract_datetime_absolute ( $now ) ) ->
-			in_units ( 'seconds' ) / ( 60 * 60 * 24 ) ;
+  my $days_ahead  =
+    ( $start_date -> subtract_datetime_absolute ( $now ) ) ->
+      in_units ( 'seconds' ) / ( 60 * 60 * 24 ) ;
 
   my $rel_who ; # Relationship between event and an organisation
 
   if ( $self -> presented_by ) {
 
-		if ( $self -> presented_by =~ /^"(.+)"$/ ) {
+    if ( $self -> presented_by =~ /^"(.+)"$/ ) {
 
-			$rel_who = lcfirst $1 ;
+      $rel_who = lcfirst $1 ;
 
-		} else {
+    } else {
 
-			$rel_who = 'presented by ' . $self -> presented_by ;
+      $rel_who = 'presented by ' . $self -> presented_by ;
 
-		}
+    }
 
-	} else {
+  } else {
 
-		$rel_who = 'presented by ' . $self -> society_name ;
+    $rel_who = 'presented by ' . $self -> society_name ;
 
-	}
+  }
 
   my $rel_who_where = $rel_who . ' at ' . $self -> venue_name ; # Adds venue
 

@@ -18,7 +18,7 @@ sub cgiapp_init {
    $self -> run_modes ( [
 
       'join_data' ,
-		'add_event'
+    'add_event'
 
    ] ) ;
 
@@ -44,35 +44,35 @@ Submit a mail form enquring about membership for a society.
 
       return {
 
-			use Data::FormValidator::Constraints qw /
-				email
-				FV_eq_with
-			/ ;
+      use Data::FormValidator::Constraints qw /
+        email
+        FV_eq_with
+      / ;
 
-			optional => [ qw /
-				telephone
-			/ ] ,
+      optional => [ qw /
+        telephone
+      / ] ,
 
          required => [ qw /
-				first_name
-				surname
-				email
-				confirm_email
-				society
-				message
+        first_name
+        surname
+        email
+        confirm_email
+        society
+        message
          / ] ,
 
          constraint_methods => {
 
-				email => {
-					constraint_method => email ,
-					name => 'email_valid'
-				} ,
+        email => {
+          constraint_method => email ,
+          name => 'email_valid'
+        } ,
 
-				confirm_email => {
-					constraint_method => FV_eq_with ( 'email' ) ,
-					name => 'email_confirmed'
-				} ,
+        confirm_email => {
+          constraint_method => FV_eq_with ( 'email' ) ,
+          name => 'email_confirmed'
+        } ,
 
          } ,
 
@@ -81,7 +81,7 @@ Submit a mail form enquring about membership for a society.
 
             constraints => {
                'email_valid' => 'Auth_001' ,
-					'email_confirmed' => 'Auth_002' ,
+          'email_confirmed' => 'Auth_002' ,
             }
 
          }
@@ -99,10 +99,10 @@ Submit a mail form enquring about membership for a society.
 
 
    $self -> header_add (
-		-Content-Length => '' ,
-		-Location => $query -> param ( 'onSuccess' ) ,
-		-Status => 302
-	) ;
+    -Content-Length => '' ,
+    -Location => $query -> param ( 'onSuccess' ) ,
+    -Status => 302
+  ) ;
 
    return $self -> redirect ( $query -> param ( 'onSuccess' ) ) ;
 
