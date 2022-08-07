@@ -2,6 +2,8 @@ package DATA::Auth::Component ;
 
 =head1 DATA::Auth::Component
 
+Provides auth related components for inclusion in pages.
+
 =cut
 
 use strict ;
@@ -49,11 +51,15 @@ sub import {
 
 }
 
+=head2 Components
+
+=cut
+
 sub auth_current_user {
 
 =head3 auth_current_user
 
-Display details of the currently authenticated user
+Display details of the currently authenticated user.
 
 =cut
 

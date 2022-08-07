@@ -4,7 +4,7 @@ package DATA::Image::Constraints ;
 
 Constraints applied to an image referenced by its URL, i.e. the validated value
 is the URL of the image. These can be applied to an image that's either hosted
- on our own site or hosted externally.
+on our own site or hosted externally.
 
 =cut
 
@@ -30,9 +30,13 @@ sub image {
   return $image ;
 }
 
+=head2 Constraints
+
+=cut
+
 sub image_valid {
 
-=head2 image_valid
+=head3 image_valid
 
 Effectively tests three things:
 1. That the URL given corresponds to a valid location - returns HTTP 200;

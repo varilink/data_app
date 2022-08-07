@@ -1,5 +1,11 @@
 package DATA::Plugin::ValidateRM ;
 
+=head1 DATA::Plugin::ValidateRM
+
+Plugin to customise the use of CGI::Application::Plugin::ValidateRM.
+
+=cut
+
 use strict ;
 use warnings ;
 

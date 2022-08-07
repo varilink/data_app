@@ -2,6 +2,11 @@ package DATA::Main ;
 
 =head1 DATA::Main
 
+Master CGI::Application superclass for the DATA website. This provides a core
+set of run modes including the run mode auto_run_mode, which is used for the
+display of all pages. Action CGI::Application classes that are based on this
+superclass then only have to define their specific actions as run modes.
+
 =cut
 
 use strict ;
@@ -64,7 +69,7 @@ sub cgiapp_postrun {
 
 =head2 run modes
 
-This superclass defines the following run modes
+This superclass defines the following run modes:
 
 =cut
 

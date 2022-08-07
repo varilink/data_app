@@ -2,7 +2,7 @@ package DATA::Plugin::Captcha ;
 
 =head1 DATA::Plugin::Captcha
 
-CGI:Application integration with Google's reCAPTCHA
+CGI:Application integration with Google's reCAPTCHA.
 
 =cut
 
@@ -15,7 +15,7 @@ sub verify {
 
 =head2 verify
 
-Verify's a user's reCAPTCHA response
+Verify's a user's reCAPTCHA response.
 
 =cut
 

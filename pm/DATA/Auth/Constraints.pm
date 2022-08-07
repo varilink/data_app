@@ -1,5 +1,11 @@
 package DATA::Auth::Constraints ;
 
+=head1 DATA::Auth::Constraints
+
+Provides auth related contraints for use in forms.
+
+=cut
+
 use strict ;
 use warnings ;
 
@@ -42,9 +48,13 @@ our @EXPORT = qw /
 
 / ;
 
+=head2 Constraints
+
+=cut
+
 sub credentials_match {
 
-=head2 credentials_match
+=head3 credentials_match
 
 Tests supplied login credentials to see if they match what we have on record.
 
@@ -63,7 +73,7 @@ Tests supplied login credentials to see if they match what we have on record.
     $user -> userid ( $data -> { $userid } ) ;
 
     my $result = $user -> fetch ( $dbh ) ;
-    
+
     $user -> fetch ( $dbh ) && md5_hex ( $value ) eq $user -> password
       ? return 1
       : return 0 ;
@@ -73,6 +83,12 @@ Tests supplied login credentials to see if they match what we have on record.
 }
 
 sub not_a_robot {
+
+=head3 not_a_robot
+
+Tests that the user interacting with the site is not a robot.
+
+=cut
 
   my $recaptcha_secret_key = shift ;
 
@@ -120,6 +136,12 @@ sub not_a_robot {
 
 sub password_complex {
 
+=head3 password_complex
+
+Checks that a user supplied password is sufficiently complex to be secure.
+
+=cut
+
   return sub {
 
     my ( $dfv , $value ) = @_ ;
@@ -136,7 +158,7 @@ sub password_complex {
 
     $check -> has_errors
       ? return undef
-      : return 1 ; 
+      : return 1 ;
 
   }
 

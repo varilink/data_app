@@ -3,7 +3,9 @@ package DATA::Auth ;
 =head1 DATA::Auth
 
 This module implements DATA's user authentication and account mangement
-functionality.
+functionality. The run modes provided by this module fall into the following
+categories; authentication, account creation and account management (post
+creation).
 
 =cut
 
@@ -117,7 +119,7 @@ sub login {
 
 =head3 login
 
-Process an attempt to authenticate
+Process an attempt to authenticate.
 
 =cut
 
@@ -257,7 +259,7 @@ sub logout {
 
 =head3 logout
 
-Unauthenticate a session via a logout method
+Unauthenticate a session via a logout method.
 
 =cut
 
@@ -271,6 +273,8 @@ Unauthenticate a session via a logout method
 }
 
 =head2 Account Creation
+
+The various account creation process steps in the DATA website.
 
 =cut
 
@@ -827,6 +831,8 @@ sub resend_confirmation_email {
 
 =head3 resend_confirmation_email
 
+Resend the confirmation email following user account creation.
+
 =cut
 
   my $self = shift ;
@@ -903,11 +909,18 @@ sub resend_confirmation_email {
 
 }
 
+=head2 Account Managment (Post Creation)
+
+Various account management actions that are available after the account creation
+process has completed.
+
+=cut
+
 sub userid_reminder {
 
 =head3 userid_reminder
 
-Send the user a reminder of their userid
+Send the user a reminder of their userid.
 
 =cut
 
@@ -978,6 +991,8 @@ sub request_password_reset {
 
 =head3 request_password_reset
 
+Request a password reset.
+
 =cut
 
   my $self = shift ;
@@ -1042,6 +1057,13 @@ sub request_password_reset {
 
 sub show_password_reset_page {
 
+=head3 request_password_reset
+
+Show the password reset page when somebody that has requested a password reset
+clicks on the link with the password reset email that is sent to them.
+
+=cut
+
   my $self = shift ;
   my $query = $self -> query ;
 
@@ -1102,6 +1124,12 @@ sub show_password_reset_page {
 }
 
 sub reset_password {
+
+=head3 reset_password
+
+Action the password reset entered via the password reset page.
+
+=cut
 
   my $self = shift ;
   my $dbh = $self -> dbh ;
@@ -1170,10 +1198,13 @@ sub reset_password {
 
 }
 
-
-
-
 sub request_password {
+
+=head3 request_password
+
+Request a new, randomly generated password.
+
+=cut
 
    my $self = shift ;
 
@@ -1230,6 +1261,8 @@ sub request_password {
 sub update_account {
 
 =head3 update_account
+
+Make a change to any of the details associated with a user account.
 
 =cut
 
@@ -1418,7 +1451,7 @@ sub update_password {
 
 =head3 update_password
 
-Updates the password of the currently logged on user
+Updates the password of the currently logged on user.
 
 =cut
 

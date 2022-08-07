@@ -31,6 +31,10 @@ sub cgiapp_init {
 
 }
 
+=head2 run modes
+
+=cut
+
 sub request {
 
 =head3 request

@@ -1,5 +1,11 @@
 package DATA::Plugin::DBH ;
 
+=head1 DATA::Plugin::Config
+
+Plugin DATA application integration with DBH.
+
+=cut
+
 use strict ;
 use warnings ;
 

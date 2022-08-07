@@ -2,6 +2,9 @@ package DATA::WhatsOn ;
 
 =head1 DATA::WhatsOn
 
+Extends the DATA::Main class to provide public actions,event management and
+organisation management run modes, all of which are action run modes.
+
 =cut
 
 use strict ;
@@ -600,6 +603,9 @@ sub event_programme {
 
 =head3 event_programme
 
+Handle the addition of event programme details or a change to existing event
+programme details.
+
 =cut
 
   my $self = shift ;
@@ -899,6 +905,9 @@ sub event_online {
 
 =head3 event_online
 
+Handle the addition of an event online listing or changes to an existing event
+online listing.
+
 =cut
 
   my $self = shift ;
@@ -1131,10 +1140,6 @@ are directed to here in this module instead.
 =head2 Organisation Management
 
 Run modes that support the management of organisations
-
-=cut
-
-=head3 Organisation Management
 
 =cut
 

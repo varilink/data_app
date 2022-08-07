@@ -1,5 +1,11 @@
 package DATA::Plugin::Email ;
 
+=head1 DATA::Plugin::Email
+
+Plugin for enabling the sending of emails by the DATA web app.
+
+=cut
+
 use strict ;
 use warnings ;
 

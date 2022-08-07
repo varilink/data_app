@@ -42,6 +42,10 @@ sub _fetched {
 
 }
 
+=head2 Accessors
+
+=cut
+
 sub userid {
 
 =head3 userid
@@ -200,6 +204,12 @@ objects.
 
 sub as_hash {
 
+=head3 as_hash
+
+Represents the user object as a hash.
+
+=cut
+
   my $self = shift ;
   my %user = %{ $self } ;
   tie my %hash , 'Hash::Case::Lower' , \%user ;
@@ -208,6 +218,13 @@ sub as_hash {
 }
 
 sub load {
+
+=head3 load
+
+Class method that loads users from a file into the database, probably now
+redundant.
+
+=cut
 
   my ( $class , $path , $dbh ) = @_ ;
 
@@ -339,7 +356,7 @@ or via email.
       'SELECT *
          FROM auth_user'
 
-    ) ;      
+    ) ;
 
     my @users ;
 
@@ -371,6 +388,13 @@ or via email.
 
 sub save {
 
+=head3
+
+Saves a user object in the database using either insert for a new user or update
+for an existing user.
+
+=cut
+
   my ( $self , $dbh ) = @_ ;
 
   if ( $self -> _fetched ) {
@@ -393,7 +417,7 @@ sub save {
                    status     = :status     ,
                    secret     = :secret     ,
                    datetime   = :datetime
-          WHERE rowid = :rowid' 
+          WHERE rowid = :rowid'
 
       ) ;
 
@@ -412,7 +436,7 @@ sub save {
                    status     = :status     ,
                    secret     = :secret     ,
                    datetime   = :datetime
-          WHERE userid = :userid' 
+          WHERE userid = :userid'
 
       ) ;
 
@@ -447,7 +471,7 @@ sub save {
                  status      ,
                  secret      ,
                  datetime
-     ) VALUES (   :userid     , 
+     ) VALUES (   :userid     ,
                     :role       ,
                     :email      ,
                  :first_name ,
@@ -478,14 +502,12 @@ sub save {
 
 }
 
-
-
-
 sub insert {
 
 =head3 insert
 
-Insert a user to the database.
+Insert a user to the database, which obviously overlaps with "save". I susepct
+that one of these methods is redundant.
 
 =cut
 
@@ -520,14 +542,16 @@ Insert a user to the database.
 
    $sth -> execute ;
 
-} 
-                   
+}
+
 
 sub store {
 
 =head3 store
 
-Store a user in the database. Performs either an insert or an update.
+Store a user in the database. Performs either an insert or an update. This would
+seem to be a direct equivalent of save so I suspect one of these methods is
+redundant.
 
 =cut
 
@@ -578,7 +602,7 @@ Store a user in the database. Performs either an insert or an update.
                              :password   ,
                              :status     ,
                              :secret     ,
-                             :datetime )' 
+                             :datetime )'
 
     ) ;
 
@@ -631,7 +655,7 @@ sub generate_password {
 
 =head3 generate_password
 
-Class method to generate a password
+Class method to generate a password.
 
 =cut
 
@@ -662,7 +686,10 @@ sub already_user {
 
 =head3 already_user
 
-Test if there is already a userid registered for the email address.
+Test if there is already a userid registered for the email address. This method
+is probably referenced by constraints but is encapsulated here along with all
+the other methods that translate between a user object and its database
+representation.
 
 =cut
 
@@ -688,7 +715,9 @@ sub duplicate_userid {
 
 =head3 not_unique
 
-Test if a userid is a duplicate of one already known.
+Test if a userid is a duplicate of one already known. Again, probably referenced
+by constraints but exists here amongst the methods that map a user object to
+its database representation.
 
 =cut
 

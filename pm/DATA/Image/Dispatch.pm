@@ -2,6 +2,8 @@ package DATA::Image::Dispatch ;
 
 =head1 DATA::Image::Dispatch
 
+Dispatcher for the image app, which uploads images via its upload run mode.
+
 =cut
 
 use strict ;
