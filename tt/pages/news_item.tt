@@ -2,7 +2,7 @@
 
 [%~ SET
 
-	title = news_item.title
+  title = news_item.title
 
 %]
 

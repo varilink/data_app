@@ -15,7 +15,7 @@
 
   <small class="form-error">
 [%~ IF error_msg %]
-		[% error_msg %]
+    [% error_msg %]
 [%~ ELSE %]
     You must repeat your email address to confirm it
 [%~ END %]
@@ -28,7 +28,7 @@
   </label>
 
   <input class="is-invalid-input" aria-invalid="true" type="text" id=
-  "userConfirmEmail" name="user_confirm_email"	placeholder=
+  "userConfirmEmail" name="user_confirm_email"  placeholder=
   "Confirm Email ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
   autocomplete="off" aria-describedby="userConfirmEmailHelpText"
   data-equalto="userEmail" [% IF required %]required[% END %]

@@ -18,10 +18,10 @@
       </p>
 
 [% PROCESS form.tt
-  action    =	'/account/action/userid_reminder'   ,
-  name      =	'Email Address for Reminder'        ,
-  onError   =	'userid_reminder'                   ,
-  onSuccess =	'/account/success_userid_reminder'
+  action    =  '/account/action/userid_reminder'   ,
+  name      =  'Email Address for Reminder'        ,
+  onError   =  'userid_reminder'                   ,
+  onSuccess =  '/account/success_userid_reminder'
 FILTER indent 6 %]
 
 [% PROCESS user_email.tt
@@ -30,14 +30,14 @@ FILTER indent 6 %]
 FILTER indent 8 %]
 
 [% PROCESS buttons.tt
-	buttons = [
-		{
-			id			= 'userid_reminder'	,
-			protect	= 1						,
-			type		= 'submit'				,
-			value		= 'Userid Reminder'	,
-		}
-	]
+  buttons = [
+    {
+      id      = 'userid_reminder'  ,
+      protect  = 1            ,
+      type    = 'submit'        ,
+      value    = 'Userid Reminder'  ,
+    }
+  ]
 FILTER indent 6 %]
 
     </div>

@@ -1,6 +1,6 @@
 [% SET
 
-	title = 'Resend of Email to Confirm Email Address'
+  title = 'Resend of Email to Confirm Email Address'
 
 %]
 
@@ -8,11 +8,11 @@
 
 <div class="row column">
 
-	[% PROCESS h1.tt %]
+  [% PROCESS h1.tt %]
 
-	<p>
-		The confirmation email has been resent.
-	</p>
+  <p>
+    The confirmation email has been resent.
+  </p>
 
 </div>
 

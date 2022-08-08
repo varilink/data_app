@@ -43,20 +43,20 @@ $ ( 'input[name="event_status"]' ) . change ( function ( ) {
       $ ( '#eventPlaceholder #eventBoxOffice' ) . val ( )
     ) ;
 
-    $ ( '#eventPublished'	) . removeClass	( 'hide' ) ;
+    $ ( '#eventPublished'  ) . removeClass  ( 'hide' ) ;
 
     // Disable and hide Placeholder
     $ ( '#eventPlaceholder #eventVenue' ) . prop ( 'disabled' , true ) ;
-    $ ( '#eventPlaceholder #eventBoxOffice' )	. prop (
+    $ ( '#eventPlaceholder #eventBoxOffice' )  . prop (
       'disabled' , true ) ;
-    $ ( '#eventPlaceholder'	) . addClass		( 'hide' ) ;
+    $ ( '#eventPlaceholder'  ) . addClass    ( 'hide' ) ;
 
   } else if ( eventStatus == 'PLACEHOLDER' ) {
 
     // Enable, update and reveal Placeholder
 
     $ ( '#eventPlaceholder #eventVenue' ) . prop ( 'disabled' , false ) ;
-    $ ( '#eventPlaceholder #eventBoxOffice' )	. prop ( 'disabled' , false ) ;
+    $ ( '#eventPlaceholder #eventBoxOffice' )  . prop ( 'disabled' , false ) ;
 
     $ ( '#eventPlaceholder #eventVenue' ) . val (
       $ ( '#eventPublished #eventVenue' ) . val ( )
@@ -65,13 +65,13 @@ $ ( 'input[name="event_status"]' ) . change ( function ( ) {
       $ ( '#eventPublished #eventBoxOffice' ) . val ( )
     ) ;
 
-    $( '#eventPlaceholder'	) . removeClass	( 'hide' ) ;
+    $( '#eventPlaceholder'  ) . removeClass  ( 'hide' ) ;
 
     // Disable and hide Published
     $ ( '#eventPublished #eventVenue' ) . prop ( 'disabled' , true ) ;
     $ ( '#eventPublished #eventBoxOffice' ) . prop ( 'disabled' , true ) ;
 
-    $( '#eventPublished'		) . addClass		( 'hide' ) ;
+    $( '#eventPublished'    ) . addClass    ( 'hide' ) ;
 
   }
 

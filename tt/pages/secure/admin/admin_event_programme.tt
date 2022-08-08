@@ -89,13 +89,13 @@ style="display: block;">
 <h3>When is it?</h3>
 
 [% INCLUDE event_start_date.tt
-	required = 1 ,
-	error_msg = 'You must enter a valid date in DD/MM/YYYY format'
+  required = 1 ,
+  error_msg = 'You must enter a valid date in DD/MM/YYYY format'
 %]
 
 [% INCLUDE event_end_date.tt
-	required = 0 ,
-	error_msg = 'If you enter an end date, it must be a valid date in DD/MM/YYYY format'
+  required = 0 ,
+  error_msg = 'If you enter an end date, it must be a valid date in DD/MM/YYYY format'
 %]
 
 [% INCLUDE event_dates.tt required = 0 %]
@@ -171,14 +171,14 @@ style="display: block;">
 [% event_published_callout FILTER indent 2 %]
 
 [% INCLUDE event_venue.tt
-	disabled = 1 ,
-	error_msg = 'You must enter the venue for the event' ,
-	required = 1
+  disabled = 1 ,
+  error_msg = 'You must enter the venue for the event' ,
+  required = 1
 %]
 
 [% INCLUDE event_box_office.tt
-	disabled = 1 ,
-	required = 1
+  disabled = 1 ,
+  required = 1
 %]
 
 </div>
@@ -205,13 +205,13 @@ style="display: block;">
 [% event_placeholder_callout FILTER indent 2 %]
 
 [% INCLUDE event_venue.tt
-	disabled = 1
-	FILTER indent 2
+  disabled = 1
+  FILTER indent 2
 %]
 
 [% INCLUDE event_box_office.tt
-	disabled = 1
-	FILTER indent 2
+  disabled = 1
+  FILTER indent 2
 %]
 
 </div>
@@ -223,16 +223,16 @@ style="display: block;">
 [% event_published_callout FILTER indent 2 %]
 
 [% INCLUDE event_venue.tt
-	disabled = 0 ,
-	error_msg = 'You must enter the venue for the event' ,
-	required = 1
-	FILTER indent 2
+  disabled = 0 ,
+  error_msg = 'You must enter the venue for the event' ,
+  required = 1
+  FILTER indent 2
 %]
 
 [% INCLUDE event_box_office.tt
-	disabled = 0 ,
-	required = 1
-	FILTER indent 2
+  disabled = 0 ,
+  required = 1
+  FILTER indent 2
 %]
 
 </div>

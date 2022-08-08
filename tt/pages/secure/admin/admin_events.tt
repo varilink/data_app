@@ -50,7 +50,7 @@ title = 'Events Listing'
 
 [% END # Not first row %]
 
-		    <tbody>
+        <tbody>
 
           <tr style="background-color: white;"><td colspan="3"></td></tr>
 
@@ -85,13 +85,13 @@ title = 'Events Listing'
 [%~ END # MACRO whatson_events BLOCK %]
 
 [%~ CGIAPP.embed (
-	'whatson_events'		,	# List of events
-	'filter' = {
-		'from' => 'now'	,	# Only return events that have not yet ended
-	} ,
-	'behaviour' = {
-		'defaults'	=> 1
-	}
+  'whatson_events'    ,  # List of events
+  'filter' = {
+    'from' => 'now'  ,  # Only return events that have not yet ended
+  } ,
+  'behaviour' = {
+    'defaults'  => 1
+  }
 ) %]
 
         </tbody>

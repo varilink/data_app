@@ -44,7 +44,7 @@ FILTER indent 6 %]
 [%~ CGIAPP.embed (
   'whatson_event'                   ,
   'filter' = {
-    'from'    => 'now'              ,	# Only events that have not yet ended
+    'from'    => 'now'              ,  # Only events that have not yet ended
     'rowid'   => "$rowid"           ,
     'userid'  => "$session.userid"  , # Only events the user represents
   }                                 ,

@@ -49,10 +49,10 @@ FILTER indent 8 %]
 [%~ IF rowid %]
 
 [%~ CGIAPP.embed (
-	'whatson_society'	,
-	'filter' = {
-		'rowid' => "$rowid"
-	}
+  'whatson_society'  ,
+  'filter' = {
+    'rowid' => "$rowid"
+  }
 ) %]
 
 [%~ ELSE %]
@@ -63,13 +63,13 @@ FILTER indent 8 %]
 
 [% PROCESS buttons.tt
 
-	buttons = [
-		{
-			id = 'save' ,
-			value = 'Save' ,
-			type = 'submit'
-		}
-	]
+  buttons = [
+    {
+      id = 'save' ,
+      value = 'Save' ,
+      type = 'submit'
+    }
+  ]
 
 FILTER indent 6 %]
 

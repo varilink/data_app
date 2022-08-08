@@ -1,5 +1,5 @@
 [% PROCESS email_header.tt
-	title = 'Confirm Email Address'
+  title = 'Confirm Email Address'
 %]
 
 [% PROCESS email_paragraph.tt %]
@@ -18,8 +18,8 @@ that you have received this email.
 [% url = "${path}/${identity}/${responses}" | url %]
 
 [% PROCESS email_footer.tt
-	action = {
-		name = 'Confirm Email Address'
-		url = "$url"
-	}
+  action = {
+    name = 'Confirm Email Address'
+    url = "$url"
+  }
 %]

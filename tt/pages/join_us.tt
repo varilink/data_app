@@ -19,10 +19,10 @@
       </p>
 
 [% PROCESS form.tt
-	action		= '/action/join_us'				,
-	name			= 'Membership Enquiry'			,
-	onError		= 'join_us'							,
-	onSuccess	= '/success_join_us'
+  action    = '/action/join_us'        ,
+  name      = 'Membership Enquiry'      ,
+  onError    = 'join_us'              ,
+  onSuccess  = '/success_join_us'
 FILTER indent 6 %]
 
         <h2>Contact Details</h2>

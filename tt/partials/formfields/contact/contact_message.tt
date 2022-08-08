@@ -17,7 +17,7 @@
   </label>
 
   <textarea class="is-invalid-input" id="contact_message" name=
-  "contact_message" required	aria-describedby="contact_messageHelpText"
+  "contact_message" required  aria-describedby="contact_messageHelpText"
   rows="5" placeholder="Message (Mandatory)"></textarea>
 
   <small class="form-error is-visible">

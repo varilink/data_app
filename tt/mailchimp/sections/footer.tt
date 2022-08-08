@@ -20,24 +20,24 @@
                                 <![endif]-->
 
 [% links =
-	[
-		{
-			type => 'twitter' ,
-			url => 'https://twitter.com/DerbyAmPerfArts'
-		} ,
-		{
-			type => 'facebook' ,
-			url => 'https://www.facebook.com/DerbyArtsAndTheatreAssociation/'
-		} ,
-		{
-			type => 'youtube' ,
-			url => 'https://www.youtube.com/channel/UCTXIEwu1D9mnV9uU7H-TZMw/'
-		} ,
-		{
-			type => 'link' ,
-			url => "$conf.root"
-		} ,
-	]
+  [
+    {
+      type => 'twitter' ,
+      url => 'https://twitter.com/DerbyAmPerfArts'
+    } ,
+    {
+      type => 'facebook' ,
+      url => 'https://www.facebook.com/DerbyArtsAndTheatreAssociation/'
+    } ,
+    {
+      type => 'youtube' ,
+      url => 'https://www.youtube.com/channel/UCTXIEwu1D9mnV9uU7H-TZMw/'
+    } ,
+    {
+      type => 'link' ,
+      url => "$conf.root"
+    } ,
+  ]
 %]
 
 [% FOREACH link IN links %]

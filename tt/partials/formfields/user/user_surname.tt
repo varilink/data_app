@@ -6,12 +6,12 @@
     Surname ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
   </label>
 
-  <input type="text" id="user_surname" name="user_surname"	placeholder=
+  <input type="text" id="user_surname" name="user_surname"  placeholder=
   "Surname ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
   [% IF required %]required [% END %]aria-describedby= "user_surnameHelpText"
   value="[% user.surname %]">
 
-	<small class="form-error">
+  <small class="form-error">
 [%~ IF error_msg %]
     [% error_msg %]
 [%~ ELSE %]
@@ -26,7 +26,7 @@
   </label>
 
   <input class="is-invalid-input" type="text" id="user_surname" name=
-  "user_surname"	placeholder="Surname ([% IF required %]Mandatory[% ELSE %]
+  "user_surname"  placeholder="Surname ([% IF required %]Mandatory[% ELSE %]
   Optional[% END %])" [% IF required %]required [% END %] aria-describedby=
   "user_surnameHelpText" value="[% user.surname %]">
 

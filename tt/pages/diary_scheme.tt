@@ -32,7 +32,7 @@ title = 'Diary Scheme'
 [%~ END # MACRO whatson_societies BLOCK %]
 
 [%~ CGIAPP.embed (
-  'whatson_societies'	,
+  'whatson_societies'  ,
   'filter' = {
     'status' => 'ACTIVE'
   } ,

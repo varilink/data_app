@@ -23,8 +23,8 @@
             committee or representatives of DATA member societies. The email
             address [% user_email %] is not in our records as corresponding to
             either of those. If you are either a member of the DATA committee or
-            a representative of	one or more DATA member societies, then please
-            confirm your registration by	clicking on "Confirm Registration"
+            a representative of  one or more DATA member societies, then please
+            confirm your registration by  clicking on "Confirm Registration"
             below. Otherwise, click on "Cancel".
           </p>
 
@@ -34,10 +34,10 @@
         <div class="float-center" style="padding: 0; width: 28em;">
 
 [% PROCESS form.tt
-  action		= '/account/action/confirm_registration'  ,
-  invisible	= 1                                       ,
+  action    = '/account/action/confirm_registration'  ,
+  invisible  = 1                                       ,
   onError   = 'warning_begin_registration'            ,
-  onSuccess	= '/account/success_confirm_registration' ,
+  onSuccess  = '/account/success_confirm_registration' ,
 FILTER indent 10 %]
 
             <input type="hidden" name="user_email" id="userEmail"

@@ -26,50 +26,50 @@ title = 'Member Societies'
 
 [% MACRO whatson_societies BLOCK %]
 
-	<table>
+  <table>
 
-		<thead>
+    <thead>
 
-			<tr>
-				<th>Name</th>
-				<th>Active (Yes/No)</th>
-			</tr>
+      <tr>
+        <th>Name</th>
+        <th>Active (Yes/No)</th>
+      </tr>
 
-		</thead>
+    </thead>
 
-		<tbody>
+    <tbody>
 
 [% FOREACH society IN societies %]
 
-			<tr>
-				<td>
-					<a href="[% root %]secure/rep/society/[% society.rowid %]">
-						[% society.name %]
-					</a>
-				</td>
-				<td>
+      <tr>
+        <td>
+          <a href="[% root %]secure/rep/society/[% society.rowid %]">
+            [% society.name %]
+          </a>
+        </td>
+        <td>
 [% IF society.status == "ACTIVE" %]
-					Yes
+          Yes
 [% ELSE %]
-					No
+          No
 [% END %]
-				</td>
-			</tr>
+        </td>
+      </tr>
 
 [% END %]
 
-		</tbody>
+    </tbody>
 
-	</table>
+  </table>
 
 [% END # MACRO whatson_societies BLOCK %]
 
 [% CGIAPP.embed (
 
-	'whatson_societies'	,
-	'filter' = {
-		'userid' => "$session.userid"
-	}
+  'whatson_societies'  ,
+  'filter' = {
+    'userid' => "$session.userid"
+  }
 
 ) %]
 

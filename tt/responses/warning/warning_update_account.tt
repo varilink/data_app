@@ -1,6 +1,6 @@
 [%~ SET
 
-	title = 'Account Update Successful'
+  title = 'Account Update Successful'
 
 %]
 
@@ -9,7 +9,7 @@
     <div class="row">
 
       <div class=
-	    "columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+      "columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
 
 [% PROCESS h1.tt FILTER indent 8 %]
 

@@ -1,5 +1,5 @@
 [% PROCESS email_header.tt
-	title = 'Event Programme Listing Update'
+  title = 'Event Programme Listing Update'
 %]
 
 [% PROCESS email_paragraph.tt %]

@@ -8,7 +8,7 @@
   </label>
   <input type="text" id="eventEndDate" name="event_end_date" placeholder=
   "End Date ([% IF required %]Mandatory[% ELSE %]Optional[% END %] DD/MM/YYYY)"
-  aria-describedby="event_end_dateHelpText"	pattern="day_month_year"
+  aria-describedby="event_end_dateHelpText"  pattern="day_month_year"
   [% IF required %]required[% END %] value="[% event.end_date %]">
   <small class="form-error">
 [%~ IF error_msg -%]
@@ -25,7 +25,7 @@
   </label>
   <input class="is-invalid-input" type="text" id="eventEndDate" name=
   "event_end_date" placeholder="End Date ([% IF required %]Mandatory[% ELSE ~%]
-  Optional[% END %] DD/MM/YYYY)"	aria-describedby="event_end_dateHelpText"
+  Optional[% END %] DD/MM/YYYY)"  aria-describedby="event_end_dateHelpText"
   pattern="day_month_year" [% IF required %]required[% END %] value=
   "[% event.end_date %]">
   <small class="form-error is-visible">

@@ -3,7 +3,7 @@
 
 [%~ UNLESS error_event_presented_by || error_society_or_presented_by
 
-	# Initial State, i.e. NOT error state
+  # Initial State, i.e. NOT error state
 
 -%]
 
@@ -21,7 +21,7 @@
     Presented By (Optional)
   </label>
   <input class="is-invalid-input" type="text" id="event_presented_by" name=
-  "event_presented_by"	aria-describedby="event_presented_byHelpText"
+  "event_presented_by"  aria-describedby="event_presented_byHelpText"
   placeholder="Presented By (Optional)"
   value="[% event.presented_by FILTER html %]">
 
@@ -116,18 +116,18 @@
 [%~ END # MACRO whatson_societies BLOCK %]
 
 [%~ IF
-	template.name == 'rep_event_programme.tt' ||
-	( template.name == 'input text' && caller == 'rep_event_programme.tt' )
+  template.name == 'rep_event_programme.tt' ||
+  ( template.name == 'input text' && caller == 'rep_event_programme.tt' )
 %]
 
 [%~ CGIAPP.embed (
 
-	'whatson_societies' ,
+  'whatson_societies' ,
 
-	'filter'	= {
-		'status'	=> 'ACTIVE' ,
-		'userid'	=> "$session.userid" ,
-	}
+  'filter'  = {
+    'status'  => 'ACTIVE' ,
+    'userid'  => "$session.userid" ,
+  }
 
 ) %]
 
@@ -135,11 +135,11 @@
 
 [%~ CGIAPP.embed (
 
-	'whatson_societies' ,
+  'whatson_societies' ,
 
-	'filter'	= {
-		'status'	=> 'ACTIVE' ,
-	}
+  'filter'  = {
+    'status'  => 'ACTIVE' ,
+  }
 
 ) %]
 

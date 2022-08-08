@@ -1,17 +1,17 @@
 [% SET
 
-	title = 'Coming Events'
-	description = 'The Derby Arts and Theatre Association (DATA) is the representative body for amateur performing arts in the Derby area. DATA also maintains a list of Events staged by DATA member Societies - the DATA Diary.'
+  title = 'Coming Events'
+  description = 'The Derby Arts and Theatre Association (DATA) is the representative body for amateur performing arts in the Derby area. DATA also maintains a list of Events staged by DATA member Societies - the DATA Diary.'
 
 ~%]
 
 <!doctype html>
 <html class='no-js' lang='en'>
-	<head>
+  <head>
 
 [%~ IF conf.root == 'https://www.derbyartsandtheatre.org.uk/' -%]
 
-		<!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async
     src="https://www.googletagmanager.com/gtag/js?id=UA-137420866-1">
     </script>
@@ -26,163 +26,163 @@
 
 [%- PROCESS head.tt FILTER indent 8 -%]
 
-	</head>
+  </head>
 
-	<body>
+  <body>
 
 [%~ #---------------------------------------------------------------------------
 
-	# Cookie Alert
+  # Cookie Alert
 
 #-----------------------------------------------------------------------------%]
 
 [%- PROCESS cookie_alert.tt FILTER indent 8 %]
 
-		<!-- Start of the Hero Image -->
-		<div class="hero-image-custom">
+    <!-- Start of the Hero Image -->
+    <div class="hero-image-custom">
 
 [%-#----------------------------------------------------------------------------
 
-	# Mobile Title Bar
+  # Mobile Title Bar
 
 #---------------------------------------------------------------------------- %]
 
-			<!-- Start of the Mobile Title Bar -->
-			<div class="title-bar title-bar-custom" data-responsive-toggle=
-			"top-bar-hero">
-				<button class="menu-icon" type="button" data-toggle="top-bar-hero">
-				</button>
-				<div class="title-bar-title">Menu</div>
-			</div>
-			<!-- End of the Mobile Title Bar -->
+      <!-- Start of the Mobile Title Bar -->
+      <div class="title-bar title-bar-custom" data-responsive-toggle=
+      "top-bar-hero">
+        <button class="menu-icon" type="button" data-toggle="top-bar-hero">
+        </button>
+        <div class="title-bar-title">Menu</div>
+      </div>
+      <!-- End of the Mobile Title Bar -->
 
 [%#-----------------------------------------------------------------------------
 
-	Menu
+  Menu
 
 ------------------------------------------------------------------------------%]
 
-			<!-- Start of the Top Bar -->
-			<div class="top-bar top-bar-hero-custom" id="top-bar-hero"
-			data-animate="slide-in-down slide-out-up">
+      <!-- Start of the Top Bar -->
+      <div class="top-bar top-bar-hero-custom" id="top-bar-hero"
+      data-animate="slide-in-down slide-out-up">
 
-				<div class="top-bar-left">
-					<ul class="menu">
-						<li><a href="[% conf.root %]events">Events</a></li>
-						<li><a href="[% conf.root %]societies">Societies</a></li>
-						<li><a href="[% conf.root %]about_us">About Us</a></li>
-					</ul>
-				</div> [%# End of top-bar-left %]
+        <div class="top-bar-left">
+          <ul class="menu">
+            <li><a href="[% conf.root %]events">Events</a></li>
+            <li><a href="[% conf.root %]societies">Societies</a></li>
+            <li><a href="[% conf.root %]about_us">About Us</a></li>
+          </ul>
+        </div> [%# End of top-bar-left %]
 
-				<div class="top-bar-right">
-					<ul class="menu">
+        <div class="top-bar-right">
+          <ul class="menu">
 [%~ IF session.userid # User is authenticated %]
-						<li>
-							<a href="[% conf.root %]secure/account/action/logout">
-								Sign-Out
-							</a>
-						</li>
-						<li>
-							<a href="[% conf.root %]secure/account">Account</a>
-						</li>
-						<li>
-							<a href=
+            <li>
+              <a href="[% conf.root %]secure/account/action/logout">
+                Sign-Out
+              </a>
+            </li>
+            <li>
+              <a href="[% conf.root %]secure/account">Account</a>
+            </li>
+            <li>
+              <a href=
 [%~ IF session.role == 'admin' %]
-								"[% conf.root %]secure/admin/"
+                "[% conf.root %]secure/admin/"
 [%~ ELSIF session.role == 'rep' %]
-								"[% conf.root %]secure/rep/"
+                "[% conf.root %]secure/rep/"
 [%~ ELSE # This should never occur %]
                 "#"
 [%~ END # IF session.role ~%]
-							><i class="fa fa-caret-right"></i> <span>Admin</span></a>
-						</li>
+              ><i class="fa fa-caret-right"></i> <span>Admin</span></a>
+            </li>
 [%~ ELSE # ! session.userid and so user is NOT authenticated %]
-						<li><a href="[% conf.root %]account/sign_in">Sign-In</a></li>
+            <li><a href="[% conf.root %]account/sign_in">Sign-In</a></li>
 [%~ END # IF session.userid %]
-					</ul>
-				</div> [%# End of top bar right %]
+          </ul>
+        </div> [%# End of top bar right %]
 
-			</div>
-			<!-- End of the Top Bar -->
-
-[%-#----------------------------------------------------------------------------
-
-	# Hero
-
-#-----------------------------------------------------------------------------%]
-
-			<!-- Start of Hero Text -->
-			<div class="hero-body-custom">
-
-				<div class="hero-contents-custom">
-
-					<h1>Derby Arts and Theatre Association</h1>
-
-					<p class="subheader">
-						The home of amateur performing arts societies in the Derby
-						area.
-					</p>
-
-					<a href="#coming_events" class="round button hollow">
-						Coming Events
-					</a>
-
-				</div>
-
-			</div>
-			<!-- End of Hero Text -->
-
-		</div>
-		<!-- End of Hero Image -->
+      </div>
+      <!-- End of the Top Bar -->
 
 [%-#----------------------------------------------------------------------------
 
-	# Body of Page
+  # Hero
 
 #-----------------------------------------------------------------------------%]
 
-		<!-- Start of Lead Paragraph -->
-		<div class="row columns">
+      <!-- Start of Hero Text -->
+      <div class="hero-body-custom">
 
-			<br>
-			<br>
-			<p class="lead">
-				The Derby Arts and Theatre Association (DATA) is the representative
-				body for amateur performing arts in the Derby area. DATA also
-				maintains a list of <a href="[% conf.root %]events">Events</a> staged
-				by DATA's member <a href="[% conf.root %]societies">Societies</a> - the
-				DATA Diary. Find out more about DATA on our <a href=
-				"[% conf.root %]about_us">About Us</a> page.
-			</p>
-			<br>
+        <div class="hero-contents-custom">
 
-		</div>
-		<!-- End of Lead Paragraph -->
+          <h1>Derby Arts and Theatre Association</h1>
 
-		<!-- Start of "Follow Us" Section -->
-		<div class="row column expanded" style="background-image:
+          <p class="subheader">
+            The home of amateur performing arts societies in the Derby
+            area.
+          </p>
+
+          <a href="#coming_events" class="round button hollow">
+            Coming Events
+          </a>
+
+        </div>
+
+      </div>
+      <!-- End of Hero Text -->
+
+    </div>
+    <!-- End of Hero Image -->
+
+[%-#----------------------------------------------------------------------------
+
+  # Body of Page
+
+#-----------------------------------------------------------------------------%]
+
+    <!-- Start of Lead Paragraph -->
+    <div class="row columns">
+
+      <br>
+      <br>
+      <p class="lead">
+        The Derby Arts and Theatre Association (DATA) is the representative
+        body for amateur performing arts in the Derby area. DATA also
+        maintains a list of <a href="[% conf.root %]events">Events</a> staged
+        by DATA's member <a href="[% conf.root %]societies">Societies</a> - the
+        DATA Diary. Find out more about DATA on our <a href=
+        "[% conf.root %]about_us">About Us</a> page.
+      </p>
+      <br>
+
+    </div>
+    <!-- End of Lead Paragraph -->
+
+    <!-- Start of "Follow Us" Section -->
+    <div class="row column expanded" style="background-image:
     url('[% conf.root %]assets/img/textures/green_bar.png');">
 
-			<br>
+      <br>
 
-			<div class="row medium-unstack">
+      <div class="row medium-unstack">
 
-				<div class="columns small-12">
+        <div class="columns small-12">
 
-					<p class="text-center">
+          <p class="text-center">
 
-						<span style="font-size: 3rem; color: #4dac71;">
-							<i class="fas fa-envelope"></i>
-						</span>
-						<br>
-						<a class="button" href="http://eepurl.com/dJi_vv" target="_blank"
-						style="border-radius: 4px; padding: 0.3em 0.5em 0.55em 0.5em;">
-							Subscribe to our email bulletin
-						</a>
+            <span style="font-size: 3rem; color: #4dac71;">
+              <i class="fas fa-envelope"></i>
+            </span>
+            <br>
+            <a class="button" href="http://eepurl.com/dJi_vv" target="_blank"
+            style="border-radius: 4px; padding: 0.3em 0.5em 0.55em 0.5em;">
+              Subscribe to our email bulletin
+            </a>
 
-					</p>
+          </p>
 
-				</div>
+        </div>
 
         <div class="columns small-12">
 
@@ -192,55 +192,55 @@
               <i class="fab fa-facebook"></i>
             </span>
             <br>
-						<a class="button" target="_blank"
-						href="https://www.facebook.com/DerbyArtsAndTheatreAssociation"
-						style="border-radius: 4px; padding: 0.3em 0.5em 0.55em 0.5em;
-						background-color: #3B5998;">
-							Folow us on Facebook
-						</a>
+            <a class="button" target="_blank"
+            href="https://www.facebook.com/DerbyArtsAndTheatreAssociation"
+            style="border-radius: 4px; padding: 0.3em 0.5em 0.55em 0.5em;
+            background-color: #3B5998;">
+              Folow us on Facebook
+            </a>
 
           </p>
 
         </div>
 
-				<div class="columns small-12">
+        <div class="columns small-12">
 
-					<p class="text-center">
+          <p class="text-center">
 
-						<span style="font-size: 3rem; color: #1DA1F2;">
-							<i class="fab fa-twitter"></i>
-						</span>
-						<br>
-						<a class="twitter-follow-button" data-show-count="false"
-						data-size="large" href="https://twitter.com/DerbyAmPerfArts">
-							Follow us on Twitter
-						</a>
+            <span style="font-size: 3rem; color: #1DA1F2;">
+              <i class="fab fa-twitter"></i>
+            </span>
+            <br>
+            <a class="twitter-follow-button" data-show-count="false"
+            data-size="large" href="https://twitter.com/DerbyAmPerfArts">
+              Follow us on Twitter
+            </a>
 
-					</p>
+          </p>
 
-				</div>
+        </div>
 
-			</div>
+      </div>
 
-			<br>
+      <br>
 
-		</div>
-		<!-- End of "Follow Us" Section -->
+    </div>
+    <!-- End of "Follow Us" Section -->
 
-		<!-- Start of "Coming Events" Title Section -->
-		<div class="row columns">
+    <!-- Start of "Coming Events" Title Section -->
+    <div class="row columns">
 
-			<br>
-			<br>
+      <br>
+      <br>
 
-			<h2 id="coming_events">Coming Events</h2>
+      <h2 id="coming_events">Coming Events</h2>
 
-			<p class="lead">
-				Below are the events presented by our member <a
-				href="[% conf.root %]societies">Societies</a> in the near future. Our
-				full <a href="[% conf.root %]events">Events</a> list contains more and
+      <p class="lead">
+        Below are the events presented by our member <a
+        href="[% conf.root %]societies">Societies</a> in the near future. Our
+        full <a href="[% conf.root %]events">Events</a> list contains more and
         facilitates the copying of the list for inclusion in printed programmes.
-			</p>
+      </p>
       <br>
 
     </div>
@@ -293,10 +293,10 @@
 
     </div> [%# End of Wrapper Row %]
 
-		<!-- End of "Coming Events Title Section" -->
+    <!-- End of "Coming Events Title Section" -->
     <br>
     <br>
-		<!-- Start of "Coming Events" List -->
+    <!-- Start of "Coming Events" List -->
 
 [%~ MACRO whatson_events BLOCK %]
 
@@ -322,7 +322,7 @@ data-dropdown data-hover="true">
 
 [%~#----------------------------------------------------------------------------
 
-	# Coming Events for Small Screens
+  # Coming Events for Small Screens
 
 #-----------------------------------------------------------------------------%]
 
@@ -365,7 +365,7 @@ data-dropdown data-hover="true">
 
 [%-#----------------------------------------------------------------------------
 
-	# Coming Events for Medium Screens
+  # Coming Events for Medium Screens
 
 #-----------------------------------------------------------------------------%]
 
@@ -641,7 +641,7 @@ item6 = col + 9
 
 [%~#----------------------------------------------------------------------------
 
-	# Coming Events for Large Screens
+  # Coming Events for Large Screens
 
 #-----------------------------------------------------------------------------%]
 
@@ -923,23 +923,23 @@ item4 = col + 8
 
 [%~ CGIAPP.embed (
 
-	# component = whatson_events - a list of events
-	'whatson_events'	,
+  # component = whatson_events - a list of events
+  'whatson_events'  ,
 
-	# filter - determines which events are returned
-	'filter' = {
-			'from'		=> 'now'				, # Only events that haven't yet ended
-			'to'			=> 'this-year'	, # Only events falling within the next year
-			'status'	=> 'PUBLISHED'	, # Only events that have been published
-			'limit'		=>	12					, # At most twelve events
-	} ,
+  # filter - determines which events are returned
+  'filter' = {
+      'from'    => 'now'        , # Only events that haven't yet ended
+      'to'      => 'this-year'  , # Only events falling within the next year
+      'status'  => 'PUBLISHED'  , # Only events that have been published
+      'limit'    =>  12          , # At most twelve events
+  } ,
 
-	'behaviour' = {
-		defaults => 1
-	}
+  'behaviour' = {
+    defaults => 1
+  }
 
 ) FILTER indent 8 %]
 
-		<!-- End of "Coming Events" List -->
+    <!-- End of "Coming Events" List -->
 
 [% PROCESS footer.tt %]

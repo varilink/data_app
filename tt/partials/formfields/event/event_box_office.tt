@@ -10,7 +10,7 @@
   <input type="text" id="eventBoxOffice" name="event_box_office" placeholder=
   "Box Office or Information ([% IF required %]Mandatory[% ELSE %]Optional
   [%~ END %])" aria-describedby="event_box_officeHelpText" [% IF required %]
-  required[% END %]	value="[% event.box_office FILTER html %]"
+  required[% END %]  value="[% event.box_office FILTER html %]"
   [% IF disabled %]disabled[% END %]>
   <small class="form-error">[% error_msg %]</small>
 

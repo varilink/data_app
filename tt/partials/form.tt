@@ -73,15 +73,15 @@ $ ( 'form' ) . submit ( function ( ) {
 window . addEventListener ( 'beforeunload' , function ( e ) {
 
   tinyMCE . triggerSave ( ) ;
-	var currFormState = $ ( 'input , textarea , select' )
+  var currFormState = $ ( 'input , textarea , select' )
     . not ( "[name='g-recaptcha-response']" ) . serialize ( ) ;
 
-	console.log ( 'Original Form State:' ) ;
-	console.log ( origFormState ) ;
-	console.log ( 'Current Form State:' ) ;
-	console.log ( currFormState ) ;
+  console.log ( 'Original Form State:' ) ;
+  console.log ( origFormState ) ;
+  console.log ( 'Current Form State:' ) ;
+  console.log ( currFormState ) ;
 
-	if ( currFormState != origFormState ) {
+  if ( currFormState != origFormState ) {
     e . preventDefault ( ) ;
     e . returnValue = null ;
   }
@@ -96,21 +96,21 @@ window . addEventListener ( 'beforeunload' , function ( e ) {
 
 // Floating labels on input fields
 var inputs =
-	'input:text,textarea,input[type="email"],input[type="password"],select' ;
+  'input:text,textarea,input[type="email"],input[type="password"],select' ;
 
 function check_labels ( ) {
 
-	var label = $ ( this ) . prev ( 'label' ) ;
+  var label = $ ( this ) . prev ( 'label' ) ;
 
-	if ( this.value !== '' ) {
+  if ( this.value !== '' ) {
 
-		label . addClass ( 'show' ) ;
+    label . addClass ( 'show' ) ;
 
-	} else {
+  } else {
 
-		label . removeClass ( 'show' );
+    label . removeClass ( 'show' );
 
-	}
+  }
 
 }
 
@@ -128,7 +128,7 @@ $ ( inputs ) . on ( 'change keyup mouseup' , check_labels ) ;
 
 $ ( 'select' ) . on ( 'change' , function ( ) {
 
-	this . removeAttribute ( 'style' ) ;
+  this . removeAttribute ( 'style' ) ;
 
 } ) ;
 

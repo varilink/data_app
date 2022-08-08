@@ -2,69 +2,69 @@
 
 [% UNLESS error_contact_surname # Initial State %]
 
-	<label for="contactSurname">
-		Surname ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
-	</label>
+  <label for="contactSurname">
+    Surname ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
 
-	<input type="text" id="contactSurname" name="contact_surname" placeholder=
-	"Surname ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
-	[% IF required %]required[% END %] aria-describedby= "contactSurnameHelpText"
-	value="[% contact.surname %]" />
+  <input type="text" id="contactSurname" name="contact_surname" placeholder=
+  "Surname ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
+  [% IF required %]required[% END %] aria-describedby= "contactSurnameHelpText"
+  value="[% contact.surname %]" />
 
-	<small class="form-error">
+  <small class="form-error">
 
 [% IF error_msg %]
 
-		[% error_msg %]
+    [% error_msg %]
 
 [% ELSE %]
 
-		You must enter your surname
+    You must enter your surname
 
 [% END %]
 
-	</small>
+  </small>
 
 [% ELSE # Error State %]
 
-	<label class="is-invalid-label" for="userSurname">
-		Surname ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
-	</label>
+  <label class="is-invalid-label" for="userSurname">
+    Surname ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
+  </label>
 
-	<input class="is-invalid-input" aria-invalid="true" type="text" id=
-	"contactSurname" name="contact_surname" placeholder="Surname (
-	[%~ IF required %]Mandatory[% ELSE %]Optional[% END %])" [% IF required ~%]
-	required [% END %] aria-describedby="contactSurnameHelpText" value=
-	"[% contact.surname %]" />
+  <input class="is-invalid-input" aria-invalid="true" type="text" id=
+  "contactSurname" name="contact_surname" placeholder="Surname (
+  [%~ IF required %]Mandatory[% ELSE %]Optional[% END %])" [% IF required ~%]
+  required [% END %] aria-describedby="contactSurnameHelpText" value=
+  "[% contact.surname %]" />
 
-	<small class="form-error is-visible">
+  <small class="form-error is-visible">
 
 [% IF error_contact_surname == 'Missing' %]
 
-		You must enter your surname
+    You must enter your surname
 
 [% ELSE %]
 
-		[% error_contact_surname %]
+    [% error_contact_surname %]
 
 [% END %]
 
-	</small>
+  </small>
 
 [% END # error_contact_surname %]
 
 
 [% IF template.name == 'subscribe.tt' %]
 
-	<p class="help-text" id="contactSurnameHelpText">
-		Please provide your surname for your subscription.
-	</p>
+  <p class="help-text" id="contactSurnameHelpText">
+    Please provide your surname for your subscription.
+  </p>
 
 [% ELSE %]
 
-	<p class="help-text" id="contactSurnameHelpText">
-		Enter your surname.
-	</p>	
+  <p class="help-text" id="contactSurnameHelpText">
+    Enter your surname.
+  </p>  
 
 [% END %]
 

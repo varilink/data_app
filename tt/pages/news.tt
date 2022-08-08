@@ -1,6 +1,6 @@
 [% SET
 
-	title = 'Membership News'
+  title = 'Membership News'
 
 %]
 
@@ -112,19 +112,19 @@
 
 [%~ IF loop.index == 0 || loop.index == 2 %]
 
-	<div class="row">
+  <div class="row">
 
 [%~ END %]
 
-		<div class="column">
+    <div class="column">
 
       [%- news_item_card FILTER indent 4 %]
 
-		</div>
+    </div>
 
 [%~ IF loop.index == 1 || loop.index == 3 %]
 
-	</div>
+  </div>
 
 [%~ END %]
 
@@ -132,31 +132,31 @@
 
 [%~ IF loop.index == 4 %]
 
-	<div class="column row">
+  <div class="column row">
 
-		<ul class="accordion" data-accordion data-allow-all-closed="true">
+    <ul class="accordion" data-accordion data-allow-all-closed="true">
 
 [%~ END # IF loop.index == 2 %]
 
-			<li class="accordion-item" data-accordion-item>
+      <li class="accordion-item" data-accordion-item>
 
-				<a href="#" class="accordion-title">
-					[% news_item.title %]<br>
-					[% news_item.published_date %]
-				</a>
+        <a href="#" class="accordion-title">
+          [% news_item.title %]<br>
+          [% news_item.published_date %]
+        </a>
 
-				<div class="accordion-content" data-tab-content>
-					<h3>[% news_item.precis %]</h3>
-					[% news_item.item_text %]
-				</div>
+        <div class="accordion-content" data-tab-content>
+          <h3>[% news_item.precis %]</h3>
+          [% news_item.item_text %]
+        </div>
 
-			</li>
+      </li>
 
 [%~ IF loop.last %]
 
-		</ul>
+    </ul>
 
-	</div>
+  </div>
 
 [%~ END # IF loop.last %]
 
@@ -180,19 +180,19 @@
 
 [%~ IF loop.index == 0 || loop.index == 3 %]
 
-	<div class="row">
+  <div class="row">
 
 [%~ END %]
 
-		<div class="column">
+    <div class="column">
 
       [%- news_item_card FILTER indent 4 %]
 
-		</div>
+    </div>
 
 [%~ IF loop.index == 2 || loop.index == 5 %]
 
-	</div>
+  </div>
 
 [%~ END %]
 
@@ -200,31 +200,31 @@
 
 [%~ IF loop.index == 6 %]
 
-	<div class="column row">
+  <div class="column row">
 
-		<ul class="accordion" data-accordion data-allow-all-closed="true">
+    <ul class="accordion" data-accordion data-allow-all-closed="true">
 
 [%~ END # IF loop.index == 6 %]
 
-			<li class="accordion-item" data-accordion-item>
+      <li class="accordion-item" data-accordion-item>
 
-				<a href="#" class="accordion-title">
-					[% news_item.title %]<br>
-					[% news_item.published_date %]
-				</a>
+        <a href="#" class="accordion-title">
+          [% news_item.title %]<br>
+          [% news_item.published_date %]
+        </a>
 
-				<div class="accordion-content" data-tab-content>
-					<h3>[% news_item.precis %]</h3>
-					[% news_item.item_text %]
-				</div>
+        <div class="accordion-content" data-tab-content>
+          <h3>[% news_item.precis %]</h3>
+          [% news_item.item_text %]
+        </div>
 
-			</li>
+      </li>
 
 [%~ IF loop.last %]
 
-		</ul>
+    </ul>
 
-	</div>
+  </div>
 
 [%~ END # IF loop.last %]
 
@@ -237,7 +237,7 @@
 [%~ END # MACRO whatson_news_items BLOCK %]
 
 [%~ CGIAPP.embed (
-	'whatson_news_items'
+  'whatson_news_items'
 ) FILTER indent 4 %]
 
 [% PROCESS footer.tt %]

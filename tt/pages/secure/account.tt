@@ -16,11 +16,11 @@ title = 'My Account'
       </p>
 
 [% PROCESS form.tt
-  action		= '/secure/account/action'          ,
+  action    = '/secure/account/action'          ,
   name      = 'Account Details'                 ,
-  onError		= 'account'                         ,
-  onSuccess	= '/secure/account'                 ,
-  onWarning	= '/account/warning_update_account'
+  onError    = 'account'                         ,
+  onSuccess  = '/secure/account'                 ,
+  onWarning  = '/account/warning_update_account'
 FILTER indent 6 %]
 
 [%~ MACRO auth_current_user BLOCK %]
@@ -46,35 +46,35 @@ FILTER indent 6 %]
     access any services that require you to be signed-in. Furthermore, if
     you change your email address then you will have to verify the new email
     address before you can sign-in again. In this eventuality, we will send you
-    an email that	contains a link that will enable you to do this.
-	</p>
+    an email that  contains a link that will enable you to do this.
+  </p>
 
 </div>
 
 [% INCLUDE user_userid.tt
-	required = 1 ,
-	error_msg = 'If you change your userid you must enter a new userid consistent with the format requirements below'
+  required = 1 ,
+  error_msg = 'If you change your userid you must enter a new userid consistent with the format requirements below'
 %]
 
 [% INCLUDE user_email.tt
-	required = 1 ,
-	error_msg = 'If you change your email address then you must enter a valid, new email address'
+  required = 1 ,
+  error_msg = 'If you change your email address then you must enter a valid, new email address'
 %]
 
 [%~ IF user_confirm_email || error_user_confirm_email %]
 
 [% INCLUDE user_confirm_email.tt
-	disabled = 0 ,
-	hidden	= 0 ,
-	required = 1
+  disabled = 0 ,
+  hidden  = 0 ,
+  required = 1
 %]
 
 [%~ ELSE %]
 
 [% INCLUDE user_confirm_email.tt
-	disabled = 1 ,
-	hidden	= 1 ,
-	required = 0
+  disabled = 1 ,
+  hidden  = 1 ,
+  required = 0
 %]
 
 [%~ END %]
@@ -96,30 +96,30 @@ FILTER indent 6 %]
 [%~ IF user_confirm_password || error_user_confirm_password %]
 
 [% INCLUDE user_confirm_password.tt
-	disabled = 0 ,
-	hidden	= 0 ,
-	required = 1
+  disabled = 0 ,
+  hidden  = 0 ,
+  required = 1
 FILTER indent 8 %]
 
 [%~ ELSE %]
 
 [% INCLUDE user_confirm_password.tt
-	disabled = 1 ,
-	hidden	= 1 ,
-	required = 0
+  disabled = 1 ,
+  hidden  = 1 ,
+  required = 0
 FILTER indent 8 %]
 
 [%~ END %]
 
 [% PROCESS buttons.tt
 
-	buttons = [
-		{
-			id		= 'update' ,
-			type	= 'submit' ,
-			value	= 'Update'
-		}
-	]
+  buttons = [
+    {
+      id    = 'update' ,
+      type  = 'submit' ,
+      value  = 'Update'
+    }
+  ]
 
 FILTER indent 6 %]
 

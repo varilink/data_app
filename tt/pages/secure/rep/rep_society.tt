@@ -45,18 +45,18 @@ value="[% organisation.status %]">
   'filter' = {
     'rowid'   => "$rowid"           , # For a specific rowid
     'userid'  => "$session.userid"  , # For which the user is a representative
-	}
+  }
 ) FILTER indent 8 %]
 
 [% PROCESS buttons.tt
 
-	buttons = [
-		{
-			id = 'save' ,
-			value = 'Save' ,
-			type = 'submit'
-		}
-	]
+  buttons = [
+    {
+      id = 'save' ,
+      value = 'Save' ,
+      type = 'submit'
+    }
+  ]
 
 FILTER indent 6 %]
 

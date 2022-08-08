@@ -39,8 +39,8 @@
 [%~ END # error_organisation_website %]
 
   <p class="help-text" id="organisationWebsiteHelpText">
-	   If this organisation has a website then you can enter its address here; for
-	    example:<br>
+     If this organisation has a website then you can enter its address here; for
+      example:<br>
       www.sitwellsingers.org.uk<br>
       www.duchess-theatre.com
   </p>

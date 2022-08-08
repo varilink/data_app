@@ -40,7 +40,7 @@
 
 [%~ UNLESS error_event_society || error_society_or_presented_by
 
-	# Initial state, i.e. not (yet) an error
+  # Initial state, i.e. not (yet) an error
 
 -%]
 
@@ -103,7 +103,7 @@
 
 [%~ #---------------------------------------------------------------------------
 
-	# The error state
+  # The error state
 
 #-----------------------------------------------------------------------------%]
 
@@ -231,23 +231,23 @@
 
 [%~ CGIAPP.embed (
 
-	'whatson_societies' ,
+  'whatson_societies' ,
 
-	filter = {
-		'status'	=> 'ACTIVE' ,
-		'userid'	=> "$session.userid"
-	}
+  filter = {
+    'status'  => 'ACTIVE' ,
+    'userid'  => "$session.userid"
+  }
 
 ) %]
 
 [%~ ELSE %]
 
 [%~ CGIAPP.embed (
-	'whatson_societies' ,
+  'whatson_societies' ,
 
-	filter = {
-		'status'	=> 'ACTIVE' ,
-	}
+  filter = {
+    'status'  => 'ACTIVE' ,
+  }
 
 ) %]
 

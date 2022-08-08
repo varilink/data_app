@@ -18,7 +18,7 @@ id="eventUseDescYesWithImage" aria-describedby="event_use_descHelpText"
 id="eventUseUescYesWithoutImage" aria-describedby="event_use_descHelpText"
 [% IF event.use_desc == 2 %]checked[% END %]>
 <label for="eventUseUescYesWithoutImage">
-	Yes (without image)
+  Yes (without image)
 </label>
 
 [%~ END # BLOCK event_use_desc %]
@@ -29,7 +29,7 @@ id="eventUseUescYesWithoutImage" aria-describedby="event_use_descHelpText"
 
 [% PROCESS event_use_desc FILTER indent 2 %]
 
-	<small class="form-error">[% error_msg %]</small>
+  <small class="form-error">[% error_msg %]</small>
 
 </fieldset>
 
@@ -39,16 +39,16 @@ id="eventUseUescYesWithoutImage" aria-describedby="event_use_descHelpText"
 
 [% PROCESS event_use_desc FILTER indent 2 %]
 
-	<small class="form-error is-visible">
-		[% error_event_use_desc %]
-	</small>
+  <small class="form-error is-visible">
+    [% error_event_use_desc %]
+  </small>
 
 </fieldset>
 
 [%~ END # UNLESS error_event_use_desc %]
 
 <p class="help-text" id="event_use_descHelpText">
-	Select if you wish to edit your event's card and add an image to it.
+  Select if you wish to edit your event's card and add an image to it.
 </p>
 
 [%~ global.script.event_use_desc = BLOCK %]
@@ -66,7 +66,7 @@ $ ( 'input[name="event_use_desc"]' ) . change ( function ( ) {
 
   var radioVal = $ ( 'input[name="event_use_desc"]:checked' ) . val ( ) ;
 
-  if ( radioVal == 0 ) {			// Default description (no image)
+  if ( radioVal == 0 ) {      // Default description (no image)
 
     $ ( '.event-use-desc-no' )              . removeClass ( 'hide' ) ;
     $ ( '.event-use-desc-yes' )             . addClass    ( 'hide' ) ;
@@ -78,13 +78,13 @@ $ ( 'input[name="event_use_desc"]' ) . change ( function ( ) {
     $ ( '.event-use-desc-yes' )             . removeClass ( 'hide' ) ;
     $ ( '.event-use-desc-yes-with-image' )  . removeClass ( 'hide' ) ;
 
-  } else if ( radioVal == 2 ) {	// Custom description without image
+  } else if ( radioVal == 2 ) {  // Custom description without image
 
-    $ ( '.event-use-desc-no' )              . addClass		( 'hide' ) ;
-    $ ( '.event-use-desc-yes' )             . removeClass	( 'hide' ) ;
-    $ ( '.event-use-desc-yes-with-image' )  . addClass		( 'hide' ) ;
+    $ ( '.event-use-desc-no' )              . addClass    ( 'hide' ) ;
+    $ ( '.event-use-desc-yes' )             . removeClass  ( 'hide' ) ;
+    $ ( '.event-use-desc-yes-with-image' )  . addClass    ( 'hide' ) ;
 
-	}
+  }
 
 } ) ;
 

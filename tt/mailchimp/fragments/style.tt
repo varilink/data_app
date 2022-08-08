@@ -106,14 +106,14 @@ h1 {
 
 [% #----------------------------------------------------------------------------
 
-	#
-	# SECTIONS
-	#
+  #
+  # SECTIONS
+  #
 
 #---------------------------------------------------------------------------- %]
 
 [%
-	# Preheader
+  # Preheader
 %]
 
 #templatePreheader {
@@ -135,7 +135,7 @@ h1 {
 }
 
 [%
-	# Header
+  # Header
 %]
 
 #templateHeader {
@@ -155,7 +155,7 @@ h1 {
 }
 
 [%
-	# Guidance
+  # Guidance
 %]
 
 #templateGuidance {
@@ -181,7 +181,7 @@ h1 {
 }
 
 [%
-	# NewsInto
+  # NewsInto
 %]
 
 #templateNewsIntro {
@@ -208,7 +208,7 @@ h1 {
 
 [%
 
-	# NewsItems
+  # NewsItems
 
 %]
 
@@ -235,7 +235,7 @@ h1 {
 }
 
 [%
-	# EventsInto
+  # EventsInto
 %]
 
 #templateEventsIntro {
@@ -262,7 +262,7 @@ h1 {
 
 [%
 
-	# Events
+  # Events
 
 %]
 
@@ -290,7 +290,7 @@ h1 {
 
 [%
 
-	# Footer
+  # Footer
 
 %]
 
@@ -318,7 +318,7 @@ h1 {
 
 [% #----------------------------------------------------------------------------
 
-	# Media Queries
+  # Media Queries
 
 # --------------------------------------------------------------------------- %]
 
@@ -427,7 +427,7 @@ h1 {
 }
 
 @media only screen and ( max-width: 480px ) {
-  .mcnImageCardMiddleImageContent {	[%# Added by DW for middle image in card %]
+  .mcnImageCardMiddleImageContent {  [%# Added by DW for middle image in card %]
     padding-top: 0 !important ;
     padding-bottom: 0 !important ;
   }

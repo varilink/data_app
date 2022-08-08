@@ -7,9 +7,9 @@
   </label>
 
 [%~ IF
-  template.name	== 'success_begin_registration.tt'  ||
-  template.name	== 'account.tt'                     ||
-  caller			== 'account.tt'
+  template.name  == 'success_begin_registration.tt'  ||
+  template.name  == 'account.tt'                     ||
+  caller      == 'account.tt'
 
   # Either success_complete_registration or account allows us to set a new
   # userid and so we must include the pattern check.
@@ -18,11 +18,11 @@
 
   <input type="text" id="userUserid" name="user_userid" placeholder=
   "Userid ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
-  aria-describedby="userUseridHelpText"	pattern="userid"
+  aria-describedby="userUseridHelpText"  pattern="userid"
   [% IF required %]required[% END %] value="[% session.userid %]"
   [% 'autocomplete="off"' IF noautocomplete %]>
 
-[%~	ELSE
+[%~  ELSE
 
   # Cant set a new userid so we must be just using an existing one and
   # therefore the pattern check is not required.
@@ -48,9 +48,9 @@
   </label>
 
 [%~ IF
-  template.name	== 'success_begin_registration.tt'  ||
-  template.name	== 'account.tt'                     ||
-  caller			== 'account.tt'
+  template.name  == 'success_begin_registration.tt'  ||
+  template.name  == 'account.tt'                     ||
+  caller      == 'account.tt'
 
   # Either success_begin_registration or account allows us to set a new userid
   # and so we must include the pattern check.
@@ -60,7 +60,7 @@
   <input class="is-invalid-input" aria-invalid="true" type="text" id=
   "userUserid" name="user_userid" pattern="userid" placeholder=
   "Userid ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
-  aria-describedby="user_useridHelpText"	[% IF required %]required[% END %]
+  aria-describedby="user_useridHelpText"  [% IF required %]required[% END %]
   [% 'autocomplete="off"' IF noautocomplete %]>
 
 [%~ ELSE %]
@@ -110,11 +110,11 @@
 
 [%#
 
-	In the sign in screen at least (will need to check if this error condition
-	can be returned by other screens) we just want to report that the user
-	credentials provided are incorrect. We dont want to indicate whether it is
-	the userid or the password that is wrong as that might be valuable
-	information for hackers.
+  In the sign in screen at least (will need to check if this error condition
+  can be returned by other screens) we just want to report that the user
+  credentials provided are incorrect. We dont want to indicate whether it is
+  the userid or the password that is wrong as that might be valuable
+  information for hackers.
 
 %]
 
@@ -159,7 +159,7 @@
 
   <p class="help-text" id="userUseridHelpText">
     Update if you want to change the userid associated with your account. This
-    must consist of only letters and numbers and be at least eight	characters
+    must consist of only letters and numbers and be at least eight  characters
     long.
   </p>
 

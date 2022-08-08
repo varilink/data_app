@@ -1,18 +1,18 @@
 <!-- Start of Event Sub Navigation -->
 [%#-----------------------------------------------------------------------------
 
-	This partial contains some explanation and sub navigation that's used in
-	four pages:
-	- admin_event_programme.tt
-	- admin_event_online.tt
-	- rep_event_programme.tt
-	- rep_event_online.tt
+  This partial contains some explanation and sub navigation that's used in
+  four pages:
+  - admin_event_programme.tt
+  - admin_event_online.tt
+  - rep_event_programme.tt
+  - rep_event_online.tt
 
 ------------------------------------------------------------------------------%]
 [%~ SET rowid = event_rowid IF !rowid && event_rowid
 
-	# In the error state event_rowid is passed by form fill and rowid isn't.
-	# Set rowid to event_rowid so that rowid can be used consistently
+  # In the error state event_rowid is passed by form fill and rowid isn't.
+  # Set rowid to event_rowid so that rowid can be used consistently
 
 ~%]
 <div class="row column">
@@ -45,7 +45,7 @@
     <ul class="pagination text-center">
 [%#-----------------------------------------------------------------------------
 
-	"Programm Listing" page link
+  "Programm Listing" page link
 
 ------------------------------------------------------------------------------%]
 [%~ IF
@@ -67,7 +67,7 @@
 [%~ END ~%]
 [%#-----------------------------------------------------------------------------
 
-	"Online Promotion" page link
+  "Online Promotion" page link
 
 ------------------------------------------------------------------------------%]
 [%~ IF rowid && event.status == 'PUBLISHED' %]
@@ -95,7 +95,7 @@
 [%~ END # IF rowid %]
 [%#-----------------------------------------------------------------------------
 
-	"Preview Event" page link
+  "Preview Event" page link
 
 ------------------------------------------------------------------------------%]
 [%~ IF rowid && event.status == 'PUBLISHED' %]

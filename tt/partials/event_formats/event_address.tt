@@ -15,23 +15,23 @@
 
 [%~ END -%]
 
-[% ",<br>$venue.address1"	IF venue.address1 %]
-[% ",<br>$venue.address2"	IF venue.address2 %]
-[% ",<br>$venue.address3"	IF venue.address3 %]
-[% ",<br>$venue.address4"	IF venue.address4 %]
-[% "<br>$venue.postcode"	IF venue.postcode %]
+[% ",<br>$venue.address1"  IF venue.address1 %]
+[% ",<br>$venue.address2"  IF venue.address2 %]
+[% ",<br>$venue.address3"  IF venue.address3 %]
+[% ",<br>$venue.address4"  IF venue.address4 %]
+[% "<br>$venue.postcode"  IF venue.postcode %]
 
 [%~ END # MACRO whatson_venue BLOCK %]
 
 [%~ CGIAPP.embed (
 
-	'whatson_venue'	,
+  'whatson_venue'  ,
 
-	'filter' = {
+  'filter' = {
 
-		'event'	=> "$event.rowid"
+    'event'  => "$event.rowid"
 
-	}
+  }
 
 ) %]
 <!-- End of Address -->

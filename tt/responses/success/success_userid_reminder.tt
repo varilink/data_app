@@ -17,7 +17,7 @@
 
           <p class="lead">
             <i class="fas fa-check"></i>
-				    We have emailed a reminder of the userid associated with your user
+            We have emailed a reminder of the userid associated with your user
             account to you. You can select from the menu above or return to our
             <a href="[% conf.root %]">home page</a>
             (<a href="[% conf.root %]"><i class="fas fa-home"></i></a>).

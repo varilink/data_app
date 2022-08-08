@@ -74,7 +74,7 @@
 [% PROCESS start_templateContainer.tt cols = 2 FILTER indent 18 %]
 [% PROCESS news_item_card.tt FILTER indent 30 %]
 
-[%	ELSE # loop.index == 1 || loop.index == 3 %]
+[%  ELSE # loop.index == 1 || loop.index == 3 %]
 
 [% PROCESS column_break.tt FILTER indent 18 %]
 [% PROCESS news_item_card.tt FILTER indent 30 %]
@@ -100,9 +100,9 @@
 
 [% FOREACH event IN events %]
 
-[%	IF
-		loop.index == 0 || loop.index == 2 || loop.index == 4 ||
-		loop.index == 6 || loop.index == 8 || loop.index == 10
+[%  IF
+    loop.index == 0 || loop.index == 2 || loop.index == 4 ||
+    loop.index == 6 || loop.index == 8 || loop.index == 10
 
 %]
 

@@ -46,10 +46,10 @@ title = 'Events Listing'
 [%~ END # MACRO whatson_societies BLOCK ~%]
 
 [%~ CGIAPP.embed (
-	'whatson_societies' ,
-	'filter' = {
-		userid => session.userid
-	}
+  'whatson_societies' ,
+  'filter' = {
+    userid => session.userid
+  }
 ) ~%]
 
 [%~ ELSE # no session.role - throw and exception ~%]
@@ -105,13 +105,13 @@ title = 'Events Listing'
         <div id="progListVideo"></div>
 
 [% PROCESS buttons.tt
-	buttons = [
-		{
-			href	= 'javascript:;'	,
-			id		= 'progListCopy'	,
-			value = 'Copy Listing'
-		}
-	]
+  buttons = [
+    {
+      href  = 'javascript:;'  ,
+      id    = 'progListCopy'  ,
+      value = 'Copy Listing'
+    }
+  ]
 FILTER indent 8 %]
 
         <table class="unstriped" id="progList">
@@ -158,19 +158,19 @@ FILTER indent 8 %]
 
 [%~ CGIAPP.embed (
 
-	# component = whatson_events - a list of events
-	'whatson_events'	,
+  # component = whatson_events - a list of events
+  'whatson_events'  ,
 
-	# filter - determines which events are returned
-	'filter' = {
-		'from'	=> 'now'			, # Only events that have not yet ended
-		'status'	=> 'PUBLISHED'	, # Only events that have been published
-	} ,
+  # filter - determines which events are returned
+  'filter' = {
+    'from'  => 'now'      , # Only events that have not yet ended
+    'status'  => 'PUBLISHED'  , # Only events that have been published
+  } ,
 
-	# behaviour
-	'behaviour' = {
-		'defaults' => 1
-	}
+  # behaviour
+  'behaviour' = {
+    'defaults' => 1
+  }
 
 ) %]
 
@@ -191,57 +191,57 @@ FILTER indent 8 %]
 
 [%~ CGIAPP.embed (
 
-	# component = whatson_events - a list of events
-	'whatson_events'	,
+  # component = whatson_events - a list of events
+  'whatson_events'  ,
 
-	# filter - determines which events are returned
-	'filter' = {
-		'from'	=> 'now'			, # Only events that haven't yet ended
-		'status'	=> 'PUBLISHED'	, # Only events that have been published
-	} ,
+  # filter - determines which events are returned
+  'filter' = {
+    'from'  => 'now'      , # Only events that haven't yet ended
+    'status'  => 'PUBLISHED'  , # Only events that have been published
+  } ,
 
-	# behaviour - determines some of the behaviours of the component
-	'behaviour' = {
-		'defaults'	=> 1
-	}
+  # behaviour - determines some of the behaviours of the component
+  'behaviour' = {
+    'defaults'  => 1
+  }
 
 ) FILTER indent 4 %]
 
 [% global.script.events = BLOCK %]
 
-	$( '#progListModal' ) . on ( 'closed.zf.reveal' , function ( ) {
+  $( '#progListModal' ) . on ( 'closed.zf.reveal' , function ( ) {
 
-		$ ( '#progListVideo' ) . html ( '' ) ;
+    $ ( '#progListVideo' ) . html ( '' ) ;
 
-	} ) ;
+  } ) ;
 
-	$ ( '#progListModal' ) . on ( 'closeme.zf.reveal' , function ( ) {
+  $ ( '#progListModal' ) . on ( 'closeme.zf.reveal' , function ( ) {
 
-		$ ( '#progListVideo' ) . html (
+    $ ( '#progListVideo' ) . html (
 
-			`<iframe width="560" height="315" frameborder="0" src=
-			"https://www.youtube.com/embed/vrscaKPEsL8?rel=0"
-			allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+      `<iframe width="560" height="315" frameborder="0" src=
+      "https://www.youtube.com/embed/vrscaKPEsL8?rel=0"
+      allow="autoplay; encrypted-media" allowfullscreen></iframe>`
 
-		) ;
+    ) ;
 
-	} ) ;
+  } ) ;
 
-	$( '#progListCopy' ) . click ( function ( event ) {
+  $( '#progListCopy' ) . click ( function ( event ) {
 
-		var el = document . getElementById ( 'progList' ) ;
-		var range = document . createRange ( ) ;
-		range . selectNodeContents ( el ) ;
-		var sel = window . getSelection ( ) ;
-		sel . removeAllRanges ( ) ;
-		sel . addRange ( range ) ;
-		document.execCommand ( "copy" ) ;
-		sel . removeAllRanges ( ) ;
-		alert (
-			'Event listing copied now paste it in to Word or an alternative'
-		) ;
+    var el = document . getElementById ( 'progList' ) ;
+    var range = document . createRange ( ) ;
+    range . selectNodeContents ( el ) ;
+    var sel = window . getSelection ( ) ;
+    sel . removeAllRanges ( ) ;
+    sel . addRange ( range ) ;
+    document.execCommand ( "copy" ) ;
+    sel . removeAllRanges ( ) ;
+    alert (
+      'Event listing copied now paste it in to Word or an alternative'
+    ) ;
 
-	} ) ;
+  } ) ;
 
 
 [% END # global.script.events = BLOCK %]

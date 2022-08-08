@@ -18,9 +18,9 @@
           <th>Role</th>
           <th>Primary Contact?</th>
         </tr>
-		</thead>
+    </thead>
 
-		<tbody>
+    <tbody>
 
 [% MACRO whatson_society BLOCK %]
 
@@ -30,11 +30,11 @@
 
 [% FOREACH contact IN contacts %]
 
-			<tr>
-				<td>[% contact.surname %], [% contact.first_name %]</td>
-				<td>[% contact.role %]</td>
-				<td>[% IF contact.primary_contact %]Yes[% END %]</td>
-			</tr>
+      <tr>
+        <td>[% contact.surname %], [% contact.first_name %]</td>
+        <td>[% contact.role %]</td>
+        <td>[% IF contact.primary_contact %]Yes[% END %]</td>
+      </tr>
 
 [% END %]
 
@@ -48,20 +48,20 @@
 
 [% CGIAPP.embed (
 
-	'whatson_society'	,
+  'whatson_society'  ,
 
-	filter = {
+  filter = {
 
-		'rowid'	=> "$rowid"				,
-		'userid'	=>	"$session.userid"	,
+    'rowid'  => "$rowid"        ,
+    'userid'  =>  "$session.userid"  ,
 
-	}
+  }
 
 ) %]
 
-		</tbody>
+    </tbody>
 
-	</table>
+  </table>
 
 </div>
 

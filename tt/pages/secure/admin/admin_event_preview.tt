@@ -24,7 +24,7 @@ title = 'Preview Event'
   'whatson_event'       , # Single event
   'filter' = {
     'from' => 'now'     , # Only return events that have not yet ended
-    'rowid'	=> "$rowid" , # An event with this unique rowid
+    'rowid'  => "$rowid" , # An event with this unique rowid
   } ,
   'behaviour' = {
     'defaults' => 1

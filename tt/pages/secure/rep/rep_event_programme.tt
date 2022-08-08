@@ -87,7 +87,7 @@ FILTER indent 2 %]
   error_msg = 'If you enter and end date, it must be a valid date in DD/MM/YYYY format'
 FILTER indent 2 %]
 
-[% INCLUDE event_dates.tt	required = 0 FILTER indent 2 %]
+[% INCLUDE event_dates.tt  required = 0 FILTER indent 2 %]
 
 [% INCLUDE event_times.tt FILTER indent 2 %]
 
@@ -160,14 +160,14 @@ FILTER indent 2 %]
 [% event_published_callout FILTER indent 4 %]
 
 [% INCLUDE event_venue.tt
-	disabled = 1 ,
-	error_msg = 'You must enter the venue for the event' ,
-	required = 1
+  disabled = 1 ,
+  error_msg = 'You must enter the venue for the event' ,
+  required = 1
 FILTER indent 4 %]
 
 [% INCLUDE event_box_office.tt
-	disabled = 1 ,
-	required = 1
+  disabled = 1 ,
+  required = 1
 FILTER indent 4 %]
 
   </div>
@@ -194,11 +194,11 @@ FILTER indent 4 %]
 [% event_placeholder_callout FILTER indent 4 %]
 
 [% INCLUDE event_venue.tt
-	disabled = 1
+  disabled = 1
 FILTER indent 4 %]
 
 [% INCLUDE event_box_office.tt
-	disabled = 1
+  disabled = 1
 FILTER indent 4 %]
 
   </div>
@@ -210,14 +210,14 @@ FILTER indent 4 %]
 [% event_published_callout FILTER indent 4 %]
 
 [% INCLUDE event_venue.tt
-	disabled = 0 ,
-	error_msg = 'You must enter the venue for the event' ,
-	required = 1
+  disabled = 0 ,
+  error_msg = 'You must enter the venue for the event' ,
+  required = 1
 FILTER indent 4 %]
 
 [% INCLUDE event_box_office.tt
-	disabled = 0 ,
-	required = 1
+  disabled = 0 ,
+  required = 1
 FILTER indent 4 %]
 
   </div>
@@ -246,12 +246,12 @@ FILTER indent 4 %]
 [%~ IF rowid %]
 
 [%~ CGIAPP.embed (
-  'whatson_event'	,
+  'whatson_event'  ,
   'filter' = {
     'from'    => 'now'              , # Events that have not yet ended
     'rowid'   => "$rowid"           ,
     'userid'  => "$session.userid"    # Events represented by this user
-	}
+  }
 ) FILTER indent 4 %]
 
 [%~ ELSE # NOT rowid %]

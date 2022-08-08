@@ -10,22 +10,22 @@ title = 'Unauthorised Access'
 
 <div class="row">
 
-	<div class=
-	"columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+  <div class=
+  "columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
 
-		<div class="callout alert">
+    <div class="callout alert">
 
-			<p class="lead">
-				<i class="fas fa-times"></i> You have tried to access a page that you
+      <p class="lead">
+        <i class="fas fa-times"></i> You have tried to access a page that you
         are not authorised to access. We suggest that you go
-				to our <a href="[% conf.root %]">home page</a> (<a
+        to our <a href="[% conf.root %]">home page</a> (<a
         href="[% conf.root %]"><i class="fas fa-home"></i></a>) and navigate
         from there.
-			</p>
+      </p>
 
-		</div>
+    </div>
 
-	</div>
+  </div>
 
 </div>
 

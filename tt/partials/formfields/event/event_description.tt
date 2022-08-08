@@ -33,7 +33,7 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
   </div>
 
   <div id="mceEventDescription" class="event-card-section event-use-desc-yes
-	hide">
+  hide">
 
 [%~ IF event.description %]
 
@@ -92,7 +92,7 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
 
   <div class="event-card-section event-use-desc-no hide">
 [% PROCESS event_default_description.tt FILTER collapse FILTER indent 4 %]
-	</div>
+  </div>
 
   <div id="mceEventDescription" class="event-card-section event-use-desc-yes">
 [%~ IF event.description %]
@@ -116,7 +116,7 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
 
 <div class="event-card">
 
-	<div class="event-card-divider"><h5>[% event_name FILTER html %]</h5></div>
+  <div class="event-card-divider"><h5>[% event_name FILTER html %]</h5></div>
 
 [%~ IF event_use_desc == 0 %]
 
@@ -204,7 +204,7 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
     error_mceEventImage == 'Missing'
     ||
     error_mceEventImage == 'event_image_provided'
-  )																									&&
+  )                                                  &&
   error_mceEventDescription == 'Mandatory field not supplied'
 
   # Both event image and event description missing, which we handle via a
@@ -224,12 +224,12 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
 %]
 
 [%~ IF
-	error_mceEventImage == 'Missing'															||
-	error_mceEventImage == 'event_image_provided'
+  error_mceEventImage == 'Missing'                              ||
+  error_mceEventImage == 'event_image_provided'
 %]
 
-	If you have answered "Yes (with image)" to the question "Provide a fuller
-	description for your event?" then you must provide an image above.
+  If you have answered "Yes (with image)" to the question "Provide a fuller
+  description for your event?" then you must provide an image above.
 
 [%~ ELSIF error_mceEventImage == 'event_image_valid' %]
 
@@ -277,9 +277,9 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
 // tinymce init for the event description
 tinymce . init ( {
   entity_encoding: 'raw' ,
-	init_instance_callback: function ( editor ) {
-		editor . save ( ) ;
-		origFormState = $ ( 'form' ) .serialize ( ) ;
+  init_instance_callback: function ( editor ) {
+    editor . save ( ) ;
+    origFormState = $ ( 'form' ) .serialize ( ) ;
 
 [%~ IF conf.jsDebug -%]
 
@@ -289,13 +289,13 @@ tinymce . init ( {
 
 [%~ END -%]
 
-	} ,
-	inline: true ,
-	menubar: false ,
-	plugins: 'link' ,
-	selector : '#mceEventDescription' ,
-	skin: false ,
-	toolbar: 'bold italic superscript | link'
+  } ,
+  inline: true ,
+  menubar: false ,
+  plugins: 'link' ,
+  selector : '#mceEventDescription' ,
+  skin: false ,
+  toolbar: 'bold italic superscript | link'
 } ) ;
 
 [%~ #------------------------------------------------------------------------ %]

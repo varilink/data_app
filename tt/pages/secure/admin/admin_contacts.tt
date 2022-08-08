@@ -42,7 +42,7 @@
 
 [%~ CGIAPP.embed (
 
-	'whatson_contacts' , "$rowid"
+  'whatson_contacts' , "$rowid"
 
 ) %]
 
@@ -52,11 +52,11 @@
 
 [%~ CGIAPP.embed (
 
-  'whatson_society'	,
+  'whatson_society'  ,
 
   filter = {
 
-    'rowid'	=> "$rowid"				,
+    'rowid'  => "$rowid"        ,
 
   }
 

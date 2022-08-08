@@ -1,17 +1,17 @@
 [% PROCESS email_header.tt
-	title = 'Membership Enquiry'
+  title = 'Membership Enquiry'
 %]
 
 [% PROCESS email_paragraph.tt %]
 
 <p>
-	We have received an enquiry about DATA Diary membership from<br />
-	[% contact.email %]
+  We have received an enquiry about DATA Diary membership from<br />
+  [% contact.email %]
 </p>
 
 <p>
-	The following message was included:<br />
-	[% contact.message %]
+  The following message was included:<br />
+  [% contact.message %]
 </p>
 
 [% PROCESS email_footer.tt %]

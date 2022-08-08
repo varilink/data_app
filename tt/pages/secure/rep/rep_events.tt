@@ -126,33 +126,33 @@ title = 'Events Listing'
 ) -%]
 
             </td>
-				<td>[% event.status FILTER lower FILTER ucfirst %]</td>
+        <td>[% event.status FILTER lower FILTER ucfirst %]</td>
         <td>
           [% event.dates %]
 [%~ UNLESS event.times == 'TBC' %]
           &nbsp;[% event.times %]
 [%~ END %]
         </td>
-			</tr>
+      </tr>
 
 [%~ END %]
 
 [%~ END # MACRO whatson_events BLOCK %]
 
 [%~ CGIAPP.embed (
-  'whatson_events'	,
+  'whatson_events'  ,
   'filter' = {
-    'from'	=> 'now'               , # Events that have not yet ended
-    'userid'	=> "$session.userid" , # Those represented by a userid
+    'from'  => 'now'               , # Events that have not yet ended
+    'userid'  => "$session.userid" , # Those represented by a userid
   } ,
   'behaviour' = {
-    'defaults'	=> 1
+    'defaults'  => 1
   }
 ) %]
 
-		</tbody>
+    </tbody>
 
-	</table>
+  </table>
 
 </div>
 

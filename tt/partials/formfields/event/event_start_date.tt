@@ -35,7 +35,7 @@
   <input class="is-invalid-input" type="text" id="eventStartDate"
   name="event_start_date" placeholder="Start Date ([% IF required ~%]
   Mandatory[% ELSE %]Optional[% END %] DD/MM/YYYY)" aria-describedby=
-  "event_start_dateHelpText"	pattern="day_month_year" [% IF required %]
+  "event_start_dateHelpText"  pattern="day_month_year" [% IF required %]
   required[% END %] class="datapicker">
   <small class="form-error is-visible">
 

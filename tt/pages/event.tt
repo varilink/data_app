@@ -2,7 +2,7 @@
 
 [%~ SET
 
-	title = "${event.name}"
+  title = "${event.name}"
 
 %]
 
@@ -38,10 +38,10 @@
 [%~ END # MACRO whatson_venue BLOCK %]
 
 [%~ CGIAPP.embed (
-	'whatson_venue' ,
-	'filter' = {
-		'event' => "$event.rowid"
-	}
+  'whatson_venue' ,
+  'filter' = {
+    'event' => "$event.rowid"
+  }
 ) FILTER indent 6 %]
 
   </div>
@@ -50,20 +50,20 @@
 
 [%~ CGIAPP.embed (
 
-	# component = whatson_event - a single event
-	'whatson_event'	,
+  # component = whatson_event - a single event
+  'whatson_event'  ,
 
-	# filter - determines which event (if any) is returned
-	'filter' = {
-		'rowid'	=> "$rowid"		, # An event with this unique rowid
-		'from'	=> 'now'			, # Only an event that hasn't yet ended
-		'status'	=> 'PUBLISHED'	, # Only an event that has been published
-	} ,
+  # filter - determines which event (if any) is returned
+  'filter' = {
+    'rowid'  => "$rowid"    , # An event with this unique rowid
+    'from'  => 'now'      , # Only an event that hasn't yet ended
+    'status'  => 'PUBLISHED'  , # Only an event that has been published
+  } ,
 
-	# behaviour - controls the behaviour of the component
-	'behaviour' = {
-		'defaults' = 1
-	}
+  # behaviour - controls the behaviour of the component
+  'behaviour' = {
+    'defaults' = 1
+  }
 
 ) FILTER indent 6 %]
 

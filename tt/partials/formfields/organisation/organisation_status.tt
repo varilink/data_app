@@ -37,7 +37,7 @@
     </legend>
 
     <input class="is-invalid-input" type="radio" name="organisation_status"
-    value="ACTIVE"	id="osActive" required
+    value="ACTIVE"  id="osActive" required
     aria-describedby="organisationStatusHelpText"
     [% IF organisation.status == "ACTIVE" %]checked[% END %]>
 
@@ -57,7 +57,7 @@
 </label>
 
   <p class="help-text" id="organisationStatusHelpText">
-	   Indicate the status of the organisation; options are:<br>
+     Indicate the status of the organisation; options are:<br>
      "Active" - for example a current member society or a venue that is taking
      bookings;<br>
      "Inactive" - for example a former member society or a venue that is closed.

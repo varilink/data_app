@@ -9,7 +9,7 @@
     <div class="row">
 
       <div class=
-    	"columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+      "columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
 
 [% PROCESS h1.tt FILTER indent 8 %]
 
@@ -20,7 +20,7 @@
           <p class="lead">
             <i class="fa fa-exclamation-triangle"></i> The email address for
             your user account is already verified and so your user account is
-            already activated for use. You can already use	your user account to
+            already activated for use. You can already use  your user account to
             <a href="[% conf.root %]account/sign_in">Sign-In</a> to our site.
             Alternatively, you can select from the menu above or return to our
             <a href="[% conf.root %]">home page</a> (<a href="[% conf.root %]">
@@ -36,10 +36,10 @@
   error_msg =
     'There has been an error confirming your email address. It''s '   _
     'possible that the link in an email that you used is out of '     _
-    'date. Enter your	userid below and click on resend to get '       _
+    'date. Enter your  userid below and click on resend to get '       _
     'another confirmation email sent to you and confirm your email '  _
     'address immediately via that email.'                                 ,
-  invisible =	1                                                           ,
+  invisible =  1                                                           ,
   onError   = 'resend_confirmation_email'                                 ,
   onSuccess = 'success_resend_confirmation_email'                         ,
 %]

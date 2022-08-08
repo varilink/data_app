@@ -24,8 +24,8 @@ large
 
 [%~
 
-	# Rather than a form submit (or other form action) button, we just want a
-	# href link button.
+  # Rather than a form submit (or other form action) button, we just want a
+  # href link button.
 
 -%]
 

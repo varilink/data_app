@@ -8,7 +8,7 @@
   </label>
   <input type="text" id="eventVenue" name="event_venue" placeholder=
   "Venue ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
-  aria-describedby="eventVenueHelpText"	[% IF required %]required[% END %]
+  aria-describedby="eventVenueHelpText"  [% IF required %]required[% END %]
   value="[% event.venue_name %]" [% IF disabled %]disabled[% END %]>
   <small class="form-error">[% error_msg %]</small>
 
@@ -61,7 +61,7 @@ var venues = [
 
 [%~ FOREACH venue IN venues -%]
 
-	"[% venue.name %]" ,
+  "[% venue.name %]" ,
 
 [%~ END -%]
 
@@ -76,8 +76,8 @@ confirmed instances.
 
 $ ( 'input[name=event_venue]' ) . autocomplete ( {
 
-	minLength: 2 ,
-	source: venues
+  minLength: 2 ,
+  source: venues
 
 } ) ;
 
