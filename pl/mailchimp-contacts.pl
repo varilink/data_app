@@ -14,7 +14,7 @@ use DATA::WhatsOn::Organisation ;
 #-------------------------------------------------------------------------------
 
 #
-#	Get configuration, connect to the database and create the Mailchimp object
+#  Get configuration, connect to the database and create the Mailchimp object
 #
 
 my $name = 'derbyartsandtheatre.org.uk' ;
@@ -29,14 +29,14 @@ my $env = $conf { env } ;
 my $database = $env -> { database } ;
 
 my $dbh = DBI -> connect (
-	'dbi:SQLite:dbname=' . $env -> { database }	,
-	''															,
-	''
+  'dbi:SQLite:dbname=' . $env -> { database }  ,
+  ''                              ,
+  ''
 ) ;
 
 my $mailchimp = new Mail::Chimp3 (
 
-	api_key => $env -> { mailchimp_api_key }
+  api_key => $env -> { mailchimp_api_key }
 
 ) ;
 
@@ -48,30 +48,30 @@ my $mailchimp = new Mail::Chimp3 (
 
 {
 
-	my $response = $mailchimp -> members (
+  my $response = $mailchimp -> members (
 
-		list_id => $env -> { mailchimp_list_id } ,
-		count => 200
+    list_id => $env -> { mailchimp_list_id } ,
+    count => 200
 
-	) ;
+  ) ;
 
-	foreach my $member ( @{ $response -> { content } -> { members } } ) {
+  foreach my $member ( @{ $response -> { content } -> { members } } ) {
 
-		$mailchimp -> delete_member (
+    $mailchimp -> delete_member (
 
-			list_id => $env -> { mailchimp_list_id } ,
-			subscriber_hash => $member -> { id }
+      list_id => $env -> { mailchimp_list_id } ,
+      subscriber_hash => $member -> { id }
 
-		) ;
+    ) ;
 
-	}
+  }
 
 }
 
 #-------------------------------------------------------------------------------
 
 #
-#	Get the list of the member society rowids and the DATA rowid
+#  Get the list of the member society rowids and the DATA rowid
 #
 
 my @society_rowids = ( ) ;
@@ -81,10 +81,10 @@ my @organisations = DATA::WhatsOn::Organisation -> fetch ( $dbh ) ;
 
 foreach my $organisation ( @organisations ) {
 
-	push @society_rowids , $organisation -> rowid
-		if $organisation -> type eq 'whatson_society' ;
+  push @society_rowids , $organisation -> rowid
+    if $organisation -> type eq 'whatson_society' ;
 
-	$data_rowid = $organisation -> rowid if $organisation -> name eq 'DATA' ;
+  $data_rowid = $organisation -> rowid if $organisation -> name eq 'DATA' ;
 
 }
 
@@ -98,44 +98,44 @@ my @contacts = DATA::WhatsOn::Contact -> fetch ( $dbh ) ;
 
 foreach my $contact ( @contacts ) {
 
-	if ( $contact -> email ) {
+  if ( $contact -> email ) {
 
-		my ( $isRepresentative , $isMember ) = ( \0 , \0 ) ;
+    my ( $isRepresentative , $isMember ) = ( \0 , \0 ) ;
 
-		foreach my $contact_organisation ( @{ $contact -> organisations } ) {
+    foreach my $contact_organisation ( @{ $contact -> organisations } ) {
 
-			my $organisation_rowid = $contact_organisation -> organisation_rowid ;
+      my $organisation_rowid = $contact_organisation -> organisation_rowid ;
 
-				$isRepresentative = \1
-					if grep ( /^$organisation_rowid$/ , @society_rowids ) ;
+        $isRepresentative = \1
+          if grep ( /^$organisation_rowid$/ , @society_rowids ) ;
 
-				$isMember = \1
-					if grep ( /^$organisation_rowid$/ , @society_rowids ) ||
-						$organisation_rowid == $data_rowid ;
+        $isMember = \1
+          if grep ( /^$organisation_rowid$/ , @society_rowids ) ||
+            $organisation_rowid == $data_rowid ;
 
-		}
+    }
 
-		my $response = $mailchimp -> add_member (
+    my $response = $mailchimp -> add_member (
 
-			list_id => $env -> { mailchimp_list_id } ,
-			email_address => $contact -> email ,
-			status => 'subscribed' ,
-			merge_fields => {
-				FNAME => $contact -> first_name ,
-				LNAME => $contact -> surname
-			} ,
-			interests => {
-				$env -> { mailchimp_representative_interest_id }
-					=> $isRepresentative  ,
-				$env -> { mailchimp_member_interest_id }
-					=> $isMember
-			}
+      list_id => $env -> { mailchimp_list_id } ,
+      email_address => $contact -> email ,
+      status => 'subscribed' ,
+      merge_fields => {
+        FNAME => $contact -> first_name ,
+        LNAME => $contact -> surname
+      } ,
+      interests => {
+        $env -> { mailchimp_representative_interest_id }
+          => $isRepresentative  ,
+        $env -> { mailchimp_member_interest_id }
+          => $isMember
+      }
 
-		) ;
+    ) ;
 
-		print Dumper $response if $response -> { code } ne '200' ;
+    print Dumper $response if $response -> { code } ne '200' ;
 
-	}
+  }
 
 }
 
@@ -147,41 +147,41 @@ foreach my $contact ( @contacts ) {
 
 foreach my $organisation ( @organisations ) {
 
-	if ( $organisation -> email ) {
+  if ( $organisation -> email ) {
 
-		my $response = $mailchimp -> add_member (
+    my $response = $mailchimp -> add_member (
 
-			list_id => $env -> { mailchimp_list_id } ,
-			email_address => $organisation -> email ,
-			status => 'subscribed'
+      list_id => $env -> { mailchimp_list_id } ,
+      email_address => $organisation -> email ,
+      status => 'subscribed'
 
-		) ;
+    ) ;
 
-		print Dumper $response if $response -> { code } ne '200' ;
+    print Dumper $response if $response -> { code } ne '200' ;
 
-	}
+  }
 
-	# Now fetch the individual organisation to get its functions
+  # Now fetch the individual organisation to get its functions
 
-	$organisation -> fetch ( $dbh ) ;
+  $organisation -> fetch ( $dbh ) ;
 
-	foreach my $function ( @{ $organisation -> functions } ) {
+  foreach my $function ( @{ $organisation -> functions } ) {
 
-		if ( $function -> email ) {
+    if ( $function -> email ) {
 
-			my $response = $mailchimp -> add_member (
+      my $response = $mailchimp -> add_member (
 
-				list_id => $env -> { mailchimp_list_id } ,
-				email_address => $function -> email ,
-				status => 'subscribed'
+        list_id => $env -> { mailchimp_list_id } ,
+        email_address => $function -> email ,
+        status => 'subscribed'
 
-			) ;
+      ) ;
 
-			print Dumper $response if $response -> { code } ne '200' ;
+      print Dumper $response if $response -> { code } ne '200' ;
 
-		}
+    }
 
-	}
+  }
 
 }
 

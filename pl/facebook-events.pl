@@ -67,16 +67,16 @@ my $now = DateTime -> now ( time_zone => 'Europe/London' ) ;
 
 if ( @ARGV ) {
 
-	if ( grep /^-d$/ , @ARGV ) {
+  if ( grep /^-d$/ , @ARGV ) {
 
-		$debug = 1 ;
-		print "Debugging enabled\n" ;
+    $debug = 1 ;
+    print "Debugging enabled\n" ;
 
-	}
+  }
 
-	if ( my $posn = grep /^-t$/ , @ARGV ) {
+  if ( my $posn = grep /^-t$/ , @ARGV ) {
 
-    print	"Applying a time offset\nTrue time: $now\n" if $debug ;
+    print  "Applying a time offset\nTrue time: $now\n" if $debug ;
 
     my $offset_days = $ARGV [ $posn + 1 ] ;
     print "Offset days=$offset_days\n" if $debug ;
@@ -85,22 +85,22 @@ if ( @ARGV ) {
     if (
       $ARGV [ $posn + 2 ]
       && $ARGV [ $posn + 2 ] =~ /^-?[0-9]{1,2}$/
-			&& $ARGV [ $posn + 2 ] >= -12 && $ARGV [ $posn + 2 ] <= 12
+      && $ARGV [ $posn + 2 ] >= -12 && $ARGV [ $posn + 2 ] <= 12
     ) {
       $offset_hours = $ARGV [ $posn + 2 ] ;
       print "Offset hours=$offset_hours\n" if $debug ;
     } else {
-			print $posn , $ARGV [ $posn + 2 ] , "\n" ;
+      print $posn , $ARGV [ $posn + 2 ] , "\n" ;
       print "Offset hours must be an integer between -12 and 12\n" ;
-			goto EXIT ;
+      goto EXIT ;
     }
 
     $now -> add ( days => $offset_days, hours => $offset_hours ) ;
-    print	"Offset time: $now\n" if $debug ;
+    print  "Offset time: $now\n" if $debug ;
 
-	} else {
+  } else {
 
-    print	"Time: $now\n" if $debug ;
+    print  "Time: $now\n" if $debug ;
 
   }
 
@@ -138,22 +138,22 @@ print Dumper $conf { env } if $debug ;
 
 # Set from to date only (no time) of now
 my $from = new DateTime (
-  year	=> $now -> year ,
-  month	=> $now -> month ,
-  day	=> $now -> day
+  year  => $now -> year ,
+  month  => $now -> month ,
+  day  => $now -> day
 ) ;
 # Set to by adding 60 days to from
 my $to = $from -> clone ;
 $to -> add ( days => 60 ) ;
 
-my $dbh = DBI -> connect (	"dbi:SQLite:dbname=$database" , '' , '' ) ;
+my $dbh = DBI -> connect (  "dbi:SQLite:dbname=$database" , '' , '' ) ;
 my $filter = {
   from   => substr ( $from , 0 , 10 ) ,
   to     => substr ( $to   , 0 , 10 ) ,
   status => 'PUBLISHED'
 } ;
 my @events = DATA::WhatsOn::Event -> fetch ( $dbh , $filter ) ;
-print scalar @events, ' events found between ',	substr ( $from , 0 , 10 ),
+print scalar @events, ' events found between ',  substr ( $from , 0 , 10 ),
   ' and ', substr ( $to , 0 , 10 ), "\n" if $debug ;
 
 # 5. Create the Facebook and Pagefeed objects ready to handle posts
@@ -162,7 +162,7 @@ print scalar @events, ' events found between ',	substr ( $from , 0 , 10 ),
 my $fb = new Facebook::OpenGraph ({
   app_id       => $app_id       ,
   secret       => $app_secret   ,
-	access_token => $access_token ,
+  access_token => $access_token ,
   version      => 'v14.0'
 }) ;
 
@@ -172,7 +172,7 @@ my $fb = new Facebook::OpenGraph ({
 
 foreach my $event ( @events ) {
 
-	my ( $message , $days_ahead ) = $event -> post ( $from ) ;
+  my ( $message , $days_ahead ) = $event -> post ( $from ) ;
 
   if (
     ( $days_ahead == 60 && $hour == 20 ) || # 60 days out      8pm - 9pm
@@ -200,25 +200,25 @@ foreach my $event ( @events ) {
       }
     ) ;
 
-		# Report on the post to stdout, which will send an email to the root email
-		# address if the script is running under cron.
-		print "\n\nPost:\t\t"		. $event -> name ;
-		print "\nStart Date:\t"	. $event -> start_date ;
-		print "\nEnd Date:\t"		. $event -> end_date ;
-		print "\nDays Ahead:\t"	. $days_ahead . "\n" ;
-		print "\nMessage:\t"		. $message ;
-		print Dumper $response if ! $response -> is_success ;
+    # Report on the post to stdout, which will send an email to the root email
+    # address if the script is running under cron.
+    print "\n\nPost:\t\t"    . $event -> name ;
+    print "\nStart Date:\t"  . $event -> start_date ;
+    print "\nEnd Date:\t"    . $event -> end_date ;
+    print "\nDays Ahead:\t"  . $days_ahead . "\n" ;
+    print "\nMessage:\t"    . $message ;
+    print Dumper $response if ! $response -> is_success ;
 
-	} elsif ( $debug ) {
+  } elsif ( $debug ) {
 
-		# Report a skipped event but only if we're in debug mode
+    # Report a skipped event but only if we're in debug mode
 
-		print "\n\nSkip:\t\t"		. $event -> name ;
-		print "\nStart Date:\t"	. $event -> start_date ;
-		print "\nEnd Date:\t"		. $event -> end_date ;
-		print "\nDays Ahead:\t"	. $days_ahead . "\n" ;
+    print "\n\nSkip:\t\t"    . $event -> name ;
+    print "\nStart Date:\t"  . $event -> start_date ;
+    print "\nEnd Date:\t"    . $event -> end_date ;
+    print "\nDays Ahead:\t"  . $days_ahead . "\n" ;
 
-	}
+  }
 
 }
 

@@ -24,7 +24,7 @@ my $database = $conf { env } -> { database } ;
 
 # Retrieve Data
 
-my $dbh = DBI -> connect (	"dbi:SQLite:dbname=$database" , '' , '' ) ;
+my $dbh = DBI -> connect (  "dbi:SQLite:dbname=$database" , '' , '' ) ;
 
 # Turn the UTF-8 flag on for all text strings coming out of the database
 $dbh -> { sqlite_unicode } = 1 ;
@@ -37,14 +37,14 @@ my @events = DATA::WhatsOn::Event -> fetch ( $dbh , $filter ) ;
 
 foreach my $event ( @events ) {
 
-	$event -> dates ( $event -> dates_derived )
-		unless $event -> dates ;
+  $event -> dates ( $event -> dates_derived )
+    unless $event -> dates ;
 
-	$event -> times ( '7.30pm' )
-		unless $event -> times ;
+  $event -> times ( '7.30pm' )
+    unless $event -> times ;
 
-	$event -> presented_by ( $event -> society_name )
-		unless $event -> presented_by ;
+  $event -> presented_by ( $event -> society_name )
+    unless $event -> presented_by ;
 
 }
 
