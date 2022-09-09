@@ -1,11 +1,14 @@
-# These are the entries for building the CGI Application Dispatch table.
-# The PSGI script reads this file and uses its contents to populate that table
-# with run modes.
-# Context configuration is then provided by the sitefunk.cfg file.
+# ------------------------------------------------------------------------------
+# See: https://github.com/varilink/data-app#configuration
+# ------------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
-# Pages accessible via the general public (i.e. authentication not required)
-# area
+# This YAML file maps HTTP URL paths to CGI::Application run modes. It is read
+# by the data-app.psgi script along with the application's configuration file.
+# The data-app.psgi script uses these two sources to build its dispatch table.
+# See the data-app.psgi script for further insight.
+
+# Pages in the general public area
+# --------------------------------
 
 # Home page
 - '': index
@@ -52,36 +55,24 @@
 # Error
 - '/error': error
 
-#
-# Actions initiated from pages and their redirect responses - test2
-#
+# Actions initiated from general public pages and their responses
+# ---------------------------------------------------------------
 
 # Join us
 - '/action/join_us': join_us
-# Join us successful - CANDIDATE FOR CONVERSION TO NON REDIRECT
+# Join us successful
 - '/success_join_us': success_join_us
 
 # Notify event
 - '/action/notify_event': notify_event
-# Notify event successful - CANDIDATE FOR CONVERSION TO NON REDIRECT
+# Notify event successful
 - '/success_notify_event': success_notify_event
 
 # Printed listing
 - '/action/printed_listing': printed_listing
 
-#
-# Actions initiated from emails - test 3
-#
-
-#-------------------------------------------------------------------------------
-
-# Account Management Area (Public)
-
-#-------------------------------------------------------------------------------
-
-#
-# Pages - test3
-#
+# Public account management area
+# ------------------------------
 
 # Begin registration
 - '/account/begin_registration': begin_registration
@@ -98,9 +89,8 @@
 # Sign-in
 - '/account/sign_in': sign_in
 
-#
-# Actions initiated from pages and their responses - test4, test5 and test6
-#
+# Actions initiated from public account management pages and their responses
+# --------------------------------------------------------------------------
 
 # Begin registration
 - '/account/action/begin_registration': begin_registration
@@ -132,31 +122,16 @@
 - '/account/action/login': login
 - '/secure/account/success_sign_in': success_sign_in
 
-#
 # Actions iniated from emails
-#
+# ---------------------------
 
 - '/account/action/confirm_email/:email/:secret/:success/:error': confirm_email
 - '/account/action/show_password_reset_page/:userid/:secret/:onSuccess/:onError': show_password_reset_page
 
-
-
-
-
-
-
-
-
-
-#
-# Account Management Area (Secure)
-#
-
+# Secure account management area
+# ------------------------------
 
 - '/secure/account/action/logout': logout
-
-
-
 
 # Pages
 - '/secure/account': account
@@ -165,14 +140,10 @@
 - '/secure/account/action': update_account
 - '/account/warning_update_account': warning_update_account
 
-################################################################################
-#                                                                              #
-# Admin Role                                                                   #
-#                                                                              #
-################################################################################
+# Admin role
+# ----------
 
 # Pages
-#------
 - '/secure/admin':                        admin_index
 - '/secure/admin/events':                 admin_events
 - '/secure/admin/event/programme':        admin_event_programme
@@ -186,19 +157,14 @@
 
 
 # Actions
-#--------
 - '/secure/admin/action/event/programme': event_programme
 - '/secure/admin/action/event/online':    event_online
 - '/secure/admin/action/society':         organisation
 
-################################################################################
-#                                                                              #
-# Rep Role                                                                     #
-#                                                                              #
-################################################################################
+# Rep Role
+# --------
 
 # Pages
-#------
 - '/secure/rep':                        rep_index
 - '/secure/rep/events':                 rep_events
 - '/secure/rep/event/programme':        rep_event_programme
@@ -210,16 +176,12 @@
 - '/secure/rep/contacts/:rowid':        rep_contacts
 
 # Actions
-#--------
 - '/secure/rep/action/event/programme': event_programme
 - '/secure/rep/action/event/online':    event_online
 - '/secure/rep/action/society':         organisation
 
-################################################################################
-#                                                                              #
-# Image Management                                                             #
-#                                                                              #
-################################################################################
+# Image management
+# ----------------
 
 - '/secure/image/upload': upload
 - '/secure/image/proxy':  proxy

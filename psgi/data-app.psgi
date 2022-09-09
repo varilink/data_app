@@ -11,7 +11,7 @@ sub {
 
   my $conf = Config::Context -> new (
 
-    file => "$ENV{'DATA_CONF'}/data.cfg" ,
+    file => "$ENV{'DATA_CONF'}/env.cfg" ,
 
     driver => 'ConfigGeneral' ,
 
@@ -41,7 +41,7 @@ sub {
 
   ) ;
 
-  my $rules = LoadFile "$ENV{'DATA_CONF'}/dispatch.yml" ;
+  my $rules = LoadFile "$ENV{'DATA_CONF'}/app/dispatch.yml" ;
 
   my $table = [ ] ;
 
