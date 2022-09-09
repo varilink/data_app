@@ -12,10 +12,10 @@ descriptive text and not just markup tags.
 ## event\_image\_valid
 
 This constraint is called in two circumstances:
-1.	When a save is executed and we're validating the contents of a tinymce
-		editor instance;
-2.	When we're attempting to copy an image from an external URL after that URL
-		has been entered in to the tincymce image dialog box.
+1\.  When a save is executed and we're validating the contents of a tinymce
+    editor instance;
+2\.  When we're attempting to copy an image from an external URL after that URL
+    has been entered in to the tincymce image dialog box.
 
 ## user\_is\_authorised
 

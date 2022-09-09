@@ -2,7 +2,7 @@
 
 Constraints applied to an image referenced by its URL, i.e. the validated value
 is the URL of the image. These can be applied to an image that's either hosted
- on our own site or hosted externally.
+on our own site or hosted externally.
 
 ## Constraints
 
