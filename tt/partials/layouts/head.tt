@@ -33,7 +33,6 @@
     template.name == 'notify_event.tt'              ||
     template.name == 'resend_confirmation_email.tt' ||
     template.name == 'sign_in.tt'                   ||
-    template.name == 'subscribe.tt'                 ||
     template.name == 'userid_reminder.tt'
   )
 %]

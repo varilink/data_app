@@ -3,7 +3,12 @@
 [% END %] action="[% action %]" data-abide novalidate method=
 "[% UNLESS method %]POST[% ELSE %][% method %][% END %]" accept-charset="utf-8"
 autocomplete="off">
+
+[%~ IF name -%]
+
   <h2 class="text-center">[% name %]</h2>
+
+[%~ END %]
 
 [%~ IF onError %]
   <input type="hidden" name="onError" id="onError" value="[% onError %]">

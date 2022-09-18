@@ -87,26 +87,12 @@
 [%~ END %]
 
 [%~ IF
-  template.name == 'events.tt'        ||
-  template.name == 'subscribe.tt'     ||
-  template.name == 'notify_event.tt'
+  template.name == 'events.tt'       ||
+  template.name == 'notify_event.tt' ||
+  template.name == 'print_events.tt'
 # Vertical event sub menu for small -%]
 
               <ul class="nested vertical menu hide-for-medium">
-
-[%~ IF template.name == 'subscribe.tt' %]
-                <li>
-                  <a href="[% conf.mailchimp_signup_form_url %]">
-                    <span class="is-active">Subscribe</span>
-                  </a>
-                </li>
-[%~ ELSE %]
-                <li>
-                  <a href="[% conf.mailchimp_signup_form_url %]">
-                    Subscribe
-                  </a>
-                </li>
-[%~ END %]
 
 [%~ IF template.name == 'notify_event.tt' %]
                 <li>
@@ -118,6 +104,20 @@
                 <li>
                   <a href="[% conf.root %]notify_event">
                     Notify Event
+                  </a>
+                </li>
+[%~ END -%]
+
+[%~ IF template.name == 'print_events.tt' %]
+                <li>
+                  <a href="[% conf.root %]print_events">
+                    <span class="is-active">Print</span>
+                  </a>
+                </li>
+[%~ ELSE %]
+                <li>
+                  <a href="[% conf.root %]print_events">
+                    Print
                   </a>
                 </li>
 [%~ END -%]
@@ -371,9 +371,9 @@
         <div class="top-bar-left">
 
 [%~ IF
-  template.name == 'events.tt'        ||
-  template.name == 'subscribe.tt'     ||
-  template.name == 'notify_event.tt'
+  template.name == 'events.tt'       ||
+  template.name == 'notify_event.tt' ||
+  template.name == 'print_events.tt'
 %]
 
 [%-#----------------------------------------------------------------------------

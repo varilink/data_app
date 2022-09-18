@@ -171,12 +171,15 @@
 
           <p class="text-center">
 
-            <span style="font-size: 3rem; color: #4dac71;">
-              <i class="fas fa-envelope"></i>
-            </span>
+            <a href="[% conf.mailchimp_signup_form_url %]" target="_blank">
+              <span style="font-size: 3rem; color: #4dac71;">
+                <i class="fas fa-envelope"></i>
+              </span>
+            </a>
             <br>
-            <a class="button" href="http://eepurl.com/dJi_vv" target="_blank"
-            style="border-radius: 4px; padding: 0.3em 0.5em 0.55em 0.5em;">
+            <a class="button" href="[% conf.mailchimp_signup_form_url %]"
+            target="_blank" style="border-radius: 4px;
+            padding: 0.3em 0.5em 0.55em 0.5em;">
               Subscribe to our email bulletin
             </a>
 
@@ -188,12 +191,14 @@
 
           <p class="text-center">
 
-            <span style="font-size: 3rem; color: #3B5998;">
-              <i class="fab fa-facebook"></i>
-            </span>
+            <a href="[% conf.facebook_page_url %]" target="_blank">
+              <span style="font-size: 3rem; color: #3B5998;">
+                <i class="fab fa-facebook"></i>
+              </span>
+            </a>
             <br>
             <a class="button" target="_blank"
-            href="https://www.facebook.com/DerbyArtsAndTheatreAssociation"
+            href="[% conf.facebook_page_url %]"
             style="border-radius: 4px; padding: 0.3em 0.5em 0.55em 0.5em;
             background-color: #3B5998;">
               Folow us on Facebook
@@ -236,67 +241,122 @@
       <h2 id="coming_events">Coming Events</h2>
 
       <p class="lead">
-        Below are the events presented by our member <a
-        href="[% conf.root %]societies">Societies</a> in the near future. Our
-        full <a href="[% conf.root %]events">Events</a> list contains more and
-        facilitates the copying of the list for inclusion in printed programmes.
+        Below are the events presented by our member <a href=
+        "[% conf.root %]societies">Societies</a> in the near future. Our full <a
+        href="[% conf.root %]events">Events</a> list may contain more and also
+        explains how to notify us of an event to add to the DATA Diary,
+        subscribe to our monthly email bulletin and produce printed listings of
+        DATA Diary events for inclusion in programmes.
       </p>
       <br>
 
     </div>
+    <!-- End of "Coming Events" Title Section -->
 
+    <!-- Start of "One-Page Event Listing Flyer" Section -->
     <div class="row column expanded" style="background-image:
     url('[% conf.root %]assets/img/textures/green_bar.png');">
 
-      <br>
+      <div class="row">
 
-      <div class="row medium-unstack">
+        <div class="columns small-12">
 
-        <div class="columns small-12 large-4 large-offset-2">
+<br>
 
-          <div class="callout information">
-
-            <p class="text-center" style="margin-bottom: 0;">
-              <span style="font-size: 120%;">
-                <i class="fas fa-info-circle"></i> Information
-              </span>
-            </p>
-
+[% PROCESS form.tt
+  action = '/action/printed_listing' ,
+  onSuccess = '/' ,
+  onError = 'index'
+FILTER indent 6 %]
             <p>
               DATA members can download a one-page flyer of coming events to
-              print on either A4 or A5 paper <span
-              class="show-for-medium">(right)</span> for inclusion in their
-              programmes as required by the terms of the <a
-              href="[% conf.root %]diary_scheme">Diary Scheme</a>.
+              print for inclusion in their programmes, as required by the terms
+              of the <a href="/diary_scheme">Diary Scheme</a>.
             </p>
+            <div class="floated-label-wrapper">
 
-          </div>
+[%~ UNLESS error_flyer_start_date # Initial State -%]
 
-        </div> [%# End of Column %]
+              <label for="flyer_start_date">
+                Start Date (Optional) DD/MM/YYYY
+              </label>
+              <input type="text" id="flyerStartDate" name=flyer_start_date
+              placeholder="Start Date (Optional) DD/MM/YYYY" aria-describedby=
+              "flyer_start_dateHelpText" pattern="day_month_year" class=
+              "datepicker">
+              <small class="form-error">
+                You must enter a valid date in DD/MM/YYYY format
+              </small>
 
-        <div class="columns small-12 large-4 large-offset-2">
+[%~ ELSE # Error State -%]
 
-          <form action="[% conf.root %]action/printed_listing">
-            <p>Page Size:</p>
-            <p>
-              <input id="A4" name="pagesize" type="radio" value="A4" checked>
-              <label for="A4">A4</label>
-              <input id="A5" name="pagesize" type="radio" value="A5">
-              <label for="A5">A5</label>
+              <label class="is-invalid-label" for="flyer_start_date">
+                Start Date (Optional) DD/MM/YYYY
+              </label>
+              <input class="is-invalid-input" type="text" id="flyerStartDate"
+              name=flyer_start_date placeholder=
+              "Start Date (Optional) DD/MM/YYYY" aria-describedby=
+              "flyer_start_dateHelpText" pattern="day_month_year" class=
+              "datepicker" value="[% flyer_start_date %]">
+              <small class="form-error is-visible">
+  You must enter a valid date in DD/MM/YYYY format
+              </small>
+
+[%~ END -%]
+
+              <p class="help-text" id="flyer_start_dateHelpText">
+                Optionally enter a start date for the flyer in DD/MM/YYYY
+                format. Without a start date, events from the current date will
+                be included. With a start date, only events from that start date
+                will be included.
+              </p>
+            </div>
+            [%~ global.script.flyer_start_date = BLOCK %]
+            // Setup Datepicker on Start Date
+                            $ ( '#flyerStartDate' ) . datepicker ( {
+                              dateFormat: 'dd/mm/yy' ,
+                              minDate: 1 ,
+                              onSelect: function ( ) {
+                                $ ( this ) . datepicker ( 'hide' ) ;
+                                $ ( this ) . trigger ( 'keyup' ) ;
+                              } ,
+                            } ) ;
+
+            [%~ END # global.script.event_start_date = BLOCK %]
+            <fieldset>
+              <input id="flyerPagesizeA4" name="flyer_pagesize" type="radio"
+              value="A4" aria-describedby="flyer_pagesizeHelpTest" required
+              [% IF !error && flyer_pagesize != 'A5' %]checked[% END %]>
+              <label for="flyerPagesizeA4">A4</label>
+              <input id="flyerPagesizeA5" name="flyer_pagesize" type="radio"
+              value="A5" aria-describedby="flyer_pagesizeHelpTest" required
+              [% IF flyer_pagesize == 'A5' %]checked[% END %]>
+              <label for="flyerPagesizeA5">A5</label>
+            </fieldset>
+            <p class="help-text" id="flyer_pagesizeHelpText">
+              Select the required page size. Coming event flyers use a portrait
+              page orientation.
             </p>
-            <input class="button" type="submit" value="Download Flyer">
-          </form>
-
-        </div> [%# End of Column %]
-
-      </div> [%# End of Row %]
-
+[% PROCESS buttons.tt
+  buttons = [
+    {
+      id = 'flyer' ,
+      protect = 1 ,
+      type = 'submit' ,
+      value = 'Download Flyer'
+    }
+  ]
+FILTER indent 6 %]
+</div>
+</div>
     </div> [%# End of Wrapper Row %]
 
     <!-- End of "Coming Events Title Section" -->
     <br>
     <br>
+
     <!-- Start of "Coming Events" List -->
+    <div id="coming_events_list">
 
 [%~ MACRO whatson_events BLOCK %]
 
@@ -940,6 +1000,7 @@ item4 = col + 8
 
 ) FILTER indent 8 %]
 
+</div>
     <!-- End of "Coming Events" List -->
 
 [% PROCESS footer.tt %]

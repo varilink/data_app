@@ -14,6 +14,7 @@ use base qw / DATA::Main / ;
 
 use Encode qw / encode / ;
 use HTML::HTMLDoc ;
+use PDF::API2 ;
 
 use DATA::Auth::Constraints ;
 use DATA::WhatsOn::Constraints ;
@@ -357,14 +358,56 @@ printing.
   my $query = $self -> query ;
   my $env = $self -> conf -> param ( 'env' ) ;
 
+  my $printed_listing_form = {
+
+    optional => [ qw /
+      flyer_start_date
+    / ] ,
+
+    constraint_methods => {
+
+      flyer_start_date => [
+        {
+          constraint_method => to_datetime ( '%d/%m/%Y' ) ,
+          name              => 'start_date_valid'
+        } ,
+        {
+          constraint_method => FV_and (
+            to_datetime ( '%d/%m/%Y' ) ,  after_today ( '%d/%m/%Y' )
+          ) ,
+          name              => 'start_date_after_today'
+        } ,
+      ] ,
+
+    } ,
+
+    msgs => $_messages ,
+
+  } ;
+
+#-------------------------------------------------------------------------------
+# Validate the inputs
+
+  my $results = $self -> check_rm ( 'form_response' , $printed_listing_form )
+    || return \$self -> check_rm_error_page ;
+
 #-------------------------------------------------------------------------------
 
 # Retrieve Data
 
   my $filter = {
-    from    => 'now'        ,
-    status  => 'PUBLISHED'
+    from   => 'now'       ,
+    status => 'PUBLISHED'
   } ;
+
+  if ( my $flyer_start_date = scalar $query -> param ( 'flyer_start_date' ) ) {
+
+    $filter -> { from } =
+      substr ( $flyer_start_date , 6 , 4 ) . '-' .
+      substr ( $flyer_start_date , 3 , 2 ) . '-' .
+      substr ( $flyer_start_date , 0 , 2 ) ;
+
+  }
 
   # Turn on the unicode flag for data retrieved from the database
   $self -> dbh -> { sqlite_unicode } = 1 ;
@@ -390,58 +433,37 @@ printing.
 
   my $tmpl = $self -> template -> load ;
   $tmpl -> param ( 'events' => \@events ) ;
-  my $pagesize = $query -> param ( 'pagesize' ) ;
+  my $pagesize = $query -> param ( 'flyer_pagesize' ) ;
   $tmpl -> param ( 'pagesize' => $pagesize ) ;
 
-  my $limit ;
+  my $exceeds ; # lowest no. of events found to exceed what can fit on one page
+  my $fits ; # highest no of events found to fit on one page
+  my $limit ; # no. of events to limit the generated PDF to
 
-  # Keep increasing the number of events to find where we go to two pages
-  for ( my $this_limit = 1 ; $this_limit <= scalar @events ; $this_limit++ ) {
+  if (
+    $pagesize eq 'A4'
+    && scalar @events > $self -> conf -> param ( 'pdf_a4_seed' )
+  ) {
 
-    # Generate the HTML
-    $tmpl -> param ( 'limit' => $this_limit ) ;
-    my $html = $tmpl -> output ;
+    # The page size is A4 and there are more events than we THINK can fit on to
+    # an A4 page, so limit the events on the page to how many we THINK can fit.
+    $limit = $self -> conf -> param ( 'pdf_a4_seed' ) ;
 
-    # Set up the htmldoc object
-    my $htmldoc = new HTML::HTMLDoc ;
-    $htmldoc -> set_bodyfont ( 'Arial' ) ;
-    $htmldoc -> set_charset ( 'iso-8859-1' ) ;
-    $htmldoc -> set_footer ( '.' , '.' , '.' ) ;
-    $htmldoc -> set_header ( '.' , 'l' , '1' ) ;
-    $htmldoc -> set_html_content ( encode ( 'iso-8859-1' , $$html ) ) ;
-    $htmldoc -> set_logoimage ( $env -> { assets } . '/img/logo.jpg' ) ;
-    # Set page up for A5 or A4. Note that A4 is the default page size.
-    if ( $pagesize eq 'A5' ) {
-      $htmldoc -> set_fontsize ( 10 ) ;
-      $htmldoc -> set_page_size ( '148x210mm' ) ;
-      $htmldoc -> set_left_margin ( 10 , 'mm' ) ;
-      $htmldoc -> set_right_margin ( 10 , 'mm' ) ;
-      $htmldoc -> set_top_margin ( 14 , 'mm' ) ;
-      $htmldoc -> set_bottom_margin ( 14 , 'mm' ) ;
-    } else { # Page size = A4
-      $htmldoc -> set_fontsize ( 11 ) ;
-      $htmldoc -> set_left_margin ( 14 , 'mm' ) ;
-      $htmldoc -> set_right_margin ( 14 , 'mm' ) ;
-      $htmldoc -> set_top_margin ( 20 , 'mm' ) ;
-      $htmldoc -> set_bottom_margin ( 20 , 'mm' ) ;
-    }
+  } elsif (
+    $pagesize eq 'A5'
+    && scalar @events > $self -> conf -> param ( 'pdf_a5_seed' )
+  ) {
 
-    # Find when this_limit takes us beyond page one
-    my $pdf = $htmldoc -> generate_pdf ;
-    my $error =  $htmldoc -> error ;
-    $error =~ /PAGES:\s(\d+)/s ;
-    last if $1 >= 2 ;
-
-    # We're still on page one, capture the limit
-    $limit = $this_limit ;
+    # The page size is A5 and there are more events than we THINK can fit on to
+    # an A5 page, so limit the events on the page to how many we THINK can fit.
+    $limit = $self -> conf -> param ( 'pdf_a5_seed' ) ;
 
   }
 
-  # Regenerate the HTML with the limit we have determined fills one page
-  $tmpl -> param ( 'limit' => $limit ) ;
-  my $html = $tmpl -> output ;
+GENPDF:
 
-  # Regenerate the PDF with the page number in the footer this time
+  $tmpl -> param ( 'limit' => $limit ) if $limit ;
+  my $html = $tmpl -> output ;
   my $htmldoc = new HTML::HTMLDoc ;
   $htmldoc -> set_bodyfont ( 'Arial' ) ;
   $htmldoc -> set_charset ( 'iso-8859-1' ) ;
@@ -449,7 +471,7 @@ printing.
   $htmldoc -> set_header ( '.' , 'l' , '.' ) ;
   $htmldoc -> set_html_content ( encode ( 'iso-8859-1' , $$html ) ) ;
   $htmldoc -> set_logoimage ( $env -> { assets } . '/img/logo.jpg' ) ;
-  # Set page up for A5 or A4. Note that A4 is the default page size.
+  # Set page up for A4 or A5. Note that A4 is the default page size.
   if ( $pagesize eq 'A5' ) {
     $htmldoc -> set_fontsize ( 10 ) ;
     $htmldoc -> set_page_size ( '148x210mm' ) ;
@@ -457,7 +479,7 @@ printing.
     $htmldoc -> set_right_margin ( 10 , 'mm' ) ;
     $htmldoc -> set_top_margin ( 14 , 'mm' ) ;
     $htmldoc -> set_bottom_margin ( 14 , 'mm' ) ;
-  } else { # Page size = A4
+  } else { # Page size = A4, either explicitly or because it's the default.
     $htmldoc -> set_fontsize ( 11 ) ;
     $htmldoc -> set_left_margin ( 14 , 'mm' ) ;
     $htmldoc -> set_right_margin ( 14 , 'mm' ) ;
@@ -465,8 +487,93 @@ printing.
     $htmldoc -> set_bottom_margin ( 20 , 'mm' ) ;
   }
 
-  # Regenerate the PDF, this time it should fill a single page
-  my $pdf = $htmldoc -> generate_pdf ;
+  my $pdf = PDF::API2 -> from_string ( $htmldoc -> generate_pdf -> to_string ) ;
+
+  if ( $pdf -> page_count == 1 ) {
+
+    # The generated PDF fits on to one page.
+
+    # If this is the most events than we've found so far can fit on one page,
+    # then register that.
+    $fits = $limit if ! $fits || $fits < $limit ;
+
+    if ( $limit && ! $exceeds || $exceeds > $limit + 1 ) {
+
+      # We have not included all events and it may be possible to add more
+      # without exeeding the no. of events that can fit on one page. Let's see
+      # if we can get more events on to a single page.
+
+      if ( ! $exceeds ) {
+
+        # We have not yet specified a number of events that exceed one page, so
+        # lets increase our limit by the configured increment for the page size
+        # that we are using.
+
+        if ( $pagesize eq 'A4' ) {
+          $limit += $self -> conf -> param ( 'pdf_a4_incr' ) ;
+        } else {
+          # Page size = A5.
+          $limit += $self -> conf -> param ( 'pdf_a5_incr' ) ;
+        }
+
+      } else {
+
+        # We know that the limit we just used fits on one page and we know a
+        # number of events that exceeds one page, so let's try half way
+        # inbetween as the next limit.
+        $limit = int ( ( $limit + $exceeds ) / 2 ) ;
+
+      }
+
+      # Try again with our new limit.
+      goto GENPDF ;
+
+    }
+
+  } else {
+
+    # The generated PDF does NOT fit on to one page.
+
+    # If this is the least no. of events that we've found so far that can not
+    # fit on one page, then register that.
+    $exceeds = $limit if ! $exceeds || $exceeds > $limit ;
+
+    if ( ! $fits ) {
+
+      # We have not yet specified a number of events that fits on one page, so
+      # lets decrease our limit by the configured increment for the page size
+      # that we are using.
+
+      if ( $pagesize eq 'A4' ) {
+        $limit -= $self -> conf -> param ( 'pdf_a4_incr' ) ;
+      } else {
+        # Page size = A5.
+        $limit -= $self -> conf -> param ( 'pdf_a5_incr' ) ;
+      }
+
+      # Try again with our new limit.
+      goto GENPDF ;
+
+    } elsif ( $fits < $limit - 1 ) {
+
+      # We know that the limit we just used exceeds one page and we know a
+      # number of events that fits on one page, so let's try half way
+      # inbetween as the next limit.
+
+      $limit = int ( ( $limit + $fits ) / 2 ) ;
+
+      # Try again with our new limit.
+      goto GENPDF ;
+
+    } else {
+
+      $limit -= 1 ;
+      goto GENPDF ;
+
+    }
+
+  }
+
   my $output = $pdf -> to_string ;
   $self -> header_add (
     -type                  => 'application/pdf'                    ,
