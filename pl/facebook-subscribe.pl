@@ -22,7 +22,7 @@ my $ini                  = new Config::Simple (
                           "/usr/local/etc/DATA/$name.ini"
                         ) ;
 my $home                = $ini -> param ( 'home' ) ;
-my $confObj              = new Config::General ( "$home/env.cfg" ) ;
+my $confObj              = new Config::General ( "$ENV{'DATA_CONF'}/app.cfg" ) ;
 my %conf                = $confObj -> getall ;
 my $access_token  = $conf { env } -> { facebook_page_access_token  } ;
 my $app_id        = $conf { env } -> { facebook_app_id            } ;

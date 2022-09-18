@@ -122,7 +122,7 @@ unless ( $hour >= 9 && $hour <= 18 ) {
 # 3. Load Environment Configuration
 # ---------------------------------
 
-my $confObj = new Config::General ( '/usr/local/etc/data/env.cfg' ) ;
+my $confObj = new Config::General ( "$ENV{'DATA_CONF'}/app.cfg" ) ;
 my %conf = $confObj -> getall ;
 my $access_token = $conf { env } -> { facebook_page_access_token } ;
 my $app_id       = $conf { env } -> { facebook_app_id            } ;

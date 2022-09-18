@@ -22,7 +22,7 @@ my $name = 'derbyartsandtheatre.org.uk' ;
 my $confSim = new Config::Simple ( "/usr/local/etc/DATA/$name.ini" ) ;
 my $home = $confSim -> param ( 'home' ) ;
 
-my $confGen = new Config::General ( "$home/env.cfg" ) ;
+my $confGen = new Config::General ( "$ENV{'DATA_CONF'}/app.cfg" ) ;
 my %conf = $confGen -> getall ;
 my $env = $conf { env } ;
 

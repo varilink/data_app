@@ -60,7 +60,7 @@ Tests whether a request to access a protected resource is permitted.
 
       my $conf = new Config::Context (
 
-         file => "$ENV{'DATA_CONF'}/env.cfg" ,
+         file => "$ENV{'DATA_CONF'}/app.cfg" ,
 
          driver => 'ConfigGeneral' ,
 

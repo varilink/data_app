@@ -5,7 +5,7 @@ use Config::General ;
 use Data::Dumper ;
 use Facebook::OpenGraph ;
 
-my $confObj = new Config::General ( '/usr/local/etc/data/env.cfg' ) ;
+my $confObj = new Config::General ( "$ENV{'DATA_CONF'}/app.cfg" ) ;
 my %conf = $confObj -> getall ;
 my $app_id = $conf { env } -> { facebook_app_id } ;
 my $app_secret = $conf { env } -> { facebook_app_secret } ;

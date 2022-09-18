@@ -31,7 +31,7 @@ my $ini = new Config::Simple (
 
 my $home = $ini -> param ( 'home' ) ;
 
-my $cObj = new Config::General ( "$home/env.cfg" ) ;
+my $cObj = new Config::General ( "$ENV{'DATA_CONF'}/app.cfg" ) ;
 my %cHash = $cObj -> getall ;
 my $env = $cHash { env } ;
 

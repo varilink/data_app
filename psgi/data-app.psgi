@@ -11,7 +11,7 @@ sub {
 
   my $conf = Config::Context -> new (
 
-    file => "$ENV{'DATA_CONF'}/env.cfg" ,
+    file => "$ENV{'DATA_CONF'}/app.cfg" ,
 
     driver => 'ConfigGeneral' ,
 

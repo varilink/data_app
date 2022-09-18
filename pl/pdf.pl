@@ -16,7 +16,7 @@ use Template ;
 my $project = 'derbyartsandtheatre.org.uk' ;
 my $ini = new Config::Simple ( "/usr/local/etc/DATA/$project.ini" ) ;
 my $home = $ini -> param ( 'home' ) ;
-my $confObj = new Config::General ( "$home/env.cfg" ) ;
+my $confObj = new Config::General ( "$ENV{'DATA_CONF'}/app.cfg" ) ;
 my %conf = $confObj -> getall ;
 my $database = $conf { env } -> { database } ;
 
