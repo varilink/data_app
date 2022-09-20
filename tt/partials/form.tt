@@ -63,13 +63,17 @@ autocomplete="off">
 -%]
 
 // Alert users if they navigate away from a page with unsaved changes
+[%~ IF psgi.REQUEST_URI.match ( '^/secure/(?:admin|rep)/event/online/' ) %]
 tinyMCE . triggerSave ( ) ;
+[%~ END %]
 var origFormState = $ ( 'input , textarea , select' )
   . not ( "[name='g-recaptcha-response']" ) . serialize ( ) ;
 
 $ ( 'form' ) . submit ( function ( ) {
 
+[%~ IF psgi.REQUEST_URI.match ( '^/secure/(?:admin|rep)/event/online/' ) %]
   tinyMCE . triggerSave ( ) ;
+[%~ END %]
   origFormState = $ ( 'input , textarea , select' )
     . not ( "[name='g-recaptcha-response']" ) . serialize ( ) ;
 
@@ -77,7 +81,9 @@ $ ( 'form' ) . submit ( function ( ) {
 
 window . addEventListener ( 'beforeunload' , function ( e ) {
 
+[%~ IF psgi.REQUEST_URI.match ( '^/secure/(?:admin|rep)/event/online/' ) %]
   tinyMCE . triggerSave ( ) ;
+[%~ END %]
   var currFormState = $ ( 'input , textarea , select' )
     . not ( "[name='g-recaptcha-response']" ) . serialize ( ) ;
 
