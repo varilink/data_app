@@ -159,7 +159,7 @@ join. The enquiry gets emailed to the webmin.
 #-------------------------------------------------------------------------------
 # Add recaptcha check unless recaptcha is disabled for this environment
 
-  unless ( $env -> { disable_recaptcha } ) {
+  if ( $env -> { use_captcha } ) {
 
     push @{ $join_us_form -> { required } } , 'g-recaptcha-response' ;
 
@@ -276,7 +276,7 @@ sent via eamil to the webmin.
 #-------------------------------------------------------------------------------
 # Add recaptcha check unless recaptcha is disabled for this environment
 
-  unless ( $env -> { disable_recaptcha } ) {
+  if ( $env -> { use_captcha } ) {
 
     push @{ $notify_event_form -> { required } } , 'g-recaptcha-response' ;
 

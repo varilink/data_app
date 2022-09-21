@@ -293,46 +293,7 @@ is to be associated with is valid for an account.
 
    my $begin_registration_form = sub {
 
-    if ( $env -> { disable_recaptcha } ) {
-
-        return {
-
-           required => [ qw /
-              user_email
-              user_confirm_email
-           / ] ,
-
-           constraint_methods => {
-
-          user_email => [
-            {
-              constraint_method => email ,
-              name => 'email_valid'
-            } ,
-            {
-              constraint_method => FV_or (
-                FV_not ( email ) ,
-                FV_not ( email_taken ( $self -> dbh ) ) ) ,
-              name => 'email_free'
-            } ,
-           ] ,
-
-              user_confirm_email => {
-            constraint_method => FV_eq_with ( 'user_email' ) ,
-            name => 'email_confirmed'
-          } ,
-
-           } ,
-
-           msgs => {
-
-              constraints => $_messages
-
-           }
-
-        } ; # End of return
-
-    } else {
+    if ( $env -> { use_captcha } ) {
 
         return {
 
@@ -378,6 +339,45 @@ is to be associated with is valid for an account.
            }
 
         } ; # End of return
+
+    } else {
+
+      return {
+
+         required => [ qw /
+            user_email
+            user_confirm_email
+         / ] ,
+
+         constraint_methods => {
+
+        user_email => [
+          {
+            constraint_method => email ,
+            name => 'email_valid'
+          } ,
+          {
+            constraint_method => FV_or (
+              FV_not ( email ) ,
+              FV_not ( email_taken ( $self -> dbh ) ) ) ,
+            name => 'email_free'
+          } ,
+         ] ,
+
+            user_confirm_email => {
+          constraint_method => FV_eq_with ( 'user_email' ) ,
+          name => 'email_confirmed'
+        } ,
+
+         } ,
+
+         msgs => {
+
+            constraints => $_messages
+
+         }
+
+      } ; # End of return
 
     }
 
