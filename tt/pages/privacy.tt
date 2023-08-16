@@ -8,7 +8,7 @@ title = 'Privacy Policy'
 
     <div class="row column">
 
-[% PROCESS h1.tt media="the_diary_scheme" FILTER indent 4 %]
+[% PROCESS h1.tt FILTER indent 4 %]
 
       <p class="lead">
         DATA takes the protection of the privacy of its members and subscribers

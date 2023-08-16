@@ -6,7 +6,7 @@ title = 'About Us'
 
 [%~ PROCESS header.tt %]
 
-[% PROCESS h1.tt media="the_diary_scheme" FILTER indent 4 %]
+[% PROCESS h1.tt FILTER indent 4 %]
 
     <div class="row medium-unstack">
 
