@@ -6,7 +6,7 @@ title = 'Member Societies'
 
 [%~ PROCESS header.tt %]
 
-[% PROCESS h1.tt media = "member_societies" FILTER indent 4 %]
+[% PROCESS h1.tt media = "member-societies.webp" FILTER indent 4 %]
 
     <div class="row column">
 

@@ -14,7 +14,7 @@
     </div>
     <div class="media-object-section">
       <div class="image">
-        <img src="[% conf.root %]assets/img/[% media %].jpg" alt="[% title %]">
+        <img src="[% conf.root %]assets/img/[% media %]" alt="[% title %]">
       </div>
     </div>
   </div>

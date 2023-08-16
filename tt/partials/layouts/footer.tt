@@ -7,7 +7,7 @@
           <h4 class="footer-data-name">Derby Arts and Theatre Association</h4>
           <div class="row align-top">
             <div class="columns small-4">
-              <img src="[% conf.root %]assets/img/logo.png">
+              <img src="[% conf.root %]assets/img/logo.webp">
             </div>
             <div class="columns small-8">
               <p class="footer-data-tagline">
