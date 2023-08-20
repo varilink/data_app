@@ -122,6 +122,9 @@
 - '/account/action/login': login
 - '/secure/account/success_sign_in': success_sign_in
 
+# Authentication/Authorisation test for secure access
+- '/_auth': request
+
 # Actions iniated from emails
 # ---------------------------
 
