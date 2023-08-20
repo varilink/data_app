@@ -126,132 +126,140 @@ Process an attempt to authenticate.
   my $self = shift ;
   my $query = $self -> query ;
 
-  my $env = $self -> conf -> param ( 'env' ) ;
+  if ( ! $query->cookie('CGISESSID') ) {
 
-  my $login_form = sub {
+    $self -> redirect ( '/no_session' ) ;
 
-    if ( $env -> { use_captcha } ) {
+  } else {
 
-      # We are using Google reCAPTCHA in this environment
+    my $env = $self -> conf -> param ( 'env' ) ;
 
-      return {
+    my $login_form = sub {
 
-        required => [ qw /
-          g-recaptcha-response
-          user_userid
-          user_password
-        / ] ,
+      if ( $env -> { use_captcha } ) {
 
-        constraint_methods => {
+        # We are using Google reCAPTCHA in this environment
 
-          'g-recaptcha-response' => {
-            constraint_method => not_a_robot (
-              $env -> { recaptcha_secret_key }
-            ) ,
-            name => 'not_a_robot'
-          } ,
+        return {
 
-          user_userid => [
-            {
-              constraint_method => user_exists ( $self -> dbh ) ,
-              name => 'user_exists'
-            } ,
-            {
-              constraint_method => FV_or (
-                FV_not ( user_exists ( $self -> dbh ) ) ,
-                user_confirmed ( $self -> dbh )
+          required => [ qw /
+            g-recaptcha-response
+            user_userid
+            user_password
+          / ] ,
+
+          constraint_methods => {
+
+            'g-recaptcha-response' => {
+              constraint_method => not_a_robot (
+                $env -> { recaptcha_secret_key }
               ) ,
-              name => 'user_confirmed'
+              name => 'not_a_robot'
             } ,
-          ] ,
 
-          user_password => {
-            constraint_method => credentials_match (
-              $self -> dbh ,
-              { fields => [ qw / user_userid / ] }
-            ) ,
-            name => 'credentials_match'
-          } ,
+            user_userid => [
+              {
+                constraint_method => user_exists ( $self -> dbh ) ,
+                name => 'user_exists'
+              } ,
+              {
+                constraint_method => FV_or (
+                  FV_not ( user_exists ( $self -> dbh ) ) ,
+                  user_confirmed ( $self -> dbh )
+                ) ,
+                name => 'user_confirmed'
+              } ,
+            ] ,
 
-        } ,
-
-        msgs => {
-
-          constraints => $_messages
-
-        }
-
-      } ; # End of return statement
-
-    } else {
-
-      # We are NOT using Google reCAPTCHA in this environment
-
-      return {
-
-        required => [ qw /
-          user_userid
-          user_password
-        / ] ,
-
-        constraint_methods => {
-
-          user_userid => [
-            {
-              constraint_method => user_exists ( $self -> dbh ) ,
-              name => 'user_exists'
-            } ,
-            {
-              constraint_method => FV_or (
-                FV_not ( user_exists ( $self -> dbh ) ) ,
-                user_confirmed ( $self -> dbh )
+            user_password => {
+              constraint_method => credentials_match (
+                $self -> dbh ,
+                { fields => [ qw / user_userid / ] }
               ) ,
-              name => 'user_confirmed'
+              name => 'credentials_match'
             } ,
-          ] ,
 
-          user_password => {
-            constraint_method => credentials_match (
-              $self -> dbh ,
-              { fields => [ qw / user_userid / ] }
-            ) ,
-            name => 'credentials_match'
           } ,
 
-        } ,
+          msgs => {
 
-        msgs => {
+            constraints => $_messages
 
-          constraints => $_messages
+          }
 
-        }
+        } ; # End of return statement
 
-      } ; # End of return statement
+      } else {
 
-    }
+        # We are NOT using Google reCAPTCHA in this environment
 
-  } ; # End of login_form sub
+        return {
 
-   my $results = $self -> check_rm (
+          required => [ qw /
+            user_userid
+            user_password
+          / ] ,
+
+          constraint_methods => {
+
+            user_userid => [
+              {
+                constraint_method => user_exists ( $self -> dbh ) ,
+                name => 'user_exists'
+              } ,
+              {
+                constraint_method => FV_or (
+                  FV_not ( user_exists ( $self -> dbh ) ) ,
+                  user_confirmed ( $self -> dbh )
+                ) ,
+                name => 'user_confirmed'
+              } ,
+            ] ,
+
+            user_password => {
+              constraint_method => credentials_match (
+                $self -> dbh ,
+                { fields => [ qw / user_userid / ] }
+              ) ,
+              name => 'credentials_match'
+            } ,
+
+          } ,
+
+          msgs => {
+
+            constraints => $_messages
+
+          }
+
+        } ; # End of return statement
+
+      }
+
+    } ; # End of login_form sub
+
+    my $results = $self -> check_rm (
       'form_response' ,
       $login_form ,
       { fill_password => 0 } ,
-   ) || return \$self -> check_rm_error_page ;
+    ) || return \$self -> check_rm_error_page ;
 
-  # We have logged on okay so user must exist. Fetch it for the role.
-   my $user = new DATA::Auth::User ;
-   $user -> userid ( scalar $query -> param ( 'user_userid' ) ) ;
-  $user -> fetch ( $self -> dbh ) ;
+    # We have logged on okay so user must exist. Fetch it for the role.
+    my $user = new DATA::Auth::User ;
+    $user -> userid ( scalar $query -> param ( 'user_userid' ) ) ;
+    $user -> fetch ( $self -> dbh ) ;
 
-   $self -> session_recreate ;
-   $self -> session -> param ( 'userid' , $user -> userid ) ;
-  $self -> session -> param ( 'role' , $user -> role ) ;
-  $self -> session -> flush ;
+    $self -> session_recreate ;
+    $self -> session -> param ( 'userid' , $user -> userid ) ;
+    $self -> session -> param ( 'role' , $user -> role ) ;
+    $self -> session -> flush ;
 
-   # Add a cookie to the outgoing headers containing the session
-   $self -> session_cookie ;
+    # Add a cookie to the outgoing headers containing the session
+    $self -> session_cookie ;
 
-   $self -> redirect ( $query -> param ( 'onSuccess' ) ) ;
+    $self -> redirect ( $query -> param ( 'onSuccess' ) ) ;
+
+  }
 
 }
 

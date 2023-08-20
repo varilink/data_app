@@ -52,6 +52,9 @@
 # Unauthorised
 - '/unauthorised': unauthorised
 
+# No session
+- '/no_session': no_session
+
 # Error
 - '/error': error
 
