@@ -246,7 +246,9 @@ Process an attempt to authenticate.
 
     # We have logged on okay so user must exist. Fetch it for the role.
     my $user = new DATA::Auth::User ;
-    $user -> userid ( scalar $query -> param ( 'user_userid' ) ) ;
+    my $userid = scalar $query->param('user_userid');
+    $userid =~ s/^\s+|\s+$//g;
+    $user->userid($userid);
     $user -> fetch ( $self -> dbh ) ;
 
     $self -> session_recreate ;
