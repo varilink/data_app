@@ -1,4 +1,9 @@
-[% UNLESS cookies.dismiss_cookie_alert == 'yes' -%]
+[% 
+    IF cookies.exists('CGISESSID') AND (
+        NOT cookies.exists('dismiss_cookie_alert') OR
+        NOT cookies.dismiss_cookie_alert == 'yes'
+    )
+-%]
 
 <!-- Start of the Cookie Alert -->
 <div data-sticky-container>

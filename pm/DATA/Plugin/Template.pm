@@ -120,8 +120,7 @@ This hook also ensures that the template output is UTF8 encoded.
   my @cookies = $self -> query -> cookie ;
   my $cookies = { } ;
   foreach my $cookie ( @cookies ) {
-    $cookies -> { $cookie } = $self -> query -> cookie ( $cookie ) unless
-    $cookie eq 'csrftoken' || $cookie eq 'CGISESSID' || $cookie eq 'sessionid' ;
+    $cookies -> { $cookie } = $self -> query -> cookie ( $cookie );
   }
   $tmpl -> param ( 'cookies' , $cookies ) ;
 
