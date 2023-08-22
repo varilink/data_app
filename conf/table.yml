@@ -46,6 +46,9 @@
 # Not found
 - '/not_found': not_found
 
+# No session
+- '/no_session': no_session
+
 # Unauthorised
 - '/unauthorised': unauthorised
 
