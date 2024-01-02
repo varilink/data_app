@@ -5,15 +5,15 @@
 
 [%~ IF conf.root == 'https://www.derbyartsandtheatre.org.uk/' -%]
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async
-    src="https://www.googletagmanager.com/gtag/js?id=UA-137420866-1">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CFTSZE5V29">
     </script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'UA-137420866-1');
+
+      gtag('config', 'G-CFTSZE5V29');
     </script>
 
 [% END %]
