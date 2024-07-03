@@ -70,7 +70,7 @@
 
 [% FOREACH event IN events %]
 
-[%  IF loop.index % 2 == 0 # loop.index is even %]
+[% IF loop.index % 2 == 0 # loop.index is even %]
 
 [% PROCESS start_templateContainer.tt cols = 2 FILTER indent 18 %]
 [% PROCESS event_card.tt FILTER indent 30 %]
