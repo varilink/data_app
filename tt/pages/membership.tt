@@ -1,0 +1,80 @@
+[%~ SET title = 'Membership Registration'
+
+# Membership - Form to register for individual DATA membership
+
+%]
+
+[%~ PROCESS header.tt %]
+
+    <div class="row column">
+
+[% PROCESS h1.tt media = "member_societies" FILTER indent 6 %]
+
+      <p class="lead">
+        If you would like to support the aims* and work of DATA, you may wish to
+        consider joining the Association as an individual member. By doing
+        this, you will be added to our database to automatically receive email
+        updates of events and performances and news about DATA campaigns. You
+        will also be able to attend, and vote at, General Meetings and be
+        eligible for election to the General Committee which manages DATA.
+        There is no membership fee for individual members.
+      </p>
+
+      <p class="lead">
+        If you want to do this, please fill in the form below and click on the
+        &quot;Register&quot; button.
+      </p>
+
+[% PROCESS form.tt
+  action    = '/action/membership'      ,
+  onError   = 'membership'              ,
+  onSuccess = '/success_membership'
+FILTER indent 6 %]
+
+[% PROCESS contact_first_name.tt
+  error_msg = 'You must enter your first name'
+  required = 1
+%]
+
+[% PROCESS contact_surname.tt
+  error_msg = 'You must enter your surname'
+  required = 1
+%]
+
+[% PROCESS contact_email.tt
+  error_msg = 'You must enter a valid email address'
+  required = 1
+FILTER indent 8 %]
+
+[% PROCESS contact_confirm_email.tt
+  error_msg = 'You must repeat your email address to confirm it',
+  required = 1
+FILTER indent 8 %]
+
+[% PROCESS contact_groups.tt
+FILTER indent 8 %]
+
+[% PROCESS buttons.tt
+
+  buttons = [
+    {
+      id = 'register' ,
+      protect = 1 ,
+      type = 'submit' ,
+      value = 'Register'
+    }
+  ]
+
+FILTER indent 6 %]
+
+      <p>
+        * The objects of the Derby Arts and Theatre Association, as stated in
+        the constitution, are &quot;to promote the education of the public by
+        encouraging and developing the Arts in Derby&quot;. In practice, DATA
+        has concentrated on the performing arts in Derby and the surrounding
+        areas.
+      </p>
+
+    </div>
+
+[% PROCESS footer.tt %]

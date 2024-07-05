@@ -77,6 +77,8 @@ sub setup {
 
     # Send an expression of interest for join DATA to the webmin
     'join_us'             =>  'join_us'            ,
+    # Register an individual member
+    'membership'          => 'membership'          ,
     # Notify the webmin of an event
     'notify_event'        => 'notify_event'         ,
     # Return a PDF cotaining coming events in a one page, printable format
@@ -190,6 +192,91 @@ join. The enquiry gets emailed to the webmin.
       contact => {
         email => $contact_email ,
         message => $contact_message
+      }
+    }
+  ) ;
+
+  $self -> redirect ( $env -> { root } . $query -> param ( 'onSuccess' ) ) ;
+
+}
+
+sub membership {
+
+=head3 membership
+
+Register an individual member.
+
+=cut
+
+  my $self = shift ;
+  my $query = $self -> query ;
+  my $env = $self -> conf -> param ( 'env' ) ;
+
+  my $membership_form = {
+
+    required => [ qw /
+      contact_first_name
+      contact_surname
+      contact_email
+      contact_confirm_email
+    / ] ,
+
+    constraint_methods => {
+
+      contact_email => {
+        constraint_method  => email ,
+        name              => 'email_valid'
+      } ,
+
+      contact_confirm_email => {
+        constraint_method => FV_eq_with ( 'contact_email' ) ,
+        name => 'email_confirmed'
+      } ,
+
+    } , # End of constraint_methods
+
+    msgs => $_messages
+
+  } ; # End of $membership_form profile
+
+#-------------------------------------------------------------------------------
+# Add recaptcha check unless recaptcha is disabled for this environment
+
+  if ( $env -> { use_captcha } ) {
+
+    push @{ $membership_form -> { required } } , 'g-recaptcha-response' ;
+
+    $membership_form -> { constraint_methods } -> { 'g-recaptcha-response' } = {
+      constraint_method => not_a_robot ( $env -> { recaptcha_secret_key } ) ,
+      name              => 'not_a_robot'
+    }
+
+  }
+
+#-------------------------------------------------------------------------------
+# Validate the inputs
+
+  my $results = $self -> check_rm ( 'form_response' , $membership_form )
+  || return \$self -> check_rm_error_page ;
+
+#-------------------------------------------------------------------------------
+# We have passed validation, send the message to webmin and redirect
+
+  my $webmin = $env -> { webmin } ;
+  my $contact_first_name = scalar $query -> param ( 'contact_first_name' ) ;
+  my $contact_surname = scalar $query -> param ( 'contact_surname' ) ;
+  my $contact_email = scalar $query -> param ( 'contact_email' ) ;
+  my $contact_groups = scalar $query -> param ( 'contact_groups' ) ;
+
+  $self -> sendmail (
+    $webmin ,
+    'DATA Membership Registration' ,
+    {
+      contact => {
+        first_name => $contact_first_name ,
+        surname => $contact_surname ,
+        email => $contact_email ,
+        groups => $contact_groups
       }
     }
   ) ;

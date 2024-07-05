@@ -30,6 +30,7 @@
   conf.use_captcha && (
     template.name == 'begin_registration.tt'        ||
     template.name == 'join_us.tt'                   ||
+    template.name == 'membership.tt'                ||
     template.name == 'notify_event.tt'              ||
     template.name == 'resend_confirmation_email.tt' ||
     template.name == 'sign_in.tt'                   ||

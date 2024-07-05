@@ -1,0 +1,14 @@
+<div class="floated-label-wrapper">
+
+  <label for="contact_groups">Groups (Optional)</label>
+
+  <textarea id="contact_groups" name="contact_groups"
+  aria-describedby="contact_groupsHelpText" rows="5" placeholder=
+  "Groups (Optional)"></textarea>
+
+  <p class="help-text" id="contact_groupsHelpText">
+    Please list any amateur music or theatre groups that you are associated
+    with.
+  </p>
+
+</div>

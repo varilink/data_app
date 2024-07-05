@@ -1,0 +1,28 @@
+[% PROCESS email_header.tt
+  title = 'Membership Registration'
+%]
+
+[% PROCESS email_paragraph.tt %]
+
+<p>
+  Somebody has registered as an individual member via the online form for this
+  purpose. They gave their contact details as follows:<br />
+  First name: [% contact.first_name %]<br />
+  Surname: [% contact.surname %]<br />
+  Email: [% contact.email %]
+</p>
+
+[% IF contact.groups %]
+<p>
+  They indicated that they are associated with the following amateur music or
+  theatre group or groups:<br />
+  [% contact.groups %]
+</p>
+[% ELSE %]
+<p>
+  They did not identify any amateur music or theatre groups that they are
+  associated with.
+</p>
+[% END %]
+
+[% PROCESS email_footer.tt %]

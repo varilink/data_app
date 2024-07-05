@@ -40,6 +40,9 @@
 # Join us
 - '/join_us': join_us
 
+# Membership (for 2024 AGM, not shown in menus)
+- '/membership': membership
+
 # Notify event
 - '/notify_event': notify_event
 
@@ -65,6 +68,11 @@
 - '/action/join_us': join_us
 # Join us successful
 - '/success_join_us': success_join_us
+
+# Membership (for 2024 AGM, not shown in menus)
+- '/action/membership': membership
+# Membership successful
+- 'success_membership': success_membership
 
 # Notify event
 - '/action/notify_event': notify_event
