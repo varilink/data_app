@@ -52,6 +52,14 @@ If this is set then this script will output the generated HTML that it uses for
 the Mailchimp template to a file. This file can then be downloaded and syntax
 checked.
 
+-y filepath
+The filepath to a file containing HTML that is to be inserted for subscribers
+who have registered an interest in latest DATA membership news.
+
+-z filepath
+The filepath to a file containing HTML that is to be inserted for subscribers
+who have NOT registered an interest in latest DATA membership news.
+
 EndofHelp
 ;
 
@@ -147,6 +155,16 @@ foreach my $arg ( @ARGV ) {
 
     # Valid output option, which must have a filepath value
     $option = 'output'; $getdir = 1;
+
+  } elsif ( $arg eq '-y' ) {
+
+    # Valid output option, which must have a filepath value
+    $option = 'member_insert'; $getpath = 1;
+
+  } elsif ( $arg eq '-z' ) {
+
+    # Valid output option, which must have a filepath value
+    $option = 'non_member_insert'; $getpath = 1;
 
   } else {
 
@@ -525,7 +543,13 @@ foreach my $segment (
   # all sections      -  Coming events plus news plus guidance (the works)
 
   next TEMPLATE if (
-    ( $segment eq 'events + news' && ! $params { news } )
+    (
+      # If there are either member news items to publish, or a member news
+      # specific insert, or a non-member news specific insert then we need an
+      # events plus member news segment; otherwsie, we don't.
+      $segment eq 'events + news' &&
+      !$params{news} && !$params{member_insert} && !$params{non_member_insert}
+    )
     ||
     ( $segment eq 'events + guidance' && ! $params { guidance } )
     ||
@@ -537,6 +561,8 @@ foreach my $segment (
   print "Producing template for segment=\"$segment\"\n" ;
 
   my $template = new Template ( {
+
+    ABSOLUTE => 1,
 
     ENCODING => 'utf8' ,
 
@@ -555,10 +581,17 @@ foreach my $segment (
     events => \@events
   } ;
 
-  $vars -> { news_items } = \@news_items
-    if $segment eq 'events + news' || $segment eq 'all sections' ;
-  $vars -> { guidance } = $guidance
-    if $segment eq 'events + guidance' || $segment eq 'all sections' ;
+  if ( $segment eq 'events only' ) {
+    $vars->{news_insert} = $params{non_member_insert}
+      if $params{non_member_insert};
+  }
+  elsif ( $segment eq 'events + news' || $segment eq 'all sections' ) {
+    $vars->{news_items} = \@news_items if @news_items;
+    $vars->{news_insert} = $params{member_insert} if $params{member_insert};
+  }
+  elsif ( $segment eq 'events + guidance' || $segment eq 'all sections' ) {
+    $vars->{guidance} = $guidance;
+  }
 
   $template -> process (
     'monthly_mailshot.tt' ,
