@@ -120,9 +120,11 @@ title = 'Diary Scheme'
                 <li class="orbit-slide">
                   <figure class="orbit-figure">
                     <img class="orbit-image"
-                    src="[% root %]/assets/img/news_items/big-bird-card.jpeg"
-                    alt="Twitter">
-                    <figcaption class="orbit-caption">Twitter</figcaption>
+                    src="[% root %]/assets/img/x-twitter.png"
+                    alt="X (formerly Twitter)">
+                    <figcaption class="orbit-caption">
+                      X (formely Twitter)
+                    </figcaption>
                   </figure>
                 </li>
                 <li class="orbit-slide">
@@ -160,7 +162,7 @@ title = 'Diary Scheme'
               </li>
               <li>
                 Tweets from the <a target="_blank"
-                href="https://twitter.com/DerbyAmPerfArts">DATA Twitter
+                href="https://x.com/DerbyAmPerfArts">DATA X (formerly Twitter)
                 account</a>.
               </li>
               <li>

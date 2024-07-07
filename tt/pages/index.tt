@@ -212,14 +212,15 @@
 
           <p class="text-center">
 
-            <span style="font-size: 3rem; color: #1DA1F2;">
-              <i class="fab fa-twitter"></i>
+            <span style="font-size: 3rem;">
+              <i class="fa-brands fa-square-x-twitter"></i>
             </span>
             <br>
             <a class="twitter-follow-button" data-show-count="false"
-            data-size="large" href="https://twitter.com/DerbyAmPerfArts">
-              Follow us on Twitter
-            </a>
+            data-size="large" href="https://x.com/DerbyAmPerfArts">
+              Follow us on X
+            </a><br>
+            (formerly Twitter)
 
           </p>
 

@@ -165,8 +165,8 @@
         We automatically post event updates to the <a
         href="https://www.facebook.com/DerbyArtsAndTheatreAssociation"
         target="_blank">DATA Facebook page</a> and Tweet them via the <a
-        href="https://twitter.com/DerbyAmPerfArts" target="_blank">DATA Twitter
-        account</a>. When we do so, we always link back to the <a
+        href="https://x.com/DerbyAmPerfArts" target="_blank">DATA X (formerly
+        Twitter) account</a>. When we do so, we always link back to the <a
         href="[% conf.root %]event/[% event.rowid %]">page for this event</a> on
         the DATA website, for full event details. However, we also include a
         summary message in the post/Tweet which varies according to how far away
