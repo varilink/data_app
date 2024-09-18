@@ -60,7 +60,11 @@
         <div class="row align-middle medium-unstack">
           <div class="columns medium-5 show-for-medium">
             <br>
-            <p>&copy; 2018 No rights reserved</p>
+            <p>
+              &copy;&nbsp;2018&nbsp;&#8209;&nbsp; 
+              <script>document.write(new Date().getFullYear())</script>
+              &nbsp;No&nbsp;rights&nbsp;reserved
+            </p>
           </div>
           <div class="medium-1 large-3 columns show-for-medium">
           </div>
@@ -81,7 +85,11 @@
             </ul>
           </div>
           <div class="columns small-12 show-for-small-only">
-            <p>&copy; 2018 No rights reserved</p>
+            <p>
+              &copy;&nbsp;2018&nbsp;&#8209;&nbsp; 
+              <script>document.write(new Date().getFullYear())</script>
+              &nbsp;No&nbsp;rights&nbsp;reserved
+            </p>
           </div>
         </div> [%# End of the row in the footer-data-bottom section %]
       </div>
