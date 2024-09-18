@@ -8,7 +8,7 @@
 
     <div class="row column">
 
-[% PROCESS h1.tt media = "member_societies" FILTER indent 6 %]
+[% PROCESS h1.tt media = "member_societies.webp" FILTER indent 6 %]
 
       <p class="lead">
         If you would like to support the aims* and work of DATA, you may wish to
