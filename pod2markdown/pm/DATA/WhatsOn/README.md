@@ -13,6 +13,10 @@ authenticated or have specific authorisation.
 Make an enquiry for a performing arts society that isn't yet a member of DATA to
 join. The enquiry gets emailed to the webmin.
 
+### membership
+
+Register an individual member.
+
 ### notify\_event
 
 Process an event notification via the event notification form. The details are
