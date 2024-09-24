@@ -6,7 +6,7 @@
 
 [%~ PROCESS header.tt %]
 
-[% PROCESS h1.tt media = "coming_events.webp" FILTER indent 4 %]
+[% PROCESS h1.tt media = "events-listing.webp" FILTER indent 4 %]
 
     <div class="row column">
 

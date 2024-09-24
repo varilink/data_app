@@ -8,7 +8,7 @@
 
     <div class="row column">
 
-[% PROCESS h1.tt media = "member_societies.webp" FILTER indent 6 %]
+[% PROCESS h1.tt media = "member-societies.webp" FILTER indent 6 %]
 
       <p class="lead">
         Are you aware of or are you involved with an amateur performing arts
