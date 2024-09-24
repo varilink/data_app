@@ -16,10 +16,10 @@ data-hover-pane="true" data-dropdown
 style=[% IF size == 'large' %]"width: 22em;"[% ELSE %]"width: 100%;"[% END %]>
   <div class="button-group [% size IF size %] stacked"
   style="margin-bottom: 0;">
-    <button class="button" type="submit" name="save_and_continue">
+    <button class="button submit" name="save_and_continue">
       Continue to Edit
     </button>
-    <button class="button" type="submit" name="save_and_exit">
+    <button class="button submit" name="save_and_exit">
       Exit
     </button>
 
@@ -30,7 +30,7 @@ style=[% IF size == 'large' %]"width: 22em;"[% ELSE %]"width: 100%;"[% END %]>
   caller        == 'rep_event_programme.tt'
 -%]
 
-    <button class="button" type="submit" name="save_and_online">
+    <button class="button submit" name="save_and_online">
       [% IF event.use_desc %]Update[% ELSE %]Enter[% END %] Online<span
       class="show-for-medium"> Promotion</span> Details
     </button>
@@ -42,13 +42,13 @@ style=[% IF size == 'large' %]"width: 22em;"[% ELSE %]"width: 100%;"[% END %]>
   caller        == 'rep_event_online.tt'
 -%]
 
-    <button class="button" type="submit" name="save_and_programme">
+    <button class="button submit" name="save_and_programme">
       Update Programme<span class="show-for-medium"> Listing</span> Details
     </button>
 
 [%~ END -%]
 
-    <button class="button" type="submit" name="save_and_preview">
+    <button class="button submit" name="save_and_preview">
       Preview<span class="show-for-medium"> Event</span>
     </button>
   </div>
@@ -61,7 +61,7 @@ class="button">
 
 [%~ IF rowid %]
 
-<button class="button alert" type="submit" name="delete">
+<button class="button submit alert" name="delete">
   Delete
 </button>
 

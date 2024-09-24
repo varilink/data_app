@@ -51,8 +51,10 @@ large
     <button
 [%~ IF button.id %] id="[% button.id %]"[% END %]
 [%~ IF button.name %] name="[% button.name %]"[% END %]
-[%~ IF button.type %] type="[% button.type %]"[% END %]
-    class="button
+[%~ IF button.type AND button.type != 'submit' %]
+ type="[% button.type %]"
+[%~ END %] class="button
+[%~ IF button.type AND button.type == 'submit' %] submit[% END %]
 [%~ IF conf.use_captcha %] g-recaptcha[% END %]
 [%~ IF button.colour %] [% button.colour %][% END %]"
 [%~ IF conf.use_captcha %]
@@ -71,8 +73,10 @@ large
     <button
 [%~ IF button.id %] id="[% button.id %]"[% END %]
 [%~ IF button.name %] name="[% button.name %]"[% END %]
-[%~ IF button.type %] type="[% button.type %]"[% END %]
-    class="button
+[%~ IF button.type AND button.type != 'submit' %]
+ type="[% button.type %]"
+[%~ END %] class="button
+[%~ IF button.type AND button.type == 'submit' %] submit[% END %]
 [%~ IF button.colour %] [% button.colour %][% END %]"
 [%~ IF button.action %] formaction="[% button.action %]"[% END %]
 [%~ IF button.disabled %] disabled[% END %]>

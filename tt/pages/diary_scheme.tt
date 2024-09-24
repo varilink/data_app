@@ -187,7 +187,7 @@ title = 'Diary Scheme'
                   <input id="A5" name="pagesize" type="radio" value="A5">
                   <label for="A5">A5</label>
                 </p>
-                <input class="button" type="submit" value="Download Flyer">
+                <input class="button submit" value="Download Flyer">
               </form>
             </div>
           </div>
