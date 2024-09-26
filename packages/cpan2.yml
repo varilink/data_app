@@ -1,0 +1,21 @@
+# ------------------------------------------------------------------------------
+# packages/cpan2.yml
+# ------------------------------------------------------------------------------
+
+---
+
+- App::Genpass
+- CGI::Application::Plugin::Config::Context
+- Data::FormValidator::Constraints::MethodsFactory
+- Data::Password::Check
+- Facebook::OpenGraph
+- HTML::HTMLDoc
+- JSON::XS
+- List::MoreUtils
+- List::SomeUtils::XS
+- Mo
+- Mozilla::CA
+- Package::Stash::XS
+- PDF::API2
+- Ref::Util
+- Type::Tiny::XS

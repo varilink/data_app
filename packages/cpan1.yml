@@ -1,0 +1,12 @@
+# ------------------------------------------------------------------------------
+# packages/cpan1.yml
+# ------------------------------------------------------------------------------
+
+---
+
+- Config::Context
+- Data::Recursive::Encode
+- Ref::Util::XS
+- Test::AllModules
+- Test::DiagINC
+- Test::Mock::Furl
