@@ -1142,7 +1142,7 @@ online listing.
     $event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
     $event -> delete ( $self -> dbh ) ;
     $redirect .= $self -> conf -> param ( 'onDelete' ) ;
-    got REDIRECT ;
+    goto REDIRECT ;
 
   }
 
