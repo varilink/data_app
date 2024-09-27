@@ -12,6 +12,7 @@ use warnings ;
 
 use base qw / DATA::Main / ;
 
+use Data::Dumper; # For use by Log Dispatch when configured
 use Encode qw / encode / ;
 use HTML::HTMLDoc ;
 use PDF::API2 ;
@@ -803,7 +804,13 @@ programme details.
 =cut
 
   my $self = shift ;
+  my $env = $self -> conf -> param ( 'env' ) ;
   my $query = $self -> query ;
+
+  $self->log->notice(
+    "Entered event_programme run mode of WhatsOn application\n"
+  );
+  $self->log->debug( Dumper $query );
 
   # Initialise redirect with the root
   # We will append the location within the root according to the submit button

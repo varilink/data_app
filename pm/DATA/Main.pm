@@ -18,6 +18,7 @@ use base qw / CGI::Application / ;
 use CGI::Application::Plugin::AnyTemplate ;
 use CGI::Application::Plugin::Config::Context ;
 use CGI::Application::Plugin::DBH qw /dbh_config dbh/ ;
+use CGI::Application::Plugin::LogDispatch ;
 use CGI::Application::Plugin::Session ;
 
 # Use DATA customisation of CGI::Application::Plugin::Config::Context
@@ -44,6 +45,7 @@ use DATA::Plugin::ValidateRM ;
 sub cgiapp_init {
 
   my $self = shift ;
+  my $env = $self -> conf -> param ( 'env' ) ;
 
   $self -> run_modes (
 
@@ -51,6 +53,22 @@ sub cgiapp_init {
     'throw_error'   => 'throw_error'   ,
     'AUTOLOAD'      => \&auto_run_mode
 
+  ) ;
+
+  my $min_log_level = 'emergency';
+  if ( defined $env -> { file_log_level } ) {
+    $min_log_level = $env -> { file_log_level };
+  }
+
+  $self -> log_config (
+    LOG_DISPATCH_MODULES => [
+      {
+        module    => 'Log::Dispatch::File' ,
+        name      => 'file' ,
+        filename  => '/tmp/data_app.log',
+        min_level => $min_log_level
+      },
+    ]
   ) ;
 
 }
