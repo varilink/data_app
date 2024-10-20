@@ -1,30 +1,76 @@
-[%~ UNLESS error # Initial State %]
+[%#
+--------------------------------------------------------------------------------
+tt/partials/formfields/event/event_description.tt
+--------------------------------------------------------------------------------
 
+This is the formfield for the "online promotiion" format of an event
+description. This takes the form of a card in Zurb's "Foundation for Sites". The
+card can have two sections, the upper section is optional and can contain a
+promotional image for the event. The lower section must always be present and
+contains the event's text description. We use the TinyMCE WYSIWYG editor in
+inline mode to faciliate the edit of this event card.
+
+This is a long file, so it's useful to summarise its structure:
+  - [Branch]
+      - Not the error state
+          - [Branch]
+              - No fuller description provided
+              - A fuller description with image provided
+              - A fuller description without an image is provided
+      - The error state
+          - [Branch]
+              - No fuller description provided
+              - A fuller description with image provided
+              - A fuller description without an image is provided
+          - Error messages
+  - Javascript for inclusion in the page footer
+
+%]
+
+[%~ UNLESS error # There are no input errors to report %]
+
+[%#~
+--------------------------------------------------------------------------------
+Not the error state
+--------------------------------------------------------------------------------
+-%]
+
+<!-- event name from the programme format event details -->
 <input type="hidden" name="event_name" value="[% event.name FILTER html %]">
-
-<input type="hidden" name="click_me"
-value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
-
-<input type="hidden" name="event_default_description" value=
-"[% PROCESS event_default_description.tt FILTER collapse FILTER html %]">
+<!-- placeholder image to be replaced by the chosen event image -->
+<input type="hidden" name="click_me" value='<p><img src="
+[%~ conf.image_upload_path %]click_me.jpg"></p>'>
+<!-- starting description build from  the programme format event details -->
+<input type="hidden" name="event_default_description" value="
+[%~ PROCESS event_default_description.tt FILTER collapse FILTER html %]">
 
 <div class="event-card">
 
   <div class="event-card-divider"><h5>[% event.name %]</h5></div>
 
-[%~ IF event.use_desc == 0 %]
+[%~ IF event.use_desc == 0
+# A description for the event that is fuller than the programme listing is NOT
+# selected, so the event card is built from the programme listing details. We
+# include a hidden image so that is may be revealed if the user selects a fuller
+# description with an event image.
+%]
 
-[%~#----------------------------------------------------------------------------
-
-  # Default Card (includes hidden image so that it may be revealed if needed)
-
-#-----------------------------------------------------------------------------%]
+[%#~
+--------------------------------------------------------------------------------
+No fuller description provided
+--------------------------------------------------------------------------------
+-%]
 
   <div id="mceEventImage" class="card-image event-use-desc-yes-with-image hide">
+
 [%~ IF event.image %]
+
     <p><img src="[% event.image %]"></p>
+
 [%~ ELSE %]
+
     <p><img src="[% conf.image_upload_path %]click_me.jpg"></p>
+
 [%~ END %]
   </div>
 
@@ -49,11 +95,11 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
 
 [%~ ELSIF event.use_desc == 1 %]
 
-[%~#----------------------------------------------------------------------------
-
-  # Custom Card with Image
-
-#-----------------------------------------------------------------------------%]
+[%#~
+--------------------------------------------------------------------------------
+A fuller description with image provided
+--------------------------------------------------------------------------------
+-%]
 
   <div id="mceEventImage" class="card-image event-use-desc-yes-with-image">
 [%~ IF event.image %]
@@ -75,11 +121,11 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
 
 [%~ ELSIF event.use_desc == 2 %]
 
-[%~#----------------------------------------------------------------------------
-
-  # Custom Card without Image
-
-#-----------------------------------------------------------------------------%]
+[%#~
+--------------------------------------------------------------------------------
+A fuller description without an image is provided
+--------------------------------------------------------------------------------
+-%]
 
   <div id="mceEventImage"
   class="card-image event-use-desc-yes-with-image hide">
@@ -108,6 +154,12 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
 
 [%~ ELSE # Error State %]
 
+[%#~
+--------------------------------------------------------------------------------
+The error state
+--------------------------------------------------------------------------------
+-%]
+
 <input type="hidden" name="event_name">
 
 <input type="hidden" name="click_me">
@@ -120,11 +172,11 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
 
 [%~ IF event_use_desc == 0 %]
 
-[%~#----------------------------------------------------------------------------
-
-  # Default Card (includes hidden image so that it may be revealed if needed)
-
-#-----------------------------------------------------------------------------%]
+[%#~
+--------------------------------------------------------------------------------
+No fuller description provided
+--------------------------------------------------------------------------------
+-%]
 
   <div id="mceEventImage"
   class="card-image event-use-desc-yes-with-image hide">
@@ -146,11 +198,11 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
 
 [%~ ELSIF event_use_desc == 1 %]
 
-[%~#----------------------------------------------------------------------------
-
-  # Custom Card with Image
-
-#-----------------------------------------------------------------------------%]
+[%#~
+--------------------------------------------------------------------------------
+A fuller description with image provided
+--------------------------------------------------------------------------------
+-%]
 
   <div id="mceEventImage" class="card-image event-use-desc-yes-with-image">
 [%~ IF mceEventImage %]
@@ -170,11 +222,11 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
 
 [%~ ELSIF event_use_desc == 2 %]
 
-[%~#----------------------------------------------------------------------------
-
-  # Custom Card without Image
-
-#-----------------------------------------------------------------------------%]
+[%#~
+--------------------------------------------------------------------------------
+A fuller description without an image is provided
+--------------------------------------------------------------------------------
+-%]
 
   <div id="mceEventImage"
   class="card-image event-use-desc-yes-with-image hide">
@@ -196,6 +248,12 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
 [%~ END # IF event_use_desc == 0 %]
 
 </div>
+
+[%#~
+--------------------------------------------------------------------------------
+Error messages
+--------------------------------------------------------------------------------
+-%]
 
 <small class="form-error is-visible">
 
@@ -260,28 +318,27 @@ value='<p><img src="[% conf.image_upload_path %]click_me.jpg"></p>'>
 
 [%~ END # UNLESS error %]
 
-[%~#----------------------------------------------------------------------------
-
-  # Now define a Javascript block for inclusion in the page footer.
-
-#-----------------------------------------------------------------------------%]
+[%#~
+--------------------------------------------------------------------------------
+Javascript for inclusion in the page footer
+--------------------------------------------------------------------------------
+-%]
 
 [%~ global.script.event_description = BLOCK %]
 
-[%~#----------------------------------------------------------------------------
+/*
+The tinymce.init configuration for the textual event description that occupies
+the lower half of an event card that includes an image and the whole event card
+when there is no image provided.
+*/
+tinymce.init( {
+  entity_encoding: 'raw',
+  init_instance_callback: function(editor) {
+    // Save the editor state for the detection of unsaved changes
+    editor.save();
+    origFormState = $('form').serialize();
 
-  # TinyMCE Initialisation for mceEventDescription
-
-#-----------------------------------------------------------------------------%]
-
-// tinymce init for the event description
-tinymce . init ( {
-  entity_encoding: 'raw' ,
-  init_instance_callback: function ( editor ) {
-    editor . save ( ) ;
-    origFormState = $ ( 'form' ) .serialize ( ) ;
-
-[%~ IF conf.jsDebug -%]
+[%~ IF conf.jsDebug # Javascript debug to the console enabled -%]
 
     console . log ( 'init_instance_callback for mceEventDescription called' ) ;
     console . log ( 'Form state set to:' ) ;
@@ -291,190 +348,157 @@ tinymce . init ( {
 
   } ,
   inline: true ,
+  license_key: 'gpl',
   menubar: false ,
   plugins: 'link' ,
   selector : '#mceEventDescription' ,
-  skin: false ,
-  toolbar: 'bold italic superscript | link'
+  skin_url: '/assets/css' ,
+  toolbar: 'bold italic superscript | link',
 } ) ;
 
-[%~ #------------------------------------------------------------------------ %]
-[%~ # TinyMCE Initialisation for mceEventImage                                %]
-[%~ #-------------------------------------------------------------------------%]
-
-tinymce . init ( {
-
-[%~ # Dont force URLs to be absolute or relative depending on relative_urls  -%]
-
-  convert_urls: false ,
-
-[%~ # Store characters in non-entity form except for XML default entities    -%]
-
-  entity_encoding: 'raw' ,
-
-[%~ # Exclude image description setting from the image plugin dialog         -%]
-
-  image_description: false ,
-
-[%~ # Disable the image dimensions input field in the image plugin dialog    -%]
-
-  image_dimensions: false ,
-
-[%~ # Use upload handler to intercept 413 from nginx with meaningful message -%]
-
-  images_upload_handler: function ( blobInfo , success , failure ) {
-
-[%~ IF conf.jsDebug %]
-
-    console . log ( 'images_upload_handler called with filename:' ) ;
-    console . log ( blobInfo . filename ( ) ) ;
-    console . log ( blobInfo . blobUri ( ) ) ;
-
-[%~ END -%]
-
-    formData = new FormData ( ) ;
-    formData . append (
-      'file' , blobInfo . blob ( ) , blobInfo . filename ( )
-    ) ;
-    var jqxhr = $ . ajax ( {
-      url: '[% conf.image_upload_handler %]' ,
-      contentType: false ,
-      data: formData ,
-      dataType: 'json' ,
-      method: 'POST' ,
-      processData: false ,
-      xhrFields: { withCredentials: false }
-    } )
-    .done ( function ( response ) {
-
-[%~ # Successfully uploaded image, return success with location from json    -%]
+/*
+The tinymce.init configuration for the event image that occupies the upper half
+of an event card that includes an image. It's possible to create an event card
+with no image provided.
+*/
+tinymce.init({
+  convert_urls: false,
+  entity_encoding: 'raw',
+  image_description: false,
+  image_dimensions: false,
+  images_upload_handler: function(blobInfo, progress) {
+    return new Promise(function(resolve, reject) {
 
 [%~ IF conf.jsDebug -%]
 
-      console . log ( 'Successful file upload, response object:' ) ;
-      console . log ( response ) ;
+      console.log('images_upload_handler called with filename:');
+      console.log(blobInfo.filename());
 
 [%~ END -%]
 
-      success ( response . location ) ;
-    } )
-    .fail ( function ( jqxhr , textStatus , errorThrown ) {
-
-[%~ # Report error uploading                                                  %]
+      formData = new FormData();
+      formData.append('file', blobInfo.blob(), blobInfo.filename());
+      var jqXHR = $.ajax({
+        url: '[% conf.images_upload_url %]',
+        contentType: false,
+        data: formData,
+        dataType: 'json',
+        method: 'POST',
+        processData: false,
+        xhr: function() {
+          var xhr = new XMLHttpRequest();
+          xhr.upload.onprogress = function(e) {
+            progress(e.loaded / e.total + 100);
+          };
+          return xhr;
+        },
+        xhrFields: {
+          withCredentials: false
+        }
+      })
+      .done(function(response, textStatus, jqXHR) {
 
 [%~ IF conf.jsDebug -%]
 
-      console . log (
-        'Upload error with jqxhr, textStatus and errorThrown as follows:'
-        ) ;
-      console . log ( jqxhr ) ;
-      console . log ( textStatus ) ;
-      console . log ( errorThrown ) ;
+        console.log('Successful response received as follows:');
+        console.log(response);
 
 [%~ END -%]
 
-      if ( errorThrown == 413 ) {
-        failure ( 'File is too large, must not exceed 2Mbytes.' ) ;
-      } else {
-        failure ( textStatus ) ;
-      }
-    } )
-  } ,
-
-  imagetools_proxy: '[% conf.image_proxy_handler %]' ,
-
-[%~ # Show the edit image and imageoptions buttons on the images toolbar     -%]
-
-  imagetools_toolbar: 'editimage imageoptions' ,
-
-[%~ # Execute actions whenever this editor instance is initialised           -%]
-
-  init_instance_callback: function ( editor ) {
-
-[%~ # Save the editor contents and refresh the captured form state           -%]
-[%~ # Editor instance initialisation can happen asynchronously               -%]
-
-    editor . save ( ) ;
-    origFormState = $ ( 'form' ) . serialize ( ) ;
+        resolve(response.location);
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
 
 [%~ IF conf.jsDebug -%]
 
-    console . log ( 'init_instance_callback for mceEventImage called' ) ;
-    console . log ( 'Form state set to:' ) ;
-    console . log ( origFormState ) ;
+        console.log(
+          'Upload error with jqXHR, textStatus and errorThrown as follows:'
+        );
+        console.log(jqXHR);
+        console.log(jqXHR.responseText);
+        console.log(textStatus);
+        console.log(errorThrown);
 
 [%~ END -%]
 
-  } ,
+        reject(jqXHR.responseText);
+      })
+    });
+  },
+  images_upload_url: '[% conf.images_upload_url %]',
+  init_instance_callback: function(editor) {
+    // Save the editor state for the detection of unsaved changes
+    editor.save();
+    origFormState = $('form').serialize();
 
-[%~ # Work in inline mode                                                    -%]
+[%~ IF conf.jsDebug # Javascript debug to the console enabled -%]
 
-  inline: true ,
+    console.log('init_instance_callback for mceEventImage called');
+    console.log('Form state set to:');
+    console.log(origFormState);
 
-[%~ # Don't show the menu bar                                                -%]
+[%~ END -%]
 
-  menubar: false ,
-
-[%~ # Use the image and imagetools plugins                                   -%]
-
-  plugins: 'image imagetools' ,
-
-[%~ # Attach this editor to the element with id mceEventImage                -%]
-
-  selector : '#mceEventImage' ,
-
-[%~ # Create event handlers                                                  -%]
-
-  setup : function ( editor ) {
-
-[%~ # Add handler for help appropriate to "add" or "change" image scenarios  -%]
-
-    editor . on ( 'change undo redo' , function ( e ) {
+  },
+  inline: true,
+  license_key: 'gpl',
+  menubar: false,
+  plugins: 'image',
+  selector : '#mceEventImage',
+  setup : function(editor) {
+    // Show context sensitive help for ADDING or CHANGING an image.
+    editor.on('change undo redo', function(e) {
       if (
-        $( '#mceEventImage img' ) . attr ( 'data-mce-src' ) ==
+        $('#mceEventImage img').attr('data-mce-src') ==
         '[% conf.image_upload_path %]click_me.jpg'
       ) {
-
-[%~ # We still have the "click me" image so give help for ADDING an image    -%]
-
-        $( '#addImageHelp'    ) . removeClass ( 'hide' ) ;
-        $( '#changeImageHelp' ) . addClass    ( 'hide' ) ;
+        // Image added, so show help for ADDING an image.
+        $('#addImageHelp').removeClass('hide');
+        $('#changeImageHelp').addClass('hide');
       } else {
-
-[%~ # We have already added our own image so show help for changing an image -%]
-
-        $( '#addImageHelp'    ) . addClass    ( 'hide' ) ;
-        $( '#changeImageHelp' ) . removeClass ( 'hide' ) ;
+        // Image added, so show help for CHANGING an image.
+        $('#addImageHelp').addClass('hide');
+        $('#changeImageHelp').removeClass('hide');
       }
-    } ) ;
-
-[%~ # Open image dialog with single click when "click me" is showing         -%]
-
-    editor . on ( 'click' , function ( e ) {
-      if (
-        $( '#mceEventImage img' ) . attr ( 'data-mce-src' ) ==
-        '[% conf.image_upload_path %]click_me.jpg'
-      ) {
-        tinyMCE . activeEditor . execCommand ( 'mceImage' ) ;
-        e . preventDefault ;
-        return false ;
+    });
+    // Show the image plugin dialog whenever the image is clicked.
+    editor.on('click', function(e) {
+      //tinyMCE.activeEditor.execCommand('mceImage');
+      editor.windowManager.open({
+        title: 'Insert Image',
+        body: {
+          type: 'panel',
+          items: [
+            {
+              type: 'urlinput',
+              name: 'Image',
+              label: 'Select an image file',
+              filetype: 'image',
+              placeholder: 'Click to chose an image',
+              picker_text: 'This is a picker'
+            }
+          ]
+        }
+      });
+      e.preventDefault;
+      return false;
+    });
+    // Prevent keyboard actions in the image editor; for example the delete key.
+    editor.on('keydown', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    });
+    editor.on('OpenWindow', function(e) {
+      var win =  editor.windowManager.getWindows()[0];
+      var srcField = win.find('#src');
+      if (srcField) {
+        srcField.disabled(true);
       }
-    } ) ;
-
-[%~ # Prevent keyboard actions in the image, e.g. delete key                 -%]
-
-    editor . on ( 'keydown' , function ( e ) {
-      e . preventDefault ( ) ;
-      e . stopPropagation ( ) ;
-      return false ;
-    } ) ;
-
+    });
   } ,
-
-  skin: false ,
-
-  toolbar: false ,
-
-} ) ;
+  skin_url: '/assets/css',
+  toolbar: false // We show the image plugin dialog on click instead.
+} );
 
 [%~ END # global.script.event_description = BLOCK %]
