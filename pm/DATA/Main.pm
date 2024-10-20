@@ -120,6 +120,11 @@ application, e.g. "Auth", "WhatsOn", etc.
 
   my ( $self , $run_mode ) = @_ ;
 
+  $self->log->notice(
+    "Entered auto_run_mode run mode of the Main application\n"
+  );
+  $self->log->debug( Dumper( $self->conf->context ) );
+
   my $tmpl = $self -> template -> load ;
 
   if (
