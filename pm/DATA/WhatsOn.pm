@@ -804,7 +804,6 @@ programme details.
 =cut
 
   my $self = shift ;
-  my $env = $self -> conf -> param ( 'env' ) ;
   my $query = $self -> query ;
 
   $self->log->notice(
