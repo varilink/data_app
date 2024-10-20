@@ -22,8 +22,8 @@
 
 <base href="[% conf.root %]">
 <link rel="stylesheet" href="[% conf.root %]assets/css/main.css">
-[%~ IF psgi.REQUEST_URI.match ( '^/secure/(?:admin|rep)/event/online/' ) %]
-<link rel="stylesheet" href="[% conf.root %]assets/css/tinymce.css">
+[%~ IF psgi.REQUEST_URI.match ( '^/+secure/(?:admin|rep)/event/online/' ) %]
+<script src="[% conf.root %]/assets/js/tinymce.js" referrerpolicy="origin"></script>
 [%~ END %]
 
 [%~ IF

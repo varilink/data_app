@@ -96,9 +96,6 @@
     </footer>
     <!-- End of Footer -->
     <script src="[% conf.root %]assets/js/main.js"></script>
-[%~ IF psgi.REQUEST_URI.match ( '^/secure/(?:admin|rep)/event/online/' ) %]
-    <script src="[% conf.root %]assets/js/tinymce.js"></script>
-[%~ END %]
     <script>
 
       $ ( function ( ) { [%# Only run Javascript when the DOM is ready %]
