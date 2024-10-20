@@ -83,7 +83,7 @@ in JPG/JPEG, PNG or GIF format and no  larger that 2MBytes in size.
 
   <div class="columns shrink"> [%# Right hand column containing card %]
 
-[% PROCESS event_description.tt FILTER indent 4 %]
+[%- PROCESS event_description.tt FILTER indent 4 %]
 
   </div> [%# END of the right hand column %]
 
