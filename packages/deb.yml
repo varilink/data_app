@@ -28,12 +28,15 @@
 - libextutils-helpers-perl
 - libfile-homedir-perl
 - libfile-libmagic-perl
+- libfile-slurp-perl
 - libfont-ttf-perl
 - libfurl-perl
 - libhash-case-perl
 - libhash-merge-perl
+- libhtml-packer-perl
 - libjson-perl
 - liblist-allutils-perl
+- libmail-chimp3-perl
 - libmath-random-isaac-xs-perl
 - libmath-random-secure-perl
 - libmime-base64-urlsafe-perl

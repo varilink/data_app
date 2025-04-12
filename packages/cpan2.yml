@@ -6,6 +6,7 @@
 
 - App::Genpass
 - CGI::Application::Plugin::Config::Context
+- CSS::Inliner
 - Data::FormValidator::Constraints::MethodsFactory
 - Data::Password::Check
 - Facebook::OpenGraph

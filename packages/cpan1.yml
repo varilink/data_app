@@ -4,8 +4,11 @@
 
 ---
 
+- Badger
 - Config::Context
 - Data::Recursive::Encode
+- HTML::Query
+- Image::Grab
 - Ref::Util::XS
 - Test::AllModules
 - Test::DiagINC
