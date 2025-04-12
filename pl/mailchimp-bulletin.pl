@@ -2,7 +2,6 @@ use strict ;
 use warnings ;
 
 use Config::General ;
-use Config::Simple ;
 use CSS::Inliner ;
 use Data::Dumper ;
 use DateTime ;
@@ -14,15 +13,14 @@ use HTML::Packer ;
 use Image::Grab qw / grab / ;
 use Mail::Chimp3 ;
 use MIME::Base64 ;
-use DATA::WhatsOn::Event ;
-use DATA::WhatsOn::NewsItem ;
 use Template ;
 
-#-------------------------------------------------------------------------------
+use DATA::WhatsOn::Event ;
+use DATA::WhatsOn::NewsItem ;
 
-#
-# Process the command line arguments
-#
+#-------------------------------------------------------------------------------
+# 1. Process the command line arguments.
+#-------------------------------------------------------------------------------
 
 my $help = << 'EndofHelp'
 Options:
@@ -30,35 +28,46 @@ Options:
 -h
 Print this message and exit. Any other options provided are ignored.
 
+-a filepath
+The filepath to a file containing HTML that is an announcment for subscribers
+who have NOT registered an interest in "Latest DATA Membership News".
+
 -d n
 The number of days (integer n) from today that event listings should start from.
 If this is omitted then they will start from the current system date.
 
 -e n
-The number of events (integer n) to list. If this is omitted then this will
-default to twelve.
-
--g filepath
-The filepath to a file containing HTML that is to be used in the guidance to
-member representatives section. If this is omitted then that section will not
+The number of events (integer n) to list. If this is omitted then no events will
 be included in the bulletin.
 
+-g filepath
+The filepath to a file containing HTML that is an announcement for subscribers
+who have registered an interest in "Guidance to Member Society Representatives".
+
+-m filepath
+The filepath to a file containing HTML that is an announcement for subscribers
+who have registered an interest in "Latest DATA Membership News".
+
 -n n
-The number of news items (integer n) to list. If this is omitted then that
-section will not be included in the bulletin.
+The number of news items (integer n) to list. If this is omitted then that no
+news items will be included in the bulletin and if -m is also ommitted then
+there will be no news section in the bulletin.
 
 -o filepath
 If this is set then this script will output the generated HTML that it uses for
 the Mailchimp template to a file. This file can then be downloaded and syntax
 checked.
 
--y filepath
-The filepath to a file containing HTML that is to be inserted for subscribers
-who have registered an interest in latest DATA membership news.
+-p n
+Pin events to the top of the bulletin If this is omitted or set to a negative
+value, e.g. 0, then any news insert and/or news items will appear above events.
+However, if this flag is provided and set to a positive value, e.g. 1, then
+events will be pinned at the top of the bulletin.
 
--z filepath
-The filepath to a file containing HTML that is to be inserted for subscribers
-who have NOT registered an interest in latest DATA membership news.
+-s string
+This option sets a custom subject line for the bulletin email. If the bulletin
+the regular monthly bulletin to advertise upcoming events then this can be
+omitted and the subject line will be derived automatically.
 
 EndofHelp
 ;
@@ -66,20 +75,36 @@ EndofHelp
 my %params ;
 
 my $option  ; # Used to capture valid options
-my $getint  ; # Used to indicate that an integer value is expected for an option
-my $getpath ;  # Used to indicate that a filepath value for an existing file is
-              # expected for an option
-my $getdir  ; # Used to indicate that a filepage value for a new file but within
+my $getdir  ; # Used to indicate that a filepath value for a new file but within
               # an existing directory is expected for an option
+my $getint  ; # Used to indicate that an integer value is expected for an option
+my $getpath ; # Used to indicate that a filepath value for an existing file is
+              # expected for an option
+my $getstr  ; # Used to indicate that a string value is expected for an option
 
 ARG:
 foreach my $arg ( @ARGV ) {
 
-  if ( $option && ( $getint || $getpath || $getdir ) ) {
+  if ( $option && ( $getdir || $getint || $getpath || $getstr ) ) {
 
     # Check for valid values for an option flag on the previous loop
 
-    if ( $getint ) {
+    if ( $getdir ) {
+
+      # Look for a filepath value for an option and test that the directory of
+      # the filepath exists. By contrast to $getpath this option will create a
+      # file so the file itself doesn't need to exist already, only the
+      # directory within which the file will reside.
+      my $dir = dirname $arg ;
+      unless ( -e $dir && -e $dir ) {
+
+        print STDERR "Directory for output file does not exist\n" ;
+        print STDERR $help ;
+        exit ;
+
+      }
+
+    } elsif ( $getint ) {
 
       # Look for an integer value for an option
       unless ( $arg eq int ( $arg ) && $arg > 0 ) {
@@ -102,21 +127,6 @@ foreach my $arg ( @ARGV ) {
 
       }
 
-    } elsif ( $getdir ) {
-
-      # Look for a filepath value for an option and test that the directory of
-      # the filepath exists. By contrast to $getpath this option will create a
-      # file so the file itself doesn't need to exist already, only the
-      # directory within which the file will reside.
-      my $dir = dirname $arg ;
-      unless ( -e $dir && -e $dir ) {
-
-        print STDERR "Directory for output file does not exist\n" ;
-        print STDERR $help ;
-        exit ;
-
-      }
-
     }
 
     $params { $option } = $arg ;
@@ -125,26 +135,40 @@ foreach my $arg ( @ARGV ) {
 
   }
 
-
   if ( $arg eq '-h' ) {
 
     print $help ;
     exit ;
 
+  } elsif ( $arg eq '-a') {
+
+    # Valid announcement (subscribers who have NOT registered an interest in
+    # "Latest DATA Membership News") option, which must have a filepath value.
+
+    $option = 'non_member_insert'; $getpath = 1;
+
   } elsif ( $arg eq '-d' ) {
 
-    # Valid days option, which must have an integer value
+    # Valid days option, which must have an integer value.
     $option = 'days' ; $getint = 1 ;
 
   } elsif ( $arg eq '-e') {
 
-    # Valid events option, which must have an integer value
+    # Valid events option, which must have an integer value.
     $option = 'events'; $getint = 1 ;
 
   } elsif ( $arg eq '-g' ) {
 
-    # Valid guidance option, which must have a filepath value
+    # Valid announcement (subscribers who have registered an interest in
+    # "Guidance to Member Society Representatives"), which must have a filepath
+    # value.
     $option = 'guidance'; $getpath = 1;
+
+  } elsif ( $arg eq '-m' ) {
+
+    # Valid announcement (subscribers who NOT registered an interest in "Latest
+    # DATA Membership News") option, which must have a filepath value.
+    $option = 'member_insert'; $getpath = 1;
 
   } elsif ( $arg eq '-n' ) {
 
@@ -156,15 +180,15 @@ foreach my $arg ( @ARGV ) {
     # Valid output option, which must have a filepath value
     $option = 'output'; $getdir = 1;
 
-  } elsif ( $arg eq '-y' ) {
+  } elsif ( $arg eq '-p' ) {
 
-    # Valid output option, which must have a filepath value
-    $option = 'member_insert'; $getpath = 1;
+    # Valid pin_events option, which must have an integer value
+    $option = 'pin_events'; $getint = 1 ;
 
-  } elsif ( $arg eq '-z' ) {
+  } elsif ( $arg eq '-s' ) {
 
-    # Valid output option, which must have a filepath value
-    $option = 'non_member_insert'; $getpath = 1;
+    # Valid output option, which must have a string value
+    $option = 'subject'; $getstr = 1;
 
   } else {
 
@@ -176,30 +200,22 @@ foreach my $arg ( @ARGV ) {
 
 }
 
-$params { events } = 12 unless $params { events } ;
-
+#-------------------------------------------------------------------------------
+# 2. Load the configuration.
 #-------------------------------------------------------------------------------
 
-#
-# Load up configuration
-#
-
-my $ini = new Config::Simple (
-  '/usr/local/etc/DATA/derbyartsandtheatre.org.uk.ini'
+my $cObj = new Config::General (
+  -ConfigFile => "$ENV{'DATA_CONF'}/app.cfg" ,
+  -IncludeRelative => 'yes',
+  -UseApacheInclude => 'yes'
 ) ;
-
-my $home = $ini -> param ( 'home' ) ;
-
-my $cObj = new Config::General ( "$ENV{'DATA_CONF'}/app.cfg" ) ;
 my %cHash = $cObj -> getall ;
 my $env = $cHash { env } ;
 my $upload_path = $env -> { image_upload_path } ;
 
 #-------------------------------------------------------------------------------
-
-#
-# Derive today as a datetime and offset it if we've been told to
-#
+# 3. Derive today as a datetime and offset it if we've been told to.
+#-------------------------------------------------------------------------------
 
 my $today = DateTime -> today ;
 my $date_to_use = $today -> clone ;
@@ -217,33 +233,36 @@ print  'Building bulletin as of '                    .
   $date_to_use -> year . "\n" ;
 
 my $month = $date_to_use -> month_name . ' '  . $date_to_use -> year ;
-my $bulletin = 'DATA Bulletin - ' . $month ;
 
-print "Building a bulletin called $bulletin\n" ;
+my $bulletin;
+if ( $params { subject } ) {
+  $bulletin = $params { subject } ;
+} else {
+  $bulletin = 'DATA Bulletin - ' . $month ;
+}
+
+print "Building a bulletin called \"$bulletin\"\n" ;
 
 #-------------------------------------------------------------------------------
-
-#
-# Create the mailchimp API object ready to use
-#
+# 4. Create the mailchimp API object ready to use.
+#-------------------------------------------------------------------------------
 
 my $mailchimp = new Mail::Chimp3 (
 
-  api_key => $env -> { mailchimp_api_key }
+  api_key => $cHash { mailchimp } { api_key }
 
 ) ;
 
 my $response ; # We will use to capture Mailchimp API responses throughout
 
 #-------------------------------------------------------------------------------
-
-#
-# Clear down any content that we are obviously replacing. We do this by deleting
-# objects in the following sequence:
-# 1. Images;
-# 2. Folders (in the content management system) that contain the images;
-# 3. Campaigns;
-# 4. Templates.
+# 5. Clear down any content that we are obviously replacing. We do this by
+# deleting objects in the following sequence:
+#   i.   Images;
+#   ii.  Folders (in the content management system) that contain the images;
+#   iii. Campaigns;
+#   iv.  Templates.
+#-------------------------------------------------------------------------------
 
 print "***** STARTING CLEARDOWN *****\n" ;
 
@@ -252,23 +271,26 @@ my $one_day = new DateTime::Duration ( { days  => 1 }  ) ;
 my $yday = $today -> clone ;
 $yday -> subtract ( $one_day ) ;
 
-#-------------------------------------------------------------------------------
-# 1. Images
+#----------
+# i. Images
+#----------
 
 $response = $mailchimp -> file_manager_files (
-  count              => 30        , # Up to 30, which should be sufficient
-  since_created_at  => "$yday"  , # Created since yesterday
-  type              => 'image'  , # It is an image file
+  count             => 30     , # Up to 30, which should be sufficient
+  since_created_at => "$yday" , # Created since yesterday
+  type             => 'image' , # It is an image file
 ) ;
 
-# Double check that this is truly a file that we want to delete.
-# If it is then it will be in a folder whose name is the same as this month's
-# bulletin name.
 foreach my $image ( @{ $response -> { content } -> { files } } ) {
+
+  # Double check that this is truly an image that we want to delete. If it is
+  # then it will be in a folder whose name is the same as the bulletin's name
+  # since we put all images associated with a bulletin in a folder that is
+  # specific to that bulletin.
 
   if ( $image -> { folder_id } ) {
 
-    # This image is in a folder. Find out if it's the correct one.
+    # This image is in a folder. Find out if it is the bulletin's folder.
 
     $response = $mailchimp -> file_manager_folder (
       folder_id => $image -> { folder_id }
@@ -291,8 +313,9 @@ foreach my $image ( @{ $response -> { content } -> { files } } ) {
 
 }
 
-#-------------------------------------------------------------------------------
-# 2. Folders
+#------------
+# ii. Folders
+#------------
 
 $response = $mailchimp -> file_manager_folders (
   since_created_at => "$yday"
@@ -301,6 +324,7 @@ $response = $mailchimp -> file_manager_folders (
 if ( $response -> { error } && $response -> { error } ) {
 
   print STDERR Dumper $response -> { content } ;
+  exit ;
 
 } else {
 
@@ -324,8 +348,9 @@ if ( $response -> { error } && $response -> { error } ) {
 
 }
 
-#-------------------------------------------------------------------------------
-# 3. Campaigns
+#---------------
+# iii. Campaigns
+# --------------
 
 $response = $mailchimp -> campaigns (
   status => 'save'
@@ -335,7 +360,7 @@ foreach my $campaign ( @{ $response -> { content } -> { campaigns } } ) {
 
   my $subject_line = $campaign -> { settings } -> { subject_line } ;
 
-  if ( $subject_line eq $bulletin ) {
+  if ( $subject_line && $subject_line eq $bulletin ) {
 
     print "Deleting campaign $subject_line\n" ;
     $response = $mailchimp -> delete_campaign (
@@ -346,12 +371,12 @@ foreach my $campaign ( @{ $response -> { content } -> { campaigns } } ) {
 
 }
 
-#-------------------------------------------------------------------------------
-# 4. Templates
+#--------------
+# iv. Templates
+#--------------
 
 $response = $mailchimp -> templates (
   created_by => 'David Williamson' ,
-#  since_date_created => $yday ,
   type => 'user' ,
 ) ;
 
@@ -376,12 +401,10 @@ print "***** CLEARDOWN FINISHED *****\n" ;
 print "***** STARTING BUILD *****\n" ;
 
 #-------------------------------------------------------------------------------
+# 6. Create a folder in the content manager to put the images in to.
+#-------------------------------------------------------------------------------
 
-#
-# Create a folder in the content manager to put the images in to
-#
-
-print 'Creating folder ' . $bulletin . "\n" ;
+print "Creating folder $bulletin\n" ;
 
 $response = $mailchimp -> add_file_manager_folder (
   name => $bulletin
@@ -390,175 +413,336 @@ $response = $mailchimp -> add_file_manager_folder (
 my $folder_id = $response -> { content } -> { id } ;
 
 #-------------------------------------------------------------------------------
-
-#
-# Get content:
-# 1. Connect to the database and fetch the news items and events;
-# 2. Read guidance from HTML file.
-#
+# 7. Get content:
+#   i.   Fetch news items from the database;
+#   ii.  Fetch events from the database;
+#   iii. Read member notice and/or representative guidance from HTML files.
+#-------------------------------------------------------------------------------
 
 my $dbh = DBI -> connect (
   'dbi:SQLite:dbname=' . $env -> { database } , "" , ""
 ) ;
 
-my @news_items = DATA::WhatsOn::NewsItem -> fetch (
-  $dbh , { limit => $params { news } }
-) if $params { news } ;
+#---------------------------------------
+# i. Fetch news items from the database.
+#---------------------------------------
 
-foreach my $news_item ( @news_items ) {
+my @news_items = ( ) ;
 
-  if ( $news_item -> image ) {
+if ( $params { news } ) {
 
-    my $image = grab ( URL => $env -> { root } . $news_item -> image ) ;
+  print "Fetching news items\n";
 
-    $news_item -> image =~ /^\/assets\/img\/news_items\/(\S+)$/ ;
+  @news_items = DATA::WhatsOn::NewsItem -> fetch (
+    $dbh , { limit => $params { news } }
+  ) ;
 
-    # Note the + 0 on the folder id otherwise API complains it's not an integer!
-    # Also, image must be base64 encoded.
-    print "Uploading image $1\n" ;
-    $response = $mailchimp -> add_file_manager_file (
-      folder_id  => $folder_id                ,
-      name      => $1                        ,
-      file_data  => encode_base64 ( $image  )  ,
-    ) ;
+  foreach my $news_item ( @news_items ) {
 
-    if ( $response -> { error } ) {
-      print STDERR Dumper $response -> { content } if $response -> { error } ;
-    } else {
+    if ( $news_item -> image ) {
 
-      $news_item -> temp (
-        'full_size_url'  => $response -> { content } -> { full_size_url }
+      my $image = grab ( URL => $env -> { root } . $news_item -> image ) ;
+
+      $news_item -> image =~ /^\/assets\/img\/news_items\/(\S+)$/ ;
+
+      # Note the + 0 on the folder id otherwise API complains it's not an
+      # integer! Also, image must be base64 encoded.
+      print "Uploading image $1\n" ;
+      $response = $mailchimp -> add_file_manager_file (
+        folder_id  => $folder_id                ,
+        name      => $1                        ,
+        file_data  => encode_base64 ( $image  )  ,
       ) ;
+
+      if ( $response -> { error } ) {
+        print STDERR Dumper $response -> { content } if $response -> { error } ;
+      } else {
+
+        $news_item -> temp (
+          'full_size_url'  => $response -> { content } -> { full_size_url }
+        ) ;
+
+      }
 
     }
 
   }
 
-}
+} else {
 
-# Determine the "from" value for the events filter before fetching events
-
-my $from = 'now' ; # If no "days" (offset) is specified then default to now
-
-if ( $params { days } ) {
-
-  # We have been asked to offset the date so use $today instead of now
-  $from =                $date_to_use -> year    . '-' .
-    sprintf ( "%02d" ,  $date_to_use -> month )  . '-' .
-    sprintf ( "%02d"  ,  $date_to_use -> day    ) ;
+  print "No news items to fetch\n";
 
 }
 
-my @events = DATA::WhatsOn::Event -> fetch (
-  $dbh , { from => $from , status => 'PUBLISHED' , limit => $params { events } }
-) ;
+# -----------------------------------
+# ii. Fetch events from the database.
+# -----------------------------------
 
-foreach my $event ( @events ) {
+my @events = ( ) ;
 
-  # Populate the default fields
+if ( $params { events } ) {
 
-  $event -> dates ( $event -> dates_derived )
-    unless $event -> dates ;
+  # We have been asked to fetch some events from the database for inclusion in
+  # the bulletin.
 
-  $event -> times ( '7.30pm' )
-    unless $event -> times ;
+  print "Fetching events\n";
 
-  $event -> presented_by ( $event -> society_name )
-    unless $event -> presented_by ;
+  # Determine the "from" value for the events filter before fetching events
 
-  # If the event has an image associated with it then we must upload this to the
-  # Mailchimp content library for use in our mailshot.
+  my $from = 'now' ; # If no "days" (offset) is specified then default to now
 
-  if ( $event -> image ) {
+  if ( $params { days } ) {
 
-    # Has the image already been uploaded? If not then we don't need to do it
-    # again of course.
+    # We have been asked to offset the date so use $today instead of now
+    $from =                $date_to_use -> year    . '-' .
+      sprintf ( "%02d" ,  $date_to_use -> month )  . '-' .
+      sprintf ( "%02d"  ,  $date_to_use -> day    ) ;
+
+  }
+
+  @events = DATA::WhatsOn::Event -> fetch (
+    $dbh ,
+    { from => $from , status => 'PUBLISHED' , limit => $params { events } }
+  ) ;
+
+  foreach my $event ( @events ) {
+
+    # Populate the default fields
+
+    $event -> dates ( $event -> dates_derived )
+      unless $event -> dates ;
+
+    $event -> times ( '7.30pm' )
+      unless $event -> times ;
+
+    $event -> presented_by ( $event -> society_name )
+      unless $event -> presented_by ;
+
+    # If the event has an image associated with it then we must upload this to
+    # the Mailchimp content library for use in our mailshot.
+
+    if ( $event -> image ) {
+
+      # Has the image already been uploaded? If not then we don't need to do it
+      # again of course.
 
 
 
-    # The event has an image associated with it. So, before we mail out we must
-    # upload the image to the Mailchimp Content Manager so that it can be used
-    # in the email bulletin.
+      # The event has an image associated with it. So, before we mail out we
+      # must upload the image to the Mailchimp Content Manager so that it can be
+      # used in the email bulletin.
 
-    # First get the image as a raw binary variable
+      # First get the image as a raw binary variable
 
-    my $url = '' ;
+      my $url = '' ;
 
-    if ( $event -> image =~ /^$upload_path/ ) {
+      if ( $event -> image =~ /^$upload_path/ ) {
 
-      # An uploaded image has been used
-      $url = $env -> { root } . $event -> image ;
+        # An uploaded image has been used
+        # $url = $env -> { root } . $event -> image ;
+        $url = 'https://www.derbyartsandtheatre.org.uk' . $event -> image ;
 
-    } else {
+      } else {
 
-      # A link to an image on a remote website has been used
-      $url = $event -> image ;
+        # A link to an image on a remote website has been used
+        $url = $event -> image ;
 
-    }
+      }
 
-    my $image = grab ( URL => $url ) ;
+      my $image = grab ( URL => $url ) ;
 
-    $event -> image =~ /^\/upload\/img\/(\S+)$/ ;
+      $event -> image =~ /^\/upload\/img\/(\S+)$/ ;
 
-    # Note the + 0 on the folder id otherwise API complains it's not an integer!
-    # Also, image must be base64 encoded.
-    print "Uploading image $1\n" ;
-    $response = $mailchimp -> add_file_manager_file (
-      folder_id  => $folder_id                ,
-      name      => $1                        ,
-      file_data  => encode_base64 ( $image  )  ,
-    ) ;
-
-    if ( $response -> { error } ) {
-      print STDERR Dumper $response -> { content } if $response -> { error } ;
-    } else {
-
-      $event -> temp (
-        'full_size_url'  => $response -> { content } -> { full_size_url }
+      # Note the + 0 on the folder id otherwise API complains it's not an
+      # integer! Also, image must be base64 encoded.
+      print "Uploading image $1\n" ;
+      $response = $mailchimp -> add_file_manager_file (
+        folder_id  => $folder_id                ,
+        name      => $1                        ,
+        file_data  => encode_base64 ( $image  )  ,
       ) ;
+
+      if ( $response -> { error } ) {
+
+        print STDERR Dumper $response -> { content } ;
+        exit ;
+
+      } else {
+
+        $event -> temp (
+          'full_size_url'  => $response -> { content } -> { full_size_url }
+        ) ;
+
+      }
 
     }
 
   }
 
+} else {
+
+  print "Skipping fetching evens\n";
+
 }
 
-my $guidance = read_file ( $params { guidance } ) if $params { guidance } ;
+#------------------------------------------------------------------------
+# iii. Read member insert and/or representative guidance from HTML files.
+#------------------------------------------------------------------------
+
+my $notice = read_file ( $params { member_insert } )
+  if $params { member_insert } ;
+my $guidance = read_file ( $params { guidance } )
+  if $params { guidance } ;
 
 #-------------------------------------------------------------------------------
-
-#
-# Create the monthly mailshot templates, populated with the relevant data
-#
+# 8. Create the template and campaign for each required audience segment
+#-------------------------------------------------------------------------------
 
 TEMPLATE:
 foreach my $segment (
-  'events only' , 'events + news' , 'events + guidance' , 'all sections'
+
+  # The audience for the campaign is segmented if the content dictates that it
+  # be so. Each segment contains a different subset of our subscribers, which is
+  # determined by the subscribers' selected interest categories as follows:
+
+  'none' ,
+  # Subscribers who have selected no interest categories.
+
+  'news' ,
+  # Subscribers who have selected the "Latest DATA Membership News" interest
+  # category.
+
+  'guidance' ,
+  # Subscribers who have selected the "Guidance to DATA Member Society
+  # Representatives" interest category.
+
+  'both',
+  # Subscribers who have selected both the "Latest DATA Membership News" and
+  # "Guidance to DATA Member Society Representatives" interest categories.
+
+  'all'
+  # All subscribers, regardless of what interest categories they have or haven't
+  # selected. Technically this isn't actually a segment and is used when the
+  # bulletin's content is such that we don't need to segment the audience.
+
 ) {
 
-  # Produce up to (depending on params) four templates as follows:
-  # events only        - Only coming events
-  # events + news      - Coming events plus latest member news
-  # events + guidance  - Coming events plus guidance to member society reps
-  # all sections      -  Coming events plus news plus guidance (the works)
+# -----------
+# i. Template
+# -----------
 
-  next TEMPLATE if (
+  # There are the following categories of content:
+  #
+  # Events:
+  # The only category of content that should be sent to all subscribers.
+  #
+  # Non Member Inserts:
+  # Only for subscribers who have NOT opted to receive "Latest DATA Membership
+  # News".
+  #
+  # Member Inserts:
+  # Only for subscribers who have opted to receive "Latest DATA Membership
+  # News".
+  #
+  # News Items
+  # Also only for subscribers who have opted to receive "Latest DATA Membership
+  # News".
+  #
+  # Guidance:
+  # Only for subscribers who have opted to receive "Guidance to DATA Member
+  # Society Representatives".
+  #
+  # Depending on the content in this specific bulletin a template or templates
+  # is created and other templates that are not required are skipped of course.
+
+  if ( $segment eq 'none' ) {
+
+    next TEMPLATE unless
+
+      # The bulletin contains:
+      #
+      # Content that is available to subscribers who have NOT opted to receive
+      # "Latest DATA Membership News" or "Guidance to DATA Member Society
+      # Representatives".
+      #
+      # and
+      #
+      # Content that is NOT available to subscribers who have NOT opted to
+      # receive "Latest DATA Membership News" or "Guidance to DATA Member
+      # Society Representatives".
+
+      (
+        $params{ events }
+        || $params{ non_member_insert }
+      )
+      &&
+      (
+        $params{ member_insert }
+        || $params{ news }
+        || $params{ guidance }
+      )
+
+  } elsif ( $segment eq 'news' ) {
+
+    next TEMPLATE unless
+
+    # The bulletin contains:
+    #
+    # Content that is only for subscribers who have opted to receive "Latest
+    # DATA Membership News" or is specifically NOT for those subscribers.
+
+    $params{ non_member_insert }
+    || $params{ member_insert }
+    || $params{ news}
+
+  } elsif ( $segment eq 'guidance' ) {
+
+    next TEMPLATE unless
+
+    # The bulletin contains:
+    #
+    # Content that is only for subscribers who have opted to receive "Guidance
+    # to DATA Member Society Representatives".
+
+    $params { guidance } ;
+
+  } elsif ( $segment eq 'both' ) {
+
+    next TEMPLATE unless
+
+    # The bulletin contains both:
+    #
+    # Content that is only for subscribers who have opted to receive "Latest
+    # DATA Membership News" or is specifically NOT for those subscribers.
+    #
+    # and
+    #
+    # Content that is only for subscribers who have opted to receive "Guidance
+    # to DATA Member Society Representatives".
+
     (
-      # If there are either member news items to publish, or a member news
-      # specific insert, or a non-member news specific insert then we need an
-      # events plus member news segment; otherwsie, we don't.
-      $segment eq 'events + news' &&
-      !$params{news} && !$params{member_insert} && !$params{non_member_insert}
+      $params{ non_member_insert }
+      || $params{ member_insert }
+      || $params{ news}
     )
-    ||
-    ( $segment eq 'events + guidance' && ! $params { guidance } )
-    ||
-    ( $segment eq 'all sections'
-        && ! ( $params { news } && $params { guidance } )
-    )
-  ) ;
+    && $params{ guidance }
 
-  print "Producing template for segment=\"$segment\"\n" ;
+  } elsif ( $segment eq 'all' ) {
+
+    next TEMPLATE unless
+
+    # The bulletin includes events only and no content that is only applicable
+    # to segments within our subscriber audience.
+
+    $params{ events }
+    && ! $params{ non_member_insert }
+    && ! $params{ member_insert }
+    && ! $params{ news }
+    && ! $params{ guidance }
+
+  }
+
+  print "Producing template for audience segment \"$segment\"\n" ;
 
   my $template = new Template ( {
 
@@ -567,9 +751,9 @@ foreach my $segment (
     ENCODING => 'utf8' ,
 
     INCLUDE_PATH => [
-      "$home/src/mailchimp" ,
-      "$home/src/mailchimp/fragments" ,
-      "$home/src/mailchimp/sections" ,
+      $env -> { tmpl_path } . '/mailchimp' ,
+      $env -> { tmpl_path } . '/mailchimp/fragments' ,
+      $env -> { tmpl_path } . '/mailchimp/sections' ,
     ]
 
   } ) || die Template -> error ( ) , "\n" ;
@@ -581,15 +765,15 @@ foreach my $segment (
     events => \@events
   } ;
 
-  if ( $segment eq 'events only' ) {
+  if ( $segment eq 'none' ) {
     $vars->{news_insert} = $params{non_member_insert}
       if $params{non_member_insert};
   }
-  elsif ( $segment eq 'events + news' || $segment eq 'all sections' ) {
+  elsif ( $segment eq 'news' || $segment eq 'both' ) {
     $vars->{news_items} = \@news_items if @news_items;
     $vars->{news_insert} = $params{member_insert} if $params{member_insert};
   }
-  elsif ( $segment eq 'events + guidance' || $segment eq 'all sections' ) {
+  elsif ( $segment eq 'guidance' || $segment eq 'both' ) {
     $vars->{guidance} = $guidance;
   }
 
@@ -621,35 +805,31 @@ foreach my $segment (
 
   print "Uploading template to Mailchimp for segment=$segment\n" ;
 
-  my $response = $mailchimp -> add_template (
+  $response = $mailchimp -> add_template (
 
     name => $bulletin . ' (' . $segment . ')' ,
     html => $packed
 
   ) ;
 
-  print STDERR Dumper $response -> { content } if $response -> { error } ;
+  my $template_id;
+  if ( $response -> { error } ) {
+    print STDERR Dumper $response -> { content } ;
+    exit ;
+  } else {
+    $template_id = $response -> { content } -> { id } ;
+  }
 
-  my $template_id = $response -> { content } -> { id } ;
+#-------------
+# ii. Campaign
+#-------------
 
   my $recipients = {
-    list_id => $env -> { mailchimp_list_id }
+    list_id => $cHash { mailchimp } { list_id }
   } ;
 
-  my $preview = << "EndofPreview" ;
-Derby Arts and Theatre Association's montly bulletin for $month showcasing the
-coming events presented by DATA's member societies.
-EndofPreview
-
-#-------------------------------------------------------------------------------
-
-#
-# Determine the segmentation options required (if any) for this campaign
-#
-
   my $settings = {
-    subject_line => $bulletin ,
-    preview_text => $preview ,
+    subject_line => "$bulletin" ,
     title => "$bulletin ($segment)" ,
     from_name => 'Derby Arts and Theatre Association' ,
     reply_to => 'admin@derbyartsandtheatre.org.uk' ,
@@ -657,181 +837,142 @@ EndofPreview
     template_id => $template_id
   } ;
 
-  my $segment_opts = { match => 'all' } ;
+  unless ( $params{ subject } ) {
 
-  if ( $segment eq 'all sections' ) {
+    # If no custom subject line was been provided then this is the regular
+    # monthly bulletin, so use the standard preview that we use for those.
 
-    # Recipient MUST have registered their interest in news AND guidance
-    $segment_opts -> { conditions } = [
-      {
-        condition_type => 'Interests' ,
-        op => 'interestcontainsall' ,
-        field => 'interests-' . $env -> { mailchimp_interest_category_id } ,
-        value => [
-          $env -> { mailchimp_representative_interest_id } ,
-          $env -> { mailchimp_member_interest_id } ,
-        ] ,
-      } ,
-    ] ;
+    my $preview = << "EndofPreview" ;
+Derby Arts and Theatre Association's monthly bulletin for $month showcasing the
+coming events presented by DATA's member societies.
+EndofPreview
 
-  } elsif ( $segment eq 'events only' ) {
-
-    # If there are either news or guidance or both present then the recipient
-    # must NOT have expressed an interest in them
-
-    #Uncomment to debug how the segments are decided upon
-    #print "At the point of creating segment_opts for segment $segment\n" ;
-    #print "And the value of $vars that we base this on is\n" ;
-    #print Dumper $vars ;
-
-    if ( $params { news } && $params { guidance } ) {
-
-      # Receipient must NOT have an interest in either news or guidance
-      $segment_opts -> { conditions } = [
-        {
-          condition_type => 'Interests' ,
-          op => 'interestnotcontains' ,
-          field => 'interests-' . $env -> { mailchimp_interest_category_id } ,
-          value => [
-            $env -> { mailchimp_representative_interest_id } ,
-            $env -> { mailchimp_member_interest_id } ,
-          ] ,
-        } ,
-      ] ;
-
-    } elsif ( $params { news } ) {
-
-      # Receipient must NOT have an interest in news
-      $segment_opts -> { conditions } = [
-        {
-          condition_type => 'Interests' ,
-          op => 'interestnotcontains' ,
-          field => 'interests-' . $env -> { mailchimp_interest_category_id } ,
-          value => [
-            $env -> { mailchimp_member_interest_id } ,
-          ] ,
-        } ,
-      ] ;
-
-    } elsif ( $params { guidance } ) {
-
-      # Receipient must NOT have an interest in guidance
-      $segment_opts -> { conditions } = [
-        {
-          condition_type => 'Interests' ,
-          op => 'interestnotcontains' ,
-          field => 'interests-' . $env -> { mailchimp_interest_category_id } ,
-          value => [
-            $env -> { mailchimp_representative_interest_id } ,
-          ] ,
-        } ,
-      ] ;
-
-    }
-
-  } elsif ( $segment eq 'events + news' ) {
-
-    # If guidance is also present then the recipient must have expressed an
-    # interest in news but NOT guidance. They will receive the "all sections"
-    # bulletin if they've also expressed an interest in guidance. If there is
-    # no guidance this month then it's enough that they've expressed an interest
-    # in news.
-
-    if ( $params { guidance } ) {
-
-      # Receipient must have an interest in news but NOT in guidance
-      $segment_opts -> { conditions } = [
-        {
-          condition_type => 'Interests' ,
-          op => 'interestcontains' ,
-          field => 'interests-' . $env -> { mailchimp_interest_category_id } ,
-          value => [
-            $env -> { mailchimp_member_interest_id } ,
-          ] ,
-        } ,
-        {
-          condition_type => 'Interests' ,
-          op => 'interestnotcontains' ,
-          field => 'interests-' . $env -> { mailchimp_interest_category_id } ,
-          value => [
-            $env -> { mailchimp_representative_interest_id } ,
-          ] ,
-        } ,
-      ] ;
-
-    } else {
-
-      # There is no guidance this month, it suffices that the recipient has
-      # expressed an interest in news
-      $segment_opts -> { conditions } = [
-        {
-          condition_type => 'Interests' ,
-          op => 'interestcontains' ,
-          field => 'interests-' . $env -> { mailchimp_interest_category_id } ,
-          value => [
-            $env -> { mailchimp_member_interest_id } ,
-          ] ,
-        } ,
-      ] ;
-
-    }
-
-  } elsif ( $segment eq 'events + guidance' ) {
-
-    # If news is also present then the recipient must have expressed an
-    # interest in guidance but NOT new. They will receive the "all sections"
-    # bulletin if they've also expressed an interest in news. If there is
-    # no news this month then it's enough that they've expressed an interest
-    # in guidance.
-
-    if ( $params { news } ) {
-
-      # Receipient must have an interest in news but NOT in guidance
-      $segment_opts -> { conditions } = [
-        {
-          condition_type => 'Interests' ,
-          op => 'interestcontains' ,
-          field => 'interests-' . $env -> { mailchimp_interest_category_id } ,
-          value => [
-            $env -> { mailchimp_representative_interest_id } ,
-          ] ,
-        } ,
-        {
-          condition_type => 'Interests' ,
-          op => 'interestnotcontains' ,
-          field => 'interests-' . $env -> { mailchimp_interest_category_id } ,
-          value => [
-            $env -> { mailchimp_member_interest_id } ,
-          ] ,
-        } ,
-      ] ;
-
-    } else {
-
-      # There is no news this month, it suffices that the recipient has
-      # expressed an interest in guidance
-      $segment_opts -> { conditions } = [
-        {
-          condition_type => 'Interests' ,
-          op => 'interestcontains' ,
-          field => 'interests-' . $env -> { mailchimp_interest_category_id } ,
-          value => [
-            $env -> { mailchimp_representative_interest_id } ,
-          ] ,
-        } ,
-      ] ;
-
-    }
+    $settings -> { preview_text } = $preview ;
 
   }
 
-  $recipients -> { segment_opts } = $segment_opts ;
+  # Set the segmentation options required (if any) for this campaign. If the
+  # segment that we've derived is "all" then actually this indicates that we do
+  # NOT need to segment the audience, so we only need to segment for other
+  # segment values.
+
+  unless ( $segment eq 'all' ) {
+
+    my $segment_opts = { match => 'all' } ;
+
+    if ( $segment eq 'none' ) {
+
+      # Recipients MUST NOT have registered an interest in neither news NOR
+      # guidance.
+
+      $segment_opts -> { conditions } = [
+        {
+          condition_type => 'Interests' ,
+          op => 'interestnotcontains' ,
+          field => 'interests-' . $cHash { mailchimp } { interest_category_id } ,
+          value => [
+            $cHash { mailchimp } { representative_interest_id } ,
+            $cHash { mailchimp } { member_interest_id } ,
+          ] ,
+        } ,
+      ] ;
+
+    } elsif ( $segment eq 'news' ) {
+
+      # Recipients MUST have registered an interest in news.
+
+      $segment_opts -> { conditions } = [
+        {
+          condition_type => 'Interests' ,
+          op => 'interestcontains' ,
+          field =>
+            'interests-' . $cHash { mailchimp } { interest_category_id } ,
+          value => [
+            $cHash { mailchimp } { member_interest_id } ,
+          ] ,
+        } ,
+      ] ;
+
+      # If there is also a "guidance" segment in the bulletin then we must
+      # exclude subscribers who are also in that segment, as they will get
+      # picked up under the "both" segment.
+
+      if ( $params{ guidance } ) {
+
+        push @{ $segment_opts -> { conditions }, {
+          condition_type => 'Interests' ,
+          op => 'interestnotcontains' ,
+          field =>
+            'interests-' . $cHash { mailchimp } { interest_category_id } ,
+          value => [
+            $cHash { mailchimp } { representative_interest_id } ,
+          ] ,
+        } } ;
+
+      }
+
+    } elsif ( $segment eq 'guidance' ) {
+
+      # Recipients MUST have registered an interest in guidance.
+
+      $segment_opts -> { conditions } = [
+        {
+          condition_type => 'Interests' ,
+          op => 'interestcontains' ,
+          field =>
+            'interests-' . $cHash { mailchimp } { interest_category_id } ,
+          value => [
+            $cHash { mailchimp } { representative_interest_id } ,
+          ] ,
+        } ,
+      ] ;
+
+      # If there is also a "news" segment in the bulletin then we must exclude
+      # subscribers who are also in that segment, as they will get picked up
+      # under the "guidance" segment.
+
+      if (
+        $params{ non_member_insert }
+        || $params{ member_insert }
+        || $params{ news}
+      ) {
+
+        push @{ $segment_opts -> { conditions }, {
+          condition_type => 'Interests' ,
+          op => 'interestnotcontains' ,
+          field =>
+            'interests-' . $cHash { mailchimp } { interest_category_id } ,
+          value => [
+            $cHash { mailchimp } { member_interest_id } ,
+          ] ,
+        } } ;
+
+      }
+
+    } elsif ( $segment eq 'both' ) {
+
+      # Recipients MUST have registered an interest in both news AND guidance.
+
+      $segment_opts -> { conditions } = [
+        {
+          condition_type => 'Interests' ,
+          op => 'interestcontainsall' ,
+          field =>
+            'interests-' . $cHash { mailchimp } { interest_category_id } ,
+          value => [
+            $cHash { mailchimp } { representative_interest_id } ,
+            $cHash { mailchimp } { member_interest_id } ,
+          ] ,
+        } ,
+      ] ;
+
+    }
+
+    $recipients -> { segment_opts } = $segment_opts ;
+
+  }
 
   print "Uploading campaign to Mailchimp for segment=$segment\n" ;
-
-  #Uncomment to debug the recipients hash
-  #print "Recipients hash:\n" ;
-  #print Dumper $recipients ;
 
   $response = $mailchimp -> add_campaign (
 
@@ -843,7 +984,12 @@ EndofPreview
 
   ) ;
 
-  print Dumper $response -> { content } if $response -> { error } ;
+  if ( $response -> { error } ) {
+
+    print Dumper $response -> { content } ;
+    exit ;
+
+  }
 
 }
 
