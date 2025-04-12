@@ -25,7 +25,7 @@
 [%~ END %]
                 [% event.dates %] [% event.times %]<br>
                 [% event.venue_name %]<br>
-                <a href="[% conf.root %]event/[% event.rowid %]" target="_blank">Full event details</a>
+                <a href="https://www.derbyartsandtheatre.org.uk/event/[% event.rowid %]" target="_blank">Full event details</a>
               </td>
             </tr>
           </tbody>
