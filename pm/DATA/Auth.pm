@@ -132,11 +132,9 @@ Process an attempt to authenticate.
 
   } else {
 
-    my $env = $self -> conf -> param ( 'env' ) ;
-
     my $login_form = sub {
 
-      if ( $env -> { use_captcha } ) {
+      if ( $self->conf->param('use_captcha') ) {
 
         # We are using Google reCAPTCHA in this environment
 
@@ -152,7 +150,7 @@ Process an attempt to authenticate.
 
             'g-recaptcha-response' => {
               constraint_method => not_a_robot (
-                $env -> { recaptcha_secret_key }
+                $self->conf->param('recaptcha_secret_key')
               ) ,
               name => 'not_a_robot'
             } ,
@@ -299,11 +297,10 @@ is to be associated with is valid for an account.
 
    my $self = shift ;
    my $query = $self -> query ;
-  my $env = $self -> conf -> param ( 'env' ) ;
 
    my $begin_registration_form = sub {
 
-    if ( $env -> { use_captcha } ) {
+    if ( $self->conf->param('use_captcha') ) {
 
         return {
 
@@ -317,7 +314,7 @@ is to be associated with is valid for an account.
 
           'g-recaptcha-response' => {
             constraint_method => not_a_robot (
-              $env -> { recaptcha_secret_key }
+              $self->conf->param('recaptcha_secret_key')
             ) ,
             name => 'not_a_robot'
           } ,
@@ -459,7 +456,6 @@ required.
 
    my $self = shift ;
    my $query = $self -> query ;
-  my $env = $self -> conf -> param ( 'env' ) ;
 
    my $complete_registration_form = sub {
 
@@ -541,7 +537,7 @@ required.
 
           'g-recaptcha-response' => {
             constraint_method => not_a_robot (
-              $env -> { recaptcha_secret_key }
+              $self->conf->param('recaptcha_secret_key')
             ) ,
             name => 'not_a_robot'
           } ,
@@ -747,8 +743,7 @@ society.
    $user -> email ( scalar $self -> query -> param ( 'user_email' ) ) ;
    $user -> first_name ( scalar $self -> query -> param ( 'user_first_name' ) ) ;
 
-  my $env = $self -> conf -> param ( 'env' ) ;
-  my $webmin = $env -> { webmin } ;
+  my $webmin = $self->conf->param('webmin');
 
    $self -> sendmail (
     $webmin ,

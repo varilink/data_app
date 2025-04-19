@@ -13,10 +13,9 @@ use base qw / Exporter / ;
 
 sub _init {
 
-   my $self = shift ;
+  my $self = shift ;
 
-  my $env = $self -> conf -> param ( 'env' ) ;
-  my $database =  $env -> { database } ;
+  my $database =  $self->conf->param('database');
 
    $self -> dbh_config (
 

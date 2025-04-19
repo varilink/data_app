@@ -131,7 +131,6 @@ join. The enquiry gets emailed to the webmin.
 
   my $self = shift ;
   my $query = $self -> query ;
-  my $env = $self -> conf -> param ( 'env' ) ;
 
   my $join_us_form = {
 
@@ -162,12 +161,13 @@ join. The enquiry gets emailed to the webmin.
 #-------------------------------------------------------------------------------
 # Add recaptcha check unless recaptcha is disabled for this environment
 
-  if ( $env -> { use_captcha } ) {
+  if ( $self->conf->param('use_captcha') ) {
 
     push @{ $join_us_form -> { required } } , 'g-recaptcha-response' ;
 
     $join_us_form -> { constraint_methods } -> { 'g-recaptcha-response' } = {
-      constraint_method => not_a_robot ( $env -> { recaptcha_secret_key } ) ,
+      constraint_method
+        => not_a_robot($self->conf->param('recaptcha_secret_key')),
       name              => 'not_a_robot'
     }
 
@@ -182,7 +182,7 @@ join. The enquiry gets emailed to the webmin.
 #-------------------------------------------------------------------------------
 # We have passed validation, send the message to webmin and redirect
 
-  my $webmin = $env -> { webmin } ;
+  my $webmin = $self->conf->param('webmin');
   my $contact_email = scalar $query -> param ( 'contact_email' ) ;
   my $contact_message = scalar $query -> param ( 'contact_message' ) ;
 
@@ -197,7 +197,7 @@ join. The enquiry gets emailed to the webmin.
     }
   ) ;
 
-  $self -> redirect ( $env -> { root } . $query -> param ( 'onSuccess' ) ) ;
+  $self->redirect($self->conf->param('root') . $query->param('onSuccess'));
 
 }
 
@@ -211,7 +211,6 @@ Register an individual member.
 
   my $self = shift ;
   my $query = $self -> query ;
-  my $env = $self -> conf -> param ( 'env' ) ;
 
   my $membership_form = {
 
@@ -243,12 +242,13 @@ Register an individual member.
 #-------------------------------------------------------------------------------
 # Add recaptcha check unless recaptcha is disabled for this environment
 
-  if ( $env -> { use_captcha } ) {
+  if ( $self->conf->param('use_captcha') ) {
 
     push @{ $membership_form -> { required } } , 'g-recaptcha-response' ;
 
     $membership_form -> { constraint_methods } -> { 'g-recaptcha-response' } = {
-      constraint_method => not_a_robot ( $env -> { recaptcha_secret_key } ) ,
+      constraint_method
+        => not_a_robot($self->conf->param('recaptcha_secret_key')),
       name              => 'not_a_robot'
     }
 
@@ -263,7 +263,7 @@ Register an individual member.
 #-------------------------------------------------------------------------------
 # We have passed validation, send the message to webmin and redirect
 
-  my $webmin = $env -> { webmin } ;
+  my $webmin = $self->conf->param('webmin');
   my $contact_first_name = scalar $query -> param ( 'contact_first_name' ) ;
   my $contact_surname = scalar $query -> param ( 'contact_surname' ) ;
   my $contact_email = scalar $query -> param ( 'contact_email' ) ;
@@ -282,7 +282,7 @@ Register an individual member.
     }
   ) ;
 
-  $self -> redirect ( $env -> { root } . $query -> param ( 'onSuccess' ) ) ;
+  $self->redirect( $self->conf->param('root') . $query->param('onSuccess') );
 
 }
 
@@ -297,7 +297,6 @@ sent via eamil to the webmin.
 
   my $self = shift ;
   my $query = $self -> query ;
-  my $env = $self -> conf -> param ( 'env' ) ;
 
   my $notify_event_form = {
 
@@ -364,13 +363,14 @@ sent via eamil to the webmin.
 #-------------------------------------------------------------------------------
 # Add recaptcha check unless recaptcha is disabled for this environment
 
-  if ( $env -> { use_captcha } ) {
+  if ( $self->conf->param('use_captcha') ) {
 
     push @{ $notify_event_form -> { required } } , 'g-recaptcha-response' ;
 
     $notify_event_form
     -> { constraint_methods } -> { 'g-recaptcha-response' } = {
-      constraint_method  => not_a_robot ( $env -> { recaptcha_secret_key } ) ,
+      constraint_method  =>
+        not_a_robot ( $self->conf->param('recaptcha_secret_key') ),
       name              => 'not_a_robot'
     }
 
@@ -422,14 +422,14 @@ sent via eamil to the webmin.
   $event -> society_name ( $society -> name ) ;
 
   # Send the message
-  my $webmin = $env -> { webmin } ;
+  my $webmin = $self->conf->param('webmin');
   $self -> sendmail (
     $webmin ,
     'DATA Diary - Event Notification' ,
     { contact => $contact , event => $event }
   ) ;
 
-  $self -> redirect ( $env -> { root } . $query -> param ( 'onSuccess' ) ) ;
+  $self->redirect( $self->conf->param('root') . $query->param('onSuccess') );
 
 }
 
@@ -444,7 +444,6 @@ printing.
 
   my $self = shift ;
   my $query = $self -> query ;
-  my $env = $self -> conf -> param ( 'env' ) ;
 
   my $printed_listing_form = {
 
@@ -558,7 +557,7 @@ GENPDF:
   $htmldoc -> set_footer ( '.' , '.' , '.' ) ;
   $htmldoc -> set_header ( '.' , 'l' , '.' ) ;
   $htmldoc -> set_html_content ( encode ( 'iso-8859-1' , $$html ) ) ;
-  $htmldoc -> set_logoimage ( $env -> { assets } . '/img/logo.jpg' ) ;
+  $htmldoc -> set_logoimage ( $self->conf->param('assets') . '/img/logo.jpg' ) ;
   # Set page up for A4 or A5. Note that A4 is the default page size.
   if ( $pagesize eq 'A5' ) {
     $htmldoc -> set_fontsize ( 10 ) ;
@@ -813,8 +812,7 @@ programme details.
 
   # Initialise redirect with the root
   # We will append the location within the root according to the submit button
-  my $env = $self -> conf -> param ( 'env' ) ;
-  my $redirect = $env -> { root } ;
+  my $redirect = $self->conf->param('root');
 
 #-------------------------------------------------------------------------------
 
@@ -1049,7 +1047,7 @@ programme details.
   # Save will give us back the event rowid, whether it's an update or an insert
   my $rowid = $event -> save ( $self -> dbh ) ;
 
-  my $webmin = $env -> { webmin } ;
+  my $webmin = $self->conf->param('webmin');
 
   $self -> sendmail (
     $webmin                                              ,
@@ -1115,8 +1113,7 @@ online listing.
 
   # Initialise redirect with the root
   # We will append the location within the root according to the submit button
-  my $env = $self -> conf -> param ( 'env' ) ;
-  my $redirect = $env -> { root } ;
+  my $redirect = $self->conf->param('root');
 
 #-------------------------------------------------------------------------------
 
@@ -1192,7 +1189,7 @@ online listing.
       } , # End of mceEventDescription hash
 
       mceEventImage => {
-        constraint_method =>  event_image_valid ( $env -> { root } ) ,
+        constraint_method =>  event_image_valid ( $self->conf->param('root') ),
         name              => 'event_image_valid'
       } , # End of mceEventImage hash
 
@@ -1270,7 +1267,7 @@ online listing.
   # Save will give us back the event rowid, whether it's an update or an insert
   my $rowid = $event -> save ( $self -> dbh ) ;
 
-  my $webmin = $env -> { webmin } ;
+  my $webmin = $self->conf->param('webmin');
 
   $self -> sendmail (
     $webmin                                              ,
@@ -1322,7 +1319,6 @@ are directed to here in this module instead.
 =cut
 
   my $self = shift ;
-  my $env = $self -> conf -> param ( 'env' ) ;
 
   if ( _authorised ( $self , 'event' ) ) {
 
@@ -1331,7 +1327,7 @@ are directed to here in this module instead.
 
   } else {
 
-    return $self -> redirect ( $env -> { root } . 'unauthorised' ) ;
+    return $self -> redirect ( $self->conf->param('root') . 'unauthorised' ) ;
 
   }
 
@@ -1356,8 +1352,7 @@ Adds or updates a member society record.
 
   # Initialise redirect with the root
   # We will append the location within the root later
-  my $env = $self -> conf -> param ( 'env' ) ;
-  my $redirect = $env -> { root } ;
+  my $redirect = $self->conf->param('root');
 
 #-------------------------------------------------------------------------------
 
@@ -1441,7 +1436,6 @@ are directed to here in this module instead.
 =cut
 
   my $self = shift ;
-  my $env = $self -> conf -> param ( 'env' ) ;
 
   if ( _authorised ( $self , 'society' ) ) {
 
@@ -1450,7 +1444,7 @@ are directed to here in this module instead.
 
   } else {
 
-    return $self -> redirect ( $env -> { root } . 'unauthorised' ) ;
+    return $self -> redirect ( $self->conf->param('root') . 'unauthorised' ) ;
 
   }
 

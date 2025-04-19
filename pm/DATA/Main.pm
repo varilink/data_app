@@ -45,7 +45,6 @@ use DATA::Plugin::ValidateRM ;
 sub cgiapp_init {
 
   my $self = shift ;
-  my $env = $self -> conf -> param ( 'env' ) ;
 
   $self -> run_modes (
 
@@ -56,8 +55,8 @@ sub cgiapp_init {
   ) ;
 
   my $min_log_level = 'emergency';
-  if ( defined $env -> { file_log_level } ) {
-    $min_log_level = $env -> { file_log_level };
+  if ( defined $self->conf->param('file_log_level') ) {
+    $min_log_level = $self->conf->param('file_log_level');
   }
 
   $self -> log_config (

@@ -25,8 +25,7 @@ use DATA::Image::Constraints ;
 sub _filepath {
 
   my ( $self , $suffix ) = @_ ;
-  my $env = $self -> conf -> param ( 'env' ) ;
-  my $upload_path = $env -> { image_upload_path } ;
+  my $upload_path = $self->conf->param('image_upload_path');
 
   my ( $sec , $min , $hour , $mday , $mon , $year , $wday , $yday , $isdst )
     = localtime ( time ) ;

@@ -49,19 +49,17 @@ the init hook to ensure that the configuration is loaded first.
 
 =cut
 
-  my $self = shift ;
+  my $self = shift;
 
-  my $env = $self -> conf -> param ( 'env' ) ;
+  my @tmpl_paths = ();
 
-  my @tmpl_paths = ( ) ;
+  foreach my $tmpl_path ( @{ $self->conf->param('tmpl_path') } ) {
 
-  foreach my $tmpl_path ( @{ $self -> conf -> param ( 'tmpl_path' ) } ) {
-
-    push @tmpl_paths , $env -> { tmpl_path } . '/' . $tmpl_path ;
+    push @tmpl_paths , $self->conf->param('tmpl_dir') . '/' . $tmpl_path;
 
   }
 
-  $self -> tmpl_path ( [ @tmpl_paths ] ) ;
+  $self->tmpl_path( [ @tmpl_paths ] );
 
 }
 
@@ -100,8 +98,7 @@ This hook also ensures that the template output is UTF8 encoded.
 
   #-----------------------------------------------------------------------------
   # Pass the CGI application configuration to the template
-  my $env = $self -> conf -> param ( 'env' ) ;
-  $tmpl -> param ( 'conf' => $env ) ;
+  $tmpl -> param ( 'conf' => scalar $self->conf->context ) ;
 
   #-----------------------------------------------------------------------------
   # Convert the session to a template parameter called session.
