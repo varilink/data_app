@@ -11,7 +11,7 @@ sub {
 
   my $conf = Config::Context -> new (
 
-    file => "$ENV{'DATA_CONF'}/app.cfg" ,
+    file => "$ENV{'DATA_APP_CONF_DIR'}/$ENV{'DATA_APP_CONF_FILE'}" ,
 
     driver => 'ConfigGeneral' ,
 
@@ -41,7 +41,7 @@ sub {
 
   ) ;
 
-  my $rules = LoadFile "$ENV{'DATA_CONF'}/app/dispatch.yml" ;
+  my $rules = LoadFile "$ENV{'DATA_APP_CONF_DIR'}/app/dispatch.yml" ;
 
   my $table = [ ] ;
 
@@ -66,7 +66,7 @@ sub {
     args_to_new => {
 
       PARAMS => {
-        home => "$ENV{'DATA_CONF'}"
+        home => "$ENV{'DATA_APP_CONF_DIR'}"
       } ,
 
     } ,

@@ -18,7 +18,7 @@ sub _init {
   $self -> conf -> init (
 
     # Locate the configuration using the home parameter passed via the ini file
-    file   => "$ENV{'DATA_CONF'}/app.cfg" ,
+    file   => "$ENV{'DATA_APP_CONF_DIR'}/$ENV{'DATA_APP_CONF_FILE'}" ,
 
     driver => 'ConfigGeneral' ,
 
