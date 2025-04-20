@@ -2,7 +2,7 @@
 
 ## Perl Scripts
 
-This directory contains Perl scripts for the [DATA - App](https://github.com/varilink/data_app) repository. Most of these social media integration scripts.
+This directory contains Perl scripts for the [DATA - App](https://github.com/varilink/data_app) repository. Most of these are social media integration scripts.
 
 ### Social Media Integration Scripts
 
