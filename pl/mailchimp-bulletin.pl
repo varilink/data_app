@@ -204,14 +204,13 @@ foreach my $arg ( @ARGV ) {
 # 2. Load the configuration.
 #-------------------------------------------------------------------------------
 
-my $cObj = new Config::General (
-  -ConfigFile => "$ENV{'DATA_CONF'}/app.cfg" ,
+my $conf = new Config::General (
+  -ConfigFile => "$ENV{'DATA_APP_CONF_DIR'}/$ENV{'DATA_APP_CONF_FILE'}",
   -IncludeRelative => 'yes',
   -UseApacheInclude => 'yes'
 ) ;
-my %cHash = $cObj -> getall ;
-my $env = $cHash { env } ;
-my $upload_path = $env -> { image_upload_path } ;
+my %conf = $conf->getall;
+my $upload_path = $conf{image_upload_path};
 
 #-------------------------------------------------------------------------------
 # 3. Derive today as a datetime and offset it if we've been told to.
@@ -249,7 +248,7 @@ print "Building a bulletin called \"$bulletin\"\n" ;
 
 my $mailchimp = new Mail::Chimp3 (
 
-  api_key => $cHash { mailchimp } { api_key }
+  api_key => $conf{mailchimp}{api_key}
 
 ) ;
 
@@ -420,7 +419,7 @@ my $folder_id = $response -> { content } -> { id } ;
 #-------------------------------------------------------------------------------
 
 my $dbh = DBI -> connect (
-  'dbi:SQLite:dbname=' . $env -> { database } , "" , ""
+  'dbi:SQLite:dbname=' . $conf{database}, "", ""
 ) ;
 
 #---------------------------------------
@@ -441,7 +440,7 @@ if ( $params { news } ) {
 
     if ( $news_item -> image ) {
 
-      my $image = grab ( URL => $env -> { root } . $news_item -> image ) ;
+      my $image = grab(URL => $conf{root} . $news_item->image);
 
       $news_item -> image =~ /^\/assets\/img\/news_items\/(\S+)$/ ;
 
@@ -539,7 +538,7 @@ if ( $params { events } ) {
       if ( $event -> image =~ /^$upload_path/ ) {
 
         # An uploaded image has been used
-        # $url = $env -> { root } . $event -> image ;
+        # $url = $conf -> { root } . $event -> image ;
         $url = 'https://www.derbyartsandtheatre.org.uk' . $event -> image ;
 
       } else {
@@ -751,9 +750,9 @@ foreach my $segment (
     ENCODING => 'utf8' ,
 
     INCLUDE_PATH => [
-      $env -> { tmpl_path } . '/mailchimp' ,
-      $env -> { tmpl_path } . '/mailchimp/fragments' ,
-      $env -> { tmpl_path } . '/mailchimp/sections' ,
+      $conf{tmpl_dir} . '/mailchimp',
+      $conf{tmpl_dir} . '/mailchimp/fragments',
+      $conf{tmpl_dir} . '/mailchimp/sections',
     ]
 
   } ) || die Template -> error ( ) , "\n" ;
@@ -761,7 +760,7 @@ foreach my $segment (
   my $raw = '' ;
 
   my $vars = {
-    conf => $env ,
+    conf => \%conf,
     events => \@events
   } ;
 
@@ -825,7 +824,7 @@ foreach my $segment (
 #-------------
 
   my $recipients = {
-    list_id => $cHash { mailchimp } { list_id }
+    list_id => $conf{mailchimp}{list_id}
   } ;
 
   my $settings = {
@@ -869,10 +868,10 @@ EndofPreview
         {
           condition_type => 'Interests' ,
           op => 'interestnotcontains' ,
-          field => 'interests-' . $cHash { mailchimp } { interest_category_id } ,
+          field => 'interests-' . $conf{mailchimp}{interest_category_id},
           value => [
-            $cHash { mailchimp } { representative_interest_id } ,
-            $cHash { mailchimp } { member_interest_id } ,
+            $conf{mailchimp}{representative_interest_id},
+            $conf{mailchimp}{member_interest_id},
           ] ,
         } ,
       ] ;
@@ -886,9 +885,9 @@ EndofPreview
           condition_type => 'Interests' ,
           op => 'interestcontains' ,
           field =>
-            'interests-' . $cHash { mailchimp } { interest_category_id } ,
+            'interests-' . $conf{mailchimp}{interest_category_id},
           value => [
-            $cHash { mailchimp } { member_interest_id } ,
+            $conf{mailchimp}{member_interest_id},
           ] ,
         } ,
       ] ;
@@ -897,17 +896,15 @@ EndofPreview
       # exclude subscribers who are also in that segment, as they will get
       # picked up under the "both" segment.
 
-      if ( $params{ guidance } ) {
+      if ( $params{guidance} ) {
 
-        push @{ $segment_opts -> { conditions }, {
-          condition_type => 'Interests' ,
-          op => 'interestnotcontains' ,
-          field =>
-            'interests-' . $cHash { mailchimp } { interest_category_id } ,
-          value => [
-            $cHash { mailchimp } { representative_interest_id } ,
-          ] ,
-        } } ;
+        push @{ $segment_opts->{conditions} },
+        {
+          condition_type => 'Interests',
+          op => 'interestnotcontains',
+          field => 'interests-' . $conf{mailchimp}{interest_category_id},
+          value => [$conf{mailchimp}{representative_interest_id}],
+        };
 
       }
 
@@ -920,9 +917,9 @@ EndofPreview
           condition_type => 'Interests' ,
           op => 'interestcontains' ,
           field =>
-            'interests-' . $cHash { mailchimp } { interest_category_id } ,
+            'interests-' . $conf{mailchimp}{interest_category_id},
           value => [
-            $cHash { mailchimp } { representative_interest_id } ,
+            $conf{mailchimp}{representative_interest_id},
           ] ,
         } ,
       ] ;
@@ -937,15 +934,16 @@ EndofPreview
         || $params{ news}
       ) {
 
-        push @{ $segment_opts -> { conditions }, {
+        push @{ $segment_opts->{conditions} },
+        {
           condition_type => 'Interests' ,
           op => 'interestnotcontains' ,
           field =>
-            'interests-' . $cHash { mailchimp } { interest_category_id } ,
+            'interests-' . $conf->{mailchimp}->{interest_category_id},
           value => [
-            $cHash { mailchimp } { member_interest_id } ,
+            $conf->{mailchimp}->{member_interest_id},
           ] ,
-        } } ;
+        };
 
       }
 
@@ -958,10 +956,10 @@ EndofPreview
           condition_type => 'Interests' ,
           op => 'interestcontainsall' ,
           field =>
-            'interests-' . $cHash { mailchimp } { interest_category_id } ,
+            'interests-' . $conf{mailchimp}{interest_category_id},
           value => [
-            $cHash { mailchimp } { representative_interest_id } ,
-            $cHash { mailchimp } { member_interest_id } ,
+            $conf{mailchimp}{representative_interest_id},
+            $conf{mailchimp}{member_interest_id},
           ] ,
         } ,
       ] ;
