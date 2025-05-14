@@ -39,18 +39,23 @@
           <ul class="menu footer-data-menu-social simple">
             <li>
                 <a target="_blank"
-                href="https://www.facebook.com/DerbyArtsAndTheatreAssociation">
+                href="https://www.facebook.com/
+[%- IF conf.facebook.page_name %]
+[%- conf.facebook.page_name %]
+[%- ELSE %]
+[%- conf.facebook.page_id %]
+[%- END %]">
                 <i class="fab fa-facebook-f" aria-hidden="true"></i>
               </a>
             </li>
             <li>
-              <a target="_blank" href="https://x.com/DerbyAmPerfArts">
+              <a target="_blank" href="https://x.com/[% conf.x.handle %]">
                 <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
               </a>
             </li>
             <li>
               <a target="_blank"
-              href="https://www.youtube.com/channel/UCTXIEwu1D9mnV9uU7H-TZMw">
+              href="https://www.youtube.com/channel/[% conf.youtube.channel %]">
                 <i class="fab fa-youtube" aria-hidden="true"></i>
               </a>
             </li>
