@@ -925,70 +925,67 @@ sub userid_reminder {
 
 =head3 userid_reminder
 
-Send the user a reminder of their userid.
+Sends the user a reminder of their userid if they provide an email address that
+is recognised as being associated with a valid user account.
 
 =cut
 
-  my $self = shift ;
+    my $self = shift;
+    my $query = $self->query;
 
-  my $query = $self -> query ;
+    my $userid_reminder = sub {
 
-  my $userid_reminder = sub {
+        return {
 
-      return {
+            required => [ qw/
+                user_email
+            / ],
 
-         required => [ qw /
-            user_email
-         / ] ,
+            constraint_methods => {
 
-         constraint_methods => {
+                user_email => [
+                    {
+                        constraint_method => user_exists($self->dbh),
+                        name => 'user_exists'
+                    },
+                    {
+                        constraint_method => FV_or(
+                            FV_not(user_exists($self->dbh)),
+                            user_confirmed($self->dbh)
+                        ),
+                        name => 'user_confirmed'
+                    },
+                ]
 
-        user_email => [
-          {
-            constraint_method => user_exists ( $self -> dbh ) ,
-            name => 'user_exists'
-          } ,
-          {
-            constraint_method => FV_or (
-              FV_not ( user_exists ( $self -> dbh ) ) ,
-              user_confirmed ( $self -> dbh )
-            ) ,
-            name => 'user_confirmed'
-          } ,
-        ]
+            },
 
-         } ,
+            msgs => {
+                constraints => $_messages
+            }
 
-         msgs => {
+        };
 
-            constraints => $_messages
+    };
 
-         }
+    $self -> check_rm(
+        'form_response',
+        $userid_reminder,
+    ) || return \$self->check_rm_error_page;
 
-      } ;
+    my $user = new DATA::Auth::User;
+    $user->email(scalar $self->query->param('user_email'));
 
-   } ;
+    if ( $user->fetch($self->dbh) ) {
 
-   $self -> check_rm (
-      'form_response' ,
-      $userid_reminder ,
-   ) || return \$self -> check_rm_error_page ;
+        $self->sendmail(
+            $user->email,
+            'DATA Diary On-line Userid Reminder',
+            { user => $user }
+        );
 
-   my $user = new DATA::Auth::User ;
+    }
 
-   $user -> email ( scalar $self -> query -> param ( 'user_email' ) ) ;
-
-   if ( $user -> fetch ( $self -> dbh ) ) {
-
-     $self -> sendmail (
-        $user -> email ,
-      'DATA Diary On-line Userid Reminder' ,
-      { user => $user }
-     ) ;
-
-  }
-
-   return $self -> redirect ( $query -> param ( 'onSuccess' ) ) ;
+    return $self->redirect(scalar $query->param('onSuccess'));
 
 }
 
