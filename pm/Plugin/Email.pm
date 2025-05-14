@@ -18,19 +18,27 @@ our @EXPORT = qw/sendmail/;
 
 sub sendmail {
 
-   my ( $self , $to , $subject , $params ) = @_ ;
+    my (
+        $self,    # CGI::Application object
+        $to,      # recipient
+        $subject, # subject line
+        $params   # parameters to be passed to the email template
+    ) = @_;
 
-  my $original = undef ;
+    my $original = undef;
+    if (
+        $self->conf->param('all_emails_to_webmin')
+        && $to ne $self->conf->param('webmin')
+    ) {
 
-  if ( my $email = $self -> conf -> param ( 'env' ) -> { email } ) {
+        # We're in a testing mode in which all emails that aren't for the webmin
+        # are redirected to the webmin and the recipient for this email is NOT
+        # the webmin, so redirect.
 
-      # We are debugging, replace "to" if it's been overridden
-    if ( $to ne $email ) {
-      $original = $to ;
-        $to = $email ;
+        $original = $to;
+        $to = $self->conf->param('webmin');
+
     }
-
-   }
 
     # Get the template for emails produced by the current runmode.
     my $tmpl = $self->template->load (
