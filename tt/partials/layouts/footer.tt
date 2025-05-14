@@ -29,8 +29,10 @@
           </div>
           <div class="footer-data-block">
             <p>
-              <i class="fas fa-at" aria-hidden="true"></i>
-              admin@derbyartsandtheatre.org.uk
+              <a href="mailto:admin@derbyartsandtheatre.org.uk">
+                <i class="fas fa-at" aria-hidden="true"></i>
+                admin@derbyartsandtheatre.org.uk
+              </a>
             </p>
           </div>
           <!-- Start of Social Menu -->
