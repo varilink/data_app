@@ -406,7 +406,7 @@ sent via eamil to the webmin.
   $event -> dates ( scalar $query -> param ( 'event_dates' ) ) ;
   $event -> times ( scalar $query -> param ( 'event_times' ) ) ;
   $event -> presented_by ( scalar $query -> param ( 'event_presented_by' ) ) ;
-  $event -> box_office ( $query -> param ( 'event_box_office' ) ) ;
+  $event -> box_office ( scalar $query -> param ( 'event_box_office' ) ) ;
 
   # Venue - Try fetch on name to see if it is already known or not.
   $event -> venue_name ( scalar $query -> param ( 'event_venue' ) ) ;
