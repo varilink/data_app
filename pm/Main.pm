@@ -40,6 +40,7 @@ use CGI::Application::Plugin::Redirect ;
 use CGI::Application::Plugin::ValidateRM ;
 
 use DATA::Plugin::Email ;
+use DATA::Plugin::LogDispatch;
 use DATA::Plugin::ValidateRM ;
 
 sub cgiapp_init {
@@ -52,22 +53,6 @@ sub cgiapp_init {
     'throw_error'   => 'throw_error'   ,
     'AUTOLOAD'      => \&auto_run_mode
 
-  ) ;
-
-  my $min_log_level = 'emergency';
-  if ( defined $self->conf->param('file_log_level') ) {
-    $min_log_level = $self->conf->param('file_log_level');
-  }
-
-  $self -> log_config (
-    LOG_DISPATCH_MODULES => [
-      {
-        module    => 'Log::Dispatch::File' ,
-        name      => 'file' ,
-        filename  => '/tmp/data_app.log',
-        min_level => $min_log_level
-      },
-    ]
   ) ;
 
 }
