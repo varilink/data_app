@@ -21,14 +21,14 @@ configuration variables for which this approach is supported.
 
 =cut
 
-use strict ;
-use warnings ;
+use strict;
+use warnings;
 
-use base qw / Exporter / ;
+use base qw/Exporter/;
 
 sub _init {
 
-  my $self = shift ;
+    my $self = shift;
 
     # Note that we load the configuration file using Config::General and then
     # use the loaded configuration in Config::Context. I've found that trying to
@@ -59,15 +59,13 @@ sub _init {
 
 sub import {
 
-  my $caller = scalar caller ;
+    my $caller = scalar caller; 
 
-  $caller -> add_callback (
+    $caller->add_callback(
+        'init', \&_init
+    );
 
-    'init' , \&_init
-
-  ) ;
-
-  goto &Exporter::import ;
+    goto &Exporter::import;
 
 }
 

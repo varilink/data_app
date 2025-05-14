@@ -1,4 +1,4 @@
-package DATA::Plugin::DBH ;
+package DATA::Plugin::DBH;
 
 =head1 DATA::Plugin::Config
 
@@ -7,44 +7,35 @@ database.
 
 =cut
 
-use strict ;
-use warnings ;
+use strict;
+use warnings;
 
-use base qw / Exporter / ;
+use base qw/Exporter/;
 
 sub _init {
 
-  my $self = shift ;
-
-  my $database =  $self->conf->param('database');
-
-   $self -> dbh_config (
-
-      'dbi:SQLite:dbname=' . $database ,
-      '' ,
-      '' ,
-
-   ) ;
-
-  # I dont fully understand why but do NOT enable the sqlite_unicode flag here
-  # $self -> dbh -> { sqlite_unicode } = 1 ;
+   my $self = shift;
+   my $database =  $self->conf->param('database');
+   $self->dbh_config(
+      'dbi:SQLite:dbname=' . $database,
+      '',
+      '',
+   );
 
 }
 
 sub import {
 
-   my $caller = scalar caller ;
+   my $caller = scalar caller;
 
-   $caller -> add_callback (
+   $caller->add_callback(
+      'init', \&_init
+   );
 
-      'init' , \&_init
-
-   ) ;
-
-   goto &Exporter::import ;
+   goto &Exporter::import;
 
 }
 
-1 ;
+1;
 
 __END__

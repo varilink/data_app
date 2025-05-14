@@ -1108,44 +1108,30 @@ online listing.
 
 =cut
 
-  my $self = shift ;
-  my $query = $self -> query ;
+my $self = shift;
+my $query = $self->query;
 
-  # Initialise redirect with the root
-  # We will append the location within the root according to the submit button
-  my $redirect = $self->conf->param('root');
+# Initialise the redirect address with the root URL. We will append the location
+# within the root according to which path we take below.
+my $redirect = $self->conf->param('root');
 
-#-------------------------------------------------------------------------------
+# Check whether the user is authorised before we go any further.
+unless ( _authorised($self, 'event') ) {
+    $redirect .= '/unauthorised';
+    goto REDIRECT;
+}
 
-#
-# Check the authorisation of the user before we go any further
-#
-
-  unless ( _authorised ( $self , 'event' ) ) {
-
-    $redirect .= '/unauthorised' ;
-    goto REDIRECT ;
-
-  }
-
-#-------------------------------------------------------------------------------
-
-#
-# We have reached here so we know that the user is authorised. Now check if this
-# is a delete request. Delete requests are very much more simple than adds or
-# updates.
-#
-
-  if ( defined $query -> param ( 'delete' ) ) {
-
-    # This is a request to delete
-    my $event = new DATA::WhatsOn::Event ;
-    # The delete button is only enabled where there is a rowid
-    # So we can safely assume that it is present without validating
-    $event -> rowid ( scalar $query -> param ( 'event_rowid' ) ) ;
-    $event -> delete ( $self -> dbh ) ;
-    $redirect .= $self -> conf -> param ( 'onDelete' ) ;
-    goto REDIRECT ;
+# Check if this is a delete request. Delete requests are very much more simple
+# than adds or updates.
+if ( defined $query->param('delete') ) {
+    # This is a request to delete an event.
+    my $event = new DATA::WhatsOn::Event;
+    # The delete button is only enabled where there is a rowid so we can safely
+    # assume that one is present without further validation.
+    $event->rowid(scalar $query->param('event_rowid'));
+    $event->delete($self->dbh);
+    $redirect .= $self->conf->param('onDelete');
+    goto REDIRECT;
 
   }
 

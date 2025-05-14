@@ -1,4 +1,4 @@
-package DATA::Auth::Request ;
+package DATA::Auth::Request;
 
 =head1 DATA::Auth::Request
 
@@ -9,8 +9,8 @@ is allocated to a role that gives them access.
 
 =cut
 
-use strict ;
-use warnings ;
+use strict;
+use warnings;
 
 # We do not base this module on DATA::Main since it doesn't require the
 # template and database capability that DATA::Main imparts.
@@ -30,13 +30,11 @@ use DATA::Plugin::Session;
 
 sub cgiapp_init {
 
-  my $self = shift ;
+my $self = shift;
 
-  $self -> run_modes ( [
-
-    'request'         ,
-
-  ] ) ;
+    $self->run_modes([
+        'request',
+    ]);
 
 }
 
@@ -48,52 +46,49 @@ sub request {
 
 =head3 request
 
-Tests whether a request to access a protected resource is permitted.
+This run mode tests if the user is permitted to access a secure resource.
 
 =cut
 
-  my $self = shift ;
+    my $self = shift;
 
-  my $query = $self -> query ;
+    my $query = $self->query;
 
-  if ( $self -> session -> param ( 'userid' ) ) {
+    if ( $self->session->param('userid') ) {
 
-    # Already authenticated, check if authorised
+        # Already authenticated, check if authorised
 
-    # Get the target
-    my $target = $query -> env -> { 'HTTP_X_ORIGINAL_URI' } ;
-    $target =~ s/\/+/\//g ; # Replace one or more / with a single /
+        # Get the target
+        my $target = $query->env->{'HTTP_X_ORIGINAL_URI'};
+        $target =~ s/\/+/\//g ; # Replace one or more / with a single /
 
-    my $config = $conf -> context ( $target ) ;
+        my $config = $self->conf->context($target);
 
-    if ( $config -> { 'role' } ) {
+        if ( $config->{'role'} ) {
 
-      # This area of the site requires that the user has a specific role.
-      # Check that they do.
+            # This area of the site requires that the user has a specific role.
+            # Check that they do.
+            $self->session->param('role') eq $config->{'role'}
+                ? $self->header_props( -status => '200' )
+                : $self->header_props( -status => '403' );
 
-      $self -> session -> param ( 'role' ) eq $config -> { 'role' }
-           ? $self -> header_props ( -status => '200' )
-         : $self -> header_props ( -status => '403' ) ;
+        } else {
+
+            # This area of the site is secure but does not require that the user
+            # has a specific role. It is sufficient just that they are
+            # authenticated.
+            $self->header_props( -status => '200');
+
+        }
 
     } else {
 
-      # This area of the site is secure but does not require that the user
-      # has a specific role. It is sufficient just that they are
-      # authenticated.
-
-      $self -> header_props ( -status => '200' ) ;
+        # Not authenticated, prompt for login
+        $self->header_props( -status => '401' );
 
     }
 
-   } else {
-
-      # Not authenticated, prompt for login
-
-      $self -> header_props ( -status => '401' ) ;
-
-   }
-
-   return ;
+    return;
 
 }
 

@@ -15,16 +15,19 @@ the mapping between those locations and their run mode names.
 
 =cut
 
-use strict ;
-use warnings ;
+use strict;
+use warnings;
 
-use CGI::Application::Dispatch::PSGI ;
-use Config::Context ;
-use YAML qw / LoadFile / ;
+use CGI::Application::Dispatch::PSGI;
+use Config::Context;
+use Config::General;
+use Data::Dumper;
+use Log::Dispatch;
+use YAML qw/LoadFile/;
 
 sub {
 
-  my $env = shift ;
+    my $env = shift;
 
     my %env_vars = (
         DATA_APP_LOG_LEVEL => $ENV{DATA_APP_LOG_LEVEL} // 'emergency',
@@ -56,40 +59,29 @@ sub {
         ],
     );
 
-  my $rules = LoadFile "$ENV{'DATA_APP_CONF_DIR'}/app/dispatch.yml" ;
+    # rule = key pair in which the key is the path and the value is the run mode
+    my $rules = LoadFile "$ENV{'DATA_APP_CONF_DIR'}/app/dispatch.yml";
+    my $table = [];
 
-  my $table = [ ] ;
+    foreach my $rule ( @{$rules} ) {
 
-  foreach my $rule ( @{ $rules } ) {
+        # Get the patch from the rule
+        my @keys = keys %{$rule} ;
+        my $path = $keys[0];
+        # Get the app for that path
+        my $app = $conf->context($path)->{app};
+        # Get the run mode
+        my $rm = $rule->{$path};
+        push @{$table}, $path => { app => $app, rm => $rm };
 
-    my @keys = keys %{ $rule } ;
+    }
 
-    my $path = $keys[0] ;
-    my $app = $conf -> context ( $path ) -> { app } ;
+    # Dispatch the request using the dispatch table that we just built
+    my $app = CGI::Application::Dispatch::PSGI->as_psgi(
+        prefix => 'DATA',
+        table => $table ,
+    );
 
-    my $rm = $rule -> { $path } ;
-
-    push @{ $table } , $path => { app => $app , rm => $rm } ;
-
-  }
-
-  # Dispatch the request
-  my $app = CGI::Application::Dispatch::PSGI -> as_psgi (
-
-    prefix => 'DATA' ,
-
-    args_to_new => {
-
-      PARAMS => {
-        home => "$ENV{'DATA_APP_CONF_DIR'}"
-      } ,
-
-    } ,
-
-    table => $table ,
-
-  ) ;
-
-  return $app -> ( $env ) ;
+    return $app->($env);
 
 }
