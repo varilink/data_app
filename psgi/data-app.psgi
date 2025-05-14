@@ -26,37 +26,35 @@ sub {
 
   my $env = shift ;
 
-  my $conf = Config::Context -> new (
+    my %env_vars = (
+        DATA_APP_LOG_LEVEL => $ENV{DATA_APP_LOG_LEVEL} // 'emergency',
+    );
 
-    file => "$ENV{'DATA_APP_CONF_DIR'}/$ENV{'DATA_APP_CONF_FILE'}" ,
+    my $general = Config::General->new(
+        -ConfigFile => "$ENV{'DATA_APP_CONF_DIR'}/$ENV{'DATA_APP_CONF_FILE'}",
+        -DefaultConfig => \%env_vars,
+        -IncludeDirectories => 'yes',
+        -IncludeRelative => 'yes',
+        -InterPolateVars => 'yes',
+        -UseApacheInclude => 'yes'
+    );
 
-    driver => 'ConfigGeneral' ,
+    my %config = $general->getall;
 
-    match_sections => [
-
-      {
-        name => 'Location' ,
-        match_type => 'path' ,
-      } ,
-      {
-        name => 'LocationMatch' ,
-        match_type => 'regex' ,
-      } ,
-
-    ] ,
-
-    driver_options => {
-
-      ConfigGeneral => {
-        -AllowMultiOptions => 'yes' ,
-        -IncludeDirectories => 'yes' ,
-        -MergeDuplicateOptions => 'no' ,
-        -UseApacheInclude => 'yes' ,
-      } ,
-
-    } ,
-
-  ) ;
+    my $conf = Config::Context->new(
+        config => \%config,
+        driver => 'ConfigGeneral',
+        match_sections => [
+            {
+                name => 'Location',
+                match_type => 'path',
+            },
+            {
+                name => 'LocationMatch',
+                match_type => 'regex',
+            },
+        ],
+    );
 
   my $rules = LoadFile "$ENV{'DATA_APP_CONF_DIR'}/app/dispatch.yml" ;
 

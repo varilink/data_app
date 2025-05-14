@@ -30,25 +30,30 @@ sub _init {
 
   my $self = shift ;
 
-  $self -> conf -> init (
+    # Note that we load the configuration file using Config::General and then
+    # use the loaded configuration in Config::Context. I've found that trying to
+    # load the configuration file directly using Config::Context prevents
+    # Config::General from interpolating variables.
 
-    # Locate the configuration using the home parameter passed via the ini file
-    file   => "$ENV{'DATA_APP_CONF_DIR'}/$ENV{'DATA_APP_CONF_FILE'}" ,
+    my %env_vars = (
+        DATA_APP_LOG_LEVEL => $ENV{DATA_APP_LOG_LEVEL} // 'emergency',
+    );
 
-    driver => 'ConfigGeneral' ,
-
-    driver_options => {
-
-      ConfigGeneral => {
-        -AllowMultiOptions => 'yes' ,
-        -IncludeDirectories => 'yes' ,
-        -MergeDuplicateOptions => 'no' ,
+    my $general = Config::General->new(
+        -ConfigFile => "$ENV{'DATA_APP_CONF_DIR'}/$ENV{'DATA_APP_CONF_FILE'}",
+        -DefaultConfig => \%env_vars,
+        -IncludeDirectories => 'yes',
+        -IncludeRelative => 'yes',
+        -InterPolateVars => 'yes',
         -UseApacheInclude => 'yes'
-      }
+    );
 
-    } ,
+    my %config = $general->getall;
 
-  ) ;
+    $self->conf->init(
+        config => \%config,
+        driver => 'ConfigGeneral',
+    );
 
 }
 
