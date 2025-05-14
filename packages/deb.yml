@@ -35,6 +35,7 @@
 - libhash-merge-perl
 - libhtml-packer-perl
 - libjson-perl
+- liblexical-var-perl
 - liblist-allutils-perl
 - libmail-chimp3-perl
 - libmath-random-isaac-xs-perl
