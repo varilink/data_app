@@ -19,23 +19,29 @@
                                 <tr>
                                 <![endif]-->
 
+[%- IF conf.facebook.page_name %]
+[%- facebook_page_path = conf.facebook.page_name %]
+[%- ELSE %]
+[%- facebook_page_path = conf.facebook.page_id %]
+[%- END %]
+
 [% links =
   [
     {
-      type => 'twitter' ,
-      url => 'https://x.com/DerbyAmPerfArts'
+      type => 'link' ,
+      url => conf.root
     } ,
     {
       type => 'facebook' ,
-      url => 'https://www.facebook.com/DerbyArtsAndTheatreAssociation/'
+      url => 'https://www.facebook.com/' _ facebook_page_path
+    } ,
+    {
+      type => 'twitter' ,
+      url => 'https://x.com/' _ conf.x.handle
     } ,
     {
       type => 'youtube' ,
-      url => 'https://www.youtube.com/channel/UCTXIEwu1D9mnV9uU7H-TZMw/'
-    } ,
-    {
-      type => 'link' ,
-      url => "https://www.derbyartsandtheatre.org.uk/"
+      url => 'https://www.youtube.com/channel/' _ conf.youtube.channel
     } ,
   ]
 %]
