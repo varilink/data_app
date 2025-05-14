@@ -59,6 +59,25 @@ sub {
         ],
     );
 
+    my $log = Log::Dispatch->new(
+        outputs => [
+            [
+                'File',
+                filename => '/tmp/data_app.log',
+                min_level =>
+                    $conf->context($env->{REQUEST_URI})->{file_log_level},
+                mode => 'append',
+                newline => 1
+            ]
+        ],
+        callbacks => sub { my %h = @_; return time().': '.$h{message}; },
+    );
+
+    $log->debug(Dumper($env));
+    $log->notice(
+        'Entered the PSGI script with request URI: ' . $env->{REQUEST_URI}
+    );
+
     # rule = key pair in which the key is the path and the value is the run mode
     my $rules = LoadFile "$ENV{'DATA_APP_CONF_DIR'}/app/dispatch.yml";
     my $table = [];

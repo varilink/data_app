@@ -52,6 +52,10 @@ This run mode tests if the user is permitted to access a secure resource.
 
     my $self = shift;
 
+    $self->log->notice(
+        'Entered request run mode of the Auth::Request application'
+    );
+
     my $query = $self->query;
 
     if ( $self->session->param('userid') ) {
