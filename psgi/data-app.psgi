@@ -1,3 +1,20 @@
+=head1 L<data-app.psgi|https://github.com/varilink/data_app/blob/main/psgi/data-app.psgi>
+
+PSGI script for the DATA web application. This uses
+-L<CGI::Application::Dispatch::PSGI|https://metacpan.org/pod/CGI::Application::Dispatch::PSGI>
+to dispatch requests. It builds the dispatch table by combining the contents of
+C<conf/context.cfg> and C<conf/dispatch.yml> from the
+-L<DATA - App|https://github.com/varilink/data_app> repository. To do this it
+requires that the C<conf/> directory be present at the location
+C<$ENV{'DATA_APP_CONF_DIR'}/app/> in the environment in which it is run.
+
+C<conf/context.cfg> contains the mapping between locations within the DATA web
+application and the -L<CGI::Application|https://metacpan.org/pod/CGI::Application>
+modules that combine for the DATA web application. C<conf/dispatch.yml> contains
+the mapping between those locations and their run mode names.
+
+=cut
+
 use strict ;
 use warnings ;
 

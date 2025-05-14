@@ -2,7 +2,8 @@ package DATA::Plugin::DBH ;
 
 =head1 DATA::Plugin::Config
 
-Plugin DATA application integration with DBH.
+Plugin DATA application integration with DBH, which is used to access a SQLite
+database.
 
 =cut
 
