@@ -11,13 +11,21 @@ restricted to specific roles whether that user is authorised.
 use strict ;
 use warnings ;
 
-use base qw / CGI::Application / ;
+# We do not base this module on DATA::Main since it doesn't require the
+# template and database capability that DATA::Main imparts.
+use base qw/CGI::Application/;
 
-use CGI::Application::Plugin::Session ;
+# Use CGI::Application plugins
+use CGI::Application::Plugin::Config::Context;
+use CGI::Application::Plugin::LogDispatch;
+use CGI::Application::Plugin::Session;
 
-use DATA::Plugin::Session ;
+# Use DATA customisation of CGI::Application::Plugin::Config::Context
+use DATA::Plugin::Config;
 
-use Config::Context ;
+# Use other DATA customisations of CGI:Application plugins
+use DATA::Plugin::LogDispatch;
+use DATA::Plugin::Session;
 
 sub cgiapp_init {
 
@@ -54,41 +62,6 @@ Tests whether a request to access a protected resource is permitted.
     # Get the target
     my $target = $query -> env -> { 'HTTP_X_ORIGINAL_URI' } ;
     $target =~ s/\/+/\//g ; # Replace one or more / with a single /
-
-    # Get the configuration location
-    my $home = $query -> env -> { 'HTTP_X_CONFIG' } ;
-
-      my $conf = new Config::Context (
-
-         file => "$ENV{'DATA_CONF'}/app.cfg" ,
-
-         driver => 'ConfigGeneral' ,
-
-        match_sections => [
-
-           {
-              name => 'Location' ,
-              match_type => 'path' ,
-           } ,
-           {
-              name => 'LocationMatch' ,
-              match_type => 'regex' ,
-           } ,
-
-        ] ,
-
-        driver_options => {
-
-           ConfigGeneral => {
-              -AllowMultiOptions => 'yes' ,
-              -IncludeDirectories => 'yes' ,
-              -MergeDuplicateOptions => 'no' ,
-              -UseApacheInclude => 'yes' ,
-           } ,
-
-        } ,
-
-     ) ;
 
     my $config = $conf -> context ( $target ) ;
 
