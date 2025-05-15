@@ -171,13 +171,13 @@
 
           <p class="text-center">
 
-            <a href="[% conf.mailchimp_signup_form_url %]" target="_blank">
+            <a href="[% conf.mailchimp.signup_form_url %]" target="_blank">
               <span style="font-size: 3rem; color: #4dac71;">
                 <i class="fas fa-envelope"></i>
               </span>
             </a>
             <br>
-            <a class="button" href="[% conf.mailchimp_signup_form_url %]"
+            <a class="button" href="[% conf.mailchimp.signup_form_url %]"
             target="_blank" style="border-radius: 4px;
             padding: 0.3em 0.5em 0.55em 0.5em;">
               Subscribe to our email bulletin
@@ -191,17 +191,24 @@
 
           <p class="text-center">
 
-            <a href="[% conf.facebook_page_url %]" target="_blank">
+[%- IF conf.facebook.page_name %]
+[%- facebook_page_path = conf.facebook.page_name %]
+[%- ELSE %]
+[%- facebook_page_path = conf.facebook.page_id %]
+[%- END %]
+
+            <a href="[% 'https://www.facebook.com/' _ facebook_page_path %]"
+            target="_blank">
               <span style="font-size: 3rem; color: #3B5998;">
                 <i class="fab fa-facebook"></i>
               </span>
             </a>
             <br>
             <a class="button" target="_blank"
-            href="[% conf.facebook_page_url %]"
+            href="[% 'https://www.facebook.com/' _ facebook_page_path %]"
             style="border-radius: 4px; padding: 0.3em 0.5em 0.55em 0.5em;
             background-color: #3B5998;">
-              Folow us on Facebook
+              Follow us on Facebook
             </a>
 
           </p>
@@ -212,15 +219,18 @@
 
           <p class="text-center">
 
-            <span style="font-size: 3rem;">
-              <i class="fa-brands fa-square-x-twitter"></i>
-            </span>
+            <a href="[% 'https://x.com/' _ conf.x.handle %]" target="_blank">
+              <span style="font-size: 3rem; color: #000000;">
+                <i class="fa-brands fa-square-x-twitter"></i>
+              </span>
+            </a>
             <br>
-            <a class="twitter-follow-button" data-show-count="false"
-            data-size="large" href="https://x.com/DerbyAmPerfArts">
+            <a class="button" target="_blank"
+              href=[% 'https://x.com/' _ conf.x.handle %]
+              style="border-radius: 4px; padding: 0.3em 0.5em 0.55em 0.5em;
+              background-color: #000000;">
               Follow us on X
-            </a><br>
-            (formerly Twitter)
+            </a>
 
           </p>
 
