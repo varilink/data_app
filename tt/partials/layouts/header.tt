@@ -388,7 +388,7 @@
               <i class="fas fa-rotate-90 fa-level-up-alt"></i>
             </li>
 
-            <li><a href="[% conf.mailchimp_signup_form_url %]">
+            <li><a href="[% conf.mailchimp.signup_form_url %]">
 [%~ IF template.name == 'subscribe.tt' %]
               <span class="is-active">Subscribe</span>
 [%~ ELSE %]
