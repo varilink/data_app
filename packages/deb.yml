@@ -58,6 +58,7 @@
 - libtest-needs-perl
 - libtest-requires-perl
 - libtest-warnings-perl
+- libtext-csv-perl
 - libtypes-serialiser-perl
 - liburi-perl
 - libyaml-perl
