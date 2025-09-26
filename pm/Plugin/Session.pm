@@ -19,7 +19,7 @@ sub _init {
     CGI_SESSION_OPTIONS => [
       "driver:File" , $self->query , { Directory => '/cookies' }
     ] ,
-    COOKIE_PARAMS => { -path  => '/' } ,
+    COOKIE_PARAMS => { -path  => '/', -samesite => 'Strict' } ,
     SEND_COOKIE => 1
   ) ;
 
