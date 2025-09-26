@@ -83,7 +83,7 @@ sub sendmail {
     # Create the email
     my $email = Email::MIME->create(
         header_str => [
-            From => 'admin@derbyartsandtheatre.org.uk',
+            From => $self->conf->param('webmin'),
             To => $to,
             Subject => $subject,
             'Content-Type' => 'multipart/alternative',
