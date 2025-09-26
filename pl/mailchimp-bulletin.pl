@@ -75,6 +75,7 @@ EndofHelp
 my %params ;
 
 my $option  ; # Used to capture valid options
+my $getbool ; # Used to indicate that a 0 or a 1 is expected for an option
 my $getdir  ; # Used to indicate that a filepath value for a new file but within
               # an existing directory is expected for an option
 my $getint  ; # Used to indicate that an integer value is expected for an option
@@ -85,11 +86,21 @@ my $getstr  ; # Used to indicate that a string value is expected for an option
 ARG:
 foreach my $arg ( @ARGV ) {
 
-  if ( $option && ( $getdir || $getint || $getpath || $getstr ) ) {
+  if ( $option && ( $getbool ||$getdir || $getint || $getpath || $getstr ) ) {
 
     # Check for valid values for an option flag on the previous loop
 
-    if ( $getdir ) {
+    if ( $getbool ) {
+
+      unless ( $arg == 0 || $arg == 1 ) {
+
+        print STDERR "Invalid value specified - must be 0 or 1\n" ;
+        print STDERR $help ;
+        exit ;
+
+      }
+
+    } elsif ( $getdir ) {
 
       # Look for a filepath value for an option and test that the directory of
       # the filepath exists. By contrast to $getpath this option will create a
@@ -183,7 +194,7 @@ foreach my $arg ( @ARGV ) {
   } elsif ( $arg eq '-p' ) {
 
     # Valid pin_events option, which must have an integer value
-    $option = 'pin_events'; $getint = 1 ;
+    $option = 'pin_events'; $getbool = 1 ;
 
   } elsif ( $arg eq '-s' ) {
 
@@ -771,6 +782,7 @@ foreach my $segment (
   elsif ( $segment eq 'news' || $segment eq 'both' ) {
     $vars->{news_items} = \@news_items if @news_items;
     $vars->{news_insert} = $params{member_insert} if $params{member_insert};
+    $vars->{pin_events} = $params{pin_events} if $params{pin_events};
   }
   elsif ( $segment eq 'guidance' || $segment eq 'both' ) {
     $vars->{guidance} = $guidance;
