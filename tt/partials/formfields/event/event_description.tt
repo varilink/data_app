@@ -2,503 +2,180 @@
 --------------------------------------------------------------------------------
 tt/partials/formfields/event/event_description.tt
 --------------------------------------------------------------------------------
-
-This is the formfield for the "online promotiion" format of an event
-description. This takes the form of a card in Zurb's "Foundation for Sites". The
-card can have two sections, the upper section is optional and can contain a
-promotional image for the event. The lower section must always be present and
-contains the event's text description. We use the TinyMCE WYSIWYG editor in
-inline mode to faciliate the edit of this event card.
-
-This is a long file, so it's useful to summarise its structure:
-  - [Branch]
-      - Not the error state
-          - [Branch]
-              - No fuller description provided
-              - A fuller description with image provided
-              - A fuller description without an image is provided
-      - The error state
-          - [Branch]
-              - No fuller description provided
-              - A fuller description with image provided
-              - A fuller description without an image is provided
-          - Error messages
-  - Javascript for inclusion in the page footer
-
 %]
 
-[%~ UNLESS error # There are no input errors to report %]
-
-[%#~
---------------------------------------------------------------------------------
-Not the error state
---------------------------------------------------------------------------------
--%]
-
-<!-- event name from the programme format event details -->
-<input type="hidden" name="event_name" value="[% event.name FILTER html %]">
-<!-- placeholder image to be replaced by the chosen event image -->
-<input type="hidden" name="click_me" value='<p><img src="
-[%~ conf.image_upload_path %]click_me.jpg"></p>'>
-<!-- starting description build from  the programme format event details -->
-<input type="hidden" name="event_default_description" value="
-[%~ PROCESS event_default_description.tt FILTER collapse FILTER html %]">
-
+<input [% FILTER collapse %]
+    type="hidden"
+    name="event_name"
+    value="[% IF event.name %][% event.name FILTER html %][% END %]"
+[% END %]>
+<input [% FILTER collapse %]
+    type="hidden"
+    name="click_me"
+    value='<p><img src="[%~ conf.image_upload_path %]click_me.jpg"></p>'
+[% END %]>
+<input [% FILTER collapse %]
+    type="hidden"
+    name="event_default_description"
+    value="
+    [%~ PROCESS event_default_description.tt FILTER collapse FILTER html %]"
+[% END %]>
+<!-- Start Event Card -->
 <div class="event-card">
-
-  <div class="event-card-divider"><h5>[% event.name %]</h5></div>
-
-[%~ IF event.use_desc == 0
-# A description for the event that is fuller than the programme listing is NOT
-# selected, so the event card is built from the programme listing details. We
-# include a hidden image so that is may be revealed if the user selects a fuller
-# description with an event image.
-%]
-
-[%#~
---------------------------------------------------------------------------------
-No fuller description provided
---------------------------------------------------------------------------------
--%]
-
-  <div id="mceEventImage" class="card-image event-use-desc-yes-with-image hide">
-
-[%~ IF event.image %]
-
-    <p><img src="[% event.image %]"></p>
-
-[%~ ELSE %]
-
-    <p><img src="[% conf.image_upload_path %]click_me.jpg"></p>
-
-[%~ END %]
-  </div>
-
-  <div class="event-card-section event-use-desc-no">
-[% PROCESS event_default_description.tt FILTER collapse FILTER indent 4 %]
-  </div>
-
-  <div id="mceEventDescription" class="event-card-section event-use-desc-yes
-  hide">
-
-[%~ IF event.description %]
-
-    [% event.description FILTER collapse %]
-
-[%~ ELSE %]
-
-[% PROCESS event_default_description.tt FILTER collapse FILTER indent 4 %]
-
-[%~ END %]
-
-  </div>
-
-[%~ ELSIF event.use_desc == 1 %]
-
-[%#~
---------------------------------------------------------------------------------
-A fuller description with image provided
---------------------------------------------------------------------------------
--%]
-
-  <div id="mceEventImage" class="card-image event-use-desc-yes-with-image">
-[%~ IF event.image %]
-    <p><img src="[% event.image %]"></p>
-[%~ ELSE %]
-    <p><img src="[% conf.image_upload_path %]click_me.jpg"></p>
-[%~ END %]
-  </div>
-
-  <div class="event-card-section event-use-desc-no hide">
-
-[% PROCESS event_default_description.tt FILTER collapse FILTER indent 4 %]
-
-  </div>
-
-  <div id="mceEventDescription" class="event-card-section event-use-desc-yes">
-    [% event.description FILTER collapse %]
-  </div>
-
-[%~ ELSIF event.use_desc == 2 %]
-
-[%#~
---------------------------------------------------------------------------------
-A fuller description without an image is provided
---------------------------------------------------------------------------------
--%]
-
-  <div id="mceEventImage"
-  class="card-image event-use-desc-yes-with-image hide">
-[%~ IF event.image %]
-    <p><img src="[% event.image %]"></p>
-[%~ ELSE %]
-  <p><img src="[% conf.image_upload_path %]click_me.jpg"></p>
-[%~ END %]
-  </div>
-
-  <div class="event-card-section event-use-desc-no hide">
-[% PROCESS event_default_description.tt FILTER collapse FILTER indent 4 %]
-  </div>
-
-  <div id="mceEventDescription" class="event-card-section event-use-desc-yes">
-[%~ IF event.description %]
-    [% event.description FILTER collapse %]
-[%~ ELSE %]
-[% PROCESS event_default_description.tt FILTER collapse FILTER indent 4 %]
-[%~ END %]
-  </div>
-
-[%~ END # IF event.use_desc == 0 %]
-
+    <div class="event-card-divider">
+        <h5>[% event.name FILTER html %]</h5>
+    </div>
+    <div [% FILTER collapse %]
+        id="mceEventImage"
+        class="card-image event-use-desc-yes-with-image
+        [%~ UNLESS event.use_desc == 1 %] hide[% END %]"
+    [% END %]>
+        [%~ IF error && mceEventImage %]
+        [% mceEventImage %]
+        [%~ ELSIF !error && event.image %]
+        <p><img src="[% event.image %]"></p>
+        [%~ ELSE %]
+        <p><img src="[% conf.image_upload_path %]click_me.jpg"></p>
+        [%~ END %]
+    </div>
+    <div class="event-card-section event-use-desc-no
+    [% UNLESS event.use_desc == 0 %] hide[% END %]">
+        [% PROCESS event_default_description.tt FILTER collapse %]
+    </div>
+    <div [% FILTER collapse %]
+        id="mceEventDescription"
+        class="event-card-section event-use-desc-yes
+        [%~ IF event.use_desc == 0 %] hide[% END %]"
+    [% END %]>
+        [%~ IF error && mceEventDescription %]
+        [% mceEventDescription %]
+        [%~ ELSIF !error && event.description %]
+        [% event.description FILTER collapse %]
+        [%~ ELSE %]
+        [% PROCESS event_default_description.tt FILTER collapse %]
+        [%~ END %]
+    </div>
 </div>
+<!-- End Event Card -->
+<small class="form-error[% IF error %] is-visible[% END %]">
 
-[%~ ELSE # Error State %]
+    [%~ IF ( error_mceEventImage == 'Missing' ||
+             error_mceEventImage == 'event_image_provided' ) &&
+           error_mceEventDescription == 'Mandatory field not supplied'
+    # Both event image and event description missing, which we handle via a
+    # combined error message for both fields.
+    -%]
 
-[%#~
---------------------------------------------------------------------------------
-The error state
---------------------------------------------------------------------------------
--%]
-
-<input type="hidden" name="event_name">
-
-<input type="hidden" name="click_me">
-
-<input type="hidden" name="event_default_description">
-
-<div class="event-card">
-
-  <div class="event-card-divider"><h5>[% event_name FILTER html %]</h5></div>
-
-[%~ IF event_use_desc == 0 %]
-
-[%#~
---------------------------------------------------------------------------------
-No fuller description provided
---------------------------------------------------------------------------------
--%]
-
-  <div id="mceEventImage"
-  class="card-image event-use-desc-yes-with-image hide">
-[%~ IF mceEventImage %]
-    [% mceEventImage %]
-[%~ ELSE %]
-    <p><img src="[% conf.image_upload_path %]click_me.jpg" /></p>
-[%~ END %]
-  </div>
-
-  <div class="event-card-section event-use-desc-no">
-    [% event_default_description %]
-  </div>
-
-  <div id="mceEventDescription" class="event-card-section event-use-desc-yes
-  hide">
-    [% event_default_description %]
-  </div>
-
-[%~ ELSIF event_use_desc == 1 %]
-
-[%#~
---------------------------------------------------------------------------------
-A fuller description with image provided
---------------------------------------------------------------------------------
--%]
-
-  <div id="mceEventImage" class="card-image event-use-desc-yes-with-image">
-[%~ IF mceEventImage %]
-    [% mceEventImage %]
-[%~ ELSE %]
-    <p><img src="[% conf.image_upload_path %]click_me.jpg"></p>
-[%~ END %]
-  </div>
-
-  <div class="event-card-section event-use-desc-no hide">
-    [% event_default_description %]
-  </div>
-
-  <div id="mceEventDescription" class="event-card-section event-use-desc-yes">
-    [% mceEventDescription %]
-  </div>
-
-[%~ ELSIF event_use_desc == 2 %]
-
-[%#~
---------------------------------------------------------------------------------
-A fuller description without an image is provided
---------------------------------------------------------------------------------
--%]
-
-  <div id="mceEventImage"
-  class="card-image event-use-desc-yes-with-image hide">
-[%~ IF mceEventImage %]
-    [% mceEventImage %]
-[%~ ELSE %]
-    <p><img src="[% conf.image_upload_path %]click_me.jpg"></p>
+[% FILTER collapse %]
+If you have answered "Yes (with image)" to the question "Provide a fuller
+description for your event?" then you must provide an image and description
+above.
 [% END %]
-  </div>
 
-  <div class="event-card-section event-use-desc-no hide">
-    [% event_default_description %]
-  </div>
+    [%~ ELSE
+    # No need for a combined error message for both fields. Handle them
+    # independently.
+    %]
 
-  <div id="mceEventDescription" class="event-card-section event-use-desc-yes">
-    [% mceEventDescription %]
-  </div>
+        [%~ IF error_mceEventImage == 'Missing' ||
+               error_mceEventImage == 'event_image_provided'
+        -%]
 
-[%~ END # IF event_use_desc == 0 %]
+[% FILTER collapse %]
+If you have answered "Yes (with image)" to the question "Provide a fuller
+description for your event?" then you must provide an image above.
+[% END %]
 
-</div>
+        [%~ ELSIF error_mceEventImage == 'event_image_valid' -%]
 
-[%#~
---------------------------------------------------------------------------------
-Error messages
---------------------------------------------------------------------------------
--%]
+[% FILTER collapse %]
+The image file that you have uploaded or the link to an image file that you have
+provided do not appear to correspond to a valid image file in one of the
+supported formats, which are JPEG, GIF or PNG.
+[% END %]
 
-<small class="form-error is-visible">
+        [%~ ELSIF error_mceEventImage %]
 
-[%~ IF
-  (
-    error_mceEventImage == 'Missing'
-    ||
-    error_mceEventImage == 'event_image_provided'
-  )                                                  &&
-  error_mceEventDescription == 'Mandatory field not supplied'
+[% error_mceEventImage %]
 
-  # Both event image and event description missing, which we handle via a
-  # combined error message for both fields.
+        [%~ END %]
 
-%]
+        [%~ IF error_mceEventDescription == 'Missing' %]
 
-  If you have answered "Yes (with image)" to the question "Provide a fuller
-  description for your event?" then you must provide an image and description
-  above.
+[% FILTER collapse %]
+If you have answered "Yes" to the question "Provide a fuller description for
+your event?" then you must provide a description above.
+[% END %]
 
-[%~ ELSE
+        [%~ ELSIF error_mceEventDescription %]
 
-  # No need for a combined error message for both fields. Handle them
-  # independently.
+[% error_mceEventDescription %]
 
-%]
+        [%~ END %]
 
-[%~ IF
-  error_mceEventImage == 'Missing'                              ||
-  error_mceEventImage == 'event_image_provided'
-%]
-
-  If you have answered "Yes (with image)" to the question "Provide a fuller
-  description for your event?" then you must provide an image above.
-
-[%~ ELSIF error_mceEventImage == 'event_image_valid' %]
-
-  The image file that you have uploaded or the link to an image file that you
-  have provided do not appear to correspond to a valid image file in one of the
-  supported formats, which are JPEG, GIF or PNG.
-
-[%~ ELSIF error_mceEventImage %]
-
-  [% error_mceEventImage %]
-
-[%~ END %]
-
-[%~ IF error_mceEventDescription == 'Missing' %]
-
-  If you have answered "Yes" to the question "Provide a fuller description for
-  your event?" then you must provide a description above.
-
-[%~ ELSIF error_mceEventDescription %]
-
-  [% error_mceEventDescription %]
-
-[%~ END %]
-
-[%~ END %]
+    [%~ END ~%]
 
 </small>
 
-[%~ END # UNLESS error %]
+[%~ global.scripts.event_description = BLOCK %]
 
-[%#~
---------------------------------------------------------------------------------
-Javascript for inclusion in the page footer
---------------------------------------------------------------------------------
--%]
+<script id="eventDescriptionScript">
 
-[%~ global.script.event_description = BLOCK %]
+  tinymce.init({
+    selector: '#mceEventDescription',
+    inline: true,
+    skin_url: '/assets/css/skins/ui/oxide',
+    plugins: 'link',
+    menubar: false,
+    toolbar: 'bold italic superscript | link',
+    license_key: 'gpl',
+  });
 
-/*
-The tinymce.init configuration for the textual event description that occupies
-the lower half of an event card that includes an image and the whole event card
-when there is no image provided.
-*/
-tinymce.init( {
-  entity_encoding: 'raw',
-  init_instance_callback: function(editor) {
-    // Save the editor state for the detection of unsaved changes
-    editor.save();
-    origFormState = $('form').serialize();
+  tinymce.init({
+    selector : '#mceEventImage',
+    inline: true,
+    skin_url: '/assets/css/skins/ui/oxide',
+    menubar: false,
+    toolbar: false,
+    setup : function(editor) {
 
-[%~ IF conf.jsDebug # Javascript debug to the console enabled -%]
-
-    console . log ( 'init_instance_callback for mceEventDescription called' ) ;
-    console . log ( 'Form state set to:' ) ;
-    console . log ( origFormState ) ;
-
-[%~ END -%]
-
-  } ,
-  inline: true ,
-  license_key: 'gpl',
-  menubar: false ,
-  plugins: 'link' ,
-  selector : '#mceEventDescription' ,
-  skin_url: '/assets/css' ,
-  toolbar: 'bold italic superscript | link',
-} ) ;
-
-/*
-The tinymce.init configuration for the event image that occupies the upper half
-of an event card that includes an image. It's possible to create an event card
-with no image provided.
-*/
-tinymce.init({
-  convert_urls: false,
-  entity_encoding: 'raw',
-  image_description: false,
-  image_dimensions: false,
-  images_upload_handler: function(blobInfo, progress) {
-    return new Promise(function(resolve, reject) {
-
-[%~ IF conf.jsDebug -%]
-
-      console.log('images_upload_handler called with filename:');
-      console.log(blobInfo.filename());
-
-[%~ END -%]
-
-      formData = new FormData();
-      formData.append('file', blobInfo.blob(), blobInfo.filename());
-      var jqXHR = $.ajax({
-        url: '[% conf.images_upload_url %]',
-        contentType: false,
-        data: formData,
-        dataType: 'json',
-        method: 'POST',
-        processData: false,
-        xhr: function() {
-          var xhr = new XMLHttpRequest();
-          xhr.upload.onprogress = function(e) {
-            progress(e.loaded / e.total + 100);
+      // Display file picker when image is clicked on.
+      editor.on('click', function (e) {
+        // Only react to image clicks
+        if (e.target.nodeName === 'IMG') {
+          const img = e.target;
+          const input = document.createElement('input');
+          input.setAttribute('type', 'file');
+          input.setAttribute('accept', 'image/*');
+          input.onchange = function () {
+            const file = this.files[0];
+            const reader = new FileReader();
+            reader.onload = function () {
+[% IF conf.jsDebug # Javascript debug to the console enabled %]
+              console.log('Original image source ' + img.src);
+[% END %]
+              img.src = reader.result; // Replace image source
+[% IF conf.jsDebug # Javascript debug to the console enabled %]
+              console.log('New image source ' + img.src);
+[% END %]
+          }
+            reader.readAsDataURL(file);
           };
-          return xhr;
-        },
-        xhrFields: {
-          withCredentials: false
-        }
-      })
-      .done(function(response, textStatus, jqXHR) {
-
-[%~ IF conf.jsDebug -%]
-
-        console.log('Successful response received as follows:');
-        console.log(response);
-
-[%~ END -%]
-
-        resolve(response.location);
-      })
-      .fail(function(jqXHR, textStatus, errorThrown) {
-
-[%~ IF conf.jsDebug -%]
-
-        console.log(
-          'Upload error with jqXHR, textStatus and errorThrown as follows:'
-        );
-        console.log(jqXHR);
-        console.log(jqXHR.responseText);
-        console.log(textStatus);
-        console.log(errorThrown);
-
-[%~ END -%]
-
-        reject(jqXHR.responseText);
-      })
-    });
-  },
-  images_upload_url: '[% conf.images_upload_url %]',
-  init_instance_callback: function(editor) {
-    // Save the editor state for the detection of unsaved changes
-    editor.save();
-    origFormState = $('form').serialize();
-
-[%~ IF conf.jsDebug # Javascript debug to the console enabled -%]
-
-    console.log('init_instance_callback for mceEventImage called');
-    console.log('Form state set to:');
-    console.log(origFormState);
-
-[%~ END -%]
-
-  },
-  inline: true,
-  license_key: 'gpl',
-  menubar: false,
-  plugins: 'image',
-  selector : '#mceEventImage',
-  setup : function(editor) {
-    // Show context sensitive help for ADDING or CHANGING an image.
-    editor.on('change undo redo', function(e) {
-      if (
-        $('#mceEventImage img').attr('data-mce-src') ==
-        '[% conf.image_upload_path %]click_me.jpg'
-      ) {
-        // Image added, so show help for ADDING an image.
-        $('#addImageHelp').removeClass('hide');
-        $('#changeImageHelp').addClass('hide');
-      } else {
-        // Image added, so show help for CHANGING an image.
-        $('#addImageHelp').addClass('hide');
-        $('#changeImageHelp').removeClass('hide');
-      }
-    });
-    // Show the image plugin dialog whenever the image is clicked.
-    editor.on('click', function(e) {
-      //tinyMCE.activeEditor.execCommand('mceImage');
-      editor.windowManager.open({
-        title: 'Insert Image',
-        body: {
-          type: 'panel',
-          items: [
-            {
-              type: 'urlinput',
-              name: 'Image',
-              label: 'Select an image file',
-              filetype: 'image',
-              placeholder: 'Click to chose an image',
-              picker_text: 'This is a picker'
-            }
-          ]
+          input.click();
         }
       });
-      e.preventDefault;
-      return false;
-    });
-    // Prevent keyboard actions in the image editor; for example the delete key.
-    editor.on('keydown', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    });
-    editor.on('OpenWindow', function(e) {
-      var win =  editor.windowManager.getWindows()[0];
-      var srcField = win.find('#src');
-      if (srcField) {
-        srcField.disabled(true);
-      }
-    });
-  } ,
-  skin_url: '/assets/css',
-  toolbar: false // We show the image plugin dialog on click instead.
-} );
 
-[%~ END # global.script.event_description = BLOCK %]
+      // Prevent keyboard actions in the image editor; for example the delete
+      // key.
+      editor.on('keydown', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      });
+
+    },
+    license_key: 'gpl',
+  });
+</script>
+
+[%~ END # global.scripts.event_description = BLOCK %]

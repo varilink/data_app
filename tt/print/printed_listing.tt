@@ -1,21 +1,27 @@
+[%#
+--------------------------------------------------------------------------------
+tt/print/printed_listing.tt
+--------------------------------------------------------------------------------
+-%]
+
 <!doctype html>
 <html>
 <head>
-<title>
-Derby Arts and Theatre Association
-</title>
+<title>Derby Arts and Theatre Association</title>
 </head>
 <body>
-<center><h2>Derby Arts and Theatre Association</h2><center>
-[% IF pagesize == 'A4' %]
+<center>
+<h2>Derby Arts and Theatre Association</h2>
+<center>
+[%- IF pagesize == 'A4' %]
 <table cellpadding="5">
-[% ELSIF pagesize == 'A5' %]
+[%- ELSIF pagesize == 'A5' %]
 <table cellpadding="3">
-[% ELSE %]
+[%- ELSE %]
 <table>
-[% END %]
+[%- END %]
 
-[% FOREACH event IN events %]
+[%~ FOREACH event IN events -%]
 
 [% PROCESS printed_events_list_item.tt %]
 
@@ -25,8 +31,8 @@ Derby Arts and Theatre Association
 
 </table>
 <center>
-  <br>
-  <p>See derbyartsandtheatre.org.uk for further information</p>
+<br>
+<p>See derbyartsandtheatre.org.uk for further information</p>
 </center>
 </body>
 </html>

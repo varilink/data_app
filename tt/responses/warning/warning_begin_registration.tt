@@ -1,69 +1,71 @@
-[%~ SET title = 'Confirm Registration'
-
-# Report to the user who is attempting to register a user account with DATA that
-# they are not known to the web site as either a DATA committee member or a
-# representative of a member society.
-
+[%#
+--------------------------------------------------------------------------------
+tt/responses/warning/warning_begin_registration.tt
+--------------------------------------------------------------------------------
+Report to the user who is attempting to register a user account with DATA that
+they are not known to the web site as either a DATA committee member or a
+representative of a member society.
 %]
 
-[%~ PROCESS header.tt %]
+[%~ title = 'Confirm Registration' %]
 
-    <div class="row">
+[%~ PROCESS header.tt FILTER trim %]
 
-      <div class=
-      "columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+[%~ PROCESS h1.tt FILTER trim | indent 8 -%]
 
-[% PROCESS h1.tt FILTER indent 8 %]
+        <div class="row">
+            <div class="[% FILTER collapse %]
+            columns small-12 medium-10 medium-offset-1 large-8 large-offset-2
+            [% END %]">
+                <div class="callout alert">
+                    <p class="lead">
+[%- FILTER collapse %]
+<i class="fas fa-exclamation-triangle"></i>&nbsp;&nbsp;Alert<br>DATA user
+accounts are only available to either members of the DATA committee or
+representatives of DATA member societies. The email address [% user_email %] is
+not in our records as corresponding to either of those. If you are either a
+member of the DATA committee or a representative of  one or more DATA member
+societies, then please confirm your registration by  clicking on "Confirm
+Registration" below. Otherwise, click on "Cancel".
+[% END ~%]
+                    </p>
+                </div>
+                <!-- Start of Float Center -->
+                <div class="float-center" style="padding: 0; width: 28em;">
 
-        <div class="callout alert">
+[%~ INCLUDE form.tt
+    action = '/account/action/confirm_registration',
+    invisible = 1,
+    onError = 'warning_begin_registration',
+    onSuccess = '/account/success_confirm_registration',
+FILTER indent 20 -%]
 
-          <p class="lead">
-            <i class="fas fa-exclamation-triangle"></i>&nbsp;&nbsp;Alert<br>
-            DATA user accounts are only available to either members of the DATA
-            committee or representatives of DATA member societies. The email
-            address [% user_email %] is not in our records as corresponding to
-            either of those. If you are either a member of the DATA committee or
-            a representative of  one or more DATA member societies, then please
-            confirm your registration by  clicking on "Confirm Registration"
-            below. Otherwise, click on "Cancel".
-          </p>
+                        <input [% FILTER collapse %]
+                            type="hidden"
+                            name="user_email"
+                            id="userEmail"
+                            value="[% user_email %]"
+                        [% END %]>
 
+[%- PROCESS buttons.tt
+    stack = 'small',
+    buttons = [
+        {
+            name = 'confirm_registration',
+            type = 'submit',
+            value = 'Confirm Registration',
+        },
+        {
+            href = "${conf.root}",
+            type = 'button',
+            value = 'Cancel',
+        }
+    ]
+FILTER indent 20 -%]
+
+                </div>
+                <!-- End of Float Center -->
+            </div>
         </div>
 
-        <!-- Start of Float Center -->
-        <div class="float-center" style="padding: 0; width: 28em;">
-
-[% PROCESS form.tt
-  action    = '/account/action/confirm_registration'  ,
-  invisible  = 1                                       ,
-  onError   = 'warning_begin_registration'            ,
-  onSuccess  = '/account/success_confirm_registration' ,
-FILTER indent 10 %]
-
-            <input type="hidden" name="user_email" id="userEmail"
-            value="[% user_email %]">
-
-[% PROCESS buttons.tt
-  stack = 'small' ,
-  buttons = [
-    {
-      name  = 'confirm_registration'  ,
-      type  = 'submit'                ,
-      value = 'Confirm Registration'  ,
-    } ,
-    {
-      href  = "${conf.root}"          ,
-      type  = 'button'                ,
-      value = 'Cancel'                ,
-    }
-  ]
-FILTER indent 10 %]
-
-        </div>
-        <!-- End of Float Center -->
-
-      </div>
-
-    </div>
-
-[% PROCESS footer.tt %]
+[%- PROCESS footer.tt -%]

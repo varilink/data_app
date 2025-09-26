@@ -1,59 +1,62 @@
-[%~ SET title = 'Register a User Account'
-
-# Register a user account with DATA Diary. User accounts can be registered by
-# members of the DATA committe or known representatives of member societies of
-# DATA. This is a two phase process:
-# 1. begin_registration
-# 2. complete_registration
-
+[%#
+--------------------------------------------------------------------------------
+tt/pages/account/begin_registration.tt
+--------------------------------------------------------------------------------
+Register a user account with DATA Diary. User accounts can be registered by
+members of the DATA committe or known representatives of member societies of
+DATA. This is a two phase process:
+1. begin_registration
+2. complete_registration
 %]
 
-[%~ PROCESS header.tt %]
+[%~ title = 'Register a User Account' %]
 
-[% PROCESS h1.tt FILTER indent 4 %]
+[%~ PROCESS header.tt FILTER trim %]
 
-    <div class="row column">
+[%- PROCESS h1.tt FILTER trim | indent 8 -%]
 
-      <p class="lead">
-        If you are either a member of the DATA committee or a representative of
-        one or more of DATA's member <a href="[% conf.root %]societies">
-        Societies</a> then you can register a user account here. User accounts
-        belonging to  members of the DATA committee have full administration
-        access rights. User accounts belonging to representatives of member
-        societies can be used to update details of those societies and their
-        associated events.
-      </p>
+        <div class="row column">
+            <p class="lead">
+[%- FILTER collapse %]
+If you are either a member of the DATA committee or a representative of one or
+more of DATA's member <a href="[% conf.root %]societies">Societies</a> then you
+can register a user account here. User accounts belonging to  members of the
+DATA committee have full administration access rights. User accounts belonging
+to representatives of member societies can be used to update details of those
+societies and their associated events.
+[% END ~%]
+            </p>
 
-[% PROCESS form.tt
-  action    = '/account/action/begin_registration'  ,
-  method    = 'GET'                                 ,
-  name      = 'Email Address'                       ,
-  onError   = 'begin_registration'                  ,
-  onSuccess = '/account/success_begin_registration' ,
-  onWarning = '/account/warning_begin_registration' ,
-FILTER indent 6 %]
+[%- PROCESS form.tt
+    action  = '/account/action/begin_registration',
+    method = 'GET',
+    name = 'Email Address',
+    onError = 'begin_registration',
+    onSuccess = '/account/success_begin_registration',
+    onWarning = '/account/warning_begin_registration',
+FILTER trim | indent 12 %]
 
 [%~ required = 1 # All form fields in this page are required %]
 
-[% PROCESS user_email.tt
-  error_msg = 'You must enter a valid email address for your user account'
-FILTER indent 8 %]
+[%- PROCESS user_email.tt
+    error_msg = 'You must enter a valid email address for your user account'
+FILTER trim | indent 16 %]
 
-[% PROCESS user_confirm_email.tt
-  error_msg = 'You must repeat your email address to confirm it'
-FILTER indent 8 %]
+[%- PROCESS user_confirm_email.tt
+    error_msg = 'You must repeat your email address to confirm it'
+FILTER trim | indent 16 %]
 
-[% PROCESS buttons.tt
-  buttons = [
-    {
-      id      = 'register'  ,
-      protect = 1           ,
-      type    = 'submit'    ,
-      value   = 'Register'  ,
-    }
-  ]
-FILTER indent 6 %]
+[%- PROCESS buttons.tt
+    buttons = [
+        {
+            id = 'register',
+            protect = 1,
+            type = 'submit',
+            value = 'Register',
+        }
+    ]
+FILTER indent 12 -%]
 
-    </div>
+        </div>
 
-[% PROCESS footer.tt %]
+[%- PROCESS footer.tt -%]

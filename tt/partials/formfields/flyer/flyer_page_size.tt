@@ -1,0 +1,35 @@
+[%#
+--------------------------------------------------------------------------------
+tt/partials/formfields/flyer/flyer_page_size.tt
+--------------------------------------------------------------------------------
+%]
+
+<fieldset>
+    <legend>Page sie:</legend>
+    <input [% FILTER collapse %]
+        id="flyerPagesizeA4"
+        name="flyer_pagesize"
+        type="radio"
+        value="A4"
+        aria-describedby="flyer_pagesizeHelpTest"
+        required
+        [% IF !error && flyer_pagesize != 'A5' %]checked[% END %]
+    [% END %]>
+    <label for="flyerPagesizeA4">A4</label>
+    <input [% FILTER collapse %]
+        id="flyerPagesizeA5"
+        name="flyer_pagesize"
+        type="radio"
+        value="A5"
+        aria-describedby="flyer_pagesizeHelpTest"
+        required
+        [% IF flyer_pagesize == 'A5' %]checked[% END %]
+    [% END %]>
+    <label for="flyerPagesizeA5">A5</label>
+</fieldset>
+<p class="help-text" id="flyer_pagesizeHelpText">
+[%- FILTER collapse %]
+Select the required page size. Coming event flyers use a portrait page
+orientation.
+[% END -%]
+</p>

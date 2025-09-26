@@ -1,40 +1,42 @@
-[% SET
-
-title = 'Member Societies'
-
+[%#
+--------------------------------------------------------------------------------
+tt/pages/societies.tt
+--------------------------------------------------------------------------------
 %]
 
-[%~ PROCESS header.tt %]
+[%- title = 'Member Societies' %]
 
-[% PROCESS h1.tt media = "member-societies.webp" FILTER indent 4 %]
+[%~ PROCESS header.tt -%]
 
-    <div class="row column">
+[%- PROCESS h1.tt media = "member-societies.webp" FILTER trim | indent 8 -%]
 
-      <p class="lead">
-        DATA Diary is made possible by the participation of our member
-        societies, read more about them below. Are you associated with an
-        amateur performing arts society in or around the Derby area that is not
-        a member of DATA? Why not apply to <a href="[% conf.root %]join_us">Join
-        Us</a>?
-      </p>
-
-      <ul class="accordion" data-accordion data-allow-all-closed="true"
-      data-multi-expand="true">
+        <!-- Start of the top-section of page -->
+        <div class="row column">
+            <p class="lead">
+[%~ FILTER collapse ~%]
+DATA Diary is made possible by the participation of our member societies, read
+more about them below. Are you associated with an amateur performing arts
+society in or around the Derby area that is not a member of DATA? Why not apply
+to <a href="[% conf.root %]join_us">Join Us</a>?
+[%~ END ~%]
+            </p>
+            <ul [% FILTER collapse %]
+                class="accordion"
+                data-accordion
+                data-allow-all-closed="true"
+                data-multi-expand="true"
+            [%~ END %]>
 
 [%~ MACRO whatson_societies BLOCK %]
 
-[%~ FOREACH society IN societies %]
+[%~ FOREACH society IN societies -%]
 
 <li class="accordian-item" data-accordion-item>
-  <a href="#" class="accordion-title">[% society.name %]</a>
-  <div class="accordion-content" data-tab-content>
-
-    <p>[% society.description %]</p>
-
-      <a href="[% conf.root %]society/[% society.rowid %]">
-        More about [% society.name %]
-      </a>
-
+    <a href="#" class="accordion-title">[% society.name %]</a>
+    <div class="accordion-content" data-tab-content>
+        <p>[% society.description %]</p>
+        <a href="[% conf.root %]society/[%~ society.rowid %]">More about
+        [%~ ' ' _ society.name %]</a>
     </div>
 </li>
 
@@ -52,10 +54,9 @@ title = 'Member Societies'
     'status'  => 'ACTIVE'  , # Only member societies in ACTIVE status returned
   }
 
-) FILTER indent 8 %]
+) FILTER indent 16 -%]
 
-      </ul>
+            </ul>
+        </div>
 
-    </div>
-
-[% PROCESS footer.tt %]
+[%- PROCESS footer.tt -%]

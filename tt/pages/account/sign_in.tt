@@ -1,53 +1,60 @@
-[%~ SET title = 'Sign-In' %]
-
-[%~ PROCESS header.tt %]
-
-[% PROCESS h1.tt FILTER indent 4 %]
-
-<div class="row column">
-
-  <p class="lead">
-    Enter the userid and password below for your DATA user account. You must
-    <a href="[% conf.root %]account/begin_registration">Register</a> a DATA user
-    account if you do not already have one.
-  </p>
-
-[% IF error_user_userid == 'user_exists' ||
-    error_user_password == 'credentials_match' %]
-
-[% error_msg = 'The user credentials that you have supplied are incorrect' %]
-
-[% END %]
-
-[% PROCESS form.tt
-  action    = '/account/action/login'        ,
-  error_msg  = "$error_msg"                ,
-  name      = 'Account Credentials'          ,
-  onSuccess  = '/secure/account/success_sign_in'  ,
-  onError    = 'sign_in'                  ,
+[%#
+--------------------------------------------------------------------------------
+tt/pages/account/sign_in.tt
+--------------------------------------------------------------------------------
 %]
 
-[% required = 1 # All form fields on this page are mandatory %]
+[%~ title = 'Sign-In' %]
 
-[% PROCESS user_userid.tt
-  error_msg = 'You must your userid'
-%]
+[%~ PROCESS header.tt FILTER trim %]
 
-[% PROCESS user_password.tt
-  error_msg = 'You must enter your password'
-%]
+[%- PROCESS h1.tt FILTER trim | indent 8 -%]
 
-[% PROCESS buttons.tt
-  buttons = [
-    {
-      id = 'sign_in' ,
-      protect = 1 ,
-      value = 'Sign-In' ,
-      type = 'submit'
-    }
-  ]
-%]
+        <div class="row column">
+            <p class="lead">
+[%- FILTER collapse %]
+Enter the userid and password below for your DATA user account. You must <a
+href="[% conf.root %]account/begin_registration">Register</a> a DATA user
+account if you do not already have one.
+[% END ~%]
+            </p>
 
-</div>
+[%~ IF error_user_userid == 'user_exists' ||
+       error_user_password == 'credentials_match' %]
 
-[% PROCESS footer.tt %]
+[%~ error_msg = 'The user credentials that you have supplied are incorrect' %]
+
+[%~ END %]
+
+[%- PROCESS form.tt
+    action = '/account/action/login',
+    error_msg = "$error_msg",
+    name = 'Account Credentials',
+    onSuccess = '/secure/account/success_sign_in',
+    onError = 'sign_in',
+FILTER trim | indent 12 %]
+
+[%~ required = 1 # All form fields on this page are mandatory %]
+
+[%- PROCESS user_userid.tt
+    error_msg = 'You must enter your userid'
+FILTER trim | indent 16 %]
+
+[%- PROCESS user_password.tt
+    error_msg = 'You must enter your password'
+FILTER trim | indent 16 %]
+
+[%- PROCESS buttons.tt
+    buttons = [
+        {
+            id = 'sign_in',
+            protect = 1,
+            value = 'Sign-In',
+            type = 'submit'
+        }
+    ]
+FILTER indent 12 -%]
+
+        </div>
+
+[%- PROCESS footer.tt -%]

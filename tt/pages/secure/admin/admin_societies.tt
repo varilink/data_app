@@ -1,68 +1,66 @@
-[%~ SET
-
-title = 'Member Societies'
-
+[%#
+--------------------------------------------------------------------------------
+tt/pages/secure/admin/admin_societies.tt
+--------------------------------------------------------------------------------
 %]
 
-[%~ PROCESS admin_header.tt %]
+[%~ title = 'Member Societies' %]
 
-[% PROCESS h1.tt FILTER indent 4 %]
+[%~ PROCESS admin_header.tt FILTER trim %]
 
-    <div class="row column">
+[%- PROCESS h1.tt FILTER trim | indent 8 -%]
 
-      <div class="callout information">
+        <div class="row column">
+            <div class="callout information">
+                <p class="lead">
+[%~ FILTER collapse %]
+<i class="fas fa-info-circle"></i>&nbsp;&nbsp;Information<br>
+To update the details of a member society, click on the society's name below.
+Alternatively <a href="[% conf.root %]secure/admin/society">Add (a) Society</a>.
+[% END ~%]
+                </p>
+            </div>
 
-        <p class="lead">
-          <i class="fas fa-info-circle"></i>&nbsp;&nbsp;Information<br>
-          To update the details of a member society, click on the society's
-          name below. Alternatively <a
-          href="[% conf.root %]secure/admin/society">Add (a) Society</a>.
-        </p>
+[%~ MACRO whatson_societies BLOCK -%]
 
-      </div>
-
-[%~ MACRO whatson_societies BLOCK %]
-
-      <table>
-
-        <thead>
-
-          <tr>
+<table>
+    <thead>
+        <tr>
             <th>Name</th>
             <th>Active (Yes/No)</th>
-          </tr>
+        </tr>
+    </thead>
+    <tbody>
 
-        </thead>
+[%~ FOREACH society IN societies -%]
 
-        <tbody>
-
-[%~ FOREACH society IN societies %]
-
-          <tr>
+        <tr>
             <td>
-              <a href="[% conf.root %]secure/admin/society/[% society.rowid %]">
-                [% society.name %]
-              </a>
+                [%~ FILTER collapse %]
+                <a href="[% conf.root %]secure/admin/society/
+                [%~ society.rowid %]">
+                    [%~ society.name ~%]
+                </a>
+                [% END ~%]
             </td>
             <td>
 [%~ IF society.status == "ACTIVE" ~%]
-              Yes
+                Yes
 [%~ ELSE ~%]
-              No
+                No
 [%~ END ~%]
             </td>
-          </tr>
+        </tr>
 
-[%~ END %]
+[%~ END -%]
 
-        </tbody>
-
-      </table>
+    </tbody>
+</table>
 
 [%~ END # MACRO whatson_societies BLOCK %]
 
-[%~ CGIAPP.embed ( 'whatson_societies' ) %]
+[%~ CGIAPP.embed('whatson_societies') FILTER indent 12 -%]
 
-    </div>
+        </div>
 
-[% PROCESS footer.tt %]
+[%- PROCESS footer.tt -%]

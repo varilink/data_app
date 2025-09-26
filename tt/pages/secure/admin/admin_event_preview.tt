@@ -1,34 +1,36 @@
-[%~ SET
-
-title = 'Preview Event'
-
+[%#
+--------------------------------------------------------------------------------
+tt/pages/secure/admin/admin_event_preview.tt
+--------------------------------------------------------------------------------
 %]
 
-[%~ PROCESS admin_header.tt -%]
+[%~ title = 'Preview Event' %]
 
-[% PROCESS h1.tt FILTER indent 4 %]
+[%~ PROCESS admin_header.tt FILTER trim %]
 
-[%~ MACRO whatson_event BLOCK -%]
+[%- PROCESS h1.tt FILTER trim | indent 8 %]
 
-[% PROCESS event_subnav.tt -%]
+[%~ MACRO whatson_event BLOCK %]
+
+[%- PROCESS event_subnav.tt FILTER trim -%]
 
 <div class="row column">
 
-[%- PROCESS event_preview_accordion.tt FILTER indent 2 %]
+[%- PROCESS event_preview_accordion.tt FILTER trim | indent 4 -%]
 
 </div>
 
 [%~ END # MACRO whatson_event BLOCK %]
 
-[%~ CGIAPP.embed (
-  'whatson_event'       , # Single event
-  'filter' = {
-    'from' => 'now'     , # Only return events that have not yet ended
-    'rowid'  => "$rowid" , # An event with this unique rowid
-  } ,
-  'behaviour' = {
-    'defaults' => 1
-  }
-) FILTER indent 4 -%]
+[%~ CGIAPP.embed(
+    'whatson_event', # Single event
+    'filter' = {
+        'from' => 'now', # Only return events that have not yet ended
+        'rowid' => "$rowid", # An event with this unique rowid
+    },
+    'behaviour' = {
+        'defaults' => 1
+    }
+) FILTER indent 8 -%]
 
-[%- PROCESS footer.tt %]
+[%- PROCESS footer.tt -%]

@@ -1,65 +1,75 @@
-[%~ SET
-
-title = 'Update Society'
-
+[%#
+--------------------------------------------------------------------------------
+tt/pages/secure/rep/rep_society.tt
+--------------------------------------------------------------------------------
 %]
 
-[%~ PROCESS rep_header.tt %]
+[%~ title = 'Update Society' %]
 
-[% PROCESS h1.tt FILTER indent 4 %]
+[%~ PROCESS rep_header.tt FILTER trim %]
 
-[% PROCESS society_subnav.tt FILTER indent 4 %]
+[%- PROCESS h1.tt FILTER trim | indent 8 %]
 
-    <div class="row column">
+[%- PROCESS society_subnav.tt FILTER trim | indent 8 -%]
 
-[% PROCESS form.tt
-  action    = '/secure/rep/action/society'  ,
-  onError   = 'rep_society'                 ,
-  onSuccess = "/secure/rep/society/$rowid"
-FILTER indent 6 -%]
+        <div class="row column">
 
-        <h2 class="text-center">Society Details</h2>
+[%- PROCESS form.tt
+    action = '/secure/rep/action/society',
+    onError = 'rep_society',
+    onSuccess = "/secure/rep/society/$rowid"
+FILTER trim | indent 12 -%]
 
-        <input type="hidden" name="organisation_rowid" value="[% rowid %]">
-        <input type="hidden" name="organisation_type" value="whatson_society">
+                <h2 class="text-center">Society Details</h2>
+                <input [% FILTER collapse %]
+                    type="hidden"
+                    name="organisation_rowid"
+                    value="[% rowid %]"
+                [% END %]>
+                <input [% FILTER collapse %]
+                    type="hidden"
+                    name="organisation_type"
+                    value="whatson_society"
+                [% END %]>
 
 [%~ MACRO whatson_society BLOCK %]
 
 [%~ organisation = society -%]
 
-<input type="hidden" name="organisation_status"
-value="[% organisation.status %]">
+<input [% FILTER collapse %]
+    type="hidden"
+    name="organisation_status"
+    value="[% organisation.status %]"
+[% END %]>
 
-[% INCLUDE organisation_name.tt required = 1 %]
+[%- INCLUDE organisation_name.tt required = 1 FILTER trim %]
 
-[% PROCESS organisation_website.tt %]
+[%- PROCESS organisation_website.tt FILTER trim %]
 
-[% PROCESS organisation_email.tt %]
+[%- PROCESS organisation_email.tt FILTER trim %]
 
-[% PROCESS organisation_description.tt %]
+[%- PROCESS organisation_description.tt FILTER trim %]
 
-[%~ END # MACRO whatson_event BLOCK %]
+[%~ END # MACRO whatson_society BLOCK %]
 
-[%~ CGIAPP.embed (
-  'whatson_society'                 , # Fetch a society
-  'filter' = {
-    'rowid'   => "$rowid"           , # For a specific rowid
-    'userid'  => "$session.userid"  , # For which the user is a representative
-  }
-) FILTER indent 8 %]
-
-[% PROCESS buttons.tt
-
-  buttons = [
-    {
-      id = 'save' ,
-      value = 'Save' ,
-      type = 'submit'
+[%~ CGIAPP.embed(
+    'whatson_society', # Fetch a society
+    'filter' = {
+        'rowid' => "$rowid", # For a specific rowid
+        'userid' => "$session.userid", # For which the user is a representative
     }
-  ]
+) FILTER indent 12 %]
 
-FILTER indent 6 %]
+[%- PROCESS buttons.tt
+    buttons = [
+        {
+            id = 'save',
+            value = 'Save',
+            type = 'submit'
+        }
+    ]
+FILTER indent 12 -%]
 
-    </div>
+        </div>
 
-[% PROCESS footer.tt %]
+[%- PROCESS footer.tt -%]

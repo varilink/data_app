@@ -1,0 +1,34 @@
+[%#
+--------------------------------------------------------------------------------
+tt/scripts/ga_script.tt
+--------------------------------------------------------------------------------
+This template file outputs the <script> tags that are required for integration
+with Google Analytics. It is used in two other template files:
+- tt/pages/index.tt
+- tt/partials/layouts/header.tt
+%]
+
+[%~ IF conf.ga.measurement_id
+# This template file only outputs if the configuration for the environment
+# contains a value for ga.measurement_id. That way we don't incorrectly try to
+# integrate test environment with Google Analytics by simply not setting a value
+# in those environments.
+-%]
+
+[%~ global.scripts.ga = BLOCK -%]
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=
+[%- conf.ga.measurement_id %]">
+</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '[% conf.ga.measurement_id %]');
+</script>
+
+[%~ END %]
+
+[%~ END -%]

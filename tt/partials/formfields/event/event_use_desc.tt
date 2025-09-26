@@ -1,91 +1,104 @@
-[%~ BLOCK event_use_desc # For use in both initial and error states -%]
+[%#-----------------------------------------------------------------------------
+tt/partials/formfields/event/event_use_desc.tt
+--------------------------------------------------------------------------------
+This outputs three radio buttons that control whether a fuller online
+description of an event is used and, if it is, whether that fuller description
+includes an image associated with the event. It must be used in conjunction with
+the event_description.tt partial since that outputs the actual description
+itself.
 
-<legend>Provide a fuller description for your event?</legend>
+This partial is split into three sections, so line separators are used between
+the sections for readability. The three sections are:
+1. A block definition that outputs the bulk of the HTML
+2. A render section that outputs the block in either the initial or error state
+   along with some small wrapper elements.
+3. A block definition for the associated Javascript that is required.
+%]
 
-<input type="radio" name="event_use_desc" value="0" id="eventUseDescNo"
-aria-describedby="event_use_descHelpText" required
-[% IF event.use_desc == 0 %]checked[% END %]>
-<label for="eventUseDescNo">No</label>
-
-<input type="radio" name="event_use_desc" value="1"
-id="eventUseDescYesWithImage" aria-describedby="event_use_descHelpText"
-[% IF event.use_desc == 1 %]checked[% END %]>
-<label for="eventUseDescYesWithImage">Yes (with image)</label>
-
-<span class="show-for-medium-only"><br></span>
-
-<input type="radio" name="event_use_desc" value="2"
-id="eventUseUescYesWithoutImage" aria-describedby="event_use_descHelpText"
-[% IF event.use_desc == 2 %]checked[% END %]>
-<label for="eventUseUescYesWithoutImage">
-  Yes (without image)
-</label>
-
-[%~ END # BLOCK event_use_desc %]
-
-[%~ UNLESS error_event_use_desc # Initial State %]
-
+<!-- Start Event Use Desc -->
 <fieldset>
-
-[% PROCESS event_use_desc FILTER indent 2 %]
-
-  <small class="form-error">[% error_msg %]</small>
-
-</fieldset>
-
-[%~ ELSE # Error State %]
-
+    <legend>Provide a fuller description for your event?</legend>
+    <input [% FILTER collapse %]
+        type="radio"
+        name="event_use_desc"
+        value="0"
+        id="eventUseDescNo"
+        aria-describedby="event_use_descHelpText"
+        required
+        [% IF event.use_desc == 0 %]
+        checked
+        [% END %]
+    [% END %]>
+    <label for="eventUseDescNo">No</label>
+    <input [% FILTER collapse %]
+        type="radio"
+        name="event_use_desc"
+        value="1"
+        id="eventUseDescYesWithImage"
+        aria-describedby="event_use_descHelpText"
+        [% IF event.use_desc == 1 %]
+        checked
+        [% END %]
+    [% END %]>
+    <label for="eventUseDescYesWithImage">Yes (with image)</label>
+    <span class="show-for-medium-only"><br></span>
+    <input [% FILTER collapse %]
+        type="radio"
+        name="event_use_desc"
+        value="2"
+        id="eventUseUescYesWithoutImage"
+        aria-describedby="event_use_descHelpText"
+        [% IF event.use_desc == 2 %]
+        checked
+        [% END %]
+    [% END %]>
+    <label for="eventUseUescYesWithoutImage">Yes (without image)</label>
+    <small class="form-error[% IF error_event_use_desc %] is-visible[% END %]">
+        [%~ IF error_event_use_desc ~%]
+        [% error_event_use_desc %]
+        [%~ ELSIF error_msg ~%]
+        [% error_msg %]
+        [%~ END ~%]
+    </small>
 <fieldset>
-
-[% PROCESS event_use_desc FILTER indent 2 %]
-
-  <small class="form-error is-visible">
-    [% error_event_use_desc %]
-  </small>
-
-</fieldset>
-
-[%~ END # UNLESS error_event_use_desc %]
-
 <p class="help-text" id="event_use_descHelpText">
-  Select if you wish to edit your event's card and add an image to it.
+[%- FILTER collapse %]
+Select if you wish to edit your event's card and add an image to it.
+[% END -%]
 </p>
+<!-- End Event Use Desc -->
 
-[%~ global.script.event_use_desc = BLOCK %]
+[%~ global.scripts.event_use_desc = BLOCK -%]
+<script id="eventUseDescScript">
 
-[%~
+  // Toggle visibility classes on change of radio button state
+   $('input[name="event_use_desc"]').change(function() {
+    var radioVal = $('input[name="event_use_desc"]:checked').val();
+    if ( radioVal == 0 ) {
 
-  # Toggle the visibility of classes corresponding to each of the permissible
-  # values of event_use_desc. This allows content relevant to each value to be
-  # dynamically displayed in the page by assigning the relevant class to it.
+      // Default description (no image)
+[% IF conf.jsDebug %]
+      console.log('No fuller description of the event selected');
+[% END %]
+      $('.event-use-desc-no').removeClass('hide');
+      $('.event-use-desc-yes').addClass('hide');
+      $('.event-use-desc-yes-with-image').addClass('hide');
 
--%]
+    } else if ( radioVal == 1 ) {
 
-// Reflect changes to event_use_desc
-$ ( 'input[name="event_use_desc"]' ) . change ( function ( ) {
+      // Custom description with image
+      $('.event-use-desc-no').addClass('hide');
+      $('.event-use-desc-yes').removeClass('hide');
+      $('.event-use-desc-yes-with-image').removeClass('hide');
 
-  var radioVal = $ ( 'input[name="event_use_desc"]:checked' ) . val ( ) ;
+    } else if (radioVal == 2) {
 
-  if ( radioVal == 0 ) {      // Default description (no image)
+      // Custom description without image
+      $('.event-use-desc-no').addClass('hide');
+      $('.event-use-desc-yes').removeClass('hide');
+      $('.event-use-desc-yes-with-image').addClass('hide');
 
-    $ ( '.event-use-desc-no' )              . removeClass ( 'hide' ) ;
-    $ ( '.event-use-desc-yes' )             . addClass    ( 'hide' ) ;
-    $ ( '.event-use-desc-yes-with-image' )  . addClass    ( 'hide' ) ;
+    }
+});
 
-  } else if ( radioVal == 1 ) { // Custom description with image
-
-    $ ( '.event-use-desc-no' )              . addClass    ( 'hide' ) ;
-    $ ( '.event-use-desc-yes' )             . removeClass ( 'hide' ) ;
-    $ ( '.event-use-desc-yes-with-image' )  . removeClass ( 'hide' ) ;
-
-  } else if ( radioVal == 2 ) {  // Custom description without image
-
-    $ ( '.event-use-desc-no' )              . addClass    ( 'hide' ) ;
-    $ ( '.event-use-desc-yes' )             . removeClass  ( 'hide' ) ;
-    $ ( '.event-use-desc-yes-with-image' )  . addClass    ( 'hide' ) ;
-
-  }
-
-} ) ;
-
-[%~ END # BLOCK global.script.event_use_desc %]
+[%~ END # BLOCK global.scripts.event_use_desc -%]

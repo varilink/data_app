@@ -1,0 +1,61 @@
+[%#
+--------------------------------------------------------------------------------
+tt/partials/formfields/flyer/flyer_start_date.tt
+--------------------------------------------------------------------------------
+%]
+
+<!-- Start Flyer Start Date -->
+<div class="floated-label-wrapper">
+    <label [% FILTER collapse %]
+        for="flyer_start_date"
+        [% IF error_flyer_start_date %]class="is-invalid-label"[% END %]
+    [% END %]>
+        [%~ 'Start Date (Optional) DD/MM/YYYY' ~%]
+    </label>
+    <input [% FILTER collapse %]
+        type="text"
+        id="flyerStartDate"
+        name=flyer_start_date
+        class="datepicker
+        [%~ IF error_flyer_start_date %] is-invalid-input[% END %]"
+        placeholder="Start Date (Optional) DD/MM/YYYY"
+        aria-describedby="flyer_start_dateHelpText"
+        pattern="day_month_year"
+        value="[% flyer_start_date %]"
+    [% END %]>
+    <small class="form-error
+    [%~ IF error_flyer_start_date %] is-visible[% END %]">
+        [%~ FILTER collapse %]
+        You must enter a valid date in DD/MM/YYYY format
+        [% END ~%]
+    </small>
+    <p [% FILTER collapse %]
+        class="help-text"
+        id="flyer_start_dateHelpText"
+    [% END %]>
+[% FILTER collapse %]
+Optionally enter a start date for the flyer in DD/MM/YYYY format. Without a
+start date, events from the current date will be included. With a start date,
+only events from that start date will be included.
+[% END ~%]
+    </p>
+</div>
+<!-- End Flyer Start Date -->
+
+[%- global.scripts.flyer_start_date = BLOCK -%]
+
+<script id="flyerStartDataScript">
+  $(function() {
+    // Setup Datepicker for flyer start date
+    $('#flyerStartDate').datepicker({
+      dateFormat: 'dd/mm/yy',
+      minDate: 1,
+      onSelect: function() {
+        $(this).datepicker('hide');
+        $(this).trigger('keyup');
+      },
+    });
+  });
+</script>
+
+[%~ END -%]

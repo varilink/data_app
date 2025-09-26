@@ -1,56 +1,51 @@
+[%#
+--------------------------------------------------------------------------------
+tt/partials/formfields/contact/contact_confirm_email.tt
+--------------------------------------------------------------------------------
+-%]
+
+<!-- Start Contact Confirm Email -->
 <div class="floated-label-wrapper">
-
-[%~ UNLESS error_contact_confirm_email # Initial State %]
-
-  <label for="contactConfirmEmail">
-    Confirm Email Address ([% IF required %]Mandatory[% ELSE %]Optional
-    [%~ END %])
-  </label>
-
-  <input type="text" id="contactConfirmEmail" name="contact_confirm_email"
-  placeholder="Confirm Email Address ([% IF required %]Mandatory
-  [%~ ELSE %]Optional[% END %])" autocomplete="off" aria-describedby=
-  "contactConfirmEmailHelpText" data-equalto="contactEmail"
-  [% IF required %]required[% END %]>
-
-  <small class="form-error">[% error_msg %]</small>
-
-[%~ ELSE # Error State %]
-
-  <label for="contactConfirmEmail" class="is-invalid-label">
-    Confirm Email Address ([% IF required %]Mandatory[% ELSE %]Optional
-    [%~ END %])
-  </label>
-
-  <input class="is-invalid-input" aria-invalid="true" type="text" id=
-  "contactConfirmEmail" name="contact_confirm_email" placeholder=
-  "Confirm Email Address ([% IF required %]Mandatory[% ELSE %]Optional
-  [%~ END %])" autocomplete="off" aria-describedby=
-  "contactConfirmEmailHelpText" data-equalto="contactEmail"
-  [% IF required %]required[% END %]>
-
-  <small class="form-error is-visible">
-
-[%~ IF error_contact_confirm_email == 'Missing' %]
-
-    You must repeat your email address to confirm it
-
-[%~ ELSIF error_contact_confirm_email == 'email_confirmed' %]
-
-    This does not match your email address above
-
-[%~ ELSE %]
-
-    [% error_contact_confirm_email %]
-
-[%~ END %]
-
-  </small>
-
-[%~ END # error_contact_confirm_email %]
-
-  <p class="help-text" id="contactConfirmEmailHelpText">
-    Confirm your email address as a cross check that you've typed it correctly.
-  </p>
-
+    <label [% FILTER collapse %]
+        for="contactConfirmEmail"
+        [% IF error_contact_confirm_email %]class="is-invalid-label"[% END %]
+    [% END %]>
+        [%~ 'Confirm Email Address (' %]
+        [%~ IF required %]Mandatory[% ELSE %]Optional[% END %]
+        [%~ ')' ~%]
+    </label>
+    <input [% FILTER collapse %]
+        type="text"
+        id="contactConfirmEmail"
+        name="contact_confirm_email"
+        placeholder="Confirm Email Address (
+        [%~ IF required %]Mandatory[% ELSE %]Optional[% END ~%]
+        )" 
+        autocomplete="off"
+        aria-describedby="contactConfirmEmailHelpText"
+        data-equalto="contactEmail"
+        [% IF required %]required[% END %]
+        [% IF error_contact_confirm_email %]
+        class="is-invalid-input"
+        aria-invalid="true"
+        [% END %]
+    [% END %]>
+    <small class="form-error[% IF error_contact_confirm_email %] is_visible
+    [%~ END %]">
+        [%~ IF error_contact_confirm_email == 'Missing' ~%]
+        You must repeat your email address to confirm it
+        [%~ ELSIF error_contact_confirm_email == 'email_confirmed' ~%]
+        This does not match your email address above
+        [%~ ELSIF error_contact_confirm_email ~%]
+        [% error_contact_confirm_email %]
+        [%~ ELSE ~%]
+        [% error_msg %]
+        [%~ END ~%]
+    </small>
+    <p class="help-text" id="contactConfirmEmailHelpText">
+[%~ FILTER collapse %]
+Confirm your email address as a cross check that you've typed it correctly.
+[% END ~%]
+    </p>
 </div>
+<!-- End Contact Confirm Email -->

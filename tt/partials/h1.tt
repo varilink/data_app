@@ -1,33 +1,44 @@
-<!-- Start of Heading 1 -->
+[%#
+--------------------------------------------------------------------------------
+tt/partials/h1.tt
+--------------------------------------------------------------------------------
+%]
+
+[%- BLOCK h1 -%]
+<h1 class="text-center">
+    <span class="show-for-large">Derby Arts and Theatre Association</span>
+    <span class="hide-for-large">DATA</span>
+    <br>[% title %]
+</h1>
+[% END %]
+
+<!-- Start of the page h1 heading -->
 <div class="row column">
-  <br>
-  <br>
+    <br>
+    <br>
 
 [%~ IF media -%]
 
-  <div class="media-object align-middle align-center">
-    <div class="media-object-section bottom">
-      <h1 class="text-center">
-        <span class="show-for-large">Derby Arts and Theatre Association</span>
-        <span class="hide-for-large">DATA</span><br />[% title %]
-      </h1>
+    <div class="media-object align-middle align-center">
+        <div class="media-object-section bottom">
+[% PROCESS h1 FILTER trim | indent 12 %]
+        </div>
+        <div class="media-object-section">
+            <div class="image">
+                <img [% FILTER collapse %]
+                    src="[% conf.root %]assets/img/[% media %]"
+                    alt="[% title %]"
+                [%~ END %]>
+            </div>
+        </div>
     </div>
-    <div class="media-object-section">
-      <div class="image">
-        <img src="[% conf.root %]assets/img/[% media %]" alt="[% title %]">
-      </div>
-    </div>
-  </div>
 
 [%~ ELSE -%]
 
-  <h1 class="text-center">
-    <span class="show-for-large">Derby Arts and Theatre Association</span>
-    <span class="hide-for-large">DATA</span><br />[% title %]
-  </h1>
+[% PROCESS h1 FILTER trim | indent 4 %]
 
 [%~ END -%]
 
-  <br>
+    <br>
 </div>
-<!-- End of Heading 1 -->
+<!-- End of the page h1 heading -->

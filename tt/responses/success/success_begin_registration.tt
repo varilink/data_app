@@ -1,70 +1,81 @@
-[%~ SET title = 'Complete User Account Registration'
-
-# Complete the registration of a user account. This will only be shown if the
-# email address is recognised as being eligible for a new user account
-
+[%#
+--------------------------------------------------------------------------------
+tt/responses/success/success_begin_registration
+--------------------------------------------------------------------------------
+Complete the registration of a user account. This will only be shown if the
+email address is recognised as being eligible for a new user account.
 %]
 
-[%~ PROCESS header.tt %]
+[%~ title = 'Complete User Account Registration' %]
 
-    <div class="row column">
+[%~ PROCESS header.tt FILTER trim %]
 
-[% PROCESS h1.tt FILTER indent 6 %]
+[%- PROCESS h1.tt FILTER trim | indent 8 -%]
 
-      <p class="lead">
-        Please complete the details below and click on "Register" to complete
-        the registration of a user account associated with the email address
-        that you provided.
-      </p>
+        <div class="row column">
+            <p class="lead">
+[%- FILTER collapse %]
+Please complete the details below and click on "Register" to complete the
+registration of a user account associated with the email address that you
+provided.
+[% END ~%]
+            </p>
 
-[% PROCESS form.tt
-  action    = '/account/action/complete_registration'    ,
-  name      = 'Registration Details'              ,
-  onError    = 'success_begin_registration'          ,
-  onSuccess  = '/account/success_complete_registration'  ,
-FILTER indent 6 %]
+[%- INCLUDE form.tt
+    action = '/account/action/complete_registration',
+    name = 'Registration Details',
+    onError = 'success_begin_registration',
+    onSuccess = '/account/success_complete_registration',
+FILTER trim | indent 12 -%]
 
-        <input name="user_email" id="user_email" type="hidden" value=
-        "[% user_email %]">
+                <input [% FILTER collapse %]
+                    name="user_email"
+                    id="user_email"
+                    type="hidden"
+                    value="[% user_email %]"
+                [% END %]>
 
-[% required = 1 # All form fields on this page are required %]
+[%~ required = 1 # All form fields on this page are required -%]
 
-        <h2>Contact Details</h2>
+                <h2>Contact Details</h2>
 
-[% PROCESS user_first_name.tt
-  error_msg = 'You must enter your first name'
-FILTER indent 8 %]
+[%- INCLUDE user_first_name.tt
+    error_msg = 'You must enter your first name'
+FILTER trim | indent 16 %]
 
-[% PROCESS user_surname.tt
-  error_msg = 'You must enter your surname'
-FILTER indent 8 %]
+[%- INCLUDE user_surname.tt
+    error_msg = 'You must enter your surname'
+FILTER trim | indent 16 -%]
 
-        <h2>Account Details</h2>
+                <h2>Account Details</h2>
 
-[% INCLUDE user_userid.tt
-  error_msg = 'You must enter an alphanumeric userid at least 8 characters long' ,
-  noautocomplete = 1 ,
-FILTER indent 8 %]
+[%- INCLUDE user_userid.tt
+    error_msg =
+        'You must enter an alphanumeric userid at least 8 characters long',
+    noautocomplete = 1,
+FILTER trim | indent 16 %]
 
-[% INCLUDE user_password.tt
-  error_msg = 'You must choose a password that complies with the format described below' ,
-  noautocomplete = 1 ,
-FILTER indent 8 %]
+[%- INCLUDE user_password.tt
+    error_msg =
+        'You must choose a password that complies with the format described ' _
+        'below',
+    noautocomplete = 1,
+FILTER trim | indent 16 %]
 
-[% PROCESS user_confirm_password.tt
-  error_msg = 'You must repeat your password to confirm it'
-FILTER indent 8 %]
+[%- INCLUDE user_confirm_password.tt
+    error_msg = 'You must repeat your password to confirm it'
+FILTER trim | indent 16 %]
 
-[% PROCESS buttons.tt
-  buttons = [
-    {
-      id    = 'register'  ,
-      type  = 'submit'    ,
-      value = 'Register'  ,
-    }
-  ]
-FILTER indent 6 %]
+[%- INCLUDE buttons.tt
+    buttons = [
+        {
+            id = 'register',
+            type = 'submit',
+            value = 'Register',
+        }
+    ]
+FILTER indent 12 -%]
 
-    </div>
+        </div>
 
-[% PROCESS footer.tt %]
+[%- PROCESS footer.tt -%]

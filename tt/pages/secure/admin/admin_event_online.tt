@@ -1,90 +1,80 @@
-[% SET
-
-title = 'Update Event (Online Promotion)'
-
+[%#
+--------------------------------------------------------------------------------
+tt/pages/secure/admin/admin_event_online.tt
+--------------------------------------------------------------------------------
 %]
 
-[%~ PROCESS admin_header.tt %]
+[%~ title = 'Update Event (Online Promotion)' %]
 
-[% PROCESS h1.tt FILTER indent 4 %]
+[%~ PROCESS admin_header.tt FILTER trim %]
+
+[%- PROCESS h1.tt FILTER trim | indent 8 %]
 
 [%~ MACRO whatson_event BLOCK %]
 
-[% PROCESS event_subnav.tt FILTER indent 4 %]
+[%- PROCESS event_subnav.tt FILTER trim -%]
 
-[%~#--------------------------------------------------------------------------%]
+<div class="row column">
 
 [%~ IF rowid %]
-
-[% onSuccess = "/secure/admin/event/online/$rowid" %]
-
+[%~ onSuccess = "/secure/admin/event/online/$rowid" %]
 [%~ ELSE %]
-
-[% onSuccess = '/secure/admin/events' %]
-
+[%~ onSuccess = '/secure/admin/events' %]
 [%~ END %]
 
-[%~#--------------------------------------------------------------------------%]
+[%- INCLUDE form.tt
+    action = '/secure/admin/action/event/online',
+    id = 'eventCardForm',
+    onError = 'admin_event_online',
+    onSuccess = "$onSuccess"
+FILTER trim | indent 4 %]
 
-    <div class="row column">
-
-[% PROCESS form.tt
-  action    = '/secure/admin/action/event/online' ,
-  id        = 'eventCardForm'                     ,
-  onError   = 'admin_event_online'                ,
-  onSuccess = "$onSuccess"
-FILTER indent 6 %]
-
-[% PROCESS event_online_promotion_form.tt FILTER indent 8 %]
+[%- PROCESS event_online_promotion_form.tt FILTER trim | indent 8 %]
 
 [%~ END # MACRO whatson_event BLOCK %]
 
 [%~ IF rowid %]
 
-[%~ CGIAPP.embed (
-  'whatson_event'       , # Single event
-  'filter' = {
-    'from' => 'now'     , # Only return events that have not yet ended
-    'rowid'  => "$rowid" , # An event with this unique rowid
-  }                     ,
-  behaviour = {
-    defaults => 1
-  }
+[%~ CGIAPP.embed(
+    'whatson_event', # Single event
+    'filter' = {
+        'from' => 'now', # Only return events that have not yet ended
+        'rowid' => "$rowid", # An event with this unique rowid
+    },
+    behaviour = {
+        defaults => 1
+    }
 ) FILTER indent 8 %]
 
 [%~ ELSE # NOT rowid %]
 
-[% whatson_event %]
+[% whatson_event FILTER indent 8 %]
 
-[%~ END # IF rowid %]
+[%~ END # IF rowid -%]
 
-[%~ #---------------------------------------------------------------------------
-
-  # The buttons are complex and so we do not use the buttons.tt partial
-
-%]
-
-        <div class="button-group large show-for-medium">
-[% INCLUDE event_buttons.tt size='large' FILTER indent 10 %]
+                <div class="button-group large show-for-medium">
+[% INCLUDE event_buttons.tt size='large' FILTER trim | indent 20 %]
+                </div>
+                <div [% FILTER collapse %]
+                    class="button-group hide-for-medium stacked"
+                    style="width: 100%;"
+                [% END %]>
+[% INCLUDE event_buttons.tt FILTER trim | indent 20 %]
+                </div>
+            </form>
+            <!-- End of Form -->
         </div>
 
-        <div class="button-group hide-for-medium stacked"
-        style="width: 100%;">
-[% INCLUDE event_buttons.tt FILTER indent 10 %]
-        </div>
+[%~ global.scripts.admin_event_online = BLOCK -%]
 
-      </form>
-      <!-- End of Form -->
-    </div>
+<script id="adminEventOnlineScript">
+  // Enable cancel button bypass of unsaved changes warning
+  $('#cancel').click(function() {
+    tinyMCE.triggerSave();
+    origFormState = $('form').serialize();
+  });
+</script>
 
-[%~ global.script.admin_event_online = BLOCK %]
+[%~ END # global.script.admin_event_online = BLOCK %]
 
-// Enable cancel button bypass of unsaved changes warning
-$( '#cancel' ) . click ( function ( ) {
-  tinyMCE . triggerSave ( ) ;
-  origFormState = $ ( 'form' ) . serialize ( ) ;
-} ) ;
-
-[% END # global.script.admin_event_online = BLOCK %]
-
-[% PROCESS footer.tt %]
+[%- PROCESS footer.tt -%]

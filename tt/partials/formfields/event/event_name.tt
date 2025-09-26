@@ -1,46 +1,49 @@
-<!-- Start of Event Name -->
+[%#
+--------------------------------------------------------------------------------
+tt/partials/formfields/event/event_name.tt
+--------------------------------------------------------------------------------
+-%]
+
+<!-- Start Event Name -->
 <div class="floated-label-wrapper">
-
-[%~ UNLESS error_event_name # Initial State -%]
-
-  <label for="event_name">
-    Name ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
-  </label>
-  <input type="text" id="event_name" name="event_name" placeholder=
-  "Name ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
-  aria-describedby="event_nameHelpText" [% IF required %]required[% END %]
-  value="[% event.name FILTER html %]">
-  <small class="form-error">
-[%~ IF error_msg %]
-    [% error_msg %]
-[% ELSE %]
-    You must enter the name of the event
-[%~ END -%]
-  </small>
-
-[%~ ELSE # Error State -%]
-
-  <label class="is-invalid-label" for="event_name">
-    Name ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
-  </label>
-
-  <input class="is-invalid-input" type="text" id="event_name" name="event_name"
-  value="[% event.name %]" aria-describedby="event_nameHelpText" placeholder=
-  "Name ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
-  [% IF required %]required[% END %]>
-
-  <small class="form-error is-visible">
-[%~ IF error_event_name == 'Missing' %]
-    You must enter the name of the event
-[%~ ELSE %]
-    [% error_event_name %]
-[%~ END %]
-  </small>
-
-[%~ END # error_event_name %]
-  <p class="help-text" id="event_nameHelpText">
-    Enter the name of the event; for example:<br>
-    "The Wind in the Willows"
-  </p>
+    <label [% FILTER collapse %]
+        for="event_name"
+        [% IF error_event_name %]class="is-invalid-label"[% END %]
+    [% END %]>
+        [%~ 'Name (' %]
+        [%~ IF required %]Mandatory[% ELSE %]Optional[% END %]
+        [%~ ')' ~%]
+    </label>
+    <input [% FILTER collapse %]
+        type="text"
+        id="event_name"
+        name="event_name"
+        placeholder="Name (
+        [%~ IF required %]Mandatory[% ELSE %]Optional[% END ~%]
+        )"
+        aria-describedby="event_nameHelpText"
+        [% IF required %]required[% END %]
+        value="[% event.name FILTER html %]"
+        [% IF error_event_name %]
+        class="is-invalid-input"
+        aria-invalid="true"
+        [% END %]
+    [% END %]>
+    <small class="form-error[% IF error_event_name %] is_visible[% END %]">
+        [%~ IF error_event_name == 'Missing' ~%]
+        You must enter the name of the event
+        [%~ ELSIF error_event_name ~%]
+        [% error_event_name %]
+        [%~ ELSIF error_msg ~%]
+        [% error_msg %]
+        [%~ ELSE ~%]
+        You must enter the name of the event
+        [%~ END ~%]
+    </small>
+    <p class="help-text" id="event_nameHelpText">
+[%- FILTER collapse %]
+Enter the name of the event; for example:<br>"The Wind in the Willows"
+[% END ~%]
+    </p>
 </div>
-<!-- End of Event Name -->
+<!-- End Event Name -->

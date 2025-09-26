@@ -1,86 +1,87 @@
-[%~ MACRO whatson_society BLOCK %]
-
-[%~ SET
-
-title = "$society.name"
-
+[%#
+--------------------------------------------------------------------------------
+tt/pages/society.tt
+--------------------------------------------------------------------------------
 %]
 
-[%~ PROCESS header.tt %]
+[%- title = "$society.name" %]
 
-[% PROCESS h1.tt FILTER indent 4 %]
+[%~ PROCESS header.tt -%]
 
-    <div class="row column">
+[%- PROCESS h1.tt FILTER trim | indent 8 %]
 
-[%~ IF society.description || society.website %]
+[%~ MACRO whatson_society BLOCK -%]
 
-      <h2>About Us</h2>
+<div class="row column">
 
-      <p>
-        [% society.description %]
-      </p>
+[%~ IF society.description || society.website -%]
 
-[%~ IF society.website %]
-      <p>
-        <a href="http://[% society.website %]" target="_blank">
-          [% society.website %]
-        </a>
-      </p>
+    <h2>About Us</h2>
+
+[%~ IF society.website -%]
+
+    <p>
+        [%~ society.description ~%]
+    </p>
+
 [%~ END %]
 
-[%~ END # IF society.description || society.website %]
+[%~ IF society.website -%]
 
-      <h2>Our Future Events</h2>
+    <p><a href="http://[% society.website %]" target="_blank">
+        [%~ society.website ~%]
+    </a></p>
+
+[%~ END %]
+
+[%~ END # IF society.description || society.website -%]
+
+    <h2>Our Future Events</h2>
 
 [%~ MACRO whatson_events BLOCK %]
 
-[%~ IF events.size > 0 %]
+[%~ IF events.size > 0 -%]
 
-[% PROCESS online_events_list.tt FILTER indent 6 %]
+[% PROCESS online_events_list.tt FILTER trim | indent 4 %]
 
-[%~ ELSE %]
+[%~ ELSE -%]
 
-      <p>
-        We do not currently have any future events listed in the DATA Diary.
-      </p>
+    <p>We do not currently have any future events listed in the DATA Diary.</p>
 
 [%~ END %]
 
 [%~ END # MACRO whatson_events BLOCK %]
 
-[%~ CGIAPP.embed (
+[%~ CGIAPP.embed(
 
-  # compnent = whatson_events - a list of events
-  'whatson_events'                ,
+    # compnent = whatson_events - a list of events
+    'whatson_events',
+    # filter - determines which events are returned
+    'filter' = {
+        'from' => 'now', # Only events that haven't yet ended
+        'status' => 'PUBLISHED', # Only events that are published
+        'society' => "$society.rowid", # Only events for a specific society
+    },
+    'behaviour' = {
+        'defaults' => 1, # Populate defaults
+    }
 
-  # filter - determines which events are returned
-  'filter' = {
-    'from'    => 'now'          , # Only events that haven't yet ended
-    'status'    => 'PUBLISHED'      , # Only events that are published
-    'society'  => "$society.rowid"  , # Only events for a specific society
-  } ,
+) -%]
 
-  'behaviour' = {
-    'defaults'  => 1            , # Populate defaults
-  }
-
-) %]
-
-    </div>
+</div>
 
 [%~ END # MACRO whatson_society BLOCK %]
 
-[%~ CGIAPP.embed (
+[%~ CGIAPP.embed(
 
-  # component = whatson_society - a single member society
-  'whatson_society'  ,
+    # component = whatson_society - a single member society
+    'whatson_society',
+    # filter - determines which member society (if any) is returned
+    'filter' = {
+        'rowid' => "$rowid", # A member society with this unique rowid
+        'status' => 'ACTIVE', # Only a member society in ACTIVE status
+    }
 
-  # filter - determines which member society (if any) is returned
-  'filter' = {
-    'rowid'  => "$rowid"  , # A member society with this unique rowid
-    'status'  => 'ACTIVE'  , # Only a member society in ACTIVE status
-  }
+) FILTER indent 8 -%]
 
-) %]
-
-[% PROCESS footer.tt %]
+[% PROCESS footer.tt -%]

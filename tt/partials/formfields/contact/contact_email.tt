@@ -1,76 +1,63 @@
+[%#
+--------------------------------------------------------------------------------
+tt/partial/formfields/contact/contact_email.tt
+--------------------------------------------------------------------------------
+-%]
+
+<!-- Start Contact Email -->
 <div class="floated-label-wrapper">
+    <label [% FILTER collapse %]
+        for="contactEmail"
+        [% IF error_contact_email %]class="is-invalid-label"[% END %]
+    [% END %]>
+        [%~ 'Email Address (' %]
+        [%~ IF required %]Mandatory[% ELSE %]Optional[% END %]
+        [%~ ')' ~%]
+    </label>
+    <input [% FILTER collapse %]
+        type="email"
+        id="contactEmail"
+        name="contact_email"
+        placeholder="Email Address (
+        [%~ IF required %]Mandatory[% ELSE %]Optional[% END ~%]
+        )"
+        pattern="email"
+        aria-describedby="contactEmailHelpText"
+        [% IF required %]required[% END %]
+        [% IF error_contact_email %]
+        class="is-invalid-input"
+        aria-invalid="true"
+        [% END %]
+    [% END %]>
+    <small class="form-error[% IF error_contact_email %] is-visible[% END %]">
+        [%~ IF error_contact_email == 'Missing' ~%]
+        You must provide an email address for us to respond to you
+        [%~ ELSIF error_contact_email == 'email_valid' ~%]
+        That email address is not a valid one
+        [%~ ELSIF error_contact_email ~%]
+        [% error_contact_email %]
+        [%~ ELSE ~%]
+        [% error_msg %]
+        [%~ END ~%]
+    </small>
+    <p class="help-text" id="contactEmailHelpText">
 
-[%~ UNLESS error_contact_email # Initial State %]
+[%~ FILTER collapse %]
 
-  <label for="contactEmail">
-    Email Address ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
-  </label>
+[% IF template.name == 'join_us.tt' %]
+Enter your email address so that we may contact you to follow up on your
+membership enquiry.
+[% ELSIF template.name == 'notify_event.tt' %]
+Enter your email address so that we may communicate with you to clarify any
+queries that we might have about this event.
+[% ELSIF template.name == 'subscribe.tt' %]
+Enter the email address that you wish us to send our montly event listings to.
+[% ELSE %]
+Enter your email address.
+[% END %]
 
-  <input type="email" id="contactEmail" name="contact_email" placeholder=
-  "Email Address ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
-  pattern="email" aria-describedby="contactEmailHelpText"
-  [% IF required %]required[% END %] />
+[% END ~%]
 
-  <small class="form-error">[% error_msg %]</small>
-
-[%~ ELSE # Error State %]
-
-  <label for="contactEmail" class="is-invalid-label">
-    Email Address ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
-  </label>
-
-  <input class="is-invalid-input" aria-invalid="true" type="email" id=
-  "contactEmail" name="contact_email" aria-describedby="contactEmailHelpText"
-  placeholder="Email Address ([% IF required %]Mandatory[% ELSE %]Optional
-  [%~ END %])" pattern="email" [% IF required %]required[% END %] />
-
-  <small class="form-error is-visible">
-
-[%~ IF error_contact_email == 'Missing' %]
-
-    You must provide an email address for us to respond to you
-
-[%~ ELSIF error_contact_email == 'email_valid' %]
-
-    That email address is not a valid one
-
-[%~ ELSE %]
-
-    [% error_contact_email %]
-
-[%~ END %]
-
-  </small>
-
-[%~ END # error_contact_email %]
-
-[%~ IF template.name == 'join_us.tt' %]
-
-  <p class="help-text" id="contactEmailHelpText">
-    Enter your email address so that we may contact you to follow up on your
-    membership enquiry.
-  </p>
-
-[%~ ELSIF template.name == 'notify_event.tt' %]
-
-  <p class="help-text" id="contactEmailHelpText">
-    Enter your email address so that we may communicate with you to clarify
-    any queries that we might have about this event.
-  </p>
-
-[%~ ELSIF template.name == 'subscribe.tt' %]
-
-  <p class="help-text" id="contactEmailHelpText">
-    Enter the email address that you wish us to send our montly event listings
-    to.
-  </p>
-
-[%~ ELSE %]
-
-  <p class="help-text" id="contactEmailHelpText">
-    Enter your email address.
-  </p>
-
-[%~ END %]
-
+    </p>
 </div>
+<!-- End Contact Email -->

@@ -1,377 +1,304 @@
-[% SET
+[%#-----------------------------------------------------------------------------
+tt/pages/index.tt
+------------------------------------------------------------------------------%]
 
-  title = 'Coming Events'
-  description = 'The Derby Arts and Theatre Association (DATA) is the representative body for amateur performing arts in the Derby area. DATA also maintains a list of Events staged by DATA member Societies - the DATA Diary.'
-
+[%~ title = 'Coming Events'
+    description =
+        'The Derby Arts and Theatre Association (DATA) is the representative ' _
+        'body for amateur performing arts in the Derby area. ' _
+        'DATA also maintains a list of Events staged by DATA member ' _
+        'Societies - the DATA Diary.'
 ~%]
 
 <!doctype html>
 <html class='no-js' lang='en'>
-  <head>
 
-[%~ IF conf.root == 'https://www.derbyartsandtheatre.org.uk/' -%]
+[%~ global.scripts = {}
+# Clear scripts array prior to adding any scripts to be output in the head
+%]
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async
-    src="https://www.googletagmanager.com/gtag/js?id=UA-137420866-1">
-    </script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-137420866-1');
-    </script>
+[%~ PROCESS ga_script.tt -%]
 
-[% END %]
+[% PROCESS head.tt FILTER trim | indent 4 -%]
 
-[%- PROCESS head.tt FILTER indent 8 -%]
+    <body>
 
-  </head>
+[%- PROCESS cookie_alert.tt FILTER trim | indent 8 -%]
 
-  <body>
-
-[%~ #---------------------------------------------------------------------------
-
-  # Cookie Alert
-
-#-----------------------------------------------------------------------------%]
-
-[%- PROCESS cookie_alert.tt FILTER indent 8 %]
-
-    <!-- Start of the Hero Image -->
-    <div class="hero-image-custom">
-
-[%-#----------------------------------------------------------------------------
-
-  # Mobile Title Bar
-
-#---------------------------------------------------------------------------- %]
-
-      <!-- Start of the Mobile Title Bar -->
-      <div class="title-bar title-bar-custom" data-responsive-toggle=
-      "top-bar-hero">
-        <button class="menu-icon" type="button" data-toggle="top-bar-hero">
-        </button>
-        <div class="title-bar-title">Menu</div>
-      </div>
-      <!-- End of the Mobile Title Bar -->
-
-[%#-----------------------------------------------------------------------------
-
-  Menu
-
-------------------------------------------------------------------------------%]
-
-      <!-- Start of the Top Bar -->
-      <div class="top-bar top-bar-hero-custom" id="top-bar-hero"
-      data-animate="slide-in-down slide-out-up">
-
-        <div class="top-bar-left">
-          <ul class="menu">
-            <li><a href="[% conf.root %]events">Events</a></li>
-            <li><a href="[% conf.root %]societies">Societies</a></li>
-            <li><a href="[% conf.root %]about_us">About Us</a></li>
-          </ul>
-        </div> [%# End of top-bar-left %]
-
-        <div class="top-bar-right">
-          <ul class="menu">
+        <!-- Start of the Hero Image -->
+        <div class="hero-image-custom">
+            <!-- Start of the Mobile Title Bar -->
+            <div [% FILTER collapse %]
+                class="title-bar title-bar-custom"
+                data-responsive-toggle="top-bar-hero">
+            [%~ END %]
+                <button [% FILTER collapse %]
+                    class="menu-icon"
+                    type="button"
+                    data-toggle="top-bar-hero">
+                [%~ END %]
+                </button>
+                <div class="title-bar-title">Menu</div>
+            </div>
+            <!-- End of the Mobile Title Bar -->
+            <!-- Start of the Top Bar -->
+            <div [% FILTER collapse %]
+                class="top-bar top-bar-hero-custom"
+                id="top-bar-hero"
+                data-animate="slide-in-down slide-out-up">
+            [%~ END %]
+                <div class="top-bar-left">
+                    <ul class="menu">
+                        <li>
+                            <a href="[% conf.root %]events">Events</a>
+                        </li>
+                        <li>
+                            <a href="[% conf.root %]societies">Societies</a>
+                        </li>
+                        <li>
+                            <a href="[% conf.root %]about_us">About Us</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="top-bar-right">
+                    <ul class="menu">
 [%~ IF session.userid # User is authenticated %]
-            <li>
-              <a href="[% conf.root %]secure/account/action/logout">
-                Sign-Out
-              </a>
-            </li>
-            <li>
-              <a href="[% conf.root %]secure/account">Account</a>
-            </li>
-            <li>
-              <a href=
-[%~ IF session.role == 'admin' %]
-                "[% conf.root %]secure/admin/"
-[%~ ELSIF session.role == 'rep' %]
-                "[% conf.root %]secure/rep/"
+                        <li>
+                            [%~ logout = 'secure/account/action/logout' %]
+                            <a href="[% conf.root _ logout %]">Sign-Out</a>
+                        </li>
+                        <li>
+                            <a href="[% conf.root %]secure/account">Account</a>
+                        </li>
+                        <li>
+                            <a href=
+[%~ IF session.role == 'admin' ~%]
+                            "[% conf.root %]secure/admin/"
+[%~ ELSIF session.role == 'rep' ~%]
+                            "[% conf.root %]secure/rep/"
 [%~ ELSE # This should never occur %]
-                "#"
+                            "#"
 [%~ END # IF session.role ~%]
-              ><i class="fa fa-caret-right"></i> <span>Admin</span></a>
-            </li>
+                            >[% FILTER collapse ~%]
+                                <i class="fa fa-caret-right"></i>
+                                <span>Admin</span>
+                            [%~ END ~%]
+                            </a>
+                        </li>
 [%~ ELSE # ! session.userid and so user is NOT authenticated %]
-            <li><a href="[% conf.root %]account/sign_in">Sign-In</a></li>
+                        <li>
+                            <a href="[% conf.root %]account/sign_in">Sign-In</a>
+                        </li>
 [%~ END # IF session.userid %]
-          </ul>
-        </div> [%# End of top bar right %]
-
-      </div>
-      <!-- End of the Top Bar -->
-
-[%-#----------------------------------------------------------------------------
-
-  # Hero
-
-#-----------------------------------------------------------------------------%]
-
-      <!-- Start of Hero Text -->
-      <div class="hero-body-custom">
-
-        <div class="hero-contents-custom">
-
-          <h1>Derby Arts and Theatre Association</h1>
-
-          <p class="subheader">
-            The home of amateur performing arts societies in the Derby
-            area.
-          </p>
-
-          <a href="#coming_events" class="round button hollow">
-            Coming Events
-          </a>
-
+                    </ul>
+                </div>
+            </div>
+            <!-- End of the Top Bar -->
+            <!-- Start of Hero Text -->
+            <div class="hero-body-custom">
+                <div class="hero-contents-custom">
+                    <h1>Derby Arts and Theatre Association</h1>
+                    <p class="subheader">
+                        [%~ FILTER collapse ~%]
+                        The home of amateur performing arts societies in the
+                        Derby area.
+                        [%~ END ~%]
+                    </p>
+                    <a href="#coming_events" class="round button hollow">
+                        [%~ BLOCK ~%]
+                        Coming Events
+                        [%~ END ~%]
+                    </a>
+                </div>
+            </div>
+            <!-- End of Hero Text -->
         </div>
-
-      </div>
-      <!-- End of Hero Text -->
-
-    </div>
-    <!-- End of Hero Image -->
-
-[%-#----------------------------------------------------------------------------
-
-  # Body of Page
-
-#-----------------------------------------------------------------------------%]
-
-    <!-- Start of Lead Paragraph -->
-    <div class="row columns">
-
-      <br>
-      <br>
-      <p class="lead">
-        The Derby Arts and Theatre Association (DATA) is the representative
-        body for amateur performing arts in the Derby area. DATA also
-        maintains a list of <a href="[% conf.root %]events">Events</a> staged
-        by DATA's member <a href="[% conf.root %]societies">Societies</a> - the
-        DATA Diary. Find out more about DATA on our <a href=
-        "[% conf.root %]about_us">About Us</a> page.
-      </p>
-      <br>
-
-    </div>
-    <!-- End of Lead Paragraph -->
-
-    <!-- Start of "Follow Us" Section -->
-    <div class="row column expanded" style="background-image:
-    url('[% conf.root %]assets/img/textures/green_bar.png');">
-
-      <br>
-
-      <div class="row medium-unstack">
-
-        <div class="columns small-12">
-
-          <p class="text-center">
-
-            <a href="[% conf.mailchimp.signup_form_url %]" target="_blank">
-              <span style="font-size: 3rem; color: #4dac71;">
-                <i class="fas fa-envelope"></i>
-              </span>
-            </a>
+        <!-- End of Hero Image -->
+        <!-- Start of Lead Paragraph -->
+        <div class="row columns">
             <br>
-            <a class="button" href="[% conf.mailchimp.signup_form_url %]"
-            target="_blank" style="border-radius: 4px;
-            padding: 0.3em 0.5em 0.55em 0.5em;">
-              Subscribe to our email bulletin
-            </a>
-
-          </p>
-
-        </div>
-
-        <div class="columns small-12">
-
-          <p class="text-center">
-
-[%- IF conf.facebook.page_name %]
-[%- facebook_page_path = conf.facebook.page_name %]
-[%- ELSE %]
-[%- facebook_page_path = conf.facebook.page_id %]
-[%- END %]
-
-            <a href="[% 'https://www.facebook.com/' _ facebook_page_path %]"
-            target="_blank">
-              <span style="font-size: 3rem; color: #3B5998;">
-                <i class="fab fa-facebook"></i>
-              </span>
-            </a>
             <br>
-            <a class="button" target="_blank"
-            href="[% 'https://www.facebook.com/' _ facebook_page_path %]"
-            style="border-radius: 4px; padding: 0.3em 0.5em 0.55em 0.5em;
-            background-color: #3B5998;">
-              Follow us on Facebook
-            </a>
-
-          </p>
-
-        </div>
-
-        <div class="columns small-12">
-
-          <p class="text-center">
-
-            <a href="[% 'https://x.com/' _ conf.x.handle %]" target="_blank">
-              <span style="font-size: 3rem; color: #000000;">
-                <i class="fa-brands fa-square-x-twitter"></i>
-              </span>
-            </a>
-            <br>
-            <a class="button" target="_blank"
-              href=[% 'https://x.com/' _ conf.x.handle %]
-              style="border-radius: 4px; padding: 0.3em 0.5em 0.55em 0.5em;
-              background-color: #000000;">
-              Follow us on X
-            </a>
-
-          </p>
-
-        </div>
-
-      </div>
-
-      <br>
-
-    </div>
-    <!-- End of "Follow Us" Section -->
-
-    <!-- Start of "Coming Events" Title Section -->
-    <div class="row columns">
-
-      <br>
-      <br>
-
-      <h2 id="coming_events">Coming Events</h2>
-
-      <p class="lead">
-        Below are the events presented by our member <a href=
-        "[% conf.root %]societies">Societies</a> in the near future. Our full <a
-        href="[% conf.root %]events">Events</a> list may contain more and also
-        explains how to notify us of an event to add to the DATA Diary,
-        subscribe to our monthly email bulletin and produce printed listings of
-        DATA Diary events for inclusion in programmes.
-      </p>
-      <br>
-
-    </div>
-    <!-- End of "Coming Events" Title Section -->
-
-    <!-- Start of "One-Page Event Listing Flyer" Section -->
-    <div class="row column expanded" style="background-image:
-    url('[% conf.root %]assets/img/textures/green_bar.png');">
-
-      <div class="row">
-
-        <div class="columns small-12">
-
-<br>
-
-[% PROCESS form.tt
-  action = '/action/printed_listing' ,
-  onSuccess = '/' ,
-  onError = 'index'
-FILTER indent 6 %]
-            <p>
-              DATA members can download a one-page flyer of coming events to
-              print for inclusion in their programmes, as required by the terms
-              of the <a href="/diary_scheme">Diary Scheme</a>.
+            <p class="lead">
+[%~ FILTER collapse %]
+The Derby Arts and Theatre Association (DATA) is the representative body for
+amateur performing arts in the Derby area. DATA also maintains a list of <a
+href="[% conf.root ~%]events">Events</a> staged by DATA's member <a href="
+[%~ conf.root %]societies">Societies</a> - the DATA Diary. Find out more about
+DATA on our <a href="[% conf.root %]about_us">About Us</a> page.
+[% END ~%]
             </p>
-            <div class="floated-label-wrapper">
+            <br>
+        </div>
+        <!-- End of Lead Paragraph -->
+        <!-- Start of "Follow Us" Section -->
+        <div [% FILTER collapse %]
+            class="row column expanded"
+            style="background-image:
+            url('[% conf.root %]assets/img/textures/green_bar.png');">
+            [%~ END %]
+            <br>
+            <div class="row medium-unstack">
+                <div class="columns small-12">
+                    <p class="text-center">
+                        <a [% FILTER collapse %]
+                            href="[% conf.mailchimp.signup_form_url %]"
+                            target="_blank">
+                        [%~ END ~%]
+                        [%~ '<span style="font-size: 3rem; color: #4dac71;">'
+                            _ '<i class="fas fa-envelope"></i></span></a>'
+                        %]
+                        <br>
+                        <a [% FILTER collapse %]
+                            class="button"
+                            href="[% conf.mailchimp.signup_form_url %]"
+                            target="_blank"
+                            style="border-radius: 4px;
+                                padding: 0.3em 0.5em 0.55em 0.5em;">
+                        [%~ END ~%]
+                            Subscribe to our email bulletin
+                        [%~ BLOCK ~%]
+                        </a>
+                        [%~ END %]
+                    </p>
+                </div>
+                <div class="columns small-12">
+                    <p class="text-center">
 
-[%~ UNLESS error_flyer_start_date # Initial State -%]
-
-              <label for="flyer_start_date">
-                Start Date (Optional) DD/MM/YYYY
-              </label>
-              <input type="text" id="flyerStartDate" name=flyer_start_date
-              placeholder="Start Date (Optional) DD/MM/YYYY" aria-describedby=
-              "flyer_start_dateHelpText" pattern="day_month_year" class=
-              "datepicker">
-              <small class="form-error">
-                You must enter a valid date in DD/MM/YYYY format
-              </small>
-
-[%~ ELSE # Error State -%]
-
-              <label class="is-invalid-label" for="flyer_start_date">
-                Start Date (Optional) DD/MM/YYYY
-              </label>
-              <input class="is-invalid-input" type="text" id="flyerStartDate"
-              name=flyer_start_date placeholder=
-              "Start Date (Optional) DD/MM/YYYY" aria-describedby=
-              "flyer_start_dateHelpText" pattern="day_month_year" class=
-              "datepicker" value="[% flyer_start_date %]">
-              <small class="form-error is-visible">
-  You must enter a valid date in DD/MM/YYYY format
-              </small>
-
+[%~ IF conf.facebook.page_name %]
+[%~ facebook_page_path = conf.facebook.page_name %]
+[%~ ELSE %]
+[%~ facebook_page_path = conf.facebook.page_id %]
 [%~ END -%]
 
-              <p class="help-text" id="flyer_start_dateHelpText">
-                Optionally enter a start date for the flyer in DD/MM/YYYY
-                format. Without a start date, events from the current date will
-                be included. With a start date, only events from that start date
-                will be included.
-              </p>
+                        <a [% FILTER collapse %]
+                            href="[% 'https://www.facebook.com/'
+                                _ facebook_page_path %]"
+                            target="_blank">
+                        [%~ END %]
+                            <span style="font-size: 3rem; color: #3B5998;">
+                                <i class="fab fa-facebook"></i>
+                            </span>
+                        </a>
+                        <br>
+                        <a [% FILTER collapse %]
+                            class="button"
+                            target="_blank"
+                            href="[% 'https://www.facebook.com/'
+                                _ facebook_page_path %]"
+                            style="border-radius: 4px;
+                                padding: 0.3em 0.5em 0.55em 0.5em;
+                                background-color: #3B5998;">
+                        [%~ END %]
+                            Follow us on Facebook
+                        </a>
+                    </p>
+                </div>
+                <div class="columns small-12">
+                    <p class="text-center">
+                        <a [% FILTER collapse %]
+                            href="[% 'https://x.com/' _ conf.x.handle %]"
+                            target="_blank">
+                        [%~ END %]
+                            <span style="font-size: 3rem; color: #000000;">
+                                <i class="fa-brands fa-square-x-twitter"></i>
+                            </span>
+                        </a>
+                        <br>
+                        <a [% FILTER collapse %]
+                            class="button"
+                            target="_blank"
+                            href="[% 'https://x.com/' _ conf.x.handle %]"
+                            style="border-radius: 4px;
+                            padding: 0.3em 0.5em 0.55em 0.5em;
+                            background-color: #000000;">
+                        [%~ END %]
+                            Follow us on X
+                        </a>
+                    </p>
+                </div>
             </div>
-            [%~ global.script.flyer_start_date = BLOCK %]
-            // Setup Datepicker on Start Date
-                            $ ( '#flyerStartDate' ) . datepicker ( {
-                              dateFormat: 'dd/mm/yy' ,
-                              minDate: 1 ,
-                              onSelect: function ( ) {
-                                $ ( this ) . datepicker ( 'hide' ) ;
-                                $ ( this ) . trigger ( 'keyup' ) ;
-                              } ,
-                            } ) ;
-
-            [%~ END # global.script.event_start_date = BLOCK %]
-            <fieldset>
-              <input id="flyerPagesizeA4" name="flyer_pagesize" type="radio"
-              value="A4" aria-describedby="flyer_pagesizeHelpTest" required
-              [% IF !error && flyer_pagesize != 'A5' %]checked[% END %]>
-              <label for="flyerPagesizeA4">A4</label>
-              <input id="flyerPagesizeA5" name="flyer_pagesize" type="radio"
-              value="A5" aria-describedby="flyer_pagesizeHelpTest" required
-              [% IF flyer_pagesize == 'A5' %]checked[% END %]>
-              <label for="flyerPagesizeA5">A5</label>
-            </fieldset>
-            <p class="help-text" id="flyer_pagesizeHelpText">
-              Select the required page size. Coming event flyers use a portrait
-              page orientation.
+            <br>
+        </div>
+        <!-- End of "Follow Us" Section -->
+        <!-- Start of "Coming Events" Title Section -->
+        <div class="row columns">
+            <br>
+            <br>
+            <h2 id="coming_events">Coming Events</h2>
+            <p class="lead">
+[%~ FILTER collapse %]
+Below are the events presented by our member <a href="[% conf.root ~%]
+societies">Societies</a> in the near future. Our full <a href="[% conf.root ~%]
+events">Events</a> list may contain more and also explains how to notify us of
+an event to add to the DATA Diary, subscribe to our monthly email bulletin and
+produce printed listings of DATA Diary events for inclusion in programmes.
+[% END ~%]
             </p>
-[% PROCESS buttons.tt
-  buttons = [
-    {
-      id = 'flyer' ,
-      protect = 1 ,
-      type = 'submit' ,
-      value = 'Download Flyer'
-    }
-  ]
-FILTER indent 6 %]
-</div>
-</div>
-    </div> [%# End of Wrapper Row %]
+            <br>
+        </div>
+        <!-- End of "Coming Events" Title Section -->
+        <!-- Start of "One-Page Event Listing Flyer" Section -->
+        <div [% FILTER collapse %]
+            class="row column expanded"
+            style="background-image:
+            url('[% conf.root %]assets/img/textures/green_bar.png');">
+        [%~ END %]
+            <div class="row">
+                <div class="columns small-12">
+                    <br>
 
-    <!-- End of "Coming Events Title Section" -->
-    <br>
-    <br>
+[%- INCLUDE form.tt
+    action = '/action/printed_listing',
+    onSuccess = '/',
+    onError = 'index'
+FILTER indent 20 -%]
 
-    <!-- Start of "Coming Events" List -->
-    <div id="coming_events_list">
+                        <p>
+[%~ FILTER collapse %]
+DATA members can download a one-page flyer of coming events to print for
+inclusion in their programmes, as required by the terms of the <a
+href="/diary_scheme">Diary Scheme</a>.
+[% END ~%]
+                        </p>
 
-[%~ MACRO whatson_events BLOCK %]
+[%- PROCESS flyer_start_date.tt FILTER trim | indent 24 -%]
 
-[%~ MACRO venue_link BLOCK %]
+[% PROCESS flyer_page_size.tt FILTER trim | indent 24 -%]
+
+[% INCLUDE buttons.tt
+    buttons = [
+        {
+            id = 'flyer',
+            protect = 1,
+            type = 'submit',
+            value = 'Download Flyer'
+        }
+    ]
+FILTER indent 20 -%]
+
+                </div>
+            </div>
+        </div> [%# End of Wrapper Row %]
+        <!-- End of "Coming Events Title Section" -->
+        <br>
+        <br>
+        <!-- Start of "Coming Events" List -->
+        <div id="coming_events_list">
+
+[%~ MACRO whatson_events BLOCK
+
+# We use the whatson_events embedded component to output lists of events (see
+# CGIAPP.embed) command near the bottom of this file. Each template that embeds
+# this component must provide its own template, which we do using a macro block.
+
+%]
+
+[%~ MACRO venue_link BLOCK
+
+# By defining the venue link as a macro block we can pass it parameters each
+# time that it is used.
+
+-%]
 
 <a data-toggle="event_venue_[% loop_index %][% screen_size %]">
 [%~ IF ( matches = event.venue_name.match ( '^(.+),' ) ) %]
@@ -380,69 +307,52 @@ FILTER indent 6 %]
     [% event.venue_name %] address
 [%~ END %]
 </a>
+<div [% FILTER collapse %]
+    class="dropdown-address-pane top"
+    id="event_venue_[% loop_index %][% screen_size %]"
+    data-dropdown data-hover="true">
+[%~ END %]
 
-<div class="dropdown-address-pane top"
-id="event_venue_[% loop_index %][% screen_size %]"
-data-dropdown data-hover="true">
-
-[% PROCESS event_address.tt FILTER indent 2 -%]
+[%- PROCESS event_address.tt FILTER trim | indent 4 -%]
 
 </div>
 
-[%~ END # MACRO venue_link BLOCK %]
-
-[%~#----------------------------------------------------------------------------
-
-  # Coming Events for Small Screens
-
-#-----------------------------------------------------------------------------%]
+[%~ END # MACRO venue_link BLOCK -%]
 
 <!-- Start of Small Screens Layout -->
 <div class="hide-for-medium">
-
-  <div class="row column">
-
-    <br>
+    <div class="row column">
+        <br>
 
 [%~ FOREACH event IN events -%]
 
-    <div class="row column text-center">
-
-      <div class="text-left" style="display: inline-block;">
+        <div class="row column text-center">
+            <div class="text-left" style="display: inline-block;">
 
 [%~ IF event.name
-# Wrap in IF even.name so we output nothing if there is no event. This is
+# Wrap in IF event.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt FILTER indent 6 %]
-[% venue_link ( loop_index = loop.index , screen_size = 'S' ) FILTER indent 6 %]
+[% PROCESS event_card.tt FILTER trim | indent 16 %]
+[%- venue_link(loop_index = loop.index, screen_size = 'S') FILTER indent 16 %]
 
 [%~ END -%]
 
-      </div>
+            </div>
+            <br>
+            <br>
+        </div>
 
-      <br>
-      <br>
+[%~ END # FOREACH event in events -%]
 
     </div>
-
-[%~ END # FOREACH event in events %]
-
-  </div>
-
 </div>
 <!-- End of Small Screens Layout -->
 
-[%-#----------------------------------------------------------------------------
-
-  # Coming Events for Medium Screens
-
-#-----------------------------------------------------------------------------%]
-
 [%~ max_images = 0 %]
 
-[%~ FOREACH col IN [ 1 , 2 ] %]
+[%~ FOREACH col IN [ 1, 2 ] %]
 
 [%~
 images = 0
@@ -461,260 +371,275 @@ item6 = col + 9
 
 [%~ END # FOREACH item %]
 
-[% SET col1_images = images IF col == 1 %]
-[% SET col2_images = images IF col == 2 %]
+[%~ SET col1_images = images IF col == 1 %]
+[%~ SET col2_images = images IF col == 2 %]
 
-[%~ END # FOREACH col %]
+[%~ END # FOREACH col -%]
 
 <!-- Start of Medium Screens Layout -->
 <div class="show-for-medium hide-for-large">
-
-  <div class="row">
-
-    <div class="medium-6 columns">
-
-      <br>
+    <div class="row">
+        <div class="medium-6 columns">
+            <br>
 
 [%~ IF events.0.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.0 FILTER indent 6 %]
-[%
-  venue_link ( event = events.0 , loop_index = 0 , screen_size = 'M' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.0 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.0, loop_index = 0, screen_size = 'M')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col1_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col1_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.2.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.2 FILTER indent 6 %]
-[%
-  venue_link ( event = events.2 , loop_index = 2 , screen_size = 'M' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.2 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.2, loop_index = 2, screen_size = 'M')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col1_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col1_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.4.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.4 FILTER indent 6 %]
-[%
-  venue_link ( event = events.4 , loop_index = 4 , screen_size = 'M' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.4 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.4, loop_index = 4, screen_size = 'M')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col1_images > 0 %]
+            <div style="line-height: 3.5;">
+               [%  break = '<br>' %]
+               [%~ break.repeat(max_images - col1_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.6.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.6 FILTER indent 6 %]
-[%
-  venue_link ( event = events.6 , loop_index = 6 , screen_size = 'M' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.6 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.6, loop_index = 6, screen_size = 'M')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col1_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col1_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.8.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.8 FILTER indent 6 %]
-[%
-  venue_link ( event = events.8 , loop_index = 8 , screen_size = 'M' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.8 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.8, loop_index = 8, screen_size = 'M')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col1_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col1_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.10.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.10 FILTER indent 6 %]
-[%
-  venue_link ( event = events.10 , loop_index = 10 , screen_size = 'M' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.10 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.10, loop_index = 10, screen_size = 'M')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-
-    </div>
-
-    <div class="medium-6 columns">
-
-      <br>
+            <br>
+            <br>
+        </div>
+        <div class="medium-6 columns">
+            <br>
 
 [%~ IF events.1.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.1 FILTER indent 6 %]
-[%
-  venue_link ( event = events.1 , loop_index = 1 , screen_size = 'M' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.1 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.1, loop_index = 1, screen_size = 'M')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col2_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col2_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.3.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.3 FILTER indent 6 %]
-[%
-  venue_link ( event = events.3 , loop_index = 3 , screen_size = 'M' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.3 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.3, loop_index = 3, screen_size = 'M')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col2_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col2_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.5.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.5 FILTER indent 6 %]
-[%
-  venue_link ( event = events.5 , loop_index = 5 , screen_size = 'M' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.5 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.5, loop_index = 5, screen_size = 'M')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col2_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col2_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.7.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.7 FILTER indent 6 %]
-[%
-  venue_link ( event = events.7 , loop_index = 7 , screen_size = 'M' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.7 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.7, loop_index = 7, screen_size = 'M')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col2_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col2_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.9.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.9 FILTER indent 6 %]
-[%
-  venue_link ( event = events.9 , loop_index = 9 , screen_size = 'M' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.9 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.9, loop_index = 9, screen_size = 'M')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col2_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col2_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.11.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.11 FILTER indent 6 %]
-[%
-  venue_link ( event = events.11 , loop_index = 11 , screen_size = 'M' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.11 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.11, loop_index = 11, screen_size = 'M')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-
+            <br>
+            <br>
+        </div>
     </div>
-
-  </div>
-
 </div>
 <!-- End of Medium Screens Layout -->
-
-[%~#----------------------------------------------------------------------------
-
-  # Coming Events for Large Screens
-
-#-----------------------------------------------------------------------------%]
 
 [%~ max_images = 0 %]
 
@@ -735,256 +660,271 @@ item4 = col + 8
 
 [%~ END # FOREACH item %]
 
-[% SET col1_images = images IF col == 1 %]
-[% SET col2_images = images IF col == 2 %]
-[% SET col3_images = images IF col == 3 %]
+[%~ SET col1_images = images IF col == 1 %]
+[%~ SET col2_images = images IF col == 2 %]
+[%~ SET col3_images = images IF col == 3 %]
 
-[%~ END # FOREACH col %]
+[%~ END # FOREACH col -%]
 
 <!-- Start of Large Screens Layout -->
 <div class="show-for-large">
-
-  <div class="row">
-
-    <div class="large-4 columns">
-
-      <br>
+    <div class="row">
+        <div class="large-4 columns">
+            <br>
 
 [%~ IF events.0.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.0 FILTER indent 6 %]
-[%
-  venue_link ( event = events.0 , loop_index = 0 , screen_size = 'L' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.0 FILTER trim | indent 12 %]
+[%-
+  venue_link(event = events.0, loop_index = 0, screen_size = 'L')
+  FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col1_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col1_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.3.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.3 FILTER indent 6 %]
-[%
-  venue_link ( event = events.3 , loop_index = 3 , screen_size = 'L' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.3 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.3, loop_index = 3, screen_size = 'L')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col1_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col1_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.6.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.6 FILTER indent 6 %]
-[%
-  venue_link ( event = events.6 , loop_index = 6 , screen_size = 'L' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.6 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.6, loop_index = 6, screen_size = 'L')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col1_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col1_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col1_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.9.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.9 FILTER indent 6 %]
-[%
-  venue_link ( event = events.9 , loop_index = 9 , screen_size = 'L' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.9 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.9, loop_index = 9, screen_size = 'L')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-
-    </div>
-
-    <div class="large-4 columns">
-
-      <br>
+            <br>
+            <br>
+        </div>
+        <div class="large-4 columns">
+            <br>
 
 [%~ IF events.1.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.1 FILTER indent 6 %]
-[%
-  venue_link ( event = events.1 , loop_index = 1 , screen_size = 'L' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.1 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.1, loop_index = 1, screen_size = 'L')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col2_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col2_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.4.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.4 FILTER indent 6 %]
-[%
-  venue_link ( event = events.4 , loop_index = 4 , screen_size = 'L' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.4 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.4, loop_index = 4, screen_size = 'L')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col2_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col2_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.7.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.7 FILTER indent 6 %]
-[%
-  venue_link ( event = events.7 , loop_index = 7 , screen_size = 'L' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.7 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.7, loop_index = 7, screen_size = 'L')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col2_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col2_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col2_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.10.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.10 FILTER indent 6 %]
-[%
-  venue_link ( event = events.10 , loop_index = 10 , screen_size = 'L' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.10 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.10, loop_index = 10, screen_size = 'L')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-
-    </div>
-
-    <div class="large-4 columns">
-
-      <br>
+            <br>
+            <br>
+        </div>
+        <div class="large-4 columns">
+        <br>
 
 [%~ IF events.2.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.2 FILTER indent 6 %]
-[%
-  venue_link ( event = events.2 , loop_index = 2 , screen_size = 'L' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.2 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.2, loop_index = 2, screen_size = 'L')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col3_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col3_images > 0 %]
+            <div style="line-height: 3.5;">
+               [%  break = '<br>' %]
+               [%~ break.repeat(max_images - col3_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.5.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.5 FILTER indent 6 %]
-[%
-  venue_link ( event = events.5 , loop_index = 5 , screen_size = 'L' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.5 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.5, loop_index = 5, screen_size = 'L')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col3_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col3_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col3_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.8.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.8 FILTER indent 6 %]
-[%
-  venue_link ( event = events.8 , loop_index = 8 , screen_size = 'L' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.8 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.8, loop_index = 8, screen_size = 'L')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-      <span style="line-height: 3.5;">
-        [%  break = '<br>' %][% break.repeat ( max_images - col3_images ) %]
-      </span>
+            <br>
+            <br>
+[%~ IF max_images - col3_images > 0 %]
+            <div style="line-height: 3.5;">
+                [%  break = '<br>' %]
+                [%~ break.repeat(max_images - col3_images) %]
+            </div>
+[%~ END %]
 
 [%~ IF events.11.name
 # Wrap in IF even.name so we output nothing if there is no event. This is
 # necessary if for example there are less than 12 events for the home page.
 -%]
 
-[% PROCESS event_card.tt event = events.11 FILTER indent 6 %]
-[%
-  venue_link ( event = events.11 , loop_index = 11 , screen_size = 'L' )
-  FILTER indent 6
+[% INCLUDE event_card.tt event = events.11 FILTER trim | indent 12 %]
+[%-
+    venue_link(event = events.11, loop_index = 11, screen_size = 'L')
+    FILTER indent 12
 %]
 
 [%~ END -%]
 
-      <br>
-      <br>
-
+            <br>
+            <br>
+        </div>
     </div>
-
-  </div>
-
 </div>
 <!-- End of Large Screens Layout -->
 
@@ -992,26 +932,26 @@ item4 = col + 8
 
 [%~ END # MACRO whatson_events BLOCK %]
 
-[%~ CGIAPP.embed (
+[%~ CGIAPP.embed(
+    # Embed the "whatson_events" component to retrieve the list of events to
+    # display. This component is defined in `pm/WhatsOn/Component.pm` in this
+    # repository.
+    'whatson_events',
+    # Pass the "whatson_events" component the filter that defines what events
+    # it is to retrieve.
+    'filter' = {
+        'from'   => 'now'       , # Only events that haven't yet ended
+        'to'     => 'this-year' , # Only events falling within the next year
+        'status' => 'PUBLISHED' , # Only events that have been published
+        'limit'  => 12          , # At most twelve events
+    },
+    # Instruct whatson_events to use defaults where values are not provided.
+    'behaviour' = {
+        defaults => 1
+    }
+) FILTER indent 12 -%]
 
-  # component = whatson_events - a list of events
-  'whatson_events'  ,
+        </div>
+        <!-- End of "Coming Events" List -->
 
-  # filter - determines which events are returned
-  'filter' = {
-      'from'    => 'now'        , # Only events that haven't yet ended
-      'to'      => 'this-year'  , # Only events falling within the next year
-      'status'  => 'PUBLISHED'  , # Only events that have been published
-      'limit'    =>  12          , # At most twelve events
-  } ,
-
-  'behaviour' = {
-    defaults => 1
-  }
-
-) FILTER indent 8 %]
-
-</div>
-    <!-- End of "Coming Events" List -->
-
-[% PROCESS footer.tt %]
+[%- PROCESS footer.tt -%]

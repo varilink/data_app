@@ -1,3 +1,9 @@
+[%#
+--------------------------------------------------------------------------------
+tt/partials/event_formats/event_address.tt
+--------------------------------------------------------------------------------
+%]
+
 <!-- Start of Address -->
 [%~ MACRO whatson_venue BLOCK %]
 
@@ -15,23 +21,31 @@
 
 [%~ END -%]
 
-[% ",<br>$venue.address1"  IF venue.address1 %]
-[% ",<br>$venue.address2"  IF venue.address2 %]
-[% ",<br>$venue.address3"  IF venue.address3 %]
-[% ",<br>$venue.address4"  IF venue.address4 %]
-[% "<br>$venue.postcode"  IF venue.postcode %]
+[%~ IF venue.address1 %]
+[% ",<br>$venue.address1" %]
+[%~ END %]
+[%~ IF venue.address2 %]
+[% ",<br>$venue.address2" %]
+[%~ END %]
+[%~ IF venue.address3 %]
+[% ",<br>$venue.address3" %]
+[%~ END %]
+[%~ IF venue.address4 %]
+[% ",<br>$venue.address4" %]
+[%~ END %]
+[%~ IF venue.postcode %]
+[% "<br>$venue.postcode"  %]
+[%~ END %]
 
 [%~ END # MACRO whatson_venue BLOCK %]
 
 [%~ CGIAPP.embed (
 
-  'whatson_venue'  ,
+    'whatson_venue',
 
-  'filter' = {
-
-    'event'  => "$event.rowid"
-
-  }
+    'filter' = {
+        'event'  => "$event.rowid"
+    }
 
 ) %]
 <!-- End of Address -->

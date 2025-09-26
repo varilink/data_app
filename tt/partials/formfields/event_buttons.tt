@@ -1,69 +1,89 @@
-[%#-----------------------------------------------------------------------------
+[%#
+--------------------------------------------------------------------------------
+tt/partials/formfields/event_buttons.tt
+--------------------------------------------------------------------------------
 This partial outputs buttons for the admin/rep event programme/online pages.
 These have an arrangement that is unique to those pages. Hence we use a unique
 partial.
-------------------------------------------------------------------------------%]
+%]
 
-<!-- Start of Buttons -->
-<button class="button" type="button" data-toggle="saveOptions
-[%~ size FILTER ucfirst IF size %]">
-  Save and&hellip;
+<!-- Start Buttons -->
+<button [% FILTER collapse %]
+    class="button"
+    type="button"
+    data-toggle="saveOptions
+    [%~ size FILTER ucfirst IF size %]"
+[% END %]>
+    [%~ 'Save and&hellip;' ~%]
 </button>
+<div [% FILTER collapse %]
+    id="saveOptions[% size FILTER ucfirst IF size %]"
+    class="dropdown-pane"
+    data-position="right"
+    data-alignment="bottom"
+    data-hover="true"
+    data-hover-pane="true"
+    data-dropdown
+    style=[% IF size == 'large' %]"width: 22em;"
+          [%~ ELSE %]"width: 100%;"
+          [%~ END %]
+[% END %]>
+    <div [% FILTER collapse %]
+        class="button-group [% size IF size %] stacked"
+        style="margin-bottom: 0;"
+    [% END %]>
+        <button class="button submit" name="save_and_continue">
+            [%~ 'Continue to Edit' ~%]
+        </button>
+        <button class="button submit" name="save_and_exit">
+            [%~ 'Exit' ~%]
+        </button>
 
-<div id="saveOptions[% size FILTER ucfirst IF size %]" class="dropdown-pane"
-data-position="right" data-alignment="bottom" data-hover="true"
-data-hover-pane="true" data-dropdown
-style=[% IF size == 'large' %]"width: 22em;"[% ELSE %]"width: 100%;"[% END %]>
-  <div class="button-group [% size IF size %] stacked"
-  style="margin-bottom: 0;">
-    <button class="button submit" name="save_and_continue">
-      Continue to Edit
-    </button>
-    <button class="button submit" name="save_and_exit">
-      Exit
-    </button>
-
-[%~ IF
-  template.name == 'admin_event_programme.tt' ||
-  caller        == 'admin_event_programme.tt' ||
-  template.name == 'rep_event_programme.tt'   ||
-  caller        == 'rep_event_programme.tt'
+[%~ IF template.name == 'admin_event_programme.tt' ||
+       caller == 'admin_event_programme.tt' ||
+       template.name == 'rep_event_programme.tt' ||
+       caller == 'rep_event_programme.tt'
 -%]
 
-    <button class="button submit" name="save_and_online">
-      [% IF event.use_desc %]Update[% ELSE %]Enter[% END %] Online<span
-      class="show-for-medium"> Promotion</span> Details
-    </button>
+        <button class="button submit" name="save_and_online">
+            [%~ FILTER collapse %]
+            [% IF event.use_desc %]Update[% ELSE %]Enter[% END %]
+            Online<span class="show-for-medium"> Promotion</span> Details
+            [% END ~%]
+        </button>
 
-[%~ ELSIF
-  template.name == 'admin_event_online.tt' ||
-  caller        == 'admin_event_online.tt' ||
-  template.name == 'rep_event_online.tt'   ||
-  caller        == 'rep_event_online.tt'
+[%~ ELSIF template.name == 'admin_event_online.tt' ||
+          caller == 'admin_event_online.tt' ||
+          template.name == 'rep_event_online.tt' ||
+          caller == 'rep_event_online.tt'
 -%]
 
-    <button class="button submit" name="save_and_programme">
-      Update Programme<span class="show-for-medium"> Listing</span> Details
-    </button>
+        <button class="button submit" name="save_and_programme">
+            [%~ FILTER collapse %]
+            Update Programme<span class="show-for-medium"> Listing</span>
+            Details
+            [% END ~%]
+        </button>
 
 [%~ END -%]
 
-    <button class="button submit" name="save_and_preview">
-      Preview<span class="show-for-medium"> Event</span>
-    </button>
-  </div>
+        <button class="button submit" name="save_and_preview">
+            [%~ FILTER collapse %]
+            Preview<span class="show-for-medium"> Event</span>
+            [% END ~%]
+        </button>
+    </div>
 </div>
-
-<a href="[% conf.root %]secure/[% session.role %]/events" id='cancel'
-class="button">
-  Exit without Saving
+<a href="[% conf.root %]secure/[% session.role ~%]
+/events" id='cancel' class="button">
+    [%~ 'Exit without Saving' ~%]
 </a>
 
-[%~ IF rowid %]
+[%~ IF rowid -%]
 
 <button class="button submit alert" name="delete">
-  Delete
+    [%~ 'Delete' ~%]
 </button>
 
 [%~ END # IF rowid %]
-<!-- End of Buttons -->
+<!-- End Buttons -->

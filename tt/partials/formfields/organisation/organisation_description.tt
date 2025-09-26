@@ -1,17 +1,24 @@
+[%#
+--------------------------------------------------------------------------------
+tt/partials/formfields/organisation/organisation_description.tt
+--------------------------------------------------------------------------------
+%]
+
 <div class="floated-label-wrapper">
-
-  <label for="organisationDescription">
-    Description (Optional)
-  </label>
-
-  <textarea name="organisation_description" id="organisationDescription"
-  rows="5" cols="80" placeholder="Description (Optional)"
-  aria-describedby="organisationDescriptionHelpText">
-    [%~ organisation.description ~%]
-  </textarea>
-
-  <p class="help-text" id="organisationDescriptionHelpText">
-    Enter a single paragraph description of your member society.
-  </p>
-
+    <label for="organisationDescription">Description (Optional)</label>
+    <textarea [% FILTER collapse %]
+        name="organisation_description"
+        id="organisationDescription"
+        rows="5"
+        cols="80"
+        placeholder="Description (Optional)"
+        aria-describedby="organisationDescriptionHelpText"
+    [% END %]>
+        [%~ organisation.description ~%]
+    </textarea>
+    <p class="help-text" id="organisationDescriptionHelpText">
+[%- FILTER collapse %]
+Enter a single paragraph description of your member society.
+[% END ~%]
+    </p>
 </div>

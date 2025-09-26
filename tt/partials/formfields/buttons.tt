@@ -1,94 +1,129 @@
-[%
+[%#
+--------------------------------------------------------------------------------
+tt/partials/formfields/buttons.tt
+--------------------------------------------------------------------------------
+This partial inserts a button group. It can be passed multiple parameters as
+Template Toolki variables as follows:
+- size = The size of the buttons within the group. Defaults to large if not set.
+- stack = If set dictates the breakpoint at which the buttons will stack.
+- buttons = An array of one or more buttons in the button group.
 
-# This partial inserts a button group. The parameters that it receives are as
-# follows:
-# size = Size of the button group, which is one of tiny,
+The buttons parameter is mandatory, the button group is of course a group of
+buttons. Within the buttons array, the buttons are hashes. Each hash can contain
+the following parameters:
+- href = The href for a link button, not applicable to a form submission button.
+- id = The button id.
+- value = The button value.
+%]
 
+[%~ BLOCK start_button_group
+   # Block that starts a button group for use lower down.
 -%]
 
-  <!-- Start Button Group -->
-  <div class="button-group
-[%~ IF size %]
-[%~ UNLESS size == 'medium' %] [% size %][% END %]
-[%~ ELSE # not size =%]
-large
-[%~ END # IF size %]
-[%~ IF stack %][% " stacked-for-$stack" %][% END ~%]
-">
+<!-- Start Button Group -->
+<div [% FILTER collapse %]
+    class="button-group
+[% IF size %]
+[% UNLESS size == 'medium'
+   # Foundation's default size is 'medium' but it isn't actually a size that can
+   # be set. However we allow for it semantically in our templates.
+%]
+    [% size %]
+[% END %]
+[% ELSE # No size set so default to large =%]
+    large
+[% END # IF size %]
+[% IF stack %]
+    [% "stacked-for-$stack" %]
+[% END %]
+[%~ END %]">
 
-[%~ form = 0 # We need to track if there are any buttons that indicate a form %]
+[%~ END # BLOCK start_button_group %]
+
+[%~ BLOCK buttons %]
 
 [%~ FOREACH button IN buttons %]
 
-[%~ IF button.href %]
+[%~ IF button.href
+    # This is a href link button and not a form action button
+%]
 
-[%~
-
-  # Rather than a form submit (or other form action) button, we just want a
-  # href link button.
-
--%]
-
-[%~ IF button.href == '#' || button.href == 'javascript:;' %]
+[%~ IF button.href == '#' || button.href == 'javascript:;'
+    # This is a button that simply invokes Javascript
+%]
 
 [%~ button_href = button.href %]
 
-[%~ ELSE %]
+[%~ ELSE
+    # This is true link button
+%]
 
-[%~ button_href = "$root$button.href" %]
+[%~ button_href = "$root$button.href"
+    # Prepend the website root to the button's relative path href
+%]
 
-[%~ END -%]
+[%~ END # Javascript href button -%]
 
-    <a href="[% button_href %]" class="button"
-    [%~ IF button.id %] id="[% button.id %]"[% END %]>
-      [% button.value %]
-    </a>
+<a [% FILTER collapse %]
+    href="[% button_href %]"
+    class="button"
+    [% IF button.id %]id="[% button.id %]"[% END %]
+[%~ END %]>
+    [% button.value %]
+</a>
 
-[%~ ELSIF button.protect # Protected form submission %]
+[%~ ELSE # The button has no href and so must be a form action button -%]
 
-[%~ form = 1 # We have a form -%]
-
-    <button
-[%~ IF button.id %] id="[% button.id %]"[% END %]
-[%~ IF button.name %] name="[% button.name %]"[% END %]
-[%~ IF button.type AND button.type != 'submit' %]
- type="[% button.type %]"
-[%~ END %] class="button
-[%~ IF button.type AND button.type == 'submit' %] submit[% END %]
-[%~ IF conf.use_captcha %] g-recaptcha[% END %]
-[%~ IF button.colour %] [% button.colour %][% END %]"
-[%~ IF conf.use_captcha %]
-    data-sitekey="[% conf.recaptcha_site_key %]"
+<button [% FILTER collapse %]
+    class="button"
+    [% IF button.id %]id="[% button.id %]"[% END %]
+    [% IF button.name %]name="[% button.name %]"[% END %]
+[% IF button.type %]
+    [% IF button.type == 'submit' %]submit
+    [% ELSE %]type="[% button.type %]"[% END %]
+[% END %]
+    [% IF button.colour %][% button.colour %][% END %]
+    [% IF button.action %]formaction="[% button.action %]"[% END %]
+    [% IF button.disabled %]disabled[% END %]
+[% IF button.protect AND conf.recaptcha.site_key # reCAPTCHA protect form %]
+    g-recaptcha
+    data-sitekey="[% conf.recaptcha.site_key %]"
     data-callback="onSubmit"
-[%~ END %]
-[%~ IF button.action %] formaction="[% button.action %]"[% END %]
-[%~ IF button.disabled %] disabled[% END %]>
-      [% button.value %]
-    </button>
-
-[%~ ELSE # Unprotected form submission %]
-
-[%~ form = 1 # We have a form -%]
-
-    <button
-[%~ IF button.id %] id="[% button.id %]"[% END %]
-[%~ IF button.name %] name="[% button.name %]"[% END %]
-[%~ IF button.type AND button.type != 'submit' %]
- type="[% button.type %]"
-[%~ END %] class="button
-[%~ IF button.type AND button.type == 'submit' %] submit[% END %]
-[%~ IF button.colour %] [% button.colour %][% END %]"
-[%~ IF button.action %] formaction="[% button.action %]"[% END %]
-[%~ IF button.disabled %] disabled[% END %]>
-      [% button.value %]
-    </button>
+[% END %]
+[%~ END %]>
+    [%~ button.value -%]
+</button>
 
 [%~ END # IF button.href %]
 
 [%~ END # FOREACH button IN buttons -%]
 
-  </div>
-  <!-- End Button Group -->
-[% IF form && ! suppress_form %]
-</form>
+[%~ END # BLOCK buttons %]
+
+[%~ is_form = 0 # Posit that button group contains no form action buttons %]
+[%~ FOREACH button IN buttons %]
+[%~ IF ! button.href # This is a form action button %]
+[%~ is_form = 1 # Admit that we do have a form action button %]
 [%~ END %]
+[%~ END %]
+
+[%~ IF is_form && ! suppress_form -%]
+
+[%~ PROCESS start_button_group FILTER trim | indent 4 %]
+
+[%~ PROCESS buttons FILTER indent 8 -%]
+
+    </div>
+    <!-- End button group -->
+</form>
+
+[%~ ELSE %]
+
+[%~ PROCESS start_button_group %]
+
+[%~ PROCESS buttons FILTER indent 4 -%]
+
+</div>
+<!-- End Button Group -->
+
+[%~ END -%]

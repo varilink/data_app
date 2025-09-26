@@ -1,38 +1,36 @@
+[%#
+--------------------------------------------------------------------------------
+tt/partials/formfields/contact/contact_message.tt
+--------------------------------------------------------------------------------
+%]
+
 <div class="floated-label-wrapper">
-
-[%~ UNLESS error_contact_message # Initial State %]
-
-  <label for="contact_message">Message (Mandatory)</label>
-
-  <textarea id="contact_message" name="contact_message" required
-  aria-describedby="contact_messageHelpText" rows="5" placeholder=
-  "Message (Mandatory)"></textarea>
-
-  <small class="form-error">[% error_msg %]</small>
-
-[%~ ELSE # Error State %]
-
-  <label for="contact_message" class="is-invalid-label">
-    Message (Mandatory)
-  </label>
-
-  <textarea class="is-invalid-input" id="contact_message" name=
-  "contact_message" required  aria-describedby="contact_messageHelpText"
-  rows="5" placeholder="Message (Mandatory)"></textarea>
-
-  <small class="form-error is-visible">
-[%~ IF error_contact_message == 'Missing' %]
-    You must enter a message
-[%~ ELSE %]
-    [% error_contact_message %]
-[%~ END %]
-  </small>
-
-[%~ END # error_message %]
-
-  <p class="help-text" id="contact_messageHelpText">
-    Add any message to us to accompany your application; for example a few brief
-    details about your candidate member society.
-  </p>
-
+    <label [% FILTER collapse %]
+        for="contact_message"
+        [% IF error_contact_message %]class="is-invalid-label"[% END %]
+    [% END %]>Message (Mandatory)</label>
+    <textarea [% FILTER collapse %]
+        id="contact_message"
+        name="contact_message"
+        required
+        aria-describedby="contact_messageHelpText"
+        rows="5"
+        placeholder="Message (Mandatory)"
+        [% IF error_contact_message %]class="is-invalid-input"[% END %]
+    [% END %]></textarea>
+    <small class="form-error[% IF error_contact_message %] is_visible[% END %]">
+        [%~ IF error_contact_message == 'Missing' ~%]
+        You must enter a message
+        [%~ ELSIF error_contact_message ~%]
+        [% error_contact_message %]
+        [%~ ELSE ~%]
+        [% error_msg %]
+        [%~ END ~%]
+    </small>
+    <p class="help-text" id="contact_messageHelpText">
+[%~ FILTER collapse %]
+Add any message to us to accompany your application; for example a few brief
+details about your candidate member society.
+[% END ~%]
+    </p>
 </div>

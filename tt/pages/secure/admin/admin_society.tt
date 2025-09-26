@@ -1,58 +1,72 @@
+[%#
+--------------------------------------------------------------------------------
+tt/pages/secure/admin/admin_society.tt
+--------------------------------------------------------------------------------
+%]
+
 [%~ IF rowid %]
 
-[%~ SET title = 'Update Society' %]
+[%~ title = 'Update Society' %]
 
 [%~ ELSE %]
 
-[%~ SET title = 'Add Society' %]
+[%~ title = 'Add Society' %]
 
 [%~ END %]
 
-[%~ PROCESS admin_header.tt %]
+[%~ PROCESS admin_header.tt FILTER trim %]
 
-[% PROCESS h1.tt FILTER indent 4 %]
+[%- PROCESS h1.tt FILTER trim | indent 8 %]
 
-[% PROCESS society_subnav.tt FILTER indent 4 %]
+[%- PROCESS society_subnav.tt FILTER trim | indent 8 -%]
 
-    <div class="row column">
+        <div class="row column">
 
-[% PROCESS form.tt
-  action    = '/secure/admin/action/society'  ,
-  name      = 'Member Society Details'        ,
-  onError   = 'admin_society'                 ,
-  onSuccess = '/secure/admin/societies'
-FILTER indent 6 %]
+[%- INCLUDE form.tt
+    action = '/secure/admin/action/society',
+    name = 'Member Society Details',
+    onError = 'admin_society',
+    onSuccess = '/secure/admin/societies'
+FILTER trim | indent 8 -%]
 
-        <input type="hidden" name="organisation_rowid" value="[% rowid %]">
-        <input type="hidden" name="organisation_type" value="whatson_society">
+            <input [% FILTER collapse %]
+                type="hidden"
+                name="organisation_rowid"
+                value="[% rowid %]"
+            [% END %]>
+            <input [% FILTER collapse %]
+                type="hidden"
+                name="organisation_type"
+                value="whatson_society"
+            [% END %]>
 
 [%~ MACRO whatson_society BLOCK %]
 
 [%~ organisation = society %]
 
-[% INCLUDE organisation_name.tt
-  required = 1
-FILTER indent 8 %]
+[%- INCLUDE organisation_name.tt
+    required = 1
+FILTER trim | indent 12 %]
 
-[% INCLUDE organisation_status.tt
-  required = 1
-FILTER indent 8 %]
+[%- INCLUDE organisation_status.tt
+    required = 1
+FILTER trim | indent 12 %]
 
-[% INCLUDE organisation_website.tt FILTER indent 8 %]
+[%- PROCESS organisation_website.tt FILTER trim | indent 12 %]
 
-[% INCLUDE organisation_email.tt FILTER indent 8 %]
+[%- PROCESS organisation_email.tt FILTER trim | indent 12 %]
 
-[% INCLUDE organisation_description.tt FILTER indent 8 %]
+[%- PROCESS organisation_description.tt FILTER trim | indent 12 %]
 
 [%~ END # MACRO whatson_event BLOCK %]
 
 [%~ IF rowid %]
 
-[%~ CGIAPP.embed (
-  'whatson_society'  ,
-  'filter' = {
-    'rowid' => "$rowid"
-  }
+[%~ CGIAPP.embed(
+    'whatson_society',
+    'filter' = {
+        'rowid' => "$rowid"
+    }
 ) %]
 
 [%~ ELSE %]
@@ -61,7 +75,7 @@ FILTER indent 8 %]
 
 [%~ END %]
 
-[% PROCESS buttons.tt
+[%- PROCESS buttons.tt
 
   buttons = [
     {
@@ -70,9 +84,8 @@ FILTER indent 8 %]
       type = 'submit'
     }
   ]
+FILTER indent 8 -%]
 
-FILTER indent 6 %]
+        </div>
 
-    </div>
-
-[% PROCESS footer.tt %]
+[%- PROCESS footer.tt -%]

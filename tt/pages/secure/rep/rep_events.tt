@@ -1,96 +1,88 @@
-[%~ SET
-
-title = 'Events Listing'
-
+[%#
+--------------------------------------------------------------------------------
+tt/pages/secure/rep/rep_events.tt
+--------------------------------------------------------------------------------
 %]
 
-[%~ PROCESS rep_header.tt %]
+[%~ title = 'Events Listing' %]
 
-[% PROCESS h1.tt FILTER indent 4 %]
+[%~ PROCESS rep_header.tt FILTER trim %]
 
-    <div class="row column">
+[%- PROCESS h1.tt FILTER trim | indent 8 -%]
 
-      <div class="callout information">
+        <div class="row column">
+            <div class="callout information">
+                <p class="lead">
 
-        <p class="lead">
-          <i class="fas fa-info-circle"></i>&nbsp;&nbsp;Information<br>
-          This is a listing of the future events for the member
+[%~ FILTER collapse %]
+<i class="fas fa-info-circle"></i>&nbsp;&nbsp;Information<br>This is a listing
+of the future events for the member
 
 [%~ MACRO whatson_societies BLOCK %]
 
-[%~ IF societies.size == 1 =%]
-
-          society
-
-[%= ELSE # Must be a representative of more than one society =%]
-
-          societies
-
-[%= END # IF societies.size == 1 %]
+[%~ IF societies.size == 1 %]
+society
+[%~ ELSE # Must be a representative of more than one society =%]
+societies
+[%~ END # IF societies.size == 1 %]
 
 [%~ END # MACRO whatson_societies BLOCK %]
 
-[%~ CGIAPP.embed (
-  'whatson_societies' ,
-  'filter' = {
-    'userid' => "$session.userid"
-  }
-) -%]
+[%~ CGIAPP.embed(
+    'whatson_societies',
+    'filter' = {
+        'userid' => "$session.userid"
+    }
+) %]
 
-          that you represent merged with those events from other societies that
-          overlap with yours as a planning aid to avoid clashes. Remember that
-          events must be "Published" to be advertised to the public.
-          "Placeholder" events are only visible to representatives of member
-          societies. You can update the details of any of your events listed by
-          clicking on the event's name below or you can <a
-          href="[% conf.root %]secure/rep/event/programme">Add (an) Event</a>.
-        </p>
+that you represent merged with those events from other societies that overlap
+with yours as a planning aid to avoid clashes. Remember that events must be
+"Published" to be advertised to the public. "Placeholder" events are only
+visible to representatives of member societies. You can update the details of
+any of your events listed by clicking on the event's name below or you can <a
+href="[% conf.root %]secure/rep/event/programme">Add (an) Event</a>.
+[% END ~%]
 
-      </div>
-
-      <table class="stack">
-
-        <thead>
-
-          <tr>
-            <th>Event</th>
-            <th>Status</th>
-            <th>Date(s) and Time(s)</th>
-          </tr>
-
-        </thead>
+                </p>
+            </div>
+            <table class="stack">
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Status</th>
+                        <th>Date(s) and Time(s)</th>
+                    </tr>
+                </thead>
 
 [%~ MACRO whatson_events BLOCK %]
 
 [%~ FOREACH event IN events %]
 
-[%~ IF event.start_date.substr ( 6 ) != year # Change of year %]
+[%~ IF event.start_date.substr(6) != year # Change of year %]
 
-[%~ SET year = event.start_date.substr ( 6 ) %]
+[%~ SET year = event.start_date.substr(6) %]
 
-[%~ UNLESS loop.index == 0 # Not first row %]
+[%~ UNLESS loop.index == 0 # Not first row -%]
 
-        </tbody>
+                </tbody>
 
 [%~ END # Not first row -%]
 
-        <tbody>
+                <tbody>
+                    <tr style="background-color: white;">
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><strong>[% year %]</strong></td>
+                    </tr>
 
-          <tr style="background-color: white;"><td colspan="3"></td></tr>
+[%~ END # Change of year -%]
 
-          <tr>
-            <td colspan="3"><strong>[% year %]</strong></td>
-          </tr>
-
-[%~ END # Change of year %]
-
-          <tr>
-            <td>
+                    <tr>
+                        <td>
 
 [%~ MACRO whatson_societies BLOCK
-
 # Get the socities that the logged in user represents.
-
 %]
 
 [%~ mine = 0 %]
@@ -101,59 +93,57 @@ title = 'Events Listing'
 
 [%~ END %]
 
-[%~ IF mine -%]
+[%~ IF mine ~%]
 
-              <a href=
-                "[% conf.root %]secure/rep/event/programme/[% event.rowid %]">
-                [% event.name FILTER html %]
-              </a>
+                            <a href="[% conf.root ~%]
+                            secure/rep/event/programme/[% event.rowid %]">
+                                [%~ event.name FILTER html ~%]
+                            </a>
 
-[%~ ELSE -%]
+[%~ ELSE ~%]
 
-              [% event.name FILTER html %]
+                            [% event.name FILTER html %]
+
+[%~ END ~%]
+
+                            <br>[% event.presented_by %]
 
 [%~ END %]
 
-              <br>[% event.presented_by %]
+[%~ CGIAPP.embed(
+    'whatson_societies',
+    'filter' = {
+        'userid' => "$session.userid"
+    }
+) ~%]
 
-[%~ END %]
-
-[%~ CGIAPP.embed (
-  'whatson_societies' ,
-  'filter' = {
-    'userid' => "$session.userid"
-  }
-) -%]
-
-            </td>
-        <td>[% event.status FILTER lower FILTER ucfirst %]</td>
-        <td>
-          [% event.dates %]
-[%~ UNLESS event.times == 'TBC' %]
-          &nbsp;[% event.times %]
-[%~ END %]
-        </td>
-      </tr>
+                        </td>
+                        <td>[% event.status FILTER lower FILTER ucfirst %]</td>
+                        <td>
+                            [%~ event.dates %]
+[%~ UNLESS event.times == 'TBC' ~%]
+                            &nbsp;[% event.times %]
+[%~ END ~%]
+                        </td>
+                    </tr>
 
 [%~ END %]
 
 [%~ END # MACRO whatson_events BLOCK %]
 
-[%~ CGIAPP.embed (
-  'whatson_events'  ,
-  'filter' = {
-    'from'  => 'now'               , # Events that have not yet ended
-    'userid'  => "$session.userid" , # Those represented by a userid
-  } ,
-  'behaviour' = {
-    'defaults'  => 1
-  }
-) %]
+[%~ CGIAPP.embed(
+    'whatson_events',
+    'filter' = {
+        'from' => 'now', # Events that have not yet ended
+        'userid' => "$session.userid", # Those represented by a userid
+    },
+    'behaviour' = {
+        'defaults'  => 1
+    }
+) -%]
 
-    </tbody>
+                </tbody>
+            </table>
+        </div>
 
-  </table>
-
-</div>
-
-[% PROCESS footer.tt %]
+[%- PROCESS footer.tt -%]

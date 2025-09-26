@@ -1,16 +1,17 @@
+[%#-----------------------------------------------------------------------------
+tt/pages/news_item.tt
+------------------------------------------------------------------------------%]
+
 [% MACRO whatson_news_item BLOCK %]
 
-[%~ SET
+[%~ title = news_item.title %]
 
-  title = news_item.title
-
-%]
+[% PROCESS h1.tt FILTER indent 4 %]
 
 [%~ PROCESS header.tt %]
 
     <div class="row columns">
 
-      [% PROCESS h1.tt FILTER indent 4 %]
 
       [% news_item.item_text %]
 
@@ -22,4 +23,4 @@
 
     </div>
 
-[% PROCESS footer.tt %]
+[% PROCESS footer.tt -%]

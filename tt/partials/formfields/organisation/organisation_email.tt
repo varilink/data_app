@@ -1,43 +1,51 @@
+[%#
+--------------------------------------------------------------------------------
+tt/partials/formfields/organisation/organisation_email.tt
+--------------------------------------------------------------------------------
+%]
+
 <div class="floated-label-wrapper">
-
-[%~ UNLESS error_organisation_email # Initial State %]
-
-  <label for="organisation_email">
-    Email ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
-  </label>
-
-  <input type="email" id="organisation_email" name="organisation_email"
-  placeholder="Email ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
-  pattern="email" aria-describedby="organisationEmailHelpText"
-  [% IF required %] required[% END %]
-  value="[% organisation.email %]">
-
-  <small class="form-error">[% error_msg %]</small>
-
-[%~ ELSE # Error State %]
-
-  <label class="is-invalid-label">
-    Email ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
-  </label>
-
-  <input class="is-invalid-input" type="email" id="organisation_email"
-  name="organisation_email" placeholder=
-  "Email ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
-  pattern="email" aria-describedby="organisationEmailHelpText"
-  [% IF required %] required[% END %]
-  value="[% organisation.email %]">
-
-  <small class="form-error is-visible">[% error_organisation_email %]</small>
-
-  <p class="help-text" id="organisationEmailHelpText">
-    If this organisation has an email address then you can enter it here; for
-    example:<br>
-    publicity@mickleoverplayers.co.uk;<br>
-    derventiochoir@hotmail.co.uk.<br>
-    <strong>Note:</strong> Do <strong>not</strong> enter the personal email
-    address of any of the organisation's contacts here
-  </p>
-
-[%~ END # error_organisation_email %]
-
+    <label [% FILTER collapse %]
+        for="organisation_email"
+        [% IF error_organisation_email %]
+        class="is-invalid-label"
+        [% END %]
+    [% END %]>
+        [%~ 'Email (' %]
+        [%~ IF required %]Mandatory[% ELSE %]Optional[% END %]
+        [%~ ')' %]
+    </label>
+    <input [% FILTER collapse %]
+        type="email"
+        id="organisation_email"
+        name="organisation_email"
+        placeholder="Email (
+        [%~ IF required %]Mandatory[% ELSE %]Optional[% END %])"
+        pattern="email"
+        aria-describedby="organisationEmailHelpText"
+        [% IF required %]
+        required
+        [% END %]
+        value="[% organisation.email %]"
+        [% IF error_organisation_email %]
+        class="is-invalid-input"
+        aria-invalid="true"
+        [% END %]
+    [% END %]>
+    <small class="form-error
+    [%~ IF error_organisation_email %] is-visible[% END %]">
+        [%~ IF error_organisation_email ~%]
+        [% error_organisation_email %]
+        [%~ ELSIF error_organisation_email ~%]
+        [% error_msg %]
+        [%~ END ~%]
+    </small>
+    <p class="help-text" id="organisationEmailHelpText">
+[%- FILTER collapse %]
+If this organisation has an email address then you can enter it here; for
+example:<br>publicity@mickleoverplayers.co.uk;<br>derventiochoir@hotmail.co.uk.
+<br><strong>Note:</strong> Do <strong>not</strong> enter the personal email
+address of any of the organisation's contacts here.
+[% END ~%]
+    </p>
 </div>

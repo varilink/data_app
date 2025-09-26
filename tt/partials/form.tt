@@ -1,146 +1,209 @@
-<!-- Start of Form -->
-<form [% UNLESS invisible %]class="callout"[% END %] [% IF id %]id="[% id %]"
-[% END %] action="[% action %]" data-abide novalidate method=
-"[% UNLESS method %]POST[% ELSE %][% method %][% END %]" accept-charset="utf-8"
-autocomplete="off">
+[%#
+--------------------------------------------------------------------------------
+tt/partials/form.tt
+--------------------------------------------------------------------------------
+%]
 
-[%~ IF name -%]
+<!-- Start Form -->
+<form [% FILTER collapse %]
+    [% UNLESS invisible %]class="callout"[% END %]
+    [% IF id %]id="[% id %]"[% END %]
+    action="[% action %]"
+    data-abide
+    novalidate
+    method="[% UNLESS method %]POST[% ELSE %][% method %][% END %]"
+    accept-charset="utf-8"
+    autocomplete="off">
+[%- END %]
 
-  <h2 class="text-center">[% name %]</h2>
-
-[%~ END %]
+[%~ IF name %]
+    <h2 class="text-center">[% name %]</h2>
+[%- END %]
 
 [%~ IF onError %]
-  <input type="hidden" name="onError" id="onError" value="[% onError %]">
-[%~ END ~%]
+    <input type="hidden" name="onError" id="onError" value="[% onError %]">
+[%- END %]
 
 [%~ IF onSuccess %]
-  <input type="hidden" name="onSuccess" id="onSuccess" value="[% onSuccess %]">
-[%~ END ~%]
+    <input [% FILTER collapse %]
+        type="hidden"
+        name="onSuccess"
+        id="onSuccess"
+        value="[% onSuccess %]">
+    [%~ END %]
+[%- END %]
 
 [%~ IF onSuccessContinue %]
-  <input type="hidden" name="onSuccessContinue" id="onSuccessContinue"
-  value="[% onSuccessContinue %]">
-[%~ END ~%]
+    <input [% FILTER collapse %]
+        type="hidden"
+        name="onSuccessContinue"
+        id="onSuccessContinue"
+        value="[% onSuccessContinue %]">
+    [%~ END %]
+[%- END %]
 
 [%~ IF onSuccessFinish %]
-  <input type="hidden" name="onSuccessFinish" id="onSuccessFinish"
-  value="[% onSuccessFinish %]">
-[%~ END ~%]
+    <input [% FILTER collapse %]
+        type="hidden"
+        name="onSuccessFinish"
+        id="onSuccessFinish"
+        value="[% onSuccessFinish %]">
+    [%~ END %]
+[%- END %]
 
 [%~ IF onWarning %]
-  <input type="hidden" name="onWarning" id="onWarning" value="[% onWarning %]">
-[%~ END ~%]
+    <input [% FILTER collapse %]
+        type="hidden"
+        name="onWarning"
+        id="onWarning"
+        value="[% onWarning %]"
+    [% END %]>
+[%- END %]
 
 [%~ UNLESS error # Initial State %]
-  <div data-abide-error class="alert callout" aria-live="assertive"
-  style="display: none;">
+    <div [% FILTER collapse %]
+        data-abide-error
+        class="alert callout"
+        aria-live="assertive"
+        style="display: none;">
+    [%~ END %]
 
 [%~ ELSE # Error State %]
-  <div data-abide-error class="alert callout" aria-live="assertive"
-  role="alert" style="display: block;">
-[% END %]
-    <p class="lead">
-      <i class="fas fa-times"></i>
-[%- IF error_msg %]
-      [% error_msg %]
+    <div [% FILTER collapse %]
+        data-abide-error
+        class="alert callout"
+        aria-live="assertive"
+        role="alert"
+        style="display: block;">
+    [%~ END %]
+
+[%- END -%]
+
+        <p class="lead">
+[%- FILTER collapse %]
+<i class="fas fa-times"></i>
+[% IF error_msg %]
+[% error_msg %]
 [% ELSE %]
-      There are errors in your input as indicated below. Please correct them and
-      try again.
-[% END -%]
-    </p>
-  </div>
-  <br>
+There are errors in your input as indicated below. Please correct them and try
+again.
+[% END %]
+[% END ~%]
+        </p>
+    </div>
+    <br>
 
-[%~ global.script.form = BLOCK %]
+[%~ global.scripts.form = BLOCK -%]
 
-[%~#----------------------------------------------------------------------------
+<script id="formScript">
+  $(function() {
 
-  # Keep track of whether we have unsaved form changes and alert the user if
-  # they attempt to navigate way while they remain unsaved.
+    // Function to toggle visibility of floating labels on input fields
+    function check_labels() {
+      var label = $(this).prev('label');
+      if (this.value !== '') {
+        label.addClass('show');
+      } else {
+        label.removeClass('show');
+      }
+    }
 
-#-------------------------------------------------------------------------------
--%]
+    // Selector for inputs with floating labels
+    var inputs =
+      'input:text,textarea,input[type="email"],input[type="password"],select';
 
-// Alert users if they navigate away from a page with unsaved changes
-[%~ IF psgi.REQUEST_URI.match ( '^/secure/(?:admin|rep)/event/online/' ) %]
-tinyMCE . triggerSave ( ) ;
+    // Check floating labels at page load
+    $(inputs).each(check_labels);
+
+    // Check floating labels on change events
+    $(inputs).on('change keyup mouseup', check_labels);
+
+    // Remove placeholder styling on select fields when a value is selected
+    $('select').on('change', function() {
+      this.removeAttribute('style');
+    });
+
+    if (typeof tinymce !== 'undefined' && tinymce.editors.length > 0) {
+
+      // There are TinyMCE editors on the page, wait until TinyMCE is ready
+      // before saving the form state.
+
+      tinymce.PluginManager.add('readycheck', function(editor) {
+        editor.on('init', function() {
+          tinyMCE.triggerSave();
+[% IF conf.jsDebug %]
+          console.log('tinyMCE state saved');
+[% END %]
+          var origFormState =
+            $('input, textarea, select')
+              .not("[name='g-recaptcha-response']")
+              .serialize();
+        });
+[% IF conf.jsDebug %]
+          console.log('Original Form State:');
+          console.log(origFormState);
+[% END %]
+      });
+
+    } else {
+
+      var origFormState = $('input, textarea, select')
+        .not("[name='g-recaptcha-response']")
+        .serialize();
+[% IF conf.jsDebug %]
+      console.log('Original Form State:');
+      console.log(origFormState);
 [%~ END %]
-var origFormState = $ ( 'input , textarea , select' )
-  . not ( "[name='g-recaptcha-response']" ) . serialize ( ) ;
 
-$ ( 'form' ) . submit ( function ( ) {
+    }
 
-[%~ IF psgi.REQUEST_URI.match ( '^/secure/(?:admin|rep)/event/online/' ) %]
-  tinyMCE . triggerSave ( ) ;
+    $('form').submit(function() {
+[% IF conf.jsDebug %]
+      console.log('form submit handler called');
+[% END %]
+
+      if (typeof tinymce !== 'undefined' && tinymce.editors.length > 0) {
+        tinyMCE.triggerSave();
+[% IF conf.jsDebug %]
+        console.log('tinyMCE state saved');
+[% END %]
+      }
+
+      origFormState =
+        $('input, textarea, select')
+          .not("[name='g-recaptcha-response']")
+          .serialize();
+
+    });
+
+    window.addEventListener('beforeunload', function(e) {
+[%~ IF conf.jsDebug %]
+      console.log('window beforeunload handler called');
 [%~ END %]
-  origFormState = $ ( 'input , textarea , select' )
-    . not ( "[name='g-recaptcha-response']" ) . serialize ( ) ;
+    if (typeof tinymce !== 'undefined' && tinymce.editors.length > 0) {
+      tinyMCE.triggerSave();
+[% IF conf.jsDebug %]
+      console.log('tinyMCE state saved');
+[% END %]
+    }
+      var currFormState =
+        $('input, textarea, select')
+          .not("[name='g-recaptcha-response']")
+          .serialize();
+[% IF conf.jsDebug %]
+      console.log('Original Form State:');
+      console.log(origFormState);
+      console.log('Current Form State:');
+      console.log(currFormState);
+[% END %]
+      if (currFormState != origFormState) {
+        e.preventDefault();
+        e.returnValue = null;
+      }
+    });
 
-} ) ;
+  });
 
-window . addEventListener ( 'beforeunload' , function ( e ) {
+</script>
 
-[%~ IF psgi.REQUEST_URI.match ( '^/secure/(?:admin|rep)/event/online/' ) %]
-  tinyMCE . triggerSave ( ) ;
-[%~ END %]
-  var currFormState = $ ( 'input , textarea , select' )
-    . not ( "[name='g-recaptcha-response']" ) . serialize ( ) ;
-
-  console.log ( 'Original Form State:' ) ;
-  console.log ( origFormState ) ;
-  console.log ( 'Current Form State:' ) ;
-  console.log ( currFormState ) ;
-
-  if ( currFormState != origFormState ) {
-    e . preventDefault ( ) ;
-    e . returnValue = null ;
-  }
-
-} ) ;
-
-[%-#----------------------------------------------------------------------------
-
-  # Put floating labels on input fields.
-
-#-----------------------------------------------------------------------------%]
-
-// Floating labels on input fields
-var inputs =
-  'input:text,textarea,input[type="email"],input[type="password"],select' ;
-
-function check_labels ( ) {
-
-  var label = $ ( this ) . prev ( 'label' ) ;
-
-  if ( this.value !== '' ) {
-
-    label . addClass ( 'show' ) ;
-
-  } else {
-
-    label . removeClass ( 'show' );
-
-  }
-
-}
-
-[%-# Check at document load %]
-$ ( inputs ) . each ( check_labels ) ;
-[%# Check on change events %]
-$ ( inputs ) . on ( 'change keyup mouseup' , check_labels ) ;
-
-[%-#----------------------------------------------------------------------------
-
-  # Remove the placeholder styling on select fields on change (i.e. the
-  # selection of an actual value.
-
-#-----------------------------------------------------------------------------%]
-
-$ ( 'select' ) . on ( 'change' , function ( ) {
-
-  this . removeAttribute ( 'style' ) ;
-
-} ) ;
-
-[% END # global.script.form = BLOCK %]
+[%~ END # global.scripts.form = BLOCK -%]

@@ -1,62 +1,74 @@
-<div class="floated-label-wrapper [% IF hidden %]hide[% END %]">
-
-[%~ UNLESS error_user_confirm_email # Initial State %]
-
-  <label for="userConfirmEmail">
-    Confirm Email ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
-  </label>
-
-  <input type="text" id="userConfirmEmail" name="user_confirm_email"
-  autocomplete="off" aria-describedby="userConfirmEmailHelpText" placeholder=
-  "Confirm Email ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
-  data-equalto="userEmail"
-  [% IF user_confirm_email.required %]required[% END %]
-  [% IF disabled %]disabled[% END %]>
-
-  <small class="form-error">
-[%~ IF error_msg %]
-    [% error_msg %]
-[%~ ELSE %]
-    You must repeat your email address to confirm it
-[%~ END %]
-  </small>
-
-[%~ ELSE # Error State %]
-
-  <label class="is-invalid-label" for="userConfirmEmail">
-    Confirm Email ([% IF required %]Mandatory[% ELSE %]Optional[% END %])
-  </label>
-
-  <input class="is-invalid-input" aria-invalid="true" type="text" id=
-  "userConfirmEmail" name="user_confirm_email"  placeholder=
-  "Confirm Email ([% IF required %]Mandatory[% ELSE %]Optional[% END %])"
-  autocomplete="off" aria-describedby="userConfirmEmailHelpText"
-  data-equalto="userEmail" [% IF required %]required[% END %]
-  [% IF disabled %]disabled[% END %]>
-
-  <small class="form-error is-visible">
-[%~ IF error_user_confirm_email == 'Missing' %]
-    You must confirm your email address as indicated below
-[%~ ELSIF error_user_confirm_email == 'email_confirmed' %]
-    This does not match the email address that you have entered
-[%~ ELSE %]
-    [% error_user_confirm_email %]
-[%~ END %]
-  </small>
-
-[%~ END # error_user_confirm_email %]
-
-  <p class="help-text" id="userConfirmEmailHelpText">
-[%~ IF
-  template.name == 'account.tt' ||
-  caller        == 'account.tt'
+[%#
+--------------------------------------------------------------------------------
+tt/partials/formfields/user/user_confirm_email.tt
+--------------------------------------------------------------------------------
 %]
-    If you have changed your email above then you must retype your new email
-    here to confirm it.
-[%~ ELSE %]
-    Confirm your email address as a cross check that you have typed it
-    correctly.
-[%~ END %]
-  </p>
 
+<!-- Start User Confirm Email -->
+<div class="floated-label-wrapper [% IF hidden %]hide[% END %]">
+    <label [% FILTER collapse %]
+        for="userConfirmEmail"
+        [% IF error_user_confirm_email %]class="is-invalid-label"[% END %]
+    [% END %]>
+        [%~ 'Confirm Email (' %]
+        [%~ IF required %]Mandatory[% ELSE %]Optional[% END %]
+        [%~ ')' ~%]
+    </label>
+    <input [% FILTER collapse %]
+        type="text"
+        id="userConfirmEmail"
+        name="user_confirm_email"
+        autocomplete="off"
+        aria-describedby="userConfirmEmailHelpText"
+        placeholder="Confirm Email (
+        [%~ IF required %]Mandatory[% ELSE %]Optional[% END %])"
+        data-equalto="userEmail"
+        [% IF user_confirm_email.required %]required[% END %]
+        [% IF disabled %]disabled[% END %]
+        [% IF error_user_confirm_email %]
+        class="is-invalid-input"
+        aria-invalid="true"
+        [% END %]
+    [% END %]>
+    <small class="form-error
+    [%~ IF error_user_confirm_email %] is_visible[% END %]">
+        [%~ IF error_user_confirm_email == 'Missing' ~%]
+        You must confirm your email address as indicated below
+        [%~ ELSIF error_user_confirm_email == 'email_confirmed' ~%]
+        This does not match the email address that you have entered
+        [%~ ELSIF error_user_confirm_email ~%]
+        [% error_user_confirm_email %]
+        [%~ ELSIF error_msg ~%]
+        [% error_msg %]
+        [%~ ELSE ~%]
+        You must repeat your email address to confirm it
+        [%~ END ~%]
+    </small>
+    <p class="help-text" id="userConfirmEmailHelpText">
+        [%~ IF template.name == 'account.tt' || caller == 'account.tt' ~%]
+[% FILTER collapse %]
+If you have changed your email above then you must retype your new email here to
+confirm it.
+[% END %]
+        [%~ ELSE ~%]
+Confirm your email address as a cross check that you have typed it correctly.
+        [%~ END ~%]
+    </p>
 </div>
+<!-- End User Confirm Email -->
+
+[%~ global.scripts.user_confirm_email = BLOCK -%]
+
+<script id="userConfirmEmailScript">
+
+  // If email is changed ask for confirmation of the new email
+
+  $('#userEmail').on ('change', function() {
+    $('#userConfirmEmail').prop('disabled', false);
+    $('#userConfirmEmail').prop('required', true);
+    $('#userConfirmEmail').parent().removeClass('hide');
+  });
+
+</script>
+
+[%~ END # global.scripts.user_confirm_email = BLOCK -%]

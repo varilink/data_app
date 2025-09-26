@@ -1,68 +1,67 @@
-[%#-----------------------------------------------------------------------------
+[%#
+--------------------------------------------------------------------------------
+tt/partials/event_formats/online_events_list.tt
+--------------------------------------------------------------------------------
+Format for listing events online, adapts for small screens to be more
+compressed. Used in the public, admin and rep areas.
+-%]
 
-  Format for listing events online, adapts for small screens to be more
-  compressed. Used in the public, admin and rep areas.
-
-------------------------------------------------------------------------------%]
-
+<!-- Start of online events list -->
 <div class="hide-for-medium">
 
 [%~ FOREACH event IN events %]
 
-[%~ IF event.start_date.substr ( 6 ) != year %]
+[%~ IF event.start_date.substr(6) != year %]
 
-[%~ SET year = event.start_date.substr ( 6 ) %]
+[%~ SET year = event.start_date.substr(6) -%]
 
-  <div class="row column">
-
-    <h4>[% year %]</h4>
-
-  </div>
+    <div class="row column">
+        <h4>[% year %]</h4>
+    </div>
 
 [%~ END %]
 
-[%~ INCLUDE online_events_list_item.tt screen = 'small' FILTER indent 2 %]
+[%~ INCLUDE online_events_list_item.tt screen = 'small' FILTER indent 4 %]
 
-[%~ END # FOREACH event IN events %]
+[%~ END # FOREACH event IN events -%]
 
 </div>
 
-[%~ SET year = '' # Reset for show-for-medium %]
+[%~ SET year = '' # Reset for show-for-medium -%]
 
 <div class="show-for-medium">
-
-  <div class="row">
-
-    <div class="small-6 columns"><h5>Event</h5></div>
-    <div class="small-2 columns"><h5>When</h5></div>
-    <div class="small-4 columns"><h5>Venue</h5></div>
-
-  </div>
+    <div class="row">
+        <div class="small-6 columns">
+            <h5>Event</h5>
+        </div>
+        <div class="small-2 columns">
+            <h5>When</h5>
+        </div>
+        <div class="small-4 columns">
+            <h5>Venue</h5>
+        </div>
+    </div>
 
 [%~ FOREACH event IN events %]
 
-[%~ IF event.start_date.substr ( 6 ) != year %]
+[%~ IF event.start_date.substr(6) != year %]
 
-[%~ SET year = event.start_date.substr ( 6 ) %]
+[%~ SET year = event.start_date.substr(6) -%]
 
-  <div class="row column">
+    <div class="row column">
+        <h4>[% year %]</h4>
+    </div>
 
-    <h4>[% year %]</h4>
+[%~ ELSE # event.start_date.substr(6) == year -%]
 
-  </div>
+    <div class="row column">
+        <hr>
+    </div>
 
-[%~ ELSE # event.start_date.substr ( 6 ) == year %]
+[%~ END # IF event.start_date.substr(6) != year %]
 
-  <div class="row column">
+[%~ INCLUDE online_events_list_item.tt FILTER indent 4 %]
 
-    <hr>
-
-  </div>
-
-[%~ END # IF event.start_date.substr ( 6 ) != year %]
-
-[%~ INCLUDE online_events_list_item.tt format %]
-
-[%~ END # FOREACH event IN events %]
+[%~ END # FOREACH event IN events -%]
 
 </div>

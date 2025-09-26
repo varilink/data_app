@@ -1,33 +1,34 @@
-[%~ SET title = 'Email Address Verified'
-
-# Report the successful registration of a user account back to the user.
-
+[%#
+--------------------------------------------------------------------------------
+tt/responses/success/success_confirm_email.tt
+--------------------------------------------------------------------------------
+Report the successful registration of a user account back to the user.
 %]
 
-[%~ PROCESS header.tt %]
+[%~ title = 'Email Address Verified' %]
 
-    <div class="row">
+[%~ PROCESS header.tt FILTER trim %]
 
-      <div class=
-      "columns small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+[%- PROCESS h1.tt FILTER trim | indent 8 -%]
 
-[% PROCESS h1.tt FILTER indent 6 %]
-
-        <div class="callout success">
-
-          <p class="lead">
-            You have successfully verified the email address associated with
-            your user account. You can now use your user account to <a href=
-            "[% conf.root %]account/sign_in">Sign-In</a> to our site.
-            Alternatively you can select from the menu above or return to our <a
-            href="[% conf.root %]">home page</a> (<a href="[% conf.root %]"><i
-            class="fas fa-home"></i></a>).
-          </p>
-
+        <div class="row">
+            <div class="[% FILTER collapse %]
+                columns small-12 medium-10 medium-offset-1 large-8
+                large-offset-2
+            [% END %]">
+                <div class="callout success">
+                    <p class="lead">
+[%- FILTER collapse %]
+You have successfully verified the email address associated with your user
+account. You can now use your user account to <a href="[% conf.root ~%]
+account/sign_in">Sign-In</a> to our site. Alternatively you can select from the
+menu above or return to our <a href="[% conf.root %]">home page</a> (<a href="
+[%~ conf.root %]"><i class="fas fa-home"></i></a>).
+[% END ~%]
+                    </p>
+                </div>
+            </div>
         </div>
 
-      </div>
+[%- PROCESS footer.tt -%]
 
-    </div>
-
-[% PROCESS footer.tt %]

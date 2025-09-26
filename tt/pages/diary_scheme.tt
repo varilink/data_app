@@ -1,201 +1,263 @@
-[%~ SET
-
-title = 'Diary Scheme'
-
+[%#
+--------------------------------------------------------------------------------
+tt/pages/diary_scheme.tt
+--------------------------------------------------------------------------------
 %]
 
-[%~ PROCESS header.tt %]
+[%~ title = 'Diary Scheme' %]
 
-[%- PROCESS h1.tt media="the-diary-scheme.webp" FILTER indent 4 %]
+[%~ PROCESS header.tt FILTER trim -%]
 
-    <div class="row medium-unstack">
+[%- PROCESS h1.tt media="the-diary-scheme.webp" FILTER trim | indent 8 -%]
 
-      <div class="columns">
+        <!-- Start of Page Content -->
+        <div class="row medium-unstack">
+            <!-- Start of Left Hand Column -->
+            <div class="column">
+                <p>
+[%~ FILTER collapse %]
+Derby Arts and Theatre Association (DATA) administers the Diary Scheme, a mutual
+aid arrangement for amateur theatre and music societies in the Derby area. It
+has been operating since DATA was founded in 1986 (see our <a href="
+[%~ conf.root %]about_us">About Us</a> page).
+[% END ~%]
+                </p>
 
-        <p>
-          Derby Arts and Theatre Association (DATA) administers the Diary
-          Scheme, a mutual aid arrangement for amateur theatre and music
-          societies in the Derby area. It has been operating since DATA was
-          founded in 1986 (see our <a href="[% conf.root %]about_us">About
-          Us</a> page).
-        </p>
+[%~ MACRO whatson_societies BLOCK -%]
 
-[%~ MACRO whatson_societies BLOCK %]
-
-<p>
-  Member societies, of which there are currently [% societies.size %], may list
-  the events that they stage on this website, which is provided and maintained
-  by DATA. Member societies pay a small fee to cover DATA's costs (currently
-  &pound;10 for two years' subscription).
-</p>
+                <p>
+[%~ FILTER collapse %]
+Member societies, of which there are currently [% societies.size %], may list
+the events that they stage on this website, which is provided and maintained by
+DATA. Member societies pay a small fee to cover DATA's costs (currently
+&pound;10 for two years' subscription).
+[% END ~%]
+                </p>
 
 [%~ END # MACRO whatson_societies BLOCK %]
 
-[%~ CGIAPP.embed (
-  'whatson_societies'  ,
-  'filter' = {
-    'status' => 'ACTIVE'
-  } ,
-) FILTER indent 8 %]
+[%~ CGIAPP.embed(
+    'whatson_societies',
+    'filter' = {
+        'status' => 'ACTIVE'
+    },
+) %]
 
-        <p>
-          Each member society must appoint at least one person to liaise with
-          the Diary Scheme's organisers. The majority of communication is by
-          e-mail. Member society representatives should advise the Diary Scheme
-          organisers of their future plans as early as possible by one of the
-          following means:
-        </p>
-
-        <ul>
-          <li>
-            Via e-mail to <a href="mailto:admin@derbyartsandtheatre.org.uk">
-            admin@derbyartsandtheatre.org.uk</a>;
-          </li>
-          <li>
-            By using the <a href="[% conf.root %]notify_event">Notify Us</a>
-            <span style="font-style: italic;">(of events)</span> page;
-          </li>
-          <li>
-            Via our recommended method, which is to <a
-            href="[% conf.root %]account/begin_registration">Register</a> a user
-            account with us, which you can then use to directly add events
-            to our website.
-          </li>
-        </ul>
-
-        <p>
-          Member societies are encouraged to use the list as a planning aid to
-          avoid duplication of events or clashes of dates. Events can be added
-          as placeholders to make them visible to other member societies without
-          being published to the public for this purpose. However, there is no
-          control by DATA over member societies' plans.
-        </p>
-
-        <p>
-          Published events are made visible on this website where they can be
-          seen by the public and are also then publicised via a number of other
-          means, see "Publicity via the DATA Diary" <span
-          class="hide-for-medium">(below)</span><span
-          class="show-for-medium">(right)</span>.
-        </p>
-
-        <p>
-          DATA and the Diary Scheme organisers accept no liability for any
-          errors, howsoever caused.
-        </p>
-
-      </div>
-
-      <div class="columns">
-
-        <div class="card" style="border-color: #4c1010; #max-width: 400px;">
-
-          <div class="card-divider" style="background-color: #4c1010;
-          color: #fefefe;">
-            <h5>Publicity via the DATA Diary</h5>
-          </div>
-          <!-- Start of Orbit -->
-          <div class="orbit" role="region" data-orbit
-          aria-label="Data Diary Publicity Channels" style="width: 100%;">
-            <!-- Start of Orbit Wrapper -->
-            <div class="orbit-wrapper">
-              <!-- Start of Orbit Container -->
-              <ul class="orbit-container">
-                <li class="is-active orbit-slide">
-                  <figure class="orbit-figure">
-                    <img class="orbit-image"
-                    src="[% root %]/assets/img/freddie.png"
-                    alt="Mailchimp">
-                    <figcaption class="orbit-caption">Mailchimp</figcaption>
-                  </figure>
-                </li>
-                <li class="orbit-slide">
-                  <figure class="orbit-figure">
-                    <img class="orbit-image"
-                    src="[% root %]/assets/img/news_items/facebook.jpg"
-                    alt="Facebook">
-                    <figcaption class="orbit-caption">Facebook</figcaption>
-                  </figure>
-                </li>
-                <li class="orbit-slide">
-                  <figure class="orbit-figure">
-                    <img class="orbit-image"
-                    src="[% root %]/assets/img/x-twitter.png"
-                    alt="X (formerly Twitter)">
-                    <figcaption class="orbit-caption">
-                      X (formely Twitter)
-                    </figcaption>
-                  </figure>
-                </li>
-                <li class="orbit-slide">
-                  <figure class="orbit-figure">
-                    <img class="orbit-image"
-                    src="[% root %]/assets/img/programme.jpg"
-                    alt="Programmes">
-                    <figcaption class="orbit-caption">Programmes</figcaption>
-                  </figure>
-                </li>
-              </ul>
-              <!-- End of Orbit Container -->
-            </div>
-            <!-- End of Orbit Wrapper -->
-          </div>
-          <!-- End of Orbit -->
-
-          <div class="card-section">
-            <p>
-              Events published to the DATA Diary via this website are also
-              publicised via a number of other means as follows:
-            </p>
-            <ul>
-              <li>
-                Inclusion in <a href=
-                "https://us17.campaign-archive.com/home/?u=7bfcb4ab03f2aa02c1186be34&id=45368022a7"
-                target="_blank">DATA's monthly e-mail bulletin</a>, which anyone
-                can <a href="http://eepurl.com/dJi_vv" target="_blank">Subscribe
-                </a> to.
-              </li>
-              <li>
-                Postings to the <a target="_blank"
-                href="https://www.facebook.com/DerbyArtsAndTheatreAssociation/">
-                DATA Facebook page</a>.
-              </li>
-              <li>
-                Tweets from the <a target="_blank"
-                href="https://x.com/DerbyAmPerfArts">DATA X (formerly Twitter)
-                account</a>.
-              </li>
-              <li>
-                Inclusion in the programmes of events staged by other member
-                societies.
-              </li>
-            </ul>
-            <div class="callout information">
-              <p>
-                <i class="fas fa-info-circle"></i>
-                It has always been and remains an obligation that DATA member
-                societies include a listing of upcoming events in the DATA Diary
-                with the programmes for events that they stage. You can download
-                a printed format, one-page flyer for this purpose below.
-              </p>
-              <form action="[% conf.root %]action/printed_listing">
-                <p>Page Size:</p>
                 <p>
-                  <input id="A4" name="pagesize" type="radio" value="A4"
-                  checked>
-                  <label for="A4">A4</label>
-                  <input id="A5" name="pagesize" type="radio" value="A5">
-                  <label for="A5">A5</label>
+[%~ FILTER collapse %]
+Each member society must appoint at least one person to liaise with the Diary
+Scheme's organisers. The majority of communication is by e-mail. Member society
+representatives should advise the Diary Scheme organisers of their future plans
+as early as possible by one of the following means:
+[% END ~%]
                 </p>
-                <input class="button submit" value="Download Flyer">
-              </form>
+                <ul>
+                    <li>
+[%~ FILTER collapse %]
+Via e-mail to <a href="mailto:[% conf.webmin %]">[% conf.webmin %]</a>;
+[% END ~%]
+                    </li>
+                    <li>
+[%~ FILTER collapse %]
+By using the <a href="[% conf.root %]notify_event">Notify Us</a> <span
+style="font-style: italic;">(of events)</span> page;
+[% END ~%]
+                    </li>
+                    <li>
+[%~ FILTER collapse %]
+Via our recommended method, which is to <a href="[% conf.root ~%]
+account/begin_registration">Register</a> a user account with us, which you can
+then use to directly add events to our website.
+[% END ~%]
+                    </li>
+                </ul>
+                <p>
+[%~ FILTER collapse %]
+Member societies are encouraged to use the list as a planning aid to avoid
+duplication of events or clashes of dates. Events can be added as placeholders
+to make them visible to other member societies without being published to the
+public for this purpose. However, there is no control by DATA over member
+societies' plans.
+[% END ~%]
+                </p>
+                <p>
+[%~ FILTER collapse %]
+Published events are made visible on this website where they can be seen by the
+public and are also then publicised via a number of other means, see "Publicity
+via the DATA Diary" <span class="hide-for-medium">(below)</span><span
+class="show-for-medium">(right)</span>.
+[% END ~%]
+                </p>
+                <p>
+[%~ FILTER collapse %]
+DATA and the Diary Scheme organisers accept no liability for any errors,
+howsoever caused.
+[% END ~%]
+                </p>
             </div>
-          </div>
+            <!-- End of Left Hand Column -->
+            <!-- Start of Right Hand Column -->
+            <div class="column">
+                <!-- Start of Right Hand Column Card -->
+                <div [% FILTER collapse %]
+                    class="card"
+                    style="border-color: #4c1010; #max-width: 400px;"
+                [% END %]>
+                    <div [% FILTER collapse %]
+                        class="card-divider"
+                        style="background-color: #4c1010; color: #fefefe;"
+                    [% END %]>
+                        <h5>Publicity via the DATA Diary</h5>
+                    </div>
+                    <!-- Start of Orbit -->
+                    <div [% FILTER collapse %]
+                        class="orbit"
+                        role="region"
+                        data-orbit
+                        aria-label="Data Diary Publicity Channels"
+                        style="width: 100%;"
+                    [% END %]>
+                        <!-- Start of Orbit Wrapper -->
+                        <div class="orbit-wrapper">
+                            <!-- Start of Orbit Container -->
+                            <ul class="orbit-container">
+                                <li class="is-active orbit-slide">
+                                    <figure class="orbit-figure">
+                                        <img [% FILTER collapse %]
+                                            class="orbit-image"
+                                            src="[% root ~%]
+                                            /assets/img/freddie.png"
+                                            alt="Mailchimp"
+                                        [% END %]>
+                                        <figcaption class="orbit-caption">
+                                            [%~ 'Mailchimp' ~%]
+                                        </figcaption>
+                                    </figure>
+                                </li>
+                                <li class="orbit-slide">
+                                    <figure class="orbit-figure">
+                                        <img [% FILTER collapse %]
+                                            class="orbit-image"
+                                            src="[% root ~%]
+                                            /assets/img/news_items/facebook.jpg"
+                                            alt="Facebook"
+                                        [% END %]>
+                                        <figcaption class="orbit-caption">
+                                            [%~ 'Facebook' ~%]
+                                        </figcaption>
+                                    </figure>
+                                </li>
+                                <li class="orbit-slide">
+                                    <figure class="orbit-figure">
+                                        <img [% FILTER collapse %]
+                                            class="orbit-image"
+                                            src="[% root ~%]
+                                            /assets/img/x-twitter.png"
+                                            alt="X (formerly Twitter)"
+                                        [% END %]>
+                                        <figcaption class="orbit-caption">
+                                            [%~ 'X (formely Twitter)' ~%]
+                                        </figcaption>
+                                    </figure>
+                                </li>
+                                <li class="orbit-slide">
+                                    <figure class="orbit-figure">
+                                        <img [% FILTER collapse %]
+                                            class="orbit-image"
+                                            src="[% root ~%]
+                                            /assets/img/programme.jpg"
+                                            alt="Programmes"
+                                        [% END %]>
+                                        <figcaption class="orbit-caption">
+                                            [%~ 'Programmes' ~%]
+                                        </figcaption>
+                                    </figure>
+                                </li>
+                            </ul>
+                            <!-- End of Orbit Container -->
+                        </div>
+                        <!-- End of Orbit Wrapper -->
+                    </div>
+                    <!-- End of Orbit -->
+                    <!-- Start of Card Section -->
+                    <div class="card-section">
+                        <p>
+[%~ FILTER collapse %]
+Events published to the DATA Diary via this website are also publicised via a
+number of other means as follows:
+[% END ~%]
+                        </p>
+                        <ul>
+                            <li>
+[%~ FILTER collapse %]
+Inclusion in <a href="https://[% conf.mailchimp.datacenter ~%]
+.campaign-archive.com/home/?u=[% conf.mailchimp.account_uid %]&id=
+[%~ conf.mailchimp.list_id %]" target="_blank">DATA's monthly e-mail
+bulletin</a>, which anyone can <a href="[% conf.mailchimp.signup_form_url %]"
+target="_blank">Subscribe</a> to.
+[% END ~%]
+                            </li>
+                            <li>
+[%~ FILTER collapse %]
+Postings to the <a target="_blank" href="https://www.facebook.com/
+[%~ IF conf.facebook.page_name %]
+[%~ conf.facebook.page_name %]
+[%~ ELSE %]
+[%~ conf.facebook.page_id %]
+[%~ END %]">DATA Facebook page</a>.
+[% END ~%]
+                            </li>
+                            <li>
+[%~ FILTER collapse %]
+Tweets from the <a target="_blank" href="https://x.com/[% conf.x.handle %]">DATA
+X (formerly Twitter) account</a>.
+[% END ~%]
+                            </li>
+                            <li>
+[%~ FILTER collapse %]
+Inclusion in the programmes of events staged by other member societies.
+[% END ~%]
+                            </li>
+                        </ul>
+                        <div class="callout information">
+                            <p>
+[%~ FILTER collapse %]
+<i class="fas fa-info-circle"></i> It has always been and remains an obligation
+that DATA member societies include a listing of upcoming events in the DATA
+Diary with the programmes for events that they stage. You can download a printed
+format, one-page flyer for this purpose below.
+[% END ~%]
+                            </p>
+                        </div>
 
+[%- INCLUDE form.tt
+    action = '/action/printed_listing',
+    onSuccess = '/diary_scheme',
+    onError = 'index'
+FILTER trim | indent 24 -%]
+
+[% PROCESS flyer_start_date.tt FILTER trim | indent 28 -%]
+
+[% PROCESS flyer_page_size.tt FILTER trim | indent 28 -%]
+
+[% INCLUDE buttons.tt
+    buttons = [
+        {
+            id = 'flyer',
+            protect = 1,
+            type = 'submit',
+            value = 'Download Flyer'
+        }
+    ]
+FILTER indent 24 -%]
+
+                    </div>
+                    <!-- End of Card Section -->
+                </div>
+                <!-- End of Right Hand Column Card -->
+            </div>
+            <!-- End of Right Hand Column -->
         </div>
+        <!-- End of Page Content -->
 
-      </div>
-
-    </div>
-
-[% PROCESS footer.tt %]
+[%- PROCESS footer.tt -%]
