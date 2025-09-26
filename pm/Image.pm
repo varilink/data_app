@@ -1,26 +1,26 @@
-package DATA::Image ;
+package DATA::Image;
 
 =head1 DATA::Image
 
-DATA image upload (from own PC) or copy (from external website) handler.
+DATA image upload handler.
 
 =cut
 
-use strict ;
-use warnings ;
+use strict;
+use warnings;
 
-use base qw / DATA::Main / ;
+use base qw/DATA::Main/;
 
 use Data::Dumper;
-use Data::FormValidator ;
-use Data::FormValidator::Constraints::Upload qw /
-  file_format
-  file_max_bytes
-  image_max_dimensions
-  image_min_dimensions
-/ ;
-use JSON ;
-use DATA::Image::Constraints ;
+use Data::FormValidator;
+use Data::FormValidator::Constraints::Upload qw/
+    file_format
+    file_max_bytes
+    image_max_dimensions
+    image_min_dimensions
+/;
+use JSON;
+use DATA::Image::Constraints;
 
 sub _filepath {
 
@@ -42,16 +42,8 @@ sub _filepath {
 }
 
 sub setup {
-
-  my $self = shift ;
-
-  $self -> run_modes ( {
-
-    'upload'  => 'upload' ,
-    'proxy'    => 'proxy'
-
-  } ) ;
-
+    my $self = shift;
+    $self->run_modes({ 'upload' => 'upload' });
 }
 
 =head2 run modes
@@ -145,62 +137,6 @@ RESPONSE:
 
 }
 
-sub proxy {
-
-=head3 proxy
-
-Server side handler for TinyMCE imagetools_proxy. This retrieves a remote (not
-within our domain) image and pipes it back to TinyMCE as if it was local.
-
-=cut
-
-  my $self = shift ;
-  my $query = $self -> query ;
-
-  my $max_size = $self -> conf -> param ( 'max_image_size' ) ;
-
-  my $profile = {
-
-    required => [ qw / url / ] ,
-
-    constraint_methods => {
-
-      url => {
-        constraint_method  => image_valid ( $max_size ) ,
-        name              => 'image_valid'
-      } ,
-    } ,
-
-  } ;
-
-  my $results = Data::FormValidator -> check ( $query , $profile ) ;
-
-  my $response ;
-
-  if ( my $errors = $results -> invalid ( 'url' ) ) {
-
-    $self -> header_props (  -status => '400' ) ;
-
-    $response =
-      'Invalid - the image must be in JPG/JPEG, GIF or PNG format and not ' .
-      'greater than 2Mbytes in size. Please try again.' ;
-
-    goto RESPONSE ;
-
-  }
-
-  my $image = DATA::Image::Constraints -> image ;
-  my $type = $image -> { MIME_TYPE } ;
-  $response = $image -> { BLOB } ;
-
-  $self -> header_props ( -type => $type ) ;
-
-RESPONSE:
-
-  return $response ;
-
-}
-
-1 ;
+1;
 
 __END__
