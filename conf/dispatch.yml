@@ -140,8 +140,10 @@
 # Actions initiated from emails
 # -----------------------------
 
-- '/account/action/confirm_email/:email/:secret/:success/:error': confirm_email
-- '/account/action/show_password_reset_page/:userid/:secret/:onSuccess/:onError': show_password_reset_page
+- ? '/account/action/confirm_email/:email/:secret/:success/:error'
+  : confirm_email
+- ? '/account/action/show_password_reset_page/:userid/:secret/:onSuccess/:onError'
+  : show_password_reset_page
 
 # ------------------------------
 # Secure account management area
