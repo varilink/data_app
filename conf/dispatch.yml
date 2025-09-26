@@ -121,6 +121,8 @@
 
 # Resend confirmation email
 - '/account/action/resend_confirmation_email': resend_confirmation_email
+- ? '/account/action/success_resend_confirmation_email'
+  : success_resend_confirmation_email
 
 # Userid reminder
 - '/account/action/userid_reminder': userid_reminder

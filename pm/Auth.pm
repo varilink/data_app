@@ -900,17 +900,7 @@ Resend the confirmation email following user account creation.
     { user => $user }
    ) ;
 
-   my $tmpl = $self -> template -> load ( $query -> param ( 'onSuccess' ) ) ;
-
-  $tmpl -> param (
-    user => $user ,
-    email => { subject => 'DATA Diary - New Userid Registration' }
-  ) ;
-
-# Need to convert this to a redirect but not sure how to do that and include
-# the parameter
-
-   return $tmpl -> output ;
+   return $self -> redirect ( $query -> param ( 'onSuccess' ) ) ;
 
 }
 
