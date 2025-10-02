@@ -53,7 +53,8 @@ process has completed.
 
 ### userid\_reminder
 
-Send the user a reminder of their userid.
+Sends the user a reminder of their userid if they provide an email address that
+is recognised as being associated with a valid user account.
 
 ### request\_password\_reset
 

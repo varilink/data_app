@@ -1,11 +1,12 @@
 # DATA::Auth::Request
 
-CGI application that handles requests for secured resources. Tests whether the
-request comes from an authenticated user and if access to the resource is
-restricted to specific roles whether that user is authorised.
+CGI application modules that handles requests for secure resources. It tests
+whether the request comes from an authenticated user. If access to the
+resource is restricted to specific roles, whether that user is authorised, i.e.
+is allocated to a role that gives them access.
 
 ## run modes
 
 ### request
 
-Tests whether a request to access a protected resource is permitted.
+This run mode tests if the user is permitted to access a secure resource.
