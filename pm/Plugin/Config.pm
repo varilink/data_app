@@ -35,13 +35,8 @@ sub _init {
     # load the configuration file directly using Config::Context prevents
     # Config::General from interpolating variables.
 
-    my %env_vars = (
-        DATA_APP_LOG_LEVEL => $ENV{DATA_APP_LOG_LEVEL} // 'emergency',
-    );
-
     my $general = Config::General->new(
         -ConfigFile => "$ENV{'DATA_APP_CONF_DIR'}/$ENV{'DATA_APP_CONF_FILE'}",
-        -DefaultConfig => \%env_vars,
         -IncludeDirectories => 'yes',
         -IncludeRelative => 'yes',
         -InterPolateVars => 'yes',

@@ -29,13 +29,8 @@ sub {
 
     my $env = shift;
 
-    my %env_vars = (
-        DATA_APP_LOG_LEVEL => $ENV{DATA_APP_LOG_LEVEL} // 'emergency',
-    );
-
     my $general = Config::General->new(
         -ConfigFile => "$ENV{'DATA_APP_CONF_DIR'}/$ENV{'DATA_APP_CONF_FILE'}",
-        -DefaultConfig => \%env_vars,
         -IncludeDirectories => 'yes',
         -IncludeRelative => 'yes',
         -InterPolateVars => 'yes',
@@ -64,8 +59,9 @@ sub {
             [
                 'File',
                 filename => '/tmp/data_app.log',
-                min_level =>
-                    $conf->context($env->{REQUEST_URI})->{file_log_level},
+#                min_level =>
+#                    $conf->context($env->{REQUEST_URI})->{file_log_level},
+                min_level => 'emergency',
                 mode => 'append',
                 newline => 1
             ]

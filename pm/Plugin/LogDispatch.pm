@@ -25,7 +25,8 @@ sub _init {
                 module    => 'Log::Dispatch::File',
                 name      => 'file',
                 filename  => '/tmp/data_app.log',
-                min_level => $self->conf->param('file_log_level'),
+                min_level =>
+                    $self->conf->param('file_log_level') // 'emergency',
                 mode => 'append',
             },
         ]
