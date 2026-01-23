@@ -23,10 +23,6 @@ The contents of this repository are summarised in this table.
 There are README files in each of these directories that further describe the directory contents.
 
 
-### Templates
-
-Contains the [Template Tookit](http://template-toolkit.org/) templates that are used throughout the web app and other Perl scripts.
-
 ## Using this Repository
 
 ### Obtaining a New Facebook Page Access Token
