@@ -217,7 +217,10 @@ foreach my $arg ( @ARGV ) {
 
 my $conf = new Config::General (
   -ConfigFile => "$ENV{'DATA_APP_CONF_DIR'}/$ENV{'DATA_APP_CONF_FILE'}",
+  -IncludeDirectories => 'yes',
   -IncludeRelative => 'yes',
+  -InterPolateEnv => 'yes',
+  -InterPolateVars => 'yes',
   -UseApacheInclude => 'yes'
 ) ;
 my %conf = $conf->getall;
