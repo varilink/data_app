@@ -22,8 +22,24 @@ The contents of this repository are summarised in this table.
 
 There are README files in each of these directories that further describe the directory contents.
 
-
 ## Using this Repository
+
+### Logging and Debugging
+
+The application has inbuilt logging and debugging facilities. Logging is provided for the server-side, Perl based functionality using the [Log::Dispath](https://metacpan.org/pod/Log::Dispatch) module. As per that CPAN documentation for the module, "The log levels that Log::Dispatch uses are taken directly from the syslog man pages".
+
+The DATA web application is coded (or rather, will be coded) to output specific categories of report at specific log levels or above. This is a work in progress, in reality we are introducing this code to specific areas of the application as and when we need to use this logging and debugging facility to diagnose an issue in a particular area.
+
+The table below shows the types of report that we associated with the *debug*, *info* and *notice* log levels. We don't currently use any of the other syslog logging levels (*warning*, *error*, *critical*, *alert* and *emergency*).
+
+debug:
+Custom reports that are specific to the logic in the context that contains them.
+
+info:
+Reports of information consumed by or output by the application; for example dumps of the query and configuration in context objects at the start of a run mode.
+
+notice:
+Reports that confirm the flow through the application; for example, the names of each run mode as it is entered and the app that contains that run mode.
 
 ### Obtaining a New Facebook Page Access Token
 
