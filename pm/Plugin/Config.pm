@@ -39,6 +39,7 @@ sub _init {
         -ConfigFile => "$ENV{'DATA_APP_CONF_DIR'}/$ENV{'DATA_APP_CONF_FILE'}",
         -IncludeDirectories => 'yes',
         -IncludeRelative => 'yes',
+        -InterPolateEnv => 'yes',
         -InterPolateVars => 'yes',
         -UseApacheInclude => 'yes'
     );
