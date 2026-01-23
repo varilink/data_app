@@ -101,4 +101,6 @@ Select if you wish to edit your event's card and add an image to it.
     }
 });
 
+</script>
+
 [%~ END # BLOCK global.scripts.event_use_desc -%]

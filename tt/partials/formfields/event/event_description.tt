@@ -39,7 +39,7 @@ tt/partials/formfields/event/event_description.tt
         [%~ END %]
     </div>
     <div class="event-card-section event-use-desc-no
-    [% UNLESS event.use_desc == 0 %] hide[% END %]">
+    [%~ UNLESS event.use_desc == 0 %] hide[% END %]">
         [% PROCESS event_default_description.tt FILTER collapse %]
     </div>
     <div [% FILTER collapse %]
@@ -117,7 +117,7 @@ your event?" then you must provide a description above.
 
 </small>
 
-[%~ global.scripts.event_description = BLOCK %]
+[%~ global.scripts.event_description = BLOCK -%]
 
 <script id="eventDescriptionScript">
 
@@ -136,43 +136,35 @@ your event?" then you must provide a description above.
     inline: true,
     skin_url: '/assets/css/skins/ui/oxide',
     menubar: false,
-    toolbar: false,
+    plugins: 'image',
+    toolbar: 'image replaceimage',
     setup : function(editor) {
-
-      // Display file picker when image is clicked on.
-      editor.on('click', function (e) {
-        // Only react to image clicks
-        if (e.target.nodeName === 'IMG') {
-          const img = e.target;
-          const input = document.createElement('input');
-          input.setAttribute('type', 'file');
-          input.setAttribute('accept', 'image/*');
-          input.onchange = function () {
-            const file = this.files[0];
-            const reader = new FileReader();
-            reader.onload = function () {
-[% IF conf.jsDebug # Javascript debug to the console enabled %]
-              console.log('Original image source ' + img.src);
-[% END %]
-              img.src = reader.result; // Replace image source
-[% IF conf.jsDebug # Javascript debug to the console enabled %]
-              console.log('New image source ' + img.src);
-[% END %]
+      editor.ui.registry.addButton('replaceimage', {
+        text: 'Replace image',
+        onAction: function () {
+          const node = editor.selection.getNode();
+          if (node.nodeName !== 'IMG') {
+            editor.notificationManager.open({
+              text: 'Please select an image first.',
+              type: 'warning'
+            });
+            return;
           }
+          const input = document.createElement('input');
+          input.type = 'file';
+          input.accept = 'image/*';
+          input.onchange = function () {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              editor.dom.setAttrib(node, 'src', e.target.result);
+            };
             reader.readAsDataURL(file);
           };
           input.click();
         }
       });
-
-      // Prevent keyboard actions in the image editor; for example the delete
-      // key.
-      editor.on('keydown', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-      });
-
     },
     license_key: 'gpl',
   });

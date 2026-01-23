@@ -143,10 +143,10 @@ England and Wales with charity number 517836.
 
 [%~ FOREACH key IN global.scripts.keys.sort('nocase') %]
 
-[%~ global.scripts.$key -%]
+[%- global.scripts.$key FILTER trim %]
 
-[%~ END -%]
+[%~ END %]
 
-[%- END %]
+[%~ END %]
     </body>
 </html>
