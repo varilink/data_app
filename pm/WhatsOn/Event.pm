@@ -460,6 +460,17 @@ sub as_hash {
 
 }
 
+sub as_number {
+
+=head3 as_number
+
+=cut
+
+    my $self = shift;
+    return $self->rowid;
+
+}
+
 =head2 Data Persistence Methods
 
 =cut

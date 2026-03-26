@@ -287,6 +287,17 @@ Returns the organisation as an unblessed hash with lower case keys
 
 }
 
+sub as_number {
+
+=head3 as_number
+
+=cut
+
+    my $self = shift;
+    return $self->rowid;
+
+}
+
 sub load {
 
   my ( $class , $path , $dbh ) = @_ ;

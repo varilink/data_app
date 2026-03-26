@@ -9,6 +9,7 @@ actions that are required for all DATA applications.
 
 use strict ;
 use warnings ;
+use Scalar::Util qw/ blessed looks_like_number /;
 
 use base qw / Exporter / ;
 
@@ -90,7 +91,47 @@ This hook also ensures that the template output is UTF8 encoded.
 
 =cut
 
-  my ( $self , $tmpl ) = @_ ;
+    my ($self, $tmpl) = @_;
+
+    sub output_value {
+        my ($value) = @_;
+        if ( blessed $value ) {
+            return $value->as_number if $value->can('as_number');
+            return '"' . $value->as_string . '"' if $value->can('as_string');
+            return $value;
+        }
+        return $value if looks_like_number($value);
+        return '"' . $value . '"';
+    }
+
+    # Log any parameters that have been passed to the template.
+    my $params = $tmpl->get_param_hash;
+    if ( %$params ) {
+        $self->log->info("template_pre_process:\n");
+        my $output;
+        foreach my $param_key ( keys %$params ) {
+            $output = "- $param_key=";
+            my $param_value = $params->{ $param_key };
+            if ( ref($param_value) eq 'ARRAY' ) {
+                # The parameter is an array.
+                $output .= '[';
+                my $item = 0;
+                foreach my $array_value ( @{ $param_value } ) {
+                    $item++;
+                    $output .= ', ' if $item > 1;
+                    $output .= output_value($array_value);
+                    if ( $item == 3 && @{ $param_value } > 3 ) {
+                        $output .= ' ... ';
+                        last;
+                    }
+                }
+                $output .= ']';
+            } else {
+                $output .= output_value($param_value);
+            }
+        }
+        $self->log->info($output);
+    }
 
   #-----------------------------------------------------------------------------
   # Pass the PSGI environment to the template
@@ -134,6 +175,21 @@ This hook also ensures that the template output is UTF8 encoded.
   # Since we're processing a template we must be about to output a web page.
   # Set the appropriate content type header.
   $self -> header_add ( -type => 'text/html; charset=utf-8' ) ;
+
+}
+
+sub _load_tmpl {
+
+=head3 template_pre_process
+
+=cut
+
+    my ($self, $ht_params, $tmpl_params, $tmpl_file) = @_;
+    use Data::Dumper;
+    $self->log->info(
+        "load_tmpl: file=" .
+        (defined $tmpl_file ? $tmpl_file : '<none>') . "\n"
+    );
 
 }
 
