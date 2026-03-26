@@ -805,11 +805,6 @@ programme details.
   my $self = shift ;
   my $query = $self -> query ;
 
-  $self->log->notice(
-    "Entered event_programme run mode of WhatsOn application\n"
-  );
-  $self->log->debug( Dumper $query );
-
   # Initialise redirect with the root
   # We will append the location within the root according to the submit button
   my $redirect = $self->conf->param('root');

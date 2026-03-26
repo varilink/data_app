@@ -59,9 +59,7 @@ Upload a file from the users own PC
 =cut
 
   my $self = shift ;
-  $self->log->notice( "Entered upload run mode of Image application\n" );
   my $query = $self -> query ;
-  $self->log->debug(Dumper($query));
 
   my $profile = {
 
@@ -114,8 +112,6 @@ Upload a file from the users own PC
   elsif  ( $type eq 'image/png' )  { $suffix = 'png' } ;
 
   my $filepath = $self -> _filepath ( $suffix ) ;
-
-  $self->log->info("\$filepath=$filepath\n");
 
   unless (
     open ( LOCAL , ">$filepath" )

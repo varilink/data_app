@@ -57,6 +57,24 @@ sub cgiapp_init {
 
 }
 
+sub cgiapp_prerun {
+
+    my $self = shift;
+
+    $self->log->notice(('-' x 80) . "\n");
+    my $runmode = $self->get_current_runmode;
+    $self->log->notice("Run mode: $runmode\n");
+
+    my $vars = $self->query->Vars;
+    if ( %$vars ) {
+        $self->log->info("Query vars:\n");
+        foreach my $name ( keys %{ $vars } ) {
+            $self->log->info("- $name=$vars->{ $name }");
+        }
+    }
+
+}
+
 sub cgiapp_postrun {
 
   my $self = shift ;
@@ -103,11 +121,6 @@ application, e.g. "Auth", "WhatsOn", etc.
 =cut
 
   my ( $self , $run_mode ) = @_ ;
-
-  $self->log->notice(
-    "Entered auto_run_mode run mode of the Main application\n"
-  );
-  $self->log->debug( Dumper( $self->conf->context ) );
 
   my $tmpl = $self -> template -> load ;
 
