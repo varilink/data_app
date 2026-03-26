@@ -12,7 +12,8 @@ tt/partials/formfields/event/event_description.tt
 <input [% FILTER collapse %]
     type="hidden"
     name="click_me"
-    value='<p><img src="[%~ conf.image_upload_path %]click_me.jpg"></p>'
+    value='<p><img src="[% conf.root %][% conf.image_upload_path ~%]
+        click_me.jpg"></p>'
 [% END %]>
 <input [% FILTER collapse %]
     type="hidden"
@@ -33,9 +34,10 @@ tt/partials/formfields/event/event_description.tt
         [%~ IF error && mceEventImage %]
         [% mceEventImage %]
         [%~ ELSIF !error && event.image %]
-        <p><img src="[% event.image %]"></p>
+        <p><img src="[% conf.root %][% event.image %]"></p>
         [%~ ELSE %]
-        <p><img src="[% conf.image_upload_path %]click_me.jpg"></p>
+        <p><img src="[% conf.root %][% conf.image_upload_path ~%]
+            click_me.jpg"></p>
         [%~ END %]
     </div>
     <div class="event-card-section event-use-desc-no
