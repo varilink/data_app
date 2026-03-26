@@ -1,4 +1,4 @@
-package DATA::WhatsOn ;
+package DATA::WhatsOn;
 
 =head1 DATA::WhatsOn
 
@@ -7,10 +7,10 @@ organisation management run modes, all of which are action run modes.
 
 =cut
 
-use strict ;
-use warnings ;
+use strict;
+use warnings;
 
-use base qw / DATA::Main / ;
+use base qw/DATA::Main/;
 
 use Data::Dumper; # For use by Log Dispatch when configured
 use Encode qw / encode / ;
@@ -27,7 +27,7 @@ use Data::FormValidator::Constraints qw / email  / ;
 use Data::FormValidator::Constraints::DateTime qw / :all / ;
 use Data::FormValidator::Constraints::MethodsFactory qw / :bool :set / ;
 
-use String::Random ;
+use String::Random;
 
 my $_messages = {
 
@@ -693,7 +693,7 @@ sub _authorised {
     # corresponding society_rowid.
 
     my $event = new DATA::WhatsOn::Event ;
-    $event -> rowid ( $query -> param ( 'event_rowid' ) ) ;
+    $event->rowid(scalar $query->param('event_rowid'));
     $event -> fetch ( $self -> dbh ) ;
     $society_rowid = $event -> society_rowid if $event -> society_rowid ;
 

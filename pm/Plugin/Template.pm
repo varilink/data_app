@@ -64,6 +64,8 @@ the init hook to ensure that the configuration is loaded first.
 
 }
 
+
+
 sub _template_pre_process {
 
 =head3 template_pre_process
@@ -195,27 +197,14 @@ sub _load_tmpl {
 
 sub import {
 
-   my $caller = scalar caller ;
+    my $caller = scalar caller;
 
-   $caller -> add_callback (
+    $caller->add_callback('init', \&_init);
+    $caller->add_callback('prerun', \&_prerun);
+    $caller->add_callback('template_pre_process', \&_template_pre_process);
+    $caller->add_callback('load_tmpl', \&_load_tmpl);
 
-      'init' , \&_init
-
-   ) ;
-
-   $caller -> add_callback (
-
-      'prerun' , \&_prerun
-
-   ) ;
-
-   $caller -> add_callback (
-
-      'template_pre_process' , \&_template_pre_process
-
-   ) ;
-
-   goto &Exporter::import ;
+    goto &Exporter::import;
 
 }
 

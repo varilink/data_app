@@ -226,26 +226,18 @@ error messages in to the relevant form.
 
 =cut
 
-  # This will always be called with errors to display
-  my ( $self , $errs ) = @_ ;
-
-  my $query = $self -> query ;
-
-  my $tmpl = $self -> template -> load ( $query -> param ( 'onError' ) ) ;
-
-  my $params = { } ;
-
-  foreach my $param ( $query -> param ) {
-
-    my $value = $query -> param ( $param ) ;
-    $params -> { $param } = $value ;
-
-  }
-
-  $tmpl -> param ( $errs ) ;
-  $tmpl -> param ( $params ) ;
-
-  return $tmpl -> output ;
+    # This will always be called with errors to display
+    my ($self, $errs) = @_;
+    my $query = $self->query;
+    my $tmpl = $self->template->load($query->param('onError'));
+    my $params = {};
+    foreach my $param ( $query->param ) {
+        my $value = $query->param($param);
+        $params->{$param} = $value;
+    }
+    $tmpl->param($errs);
+    $tmpl->param($params);
+    return $tmpl->output;
 
 }
 
