@@ -31,31 +31,25 @@ use String::Random ;
 
 my $_messages = {
 
-  constraints => {
+    constraints => {
+        # A hash reference containing messages associated with constraints
+        email_confirmed                => 'email_confirmed',
+        email_valid                    => 'email_valid',
+        end_date_not_before_start_date => 'end_date_not_before_start_date',
+        end_date_valid                 => 'end_date_valid',
+        event_description_valid        => 'event_description_valid',
+        event_image_provided           => 'event_image_provided',
+        event_image_valid              => 'event_image_valid',
+        event_status_valid             => 'event_status_valid',
+        event_use_desc_valid           => 'event_use_desc_valid',
+        not_a_robot                    => 'not_a_robot',
+        start_date_after_today         => 'start_date_after_today',
+        start_date_valid               => 'start_date_valid',
+        status_valid                   => 'status_valid',
+        venue_exists                   => 'venue_exists',
+    }, # End of constraints hash
 
-    # A hash reference containing messages associated with constraints
-
-    contact_is_subscribed          => 'contact_is_subscribed'          ,
-    contact_not_subscribed         => 'contact_not_subscribed'         ,
-    email_confirmed                => 'email_confirmed'                ,
-    email_valid                    => 'email_valid'                    ,
-    end_date_not_before_start_date => 'end_date_not_before_start_date' ,
-    end_date_valid                 => 'end_date_valid'                 ,
-    event_description_valid        => 'event_description_valid'        ,
-    event_image_provided           => 'event_image_provided'           ,
-    event_image_valid              => 'event_image_valid'              ,
-    event_status_valid             => 'event_status_valid'             ,
-    event_use_desc_valid           => 'event_use_desc_valid'           ,
-    not_a_robot                    => 'not_a_robot'                    ,
-    start_date_after_today         => 'start_date_after_today'         ,
-    start_date_valid               => 'start_date_valid'               ,
-    status_valid                   => 'status_valid'                   ,
-    unsubscribe_valid              => 'unsubscribe_valid'              ,
-    venue_exists                   => 'venue_exists'                   ,
-
-  } , # End of constraints hash
-
-} ; # End of $_messages hash
+}; # End of $_messages hash
 
 sub _secret {
 

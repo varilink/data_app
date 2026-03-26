@@ -1,73 +1,51 @@
-package DATA::WhatsOn::Constraints ;
+package DATA::WhatsOn::Constraints;
 
 =head1 DATA::WhatsOn::Constraints
 
-=cut
-
-use strict ;
-use warnings ;
-
-use base qw / Exporter / ;
-
-use DATA::Auth::User ;
-use DATA::WhatsOn::Contact ;
-use DATA::WhatsOn::Event ;
-use DATA::WhatsOn::Organisation ;
-
-use File::LibMagic ;
-use LWP::UserAgent ;
-
-our @EXPORT = qw /
-
-  contact_is_subscribed
-  event_description_valid
-  event_image_provided
-  event_image_valid
-  unsubscribe_valid
-  user_is_authorised
-  user_is_rep_for_event
-  venue_exists
-
-/ ;
-
-sub contact_is_subscribed {
-
-=head2 contact_is_subscribed
+This package provides a library of constraint functions for the DATA::WhastOn
+application. The constraints are implemented via the Data::FormValidator
+package.
 
 =cut
 
-  my $dbh = shift ;
+use strict;
+use warnings;
 
-  return sub {
+use base qw/Exporter/;
 
-    my ( $dfv , $value ) = @_ ;
+use DATA::Auth::User;
+use DATA::WhatsOn::Contact;
+use DATA::WhatsOn::Event;
+use DATA::WhatsOn::Organisation;
 
-    my $contact = new DATA::WhatsOn::Contact ;
-    $contact -> email ( $value ) ;
-    return 1 if $contact -> fetch ( $dbh ) && $contact -> subscriber ;
-    return 0 ;
+use File::LibMagic;
+use LWP::UserAgent;
+use URI;
 
-  }
-
-}
+our @EXPORT = qw/
+    event_description_valid
+    event_image_provided
+    event_image_valid
+    user_is_authorised
+    user_is_rep_for_event
+    venue_exists
+/;
 
 sub event_description_valid {
 
 =head2 event_description_valid
 
 Tests if the event description has non HTML content in it, i.e. it does contain
-descriptive text and not just markup tags.
+descriptive text and not just markup tags. If it just contained markup tags then
+that would equate to no description being provided.
 
 =cut
 
-  return sub {
-
-    my ( $dfv , $value ) = @_ ;
-
-    $value =~ s/<.+?>//g ; # Strip the HTML from the value
-    return $value ; # If there's content left this will be true
-
-  }
+    return sub {
+        my ($dfv, $value) = @_;
+        $value =~ s/<.+?>//g; # Strip the HTML from the value
+        return $value; # If there's content left this will be true
+    }
 
 }
 
@@ -75,19 +53,46 @@ sub event_image_provided {
 
 =head2 event_image_provided
 
+Tests that am image has been provided for an event where one has been promised,
+as it were, by indicating that an online promotion listing WITH IMAGE is
+required.
+
 =cut
 
-  my $root = shift ;
+    my ( $root, $upload_path, $click_me_param ) = @_;
 
-  return sub {
+    return sub {
 
-    my ( $dfv , $value ) = @_ ;
+        sub extract_img_src {
+            my ($html) = @_;
+            $html =~ m{<img[^>]+src="([^"]+)"}i
+                or return undef;
+            return $1;
+        }
 
-    return 1 if $value =~ /<p><img src="(.+)" \/><\/p>/ ;
+        sub normalise_src {
+            my ($src, $root, $upload_path) = @_;
+            my $base = $root . '/' . $upload_path;
+            my $uri = URI->new_abs($src, $base);
+            return $uri->path;
+        }
 
-    return 0 ;
+        my ($dfv, $value) = @_;
+        my $data = $dfv->get_filtered_data;
+        if ( $data->{ event_use_desc } == 1 ) {
+            my $submitted_src = extract_img_src($data->{ mceEventImage });
+            my $initial_src = extract_img_src($click_me_param);
+            $submitted_src = normalise_src(
+                $submitted_src, $root, $upload_path
+            );
+            $initial_src = normalise_src(
+                $initial_src, $root, $upload_path
+            );
+            return 0 if $submitted_src eq $initial_src;
+        }
+        return 1;
 
-  }
+    }
 
 }
 
@@ -95,94 +100,17 @@ sub event_image_valid {
 
 =head2 event_image_valid
 
-This constraint is called in two circumstances:
-1.  When a save is executed and we're validating the contents of a tinymce
-    editor instance;
-2.  When we're attempting to copy an image from an external URL after that URL
-    has been entered in to the tincymce image dialog box.
+Tests that an image provided for the online promotion representation of an event
+is valid. Images are validated for MIME type and size.
 
 =cut
 
-  my $root = shift ;
+    my $root = shift;
 
-  return sub {
-
-    my ( $dfv , $value ) = @_ ;
-
-    my $rc = 0 ;
-
-    my $url ;
-
-    if (
-      $value =~ /^
-        <p>
-          <img\s
-            src="(.+?)"\s
-            (?:width="\d+"\sheight="\d+"\s)?
-          \/>
-        <\/p>
-      $/x
-    ) {
-
-      # We're validating the image identified in a tinymce editor instance
-      $url = $1 ;
-
-    } else {
-
-      # We're validating the image identified via the tinymce image dialog
-      $url = $value ;
-
+    return sub {
+        my ($dfv, $value) = @_;
+        return 1;
     }
-
-    $url = $root . $url if $url =~ /^\/upload\/img\// ;
-
-    my $ua = new LWP::UserAgent ;
-
-    my $response = $ua -> get ( $url ) ;
-
-    if ( $response -> is_success ) {
-
-      my $magic = new File::LibMagic ;
-      my $mime_type = $magic ->
-        info_from_string ( $response -> content ) -> { mime_type } ;
-
-      $rc = 1 if
-        $mime_type eq 'image/gif'    ||
-        $mime_type eq 'image/jpeg'    ||
-        $mime_type eq 'image/png'    ;
-
-    }
-
-    return $rc ;
-
-  }
-
-}
-
-sub unsubscribe_valid {
-
-  my $dbh = shift ;
-
-  return sub {
-
-    my ( $dfv , $email ) = @_ ;
-
-    my $contact = new DATA::WhatsOn::Contact ;
-    $contact -> email ( $email ) ;
-
-    my $data = $dfv -> get_filtered_data ;
-
-    if ( $contact -> fetch ( $dbh )                            &&
-         $data -> { contact_secret } eq $contact -> secret
-    ) {
-
-      return 1 ;
-
-    }
-
-    return 0 ;
-
-  }
 
 }
 
@@ -200,47 +128,39 @@ WhatsOn Event or Society. It enforces the following:
 
 =cut
 
-  my $dbh = shift ;
+    my $dbh = shift;
 
-  return sub {
+    return sub {
 
-    my $dfv = shift ;
+        my $dfv = shift;
+        my $rc = 0;
+        my $data = $dfv->get_filtered_data;
 
-    my $rc = 0 ;
+        if ( $data->{ user_role } eq 'admin' ) {
+            $rc = 1; # Admins can do anything
+        } elsif ( $data->{ user_role } eq 'rep' ) {
 
-    my $data = $dfv -> get_filtered_data ;
+            my $user_userid = $dfv->get_current_constraint_value;
+            my $user = new DATA::Auth::User;
+            $user->userid($user_userid);
+            $user->fetch($dbh);
 
-    if ( $data -> { user_role } eq 'admin' ) {
+            my $contact = new DATA::WhatsOn::Contact;
+            $contact->email($user->email);
+            $contact->fetch($dbh);
 
-      $rc = 1 ; # Admins can do anything
+            my $society_rowid = $data->{society_rowid};
 
-    } elsif ( $data -> { user_role } eq 'rep' ) {
+            foreach my $organisation ( @{ $contact->organisations } ) {
+                $rc = 1
+                if $organisation->organisation_rowid == $society_rowid;
+            }
 
-      my $user_userid = $dfv -> get_current_constraint_value ;
+        }
 
-      my $user = new DATA::Auth::User ;
-      $user -> userid ( $user_userid ) ;
-      $user -> fetch ( $dbh ) ;
-
-      my $contact = new DATA::WhatsOn::Contact ;
-      $contact -> email ( $user -> email ) ;
-      $contact -> fetch ( $dbh ) ;
-
-      my $society_rowid = $data -> { society_rowid } ;
-
-      foreach my $organisation ( @{ $contact -> organisations } ) {
-
-        $rc = 1
-          if $organisation -> organisation_rowid == $society_rowid ;
-
-      }
-
+        return $rc;
 
     }
-
-    return $rc ;
-
-  }
 
 }
 
@@ -254,41 +174,34 @@ a representative for the society that is presenting the event.
 
 =cut
 
-  my $dbh = shift ;
+    my $dbh = shift;
 
-  return sub {
+    return sub {
 
-    my $dfv = shift ;
+        my $dfv = shift;
 
-    # This constraint is on userid so get the value of userid
-    my $user_userid = $dfv -> get_current_constraint_value ;
+        # This constraint is on userid so get the value of userid
+        my $user_userid = $dfv->get_current_constraint_value;
+        my $user = new DATA::Auth::User;
+        $user->userid($user_userid);
+        $user->fetch($dbh);
+        my $contact = new DATA::WhatsOn::Contact;
+        $contact->email($user->email);
+        $contact->fetch($dbh);
+        my $data = $dfv->get_filtered_data;
+        my $event_rowid = $data->{ event_rowid };
+        my $event = new DATA::WhatsOn::Event;
+        $event->rowid($event_rowid);
+        $event->fetch($dbh);
 
-    my $user = new DATA::Auth::User ;
-    $user -> userid ( $user_userid ) ;
-    $user -> fetch ( $dbh ) ;
-
-    my $contact = new DATA::WhatsOn::Contact ;
-    $contact -> email ( $user -> email ) ;
-    $contact -> fetch ( $dbh ) ;
-
-    my $data = $dfv -> get_filtered_data ;
-    my $event_rowid = $data -> { event_rowid } ;
-
-    my $event = new DATA::WhatsOn::Event ;
-    $event -> rowid ( $event_rowid ) ;
-    $event -> fetch ( $dbh ) ;
-
-    my $user_is_rep_for_event = 0 ;
-    foreach my $organisation ( @{ $contact -> organisations } ) {
-
-      $user_is_rep_for_event = 1
-        if $organisation -> organisation_rowid == $event -> society_rowid ;
+        my $user_is_rep_for_event = 0;
+        foreach my $organisation ( @{ $contact->organisations } ) {
+            $user_is_rep_for_event = 1
+                if $organisation->organisation_rowid == $event->society_rowid;
+        }
+        return $user_is_rep_for_event;
 
     }
-
-    return $user_is_rep_for_event ;
-
-  }
 
 }
 
@@ -296,25 +209,23 @@ sub venue_exists {
 
 =head2 venue_exists
 
-Tests if an organisation exists.
+Tests if an organisation exists in database and is of the venue organisation
+type.
 
 =cut
 
-  my $dbh = shift ;
+    my $dbh = shift;
 
-  return sub {
-
-    my ( $dfv , $value ) = @_ ;
-
-    my $venue = new DATA::WhatsOn::Organisation ;
-    $venue -> name ( $value ) ;
-    $venue -> type ( 'whatson_venue' ) ;
-    return $venue -> fetch ( $dbh ) ;
-
-  }
+    return sub {
+        my ($dfv, $value) = @_;
+        my $venue = new DATA::WhatsOn::Organisation;
+        $venue->name($value);
+        $venue->type('whatson_venue');
+        return $venue->fetch($dbh);
+    }
 
 }
 
-1 ;
+1;
 
 __END__
